@@ -1,0 +1,125 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/socialbar.css">
+    <script src="/scripts/navbar.js" defer></script>
+
+    <link rel="stylesheet" href="/styles/tramitacion_procedimientos.css">
+
+</head>
+<body>
+<aside>
+    <%- include('../components/common/rrss.ejs') %>
+</aside>
+<header>
+    <%- include('../components/common/navbar.ejs') %>
+</header>
+<main>
+    <h2 class="titulo_seccion">
+        <p>Tramitación de Procedimientos</p>
+    </h2>
+    <div class="container_cards" id="container-cards">
+        <div class="card card_overall_record float_card" id="card-overall-record">
+            <div class="card_body_container">
+                <p class="title_float_card">
+                    Registro General<br>
+                    <img class="card_image" src = "/images/tramitacion-procedimientos/registro_general_white.png">
+                </p>
+                <div class="sub_container_cards sub_container_cards_owner_management">
+                    <div class="sub_card sub_card_overall_record float_sub_card" id="sub-card-overall-record-1">
+                        <p class="title_float_card">
+                            Solicitud genérica
+                        </p>
+                    </div>
+                    <div class="sub_card sub_card_overall_record float_sub_card" id="sub-card-overall-record-2">
+                        <p class="title_float_card">
+                            Solicitud de Documentación-Certificados
+                        </p>
+                    </div>
+                    <div class="sub_card sub_card_overall_record float_sub_card" id="sub-card-overall-record-3">
+                        <p class="title_float_card">
+                            Aportar documentación requerida
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card_irrigation_management float_card" id="card-irrigation-management">
+            
+            <div class="card_body_container">
+                <p class="title_float_card">
+                    Gestión de Regantes<br>
+                    <img class="card_image" src = "/images/tramitacion-procedimientos/gestion_regantes_white.png">
+                </p>
+                <div class="sub_container_cards sub_container_cards_irrigation_management">
+                    <div class="sub_card sub_card_irrigation_management float_sub_card" id="sub-card-irrigation-management-1">
+                        <p class="title_float_card">
+                            Renuncia de parcelas.
+                        </p>
+                    </div>
+                    <div class="sub_card sub_card_overall_record float_sub_card" id="sub-card-overall-recordirrigation-management-2">
+                        <p class="title_float_card">
+                            Presentación del informe técnico acreditativo del cumplimiento de las medidas cautelares de la CHS.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card_authorization_works float_card" id="card-authorization-works">
+            <div class="card_body_container">
+                <p class="title_float_card">
+                    Autorización de obras<br>
+                    <img class="card_image" src = "/images/tramitacion-procedimientos/authorization_works_white.png">
+                </p>
+                <div class="sub_container_cards sub_container_cards_authorization_works">
+                    <div class="sub_card sub_card_authorization_works float_sub_card" id="sub_card-authorization-works">
+                        <p class="title_float_card">
+                            Solicitud de balsa de riego
+                        </p>
+                    </div>
+                    <div class="sub_card sub_card_authorization_works float_sub_card" id="sub_card-authorization-works">
+                        <p class="title_float_card">
+                            Solicitud de cruce de caminos.
+                        </p>
+                    </div>
+                    <div class="sub_card sub_card_authorization_works float_sub_card" id="sub_card-authorization-works">
+                        <p class="title_float_card">
+                            Solicitud de edificación / vallado.
+                        </p>
+                    </div>
+                    <div class="sub_card sub_card_authorization_works float_sub_card" id="sub_card-authorization-works">
+                        <p class="title_float_card">
+                            Solicitud de instalación de setos / Afección de tuberías primárias y principales.
+                        </p>
+                    </div>
+                    <div class="sub_card sub_card_authorization_works float_sub_card" id="sub_card-authorization-works">
+                        <p class="title_float_card">
+                            Solicitud de línea eléctica.
+                        </p>
+                    </div>
+                    <div class="sub_card sub_card_authorization_works float_sub_card" id="sub_card-authorization-works">
+                        <p class="title_float_card">
+                            Solicitud de tubería cuneta.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card_owner_management float_card" id="card-owner-management">
+            <div class="card_body_container">
+                <p class="title_float_card">
+                    Gestión de Propietarios<br>
+                    <img class="card_image" src = "/images/tramitacion-procedimientos/gestion_propietarios_white.png">
+                </p>
+                <div class="sub_container_cards sub_card sub_container_cards_owner_management">
+                    <div class="sub_card sub_card_owner_management float_sub_card" id="sub_card-owner_management">
+                        <p class="title_float_card">
+                            Gestión de Propietarios
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<nav id="navbar">
+    <a href="/">
+        <img id="logo" src="/images/logo.jpg">
+    </a>
+    <section>
+        <h1 id="titulo-comunidad">
+            Comunidad de Regantes Canal de Hidralab
+        </h1>
+        <div id="option-selector">
+            <div id="icons">
+                <span id="icon-home" class="option-menu-icon <% if (navGroup === 0) { %>active<% } else { %>inactive<% } %>" onclick="selectMenu(this)" data-navgroup="0"></span>
+                <span id="icon-herramientas" class="option-menu-icon <% if (navGroup === 1) { %>active<% } else { %>inactive<% } %> <% if (navGroup >= 1) { %>left<% } else { %>right<% } %>" onclick="selectMenu(this)" data-navgroup="1"></span>
+                <span id="icon-gestores" class="option-menu-icon <% if (navGroup === 2) { %>active left<% } else { %>inactive right<% } %>" onclick="selectMenu(this)" data-navgroup="2"></span>
+            </div>
+            <div id="option-scroll" class="menu<%= navGroup %>">
+                <ul id="nav-inicio-options" class="menu-options">  
+                    <li><a <% if (navIndex === 0) { %> class="active" <% } %> href="/">Inicio</a></li>
+                    <li><a <% if (navIndex === 1) { %> class="active" <% } %> href="/conocenos">Conócenos</a></li>
+                    <li><a <% if (navIndex === 2) { %> class="active" <% } %> href="/noticias">Noticias</a></li>
+                    <li><a <% if (navIndex === 3) { %> class="active" <% } %> href="/junta-de-gobierno">Junta de gobierno</a></li>
+                    <li><a <% if (navIndex === 4) { %> class="active" <% } %> href="/servicios">Servicios</a></li>
+                    <li><a <% if (navIndex === 5) { %> class="active" <% } %> href="/mapa">Mapa</a></li>
+                    <li><a <% if (navIndex === 6) { %> class="active" <% } %> href="/contacto">Contacto</a></li>
+                    <li><a <% if (navIndex === 7) { %> class="active" <% } %> href="/login">Iniciar sesión</a></li>
+                </ul>
+                <ul id="nav-herramientas-options" class="menu-options">  
+                    <li><a <% if (navIndex === 8) { %> class="active" <% } %> href="/tramitacion-procedimientos">Tramitacion Procedimientos</a></li>
+                    <li><a <% if (navIndex === 9) { %> class="active" <% } %> href="/mapa-sig">Herramientas Mapa SIG</a></li>
+                    <li><a <% if (navIndex === 10) { %> class="active" <% } %> href="/visor-datos">Visor de Datos</a></li>
+                </ul>
+                <ul id="nav-gestor-options" class="menu-options">    
+                    <li><a <% if (navIndex === 11) { %> class="active" <% } %> href="/gestor-noticias">Gestor de Noticias</a></li>
+                    <li><a <% if (navIndex === 12) { %> class="active" <% } %> href="/gestor-equipos">Gestor de Equipos</a></li>
+                    <li><a <% if (navIndex === 13) { %> class="active" <% } %> href="/gestor-riegos">Gestor de Riegos</a></li>
+                    <li><a <% if (navIndex === 14) { %> class="active" <% } %> href="/gestor-red">Gestor de Red</a></li>
+                    <li><a <% if (navIndex === 15) { %> class="active" <% } %> href="/gestor-usuarios">Gestor de Usuarios</a></li>
+                </ul>
+                </div>            
+            </div>
+        </div>
+    </section>
+</nav>

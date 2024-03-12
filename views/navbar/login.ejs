@@ -1,0 +1,74 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/socialbar.css">
+    <script src="/scripts/navbar.js" defer></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3/animate.min.css">
+    
+    <link rel="stylesheet" href="/styles/login.css">
+    <script src="/scripts/login.js" defer></script>
+</head>
+<body>
+    <aside>
+        <%- include('../components/common/rrss.ejs') %>
+    </aside>
+    <header>
+        <%- include('../components/common/navbar.ejs') %>
+    </header>
+    <main>
+        <h2 class="titulo_seccion">
+            <p>Iniciar Sesión</p>
+        </h2>
+        <div id="container-master-login" class="container_master_login">
+            <div id="main-login" class="main_login">
+                <form class="form_login" action="/auth/login" method="POST">
+                    <img class="img_security" src="/images/login/security.jpeg">
+                    <div id="container-subcontainers-input" class="container_subcontainers_input">
+                        <div class="subcontainer_email">
+                            <div class="subcontainer_input_email">
+                                <a id="label-subcontainer-input-email" class="label_subcontainer_input_email red_label" href="">Usuario*</a>
+                                <div class="container_img_email">
+                                    <img class="img_email" src="/images/login/user.png" width="32" height="25">
+                                </div>
+                                <input type="text" name="email" id="input-email" class="input_email" placeholder="Usuario*" required onfocus="applyRedBorder('email');" onblur="if(this.value=='') addImportantWarning('email'); else removeImportantWarning('email'); removeRedBorder('email');" />
+                            </div>
+                            <div id="container-text-input-email" class="container_text_input_email">
+                                <a id="text-informative-notice-email" class="text_informative_notice_email" href="" tabindex="-1">Email asociado al usuario</a>
+                                <a id="text-important-warning-email" class="text_important_warning_email concealment" href="" tabindex="-1">El email es obligatorio</a>
+                            </div>
+                        </div>
+                        <div class="subcontainer_pass">
+                            <div class="subcontainer_input_pass">
+                                <a id="label-subcontainer-input-pass" class="label_subcontainer_input_pass red_label" href="">Contraseña*</a>
+                                <div class="container_img_pass">
+                                    <img class="img_pass" src="/images/login/password.png" width="32" height="25">
+                                </div>
+                                <input type="password" name="password" id="input-pass" class="input_pass" placeholder="Contraseña*" required onfocus="applyRedBorder('pass');" onblur="if(this.value=='') addImportantWarning('pass'); else removeImportantWarning('pass'); removeRedBorder('pass');" />
+                            </div>
+                            <div id="container-text-input-pass" class="container_text_input_pass">
+                                <a id="text-informative-notice-pass" class="text_informative_notice_pass" href="" tabindex="-1">Contraseña asociada al usuario</a>
+                                <a id="text-important-warning-pass" class="text_important_warning_pass concealment" href="" tabindex="-1">La contraseña es obligatoria</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="container-help-links" class="container_help_links">
+                        <a id="text-technical-support-contact" class="text_technical_support_contact" href="">Soporte técnico y contacto</a>
+                        <a id="text-forgot-password" class="text_forgot_password" href="">He olvidado mi contraseña</a>
+                    </div>
+                    <!-- <button class="btn_login" onclick="return validarFormulario()">Iniciar Sesión</button> -->
+                    <button class="btn_login">Iniciar Sesión</button>
+                </form>
+            </div>
+            <div id="container-img-vertical-separator" class="container_img_vertical_separator">
+                <img class="img_vertical_separator" src="/images/login/vertical_separator.png"  >
+            </div>
+            <div id="container-digital-login" class="container_digital_login">
+                <button class="float_card_1 float_card"></button>
+                <button class="float_card_2 float_card"></button>
+                <button class="float_card_3 float_card"></button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

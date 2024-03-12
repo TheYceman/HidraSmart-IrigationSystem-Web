@@ -1,0 +1,714 @@
+var myMap;
+
+var counterArray = [];
+var markerPumpEstationsArray = [];
+var makersCountersArray = [];
+var makersCountersMasterArray = [];
+
+var markerValveOpenArray = [];
+
+var polygonsArray = [];
+var polylinesArray = [];
+
+var checkboxCounters = document.getElementById("item1-1");
+var checkboxCountersWithoutWatering = document.getElementById("item1-1-1");
+var checkboxCountersAnomalous = document.getElementById("item1-1-2");
+var checkboxCountersWatering = document.getElementById("item1-1-3");
+var checkboxCountersMaster = document.getElementById("item1-1-4");
+
+var checkboxPumpEstation = document.getElementById("item1-2");
+
+var checkboxValveOpen = document.getElementById("item2-1-1");
+var checkboxValveClosed = document.getElementById("item2-1-2");
+
+var checkboxFlechas = document.getElementById("item2-3-1");
+checkboxFlechas.addEventListener("change", function () {
+  delete_pipelines();
+  paint_pipelines();
+});
+
+var infowindow = new google.maps.InfoWindow();
+var infowindowTub = new google.maps.InfoWindow();
+var infowindowsPlots = new Map(); // Objeto de mapa para almacenar los infowindows asociados a las parcelas
+var infowindowspipelines = new Map(); // Objeto de mapa para almacenar los infowindows asociados a las tuberías
+
+// Coordenadas
+const targetLongitude = -3.070035423095705;
+const targetLatitude = 39.1430930560515;
+
+const viewer = new Cesium.Viewer("cesiumContainer", {
+  animation: false,
+  baseLayerPicker: false,
+  fullscreenButton: false,
+  geocoder: false,
+  homeButton: false,
+  infoBox: false,
+  sceneModePicker: false,
+  selectionIndicator: false,
+  timeline: false,
+  navigationHelpButton: false,
+  navigationInstructionsInitiallyVisible: false,
+  creditContainer: document.createElement("div"), // Elemento HTML vacío para ocultar las letras
+});
+
+// Variable para verificar si los azulejos del globo se han cargado
+let tilesLoaded = false;
+
+// Verificar si los azulejos del globo ya han sido cargados
+if (viewer.scene.globe.tilesLoaded) {
+  // Los azulejos del globo ya han sido cargados
+  tilesLoaded = true;
+} else {
+  // Esperar al evento 'tilesLoaded' para que los azulejos del globo se carguen por completo
+  viewer.scene.globe.tileLoadProgressEvent.addEventListener(function () {
+    // Los azulejos del globo se han cargado por completo
+    tilesLoaded = true;
+  });
+}
+
+// Función para verificar periódicamente si los azulejos del globo se han cargado por completo
+function checkGlobeLoadingProgress() {
+  if (tilesLoaded) {
+    // Los azulejos del globo se han cargado por completo, iniciar la animación de la cámara
+    animateCamera();
+  } else {
+    // Los azulejos del globo no se han cargado por completo, volver a verificar en 500 ms (ajusta este valor según sea necesario)
+    setTimeout(checkGlobeLoadingProgress, 500);
+  }
+}
+
+// Iniciar la verificación periódica de carga de los azulejos del globo
+checkGlobeLoadingProgress();
+
+function animateCamera() {
+  // Zoom deseado
+  const targetZoom = 14000;
+
+  // Definir la posición de destino de la cámara
+  const targetPosition = Cesium.Cartesian3.fromDegrees(
+    targetLongitude,
+    targetLatitude,
+    targetZoom
+  );
+  const targetPositionCartographic =
+    viewer.scene.globe.ellipsoid.cartesianToCartographic(targetPosition);
+  const targetHeight = targetPositionCartographic.height;
+
+  // Animar la transición de la cámara
+  viewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromRadians(
+      targetPositionCartographic.longitude,
+      targetPositionCartographic.latitude,
+      targetHeight
+    ),
+    orientation: {
+      heading: viewer.camera.heading,
+      pitch: viewer.camera.pitch,
+      roll: viewer.camera.roll,
+    },
+    duration: 2, // Duración de la animación en segundos
+    complete: function () {
+      // La animación ha finalizado
+      console.log("Animación completa");
+
+      // Obtener referencia al segundo div
+      var map = document.getElementById("mapContainer");
+
+      // Mostrar el segundo div con un degradado
+      map.style.opacity = 1;
+    },
+  });
+}
+
+myMap = new google.maps.Map(document.getElementById("map"), {
+  zoom: 13,
+  streetViewControl: false,
+  center: { lat: targetLatitude, lng: targetLongitude },
+  mapTypeId: "satellite",
+});
+
+const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+checkboxes.forEach(function (checkbox) {
+  checkbox.addEventListener("change", function () {
+    if (this.checked) {
+      switch (this.value) {
+        case "item1-1":
+          var checkboxCounter =
+            document.getElementsByClassName("checkbox_counter");
+          for (var i = 0; i < checkboxCounter.length; i++) {
+            checkboxCounter[i].checked = true;
+            checkboxCounter[i].disabled = false;
+          }
+          var checkboxCounterList = document.getElementsByClassName(
+            "checkbox_counter_list"
+          );
+          if (checkboxCounterList.length > 0) {
+            checkboxCounterList[0].style.opacity = 1;
+          }
+          paint_counter();
+          break;
+        case "item1-1-1":
+          paint_counter();
+          break;
+        case "item1-1-2":
+          paint_counter();
+          break;
+        case "item1-1-3":
+          paint_counter();
+          break;
+        case "item1-1-4":
+          paint_counter();
+          break;
+        case "item1-2":
+          paint_counter();
+          break;
+        case "item2-1":
+          paint_counter();
+          var checkboxValve = document.getElementsByClassName("checkbox_valve");
+          for (var i = 0; i < checkboxValve.length; i++) {
+            checkboxValve[i].checked = true;
+            checkboxValve[i].disabled = false;
+          }
+          var checkboxValveList = document.getElementsByClassName(
+            "checkbox_valve_list"
+          );
+          if (checkboxValveList.length > 0) {
+            checkboxValveList[0].style.opacity = 1;
+          }
+          break;
+        case "item2-1-1":
+          paint_counter();
+          break;
+        case "item2-1-2":
+          paint_counter();
+          break;
+        case "item2-2":
+          paint_plots();
+          var checkboxPressure =
+            document.getElementsByClassName("checkbox_pressure");
+          for (var i = 0; i < checkboxPressure.length; i++) {
+            checkboxPressure[i].checked = true;
+            checkboxPressure[i].disabled = false;
+          }
+          var checkboxPressureList = document.getElementsByClassName(
+            "checkbox_pressure_list"
+          );
+          if (checkboxPressureList.length > 0) {
+            checkboxPressureList[0].style.opacity = 1;
+          }
+          break;
+        case "item2-3":
+          console.log("Entra");
+          paint_pipelines();
+          // Habilitar el checkbox "item2.2"
+          var checkboxPipelines =
+            document.getElementsByClassName("checkbox_pipelines");
+          for (var i = 0; i < checkboxPipelines.length; i++) {
+            checkboxPipelines[i].checked = true;
+            checkboxPipelines[i].disabled = false;
+          }
+          var checkboxPipelinesList = document.getElementsByClassName(
+            "checkbox_pipelines_list"
+          );
+          if (checkboxPipelinesList.length > 0) {
+            checkboxPipelinesList[0].style.opacity = 1;
+          }
+          break;
+      }
+    } else {
+      switch (this.value) {
+        case "item1-1":
+          var checkboxCounter =
+            document.getElementsByClassName("checkbox_counter");
+          for (var i = 0; i < checkboxCounter.length; i++) {
+            checkboxCounter[i].checked = false;
+            checkboxCounter[i].disabled = true;
+          }
+          var checkboxCounterList = document.getElementsByClassName(
+            "checkbox_counter_list"
+          );
+          if (checkboxCounterList.length > 0) {
+            checkboxCounterList[0].style.opacity = 0.5;
+          }
+          delete_counter();
+          break;
+        case "item1-1-1":
+          delete_counter();
+          break;
+        case "item1-1-4":
+          delete_counter();
+          break;
+        case "item1-2":
+          delete_counter();
+          break;
+        case "item2-1":
+          var checkboxValve = document.getElementsByClassName("checkbox_valve");
+          for (var i = 0; i < checkboxValve.length; i++) {
+            checkboxValve[i].checked = false;
+            checkboxValve[i].disabled = true;
+          }
+          var checkboxValveList = document.getElementsByClassName(
+            "checkbox_valve_list"
+          );
+          if (checkboxValveList.length > 0) {
+            checkboxValveList[0].style.opacity = 0.5;
+          }
+          delete_counter();
+          break;
+        case "item2-1-1":
+          delete_counter();
+          break;
+        case "item2-1-2":
+          delete_counter();
+          break;
+        case "item2-2":
+          var checkboxPressure =
+            document.getElementsByClassName("checkbox_pressure");
+          for (var i = 0; i < checkboxPressure.length; i++) {
+            checkboxPressure[i].checked = false;
+            checkboxPressure[i].disabled = true;
+          }
+          var checkboxPressureList = document.getElementsByClassName(
+            "checkbox_pressure_list"
+          );
+          if (checkboxPressureList.length > 0) {
+            checkboxPressureList[0].style.opacity = 0.5;
+          }
+          delete_plots();
+          break;
+        case "item2-3":
+          delete_pipelines();
+          // Deshabilitar y desmarcar el checkbox "item2.2"
+          var checkboxPipelines =
+            document.getElementsByClassName("checkbox_pipelines");
+          for (var i = 0; i < checkboxPipelines.length; i++) {
+            checkboxPipelines[i].checked = false;
+            checkboxPipelines[i].disabled = true;
+          }
+          var checkboxPipelinesList = document.getElementsByClassName(
+            "checkbox_pipelines_list"
+          );
+          if (checkboxPipelinesList.length > 0) {
+            checkboxPipelinesList[0].style.opacity = 0.5;
+          }
+          break;
+      }
+    }
+  });
+});
+
+// Agrega un evento de cambio de zoom al mapa
+google.maps.event.addListener(map, "zoom_changed", function () {
+  // Obtiene el nivel de zoom actual
+  var zoomLevel = map.getZoom();
+
+  // Calcula el nuevo tamaño del icono del marcador en función del nivel de zoom
+  var iconSize = 20 + zoomLevel * 2; // Ajusta el tamaño según tus preferencias
+
+  // Establece el nuevo tamaño del icono del marcador
+  marker.setIcon({
+    url: "path/to/marker-icon.png", // Ruta del icono del marcador
+    scaledSize: new google.maps.Size(iconSize, iconSize), // Tamaño actualizado del icono del marcador
+  });
+});
+
+function paint_counter() {
+  fetch("json/nodes.json")
+    .then((response) => response.json())
+    .then(function (data) {
+      var countersArray = Array.from(data);
+      countersArray.forEach(function (counter) {
+        if (checkboxCountersWithoutWatering.checked) {
+          if (counter.tipoEle == 2) {
+            var iconUrl = "/images/mapa_sig/counter_without_watering.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerCounter = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(30, 20),
+              },
+              title: counter.ideEle,
+            });
+            // Agregar evento de clic al marker
+            markerCounter.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.ideEle);
+            });
+            // Agregar el marker al arreglo
+            makersCountersArray.push(markerCounter);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+        if (checkboxCountersAnomalous.checked) {
+        }
+        if (checkboxCountersWatering.checked) {
+        }
+        if (checkboxCountersMaster.checked) {
+          if (counter.tipoEle == 4) {
+            var iconUrl = "/images/mapa_sig/counter_master.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerCounterMaster = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(30, 20),
+              },
+              title: counter.ideEle,
+            });
+            // Agregar evento de clic al marker
+            markerCounterMaster.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.ideEle);
+            });
+            // Agregar el marker al arreglo
+            makersCountersMasterArray.push(markerCounterMaster);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+        if (checkboxPumpEstation.checked) {
+          if (counter.tipoEle == 0) {
+            var iconUrl = "/images/mapa_sig/pump_station.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerPumpEstation = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(20, 20),
+              },
+              title: counter.ideEle,
+            });
+            // Agregar evento de clic al marker
+            markerPumpEstation.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.ideEle);
+            });
+            // Agregar el marker al arreglo
+            markerPumpEstationsArray.push(markerPumpEstation);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+        if (checkboxValveOpen.checked) {
+          if (counter.tipoEle == 3) {
+            var iconUrl = "/images/mapa_sig/valve_open.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerValveOpen = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(20, 20),
+              },
+              title: counter.ideEle,
+            });
+            // Agregar evento de clic al marker
+            markerValveOpen.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.ideEle);
+            });
+            // Agregar el marker al arreglo
+            markerValveOpenArray.push(markerValveOpen);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+      });
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+}
+
+// Función para eliminar los marcadores del array
+function delete_counter() {
+  if (!checkboxCountersWithoutWatering.checked) {
+    for (var i = 0; i < makersCountersArray.length; i++) {
+      makersCountersArray[i].setMap(null); // Eliminar el marcador del mapa
+    }
+    makersCountersArray = []; // Vaciar el array de marcadores
+  }
+  if (!checkboxCountersMaster.checked) {
+    for (var i = 0; i < makersCountersMasterArray.length; i++) {
+      makersCountersMasterArray[i].setMap(null); // Eliminar el marcador del mapa
+    }
+    makersCountersMasterArray = []; // Vaciar el array de marcadores
+  }
+  if (!checkboxPumpEstation.checked) {
+    for (var i = 0; i < markerPumpEstationsArray.length; i++) {
+      markerPumpEstationsArray[i].setMap(null); // Eliminar el marcador del mapa
+    }
+    markerPumpEstationsArray = []; // Vaciar el array de marcadores
+  }
+  if (!checkboxValveOpen.checked) {
+    for (var i = 0; i < markerValveOpenArray.length; i++) {
+      markerValveOpenArray[i].setMap(null); // Eliminar el marcador del mapa
+    }
+    markerValveOpenArray = []; // Vaciar el array de marcadores
+  }
+}
+
+function paint_valve() {
+  fetch("/json/mapa_sig.json")
+    .then((response) => response.json())
+    .then(function (data) {
+      var countersArray = Array.from(data);
+      countersArray.forEach(function (counter) {
+        if (checkboxCountersWithoutWatering.checked) {
+          if (counter.tipoEle == 3) {
+            if (checkboxValvesOpen.checked) {
+              var iconUrl = "/images/mapa_sig/counter_without_watering.png";
+            }
+            if (checkboxValvesclosed.checked) {
+              var iconUrl = "/images/mapa_sig/counter_without_watering.png";
+            }
+
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerCounter = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(30, 20),
+              },
+              title: counter.ideEle,
+            });
+            // Agregar evento de clic al marker
+            markerCounter.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.ideEle);
+            });
+            // Agregar el marker al arreglo
+            makersCountersArray.push(markerCounter);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+
+        if (checkboxCountersMaster.checked) {
+          if (counter.tipoEle == 4) {
+            var iconUrl = "/images/mapa_sig/counter_master.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerCounterMaster = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(30, 20),
+              },
+              title: counter.ideEle,
+            });
+            // Agregar evento de clic al marker
+            markerCounterMaster.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.ideEle);
+            });
+            // Agregar el marker al arreglo
+            makersCountersMasterArray.push(markerCounterMaster);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+      });
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+}
+
+function paint_plots() {
+  var plotCoords = [];
+  fetch("json/parcelas.json")
+    .then((response) => response.json())
+    .then(function (data) {
+      var plotsArray = Array.from(data);
+      plotsArray.forEach(function (plot) {
+        if (plot.nSecuencial == 1) {
+          if (plotCoords.length > 0) {
+            // Declaración y asignación de la variable pressureValor
+            var pressureValor = 16;
+            // Llamada a la función adjust_pressure_color pasando pressureValor como argumento
+            var pressureColor = adjust_pressure_color(pressureValor);
+            // Crear el área poligonal para la parcela
+            var polygon = new google.maps.Polygon({
+              paths: plotCoords,
+              strokeColor: "#FCAE1E", // Color del borde del área
+              strokeOpacity: 0.8, // Opacidad del borde del área
+              strokeWeight: 1, // Grosor del borde del área
+              fillColor: pressureColor, // Color de relleno del área
+              fillOpacity: 0.35, // Opacidad del relleno del área
+            });
+            // Agregar evento de clic al polígono
+            polygon.addListener("click", function (event) {
+              show_infowindow_plots(event, plot.ideParcela);
+            });
+
+            // Agregar el área poligonal al mapa
+            polygon.setMap(myMap);
+            // Agregar el polígono al arreglo
+            polygonsArray.push(polygon);
+            // Guardar el infowindow asociado al polígono de parcela
+            infowindowsPlots.set(polygon, infowindow);
+          }
+          plotCoords = []; // Array para almacenar las coordenadas de los puntos de la parcela
+        }
+        // Obtener las coordenadas de los puntos de la parcela y agregarlas al array plotCoords
+        plotCoords.push({
+          lat: parseFloat(plot.coorX),
+          lng: parseFloat(plot.coorY),
+        });
+      });
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+}
+
+function adjust_pressure_color(pressureValor) {
+  switch (true) {
+    case pressureValor < 15:
+      return "grey"; // Color en hexadecimal para valores menores a 15
+    case pressureValor >= 15 && pressureValor < 20:
+      return "green"; // Color en hexadecimal para valores entre 15 y 20
+    case pressureValor >= 20 && pressureValor < 25:
+      return "blue"; // Color en hexadecimal para valores entre 20 y 25
+    case pressureValor >= 25 && pressureValor < 30:
+      return "orange"; // Color en hexadecimal para valores entre 25 y 30
+    default:
+      return "purple"; // Color en hexadecimal para valores mayores o iguales a 30
+  }
+}
+
+function show_infowindow_plots(event, content) {
+  infowindow.setContent(content);
+  infowindow.setPosition(event.latLng);
+  infowindow.open(myMap);
+}
+
+function delete_plots() {
+  // Eliminar los polígonos de parcelas del mapa y sus correspondientes infowindows
+  polygonsArray.forEach(function (polygon) {
+    if (polygon instanceof google.maps.Polygon) {
+      polygon.setMap(null);
+      // Obtener el infowindow asociado al polígono de parcela y cerrarlo
+      var infowindowClosed = infowindowsPlots.get(polygon);
+      if (infowindowClosed) {
+        infowindowClosed.close();
+        infowindowsPlots.delete(polygon); // Eliminar el infowindow del mapa
+      }
+    }
+  });
+
+  // Filtrar los polígonos que no son de parcelas y conservar solo las tuberías
+  polygonsArray = polygonsArray.filter(function (polygon) {
+    return polygon instanceof google.maps.Polyline;
+  });
+}
+
+function paint_pipelines() {
+  var pipelineCoords = [];
+  fetch("json/tuberias.json")
+    .then((response) => response.json())
+    .then(function (data) {
+      var pipelineArray = Array.from(data);
+      pipelineArray.forEach(function (pipeline) {
+        if (pipeline.numCurva == 1) {
+          if (pipelineCoords.length > 0) {
+            // Crear la línea para la tubería
+            var polyline = new google.maps.Polyline({
+              path: pipelineCoords,
+              strokeColor: "#000", // Color de la línea
+              strokeOpacity: 1, // Opacidad de la línea
+              strokeWeight: 2, // Grosor de la línea
+            });
+            // Agregar evento de clic al polígono
+            polyline.addListener("click", function (event) {
+              mostrar_infowindow_tuberias(event, pipeline.ideEle);
+            });
+            // Agregar la línea al mapa
+            polyline.setMap(myMap);
+            // Agregar la línea al arreglo
+            polylinesArray.push(polyline);
+            // Guardar el infowindow asociado a la polilínea de tubería
+            infowindowspipelines.set(polyline, infowindow);
+            // Verificar el estado del checkbox
+            var checkboxarrowhead = document.getElementById("item2-3-1");
+            if (checkboxarrowhead.checked) {
+              // Agregar la punta de flecha a la polilínea
+              add_arrowhead(polyline);
+            }
+          }
+          pipelineCoords = []; // Array para almacenar las coordenadas de los puntos de la parcela
+        }
+        // Obtener las coordenadas de los puntos de la parcela y agregarlas al array parcelaCoords
+        pipelineCoords.push({
+          lat: parseFloat(pipeline.coorX),
+          lng: parseFloat(pipeline.coorY),
+        });
+      });
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+}
+
+function mostrar_infowindow_tuberias(event, content) {
+  infowindow.setContent(content);
+  infowindow.setPosition(event.latLng);
+  infowindow.open(myMap);
+}
+
+function delete_pipelines() {
+  // Eliminar las polilíneas de tuberías del mapa y sus correspondientes infowindows
+  polylinesArray.forEach(function (polyline) {
+    if (polyline instanceof google.maps.Polyline) {
+      polyline.setMap(null);
+      // Obtener el infowindow asociado a la polilínea de tubería y cerrarlo
+      var infowindowClosed = infowindowspipelines.get(polyline);
+      if (infowindowClosed) {
+        infowindowClosed.close();
+        infowindowspipelines.delete(polyline); // Eliminar el infowindow del mapa
+      }
+    }
+  });
+
+  // Filtrar las polilíneas que no son de tuberías y conservar solo las parcelas
+  polylinesArray = polylinesArray.filter(function (polyline) {
+    return polyline instanceof google.maps.Polyline;
+  });
+}
+
+function add_arrowhead(polyline) {
+  // Crear el símbolo de la punta de flecha
+  var symbol = {
+    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, // Utilizar la flecha cerrada hacia adelante como símbolo
+    scale: 2, // Escala del símbolo
+    strokeColor: "#FF0000", // Color de la línea del símbolo
+  };
+
+  // Agregar el símbolo a la polilínea
+  polyline.setOptions({
+    icons: [
+      {
+        icon: symbol,
+        offset: "50%", // Colocar el símbolo en el extremo final de la polilínea
+      },
+    ],
+  });
+}
+//Cómo realizo una animación donde al carga la página se vea el globo terráqueo y haga un zoom progresivo hasta situarse en las coordenadas lat: 39.144025, lng: -3.094583 sobre mi mapade google, para el inicio de la animación otra biblioteca distintaa la de google?
+// function hide_arrowhead {
+
+// }

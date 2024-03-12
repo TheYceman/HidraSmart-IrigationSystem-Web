@@ -1,0 +1,89 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+<link rel="stylesheet" href="/styles/navbar.css">
+<link rel="stylesheet" href="/styles/socialbar.css">
+<script src="/scripts/navbar.js" defer></script>
+
+<link rel="stylesheet" href="/styles/gestor_red.css">
+</head>
+
+<body>
+    <header>
+        <%- include('../components/common/navbar.ejs') %>
+    </header>
+    <main>
+        <h2 class="titulo_seccion">
+            <p>Gestor de Red</p>
+        </h2>
+        <div class="table-container">  
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Dirección</th>
+                        <th>Sector</th>
+                        <th>Municipio</th>
+                        <th>Polígono</th>
+                        <th>Parcela</th>
+                        <th>Área</th>
+                        <th>Tipo</th>
+                        <th>Cultivo</th>
+                        <th>Titular</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    <% for(let propietario of red) { %>
+                    <tr data-uid="<%= propietario.id %>">
+                        <td>
+                            <%= propietario.nombre %>
+                        </td>
+                        <td>
+                            <%= propietario.apellidos %>
+                        </td>
+                        <td>
+                            <%= propietario.telefono %>
+                        </td>
+                        <td>
+                            <%= propietario.email %>
+                        </td>
+                        <td>
+                            <%= propietario.direccion %>
+                        </td>
+                        <td>
+                            <%= propietario.sector %>
+                        </td>
+                        <td>
+                            <%= propietario.municipio %>
+                        </td>
+                        <td>
+                            <%= propietario.poligono %>
+                        </td>
+                        <td>
+                            <%= propietario.parcela %>
+                        </td>
+                        <td>
+                            <%= propietario.area %>
+                        </td>
+                        <td>
+                            <%= propietario.tipo %>
+                        </td>
+                        <td>
+                            <%= propietario.cultivo %>
+                        </td>
+                        <td>
+                            <%= propietario.titular %>
+                        </td>
+                        <td class="acciones">
+                            <button class="btn">Editar</button>
+                            <button class="btn red-btn">Borrar</button>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
