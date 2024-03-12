@@ -1,0 +1,53 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+<link rel="stylesheet" href="/styles/navbar.css">
+<link rel="stylesheet" href="/styles/socialbar.css">
+<script src="/scripts/navbar.js" defer></script>
+
+<link rel="stylesheet" href="/styles/gestor_usuarios.css">
+</head>
+
+<body>
+    <header>
+        <%- include('../components/common/navbar.ejs') %>
+    </header>
+    <main>
+        <h2 class="titulo_seccion">
+            <p>Gestor de Usuarios</p>
+        </h2>
+        <div class="table-container">  
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>DNI</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    <% for(let usuario of usuarios) { %>
+                    <tr data-uid="<%= usuario.dni %>">
+                        <td>
+                            <%= usuario.usuario %>
+                        </td>
+                        <td>
+                            <%= usuario.nombre %>
+                        </td>
+                        <td>
+                            <%= usuario.apellidos %>
+                        </td>
+                        <td>
+                            <%= usuario.dni %>
+                        </td>
+                        <td class="acciones">
+                            <button class="btn">Editar</button>
+                            <button class="btn red-btn">Borrar</button>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>

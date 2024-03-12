@@ -1,0 +1,26 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+  <link rel="stylesheet" href="/styles/navbar.css">
+  <link rel="stylesheet" href="/styles/socialbar.css">
+  <script src="/scripts/navbar.js" defer></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" defer></script>
+
+    <link rel="stylesheet" href="/styles/servicios.css">
+    <script src="/scripts/slider_servicios.js" defer></script>
+</head>
+<body>
+<aside>
+    <%- include('../components/common/rrss.ejs') %>
+</aside>
+<header>
+    <%- include('../components/common/navbar.ejs') %>
+</header>
+<main>
+    <h2 class="titulo_seccion">
+        <p>Servicios</p>
+    </h2>
+    <%- include('../components/servicios/slider-servicios.ejs', { servicios: servicios }) %>
+</main>
+</body>
+</html>

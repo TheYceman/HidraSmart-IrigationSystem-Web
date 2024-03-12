@@ -1,0 +1,312 @@
+#data-viewer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 15px;
+  width: 85%;
+  height: 80%;
+  margin: 0 auto;
+}
+
+#data-viewer section {
+  width: 100%;
+  height: 100%;
+  max-height: 33vh;
+  background-color: var(--color-primary-300);
+  border-radius: 5px;
+  box-shadow: var(--box-shadow-default);
+  padding: 15px;
+}
+
+#highchart-graph {
+  background-color: var(--color-bg-darker) !important;
+}
+
+#filtros {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#selectores {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+#selectores > div ~ div {
+  margin-top: 10px;
+}
+
+#selectores > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#selectores > div select,
+#selectores > div input,
+#selectores > div label {
+  min-width: 50%;
+}
+
+#lista-elementos {
+  height: 100%;
+  width: 43%;
+  background-color: white;
+  border-radius: 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+#lista-elementos ul.blocked li {
+  cursor: url("/images/visor-datos/blocked-pointer.png"), auto;
+}
+
+#lista-elementos li {
+  cursor: url("/images/visor-datos/add-pointer.png"), auto;
+}
+
+#lista-elementos ul li.selected {
+  background-color: var(--color-primary-300);
+  padding: 0 5px;
+  cursor: url("/images/visor-datos/remove-pointer.png"), auto;
+}
+
+#lista-elementos ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+main {
+  margin-bottom: 50px;
+}
+
+/* CARLOS */
+/* .subcontainer_data_viewer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 49%;
+  justify-content: space-between;
+} */
+
+/* Inicio CSS Box 2 */
+
+/* .flex-container2 {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  margin-top: 2%;
+  padding: 0px;
+  margin-left: -4px;
+  justify-content: space-evenly;
+}
+
+.dropdown_group {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  padding: 0.9vw;
+}
+
+.box_label {
+  padding: 0px;
+  font-weight: 400;
+  font-size: 0.95em;
+  margin-top: 5px;
+}
+
+.selector_dropdown {
+  height: 28px;
+}
+
+.box_list_container {
+  height: 75%;
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+}
+
+
+
+.box_list_container {
+  height: 75%;
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+}
+
+.box_list_elements {
+  width: 50%;
+  height: 100%;
+  padding: 1vw;
+}
+
+
+#listContainer ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+#listContainer li::before {
+  content: "";
+}
+
+#listContainer ul li:hover {
+  cursor: pointer;
+}
+
+#listContainer::-webkit-scrollbar {
+  width: 0.5vw;
+}
+
+#listContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#listContainer::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 0.5vw;
+}
+
+#listContainer::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.selected {
+  background-color: #27b5f1;
+  color: #fff;
+}
+
+li {
+  cursor: pointer;
+  marker-start: none;
+}
+
+li.selected {
+  cursor: url("ruta-a-imagen-simbolo-minus.png"), auto;
+}
+
+li.unavailable {
+  cursor: not-allowed;
+}
+
+::marker {
+  display: none;
+}
+
+.box_buttons {
+  display: flex;
+  flex-direction: column;
+} */
+
+/* Fin CSS Box 2 */
+
+/* Inicio CSS Box 3 */
+
+/* Fin CSS Box 3 */
+/* CSS Box 4 */
+/* .slides {
+  display: flex;
+  position: relative;
+}
+
+.slides .slide {
+  position: absolute;
+  top: 0;
+  max-height: 2.5vw;
+  padding: 0.7vw;
+  background: #009bdb;
+  color: #1316dd;
+  float: left;
+  overflow: hidden;
+  border-radius: 5px;
+  align-items: center;
+  text-align: center;
+  transition: max-height 0.25s ease-in-out, width 0.25s 0.25s ease-in-out,
+    left 0.25s 0.5s ease-in-out, top 0.25s 0.75s ease-in-out;
+}
+
+.slides .slide > a {
+  display: block;
+  padding-bottom: 1vw;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #1316dd;
+  transition: color 2s;
+  font-size: 0.8vw;
+  text-align: center;
+}
+
+.slides .slide.active {
+  position: absolute;
+  top: 3vw;
+  left: 0;
+  width: 100%;
+  max-height: 18vw;
+  float: none;
+  transition: top 0.25s 1s ease-in-out, left 0.25s 1.25s ease-in-out,
+    width 0.25s 1.5s ease-in-out, max-height 0.25s 1.75s ease-in-out;
+}
+
+.slides .slide.active a {
+  color: white;
+}
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.container_tables {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+#data-viewer h1 {
+  margin: 0;
+  font-family: "Oswald", sans-serif;
+  font-size: 2em;
+  text-transform: uppercase;
+  text-align: center;
+  color: white;
+}
+
+.cf:before,
+.slides:before,
+.cf:after,
+.slides:after {
+  content: " ";
+  display: table;
+}
+
+.cf:after,
+.slides:after {
+  clear: both;
+} */
+
+/*CSS tablas tabs*/
+
+/* .table_container {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.table-container {
+  height: 13.2vw;
+  border: 2px solid #fff;
+}
+
+th,
+td {
+  font-size: 0.8vw;
+} */

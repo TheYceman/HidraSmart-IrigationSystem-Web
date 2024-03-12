@@ -1,0 +1,47 @@
+/* CSS mapa Cesium */
+
+#container {
+  position: relative;
+  width: 83vw;
+  margin: 0 auto;
+  height: 70vh;
+  overflow: hidden;
+}
+
+#cesiumContainer {
+  position: absolute;
+  width: 91vw;
+  margin: 0 auto;
+  height: 70vh;
+  overflow: hidden;
+  /* transition: opacity 1s, transform 1s; */
+}
+
+#mapContainer {
+  position: absolute;
+  width: 91vw;
+  margin: 0 auto;
+  height: 70vh;
+  overflow: hidden;
+  /* background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  ); */
+  opacity: 0;
+  pointer-events: auto;
+  transition: opacity 1s;
+  z-index: 99999;
+}
+
+#cesiumContainer {
+  width: 83vw;
+  margin: 0 auto;
+  height: 70vh;
+  overflow: hidden;
+  z-index: 5;
+}
+
+main {
+  height: var(--height-max-space);
+}

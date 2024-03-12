@@ -1,0 +1,131 @@
+#noticias {
+  height: 65vh;
+  width: 85%;
+  margin: 0 auto;
+}
+
+#slides-news {
+  list-style: none;
+  height: 100%;
+  padding: 0;
+  margin: 0 auto;
+}
+
+#prev-arrow,
+#next-arrow {
+  top: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  height: 70%;
+  width: 20%;
+  z-index: 10;
+  overflow: hidden;
+}
+
+#next-arrow {
+  right: 15px;
+}
+
+#next-arrow:hover {
+  --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 4 4'%3E %3Cpolyline points='1 1 3 2 1 3' stroke='white' stroke-width='.3' stroke-opacity='.5' fill='none'%3E%3C/polyline%3E %3C/svg%3E");
+  cursor: var(--arrow) 40 40, auto;
+}
+
+#prev-arrow:hover {
+  --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 4 4'%3E %3Cpolyline points='3 1 1 2 3 3' stroke='white' stroke-width='.3' stroke-opacity='.5' fill='none'%3E%3C/polyline%3E %3C/svg%3E");
+  cursor: var(--arrow) 40 40, auto;
+}
+
+/* Slider noticias */
+
+.slick-current {
+  overflow-y: auto;
+}
+
+.slick-list {
+  height: 70%;
+  top: 0;
+  position: absolute;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.slick-list > div {
+  height: 100%;
+}
+
+.titulo_noticia_slider {
+  text-align: justify;
+}
+
+.imagen_noticia_slider {
+  margin-left: 1.5vw;
+  width: 35vw;
+  height: 18vw;
+  float: right;
+}
+
+.cuerpo_noticia_slider {
+  height: 100%;
+  line-height: 1.5;
+  text-align: justify;
+  white-space: pre-wrap;
+  margin: 0;
+  padding: 0 1rem;
+}
+
+/* Miniaturas */
+
+.slick-dots {
+  height: 30%;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  justify-content: space-around;
+  align-items: center;
+  overflow: visible;
+}
+
+.slick-dots > li {
+  width: 100%;
+  height: 100%;
+  box-shadow: 2px 4px 8px rgb(68, 67, 67);
+  border-radius: 10px;
+  display: flex;
+}
+
+.miniatura_noticia {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.miniatura_noticia:hover img {
+  height: 0;
+}
+
+.miniatura_noticia h2 {
+  align-items: center;
+}
+
+.fecha_noticia_miniatura {
+  margin: 0 0 0.5rem 0;
+}
+
+.titulo_noticia_miniatura {
+  display: flex;
+  height: 100%;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.imagen_miniatura_noticia {
+  width: 100%;
+  height: 5rem;
+  object-fit: cover;
+  float: left;
+  transition: height 0.3s ease-out;
+}

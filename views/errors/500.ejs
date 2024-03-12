@@ -1,0 +1,19 @@
+<%- include('../components/common/head.ejs', { pageTitle: 'Error interno!' }) %>
+  <link rel="stylesheet" href="/styles/navbar.css">
+  <link rel="stylesheet" href="/styles/socialbar.css">
+  <script src="/scripts/navbar.js" defer></script> 
+</head>
+<body>
+  <header>
+    <%- include('../components/common/navbar.ejs') %>
+  </header>
+  <main>
+    <h1>Error interno del servidor</h1>
+    <p>
+      Ha ocurrido un error en el servidor. Estamos trabajando para resolverlo, 
+      vuelva a intentarlo en unos minutos!
+    </p>
+    <p class="eliminar-en-produccion"><%= error %></p>
+  </main>
+</body>
+</html>

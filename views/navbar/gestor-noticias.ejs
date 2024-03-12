@@ -1,0 +1,53 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+<link rel="stylesheet" href="/styles/navbar.css">
+<link rel="stylesheet" href="/styles/socialbar.css">
+<script src="/scripts/navbar.js" defer></script>
+
+<link rel="stylesheet" href="/styles/gestor_noticias.css">
+</head>
+
+<body>
+    <header>
+        <%- include('../components/common/navbar.ejs') %>
+    </header>
+    <main>
+        <h2 class="titulo_seccion">
+            <p>Gestor de Noticias</p>
+        </h2>
+        <div class="table-container">  
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Titular</th>
+                        <th>Noticia</th>
+                        <th>Imagen</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    <% for(let noticia of noticias) { %>
+                    <tr data-uid="<%= noticia.id %>">
+                        <td>
+                            <%= noticia.date %>
+                        </td>
+                        <td>
+                            <%= noticia.title %>
+                        </td>
+                        <td>
+                            <%= noticia.body %>
+                        </td>
+                        <td>
+                            <img class="imagen-noticia" src="<%= noticia.image %>" alt="Imagen de la noticia">
+                        </td>
+                        <td class="acciones">
+                            <button class="btn">Editar</button>
+                            <button class="btn red-btn">Borrar</button>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
