@@ -1,0 +1,17 @@
+<%- include('../components/common/head.ejs', { title: 'Recurso no encontrado!' }) %>
+  <link rel="stylesheet" href="/styles/navbar.css">
+  <link rel="stylesheet" href="/styles/socialbar.css">
+  <script src="/scripts/navbar.js" defer></script> 
+</head>
+<body>
+  <header>  
+    <%- include('../components/common/navbar.ejs', { navIndex: -1 }) %>
+  </header>
+  <main>
+    <h1>No se ha podido encontrar la página</h1>
+    <p>
+        El recurso al que se ha intentado acceder no está disponible.
+    </p>
+  </main>
+</body>
+</html>

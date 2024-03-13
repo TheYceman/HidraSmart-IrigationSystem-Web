@@ -1,0 +1,21 @@
+#conocenos {
+  width: 83vw;
+  margin: 0 auto;
+  text-align: justify;
+  font-size: 1rem;
+  padding: 0;
+}
+
+#conocenos p {
+  font-size: 1.2rem;
+  white-space: pre-wrap;
+  margin: 0;
+  margin-top: 0;
+}
+
+.image_conocenos {
+  margin: 0vw 0vw 0vw 2vw;
+  width: 40vw;
+  height: 20vw;
+  float: right;
+}

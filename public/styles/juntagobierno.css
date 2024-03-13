@@ -1,0 +1,25 @@
+main {
+  height: var(--height-max-space);
+  display: flex;
+  flex-direction: column;
+}
+
+#highchart-organizacion {
+  width: 80%;
+  margin: 0 auto;
+}
+
+#highchart-organizacion h4 {
+  text-transform: none;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+#highchart-organizacion p {
+  font-size: 0.8rem;
+  line-height: 1rem;
+}
+
+.highcharts-background {
+  fill: var(--color-bg);
+}

@@ -1,0 +1,10 @@
+#gestor-equipos-placeholder {
+  width: 89vw;
+}
+
+main > div {
+  margin: 0 auto;
+  width: 90%;
+  overflow: scroll;
+  max-height: 70%;
+}

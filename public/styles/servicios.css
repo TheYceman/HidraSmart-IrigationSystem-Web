@@ -1,0 +1,164 @@
+#slider-servicios {
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  width: 90%;
+  height: 62vh;
+  overflow: hidden;
+}
+
+.slider_text {
+  margin-left: -35vw;
+  width: 35vw;
+  height: 62vh;
+  align-self: stretch;
+  z-index: 1;
+  float: right;
+}
+
+.slider_text .slide {
+  width: 51.6vw;
+  position: absolute;
+  padding: 1vw 1vw 1vw 2vw;
+  color: white;
+}
+
+.slide h2 {
+  margin: 1.9vw 0vw 0vw 0vw;
+  padding: 0.5vw 1vw;
+  color: #009bdb;
+  font-weight: bold;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
+    1px 1px 0 black;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.slide p {
+  font-size: 1.25rem;
+  margin: 3vh 0 0 0;
+  padding: 3vh 2vw 3vh 2vw;
+  color: white;
+  font-weight: bold;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
+    1px 1px 0 black;
+  white-space: pre-wrap;
+  max-width: 48vw;
+  max-height: 49vh;
+  min-height: 49vh;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  z-index: 99;
+}
+
+::-webkit-scrollbar {
+  width: 0.5vw;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.slider_images {
+  flex: 0 0 68vw;
+  height: 62vh;
+  position: relative;
+  z-index: 0;
+}
+.slider_images .slide-image {
+  position: absolute;
+  overflow: hidden;
+  height: 62vh;
+  width: 50vw;
+  left: 7vw;
+  top: 3vw;
+}
+.slider_images .slide-image img {
+  height: 62vh;
+  width: 50vw;
+  object-fit: cover;
+}
+
+.backgrounds {
+  position: absolute;
+  width: 70vw;
+  height: 62vh;
+}
+.backgrounds .bg-pieces {
+  position: absolute;
+  width: 70vw;
+  height: 33vw;
+}
+.backgrounds .bg-pieces .bgpiece {
+  background-repeat: no-repeat;
+  position: relative;
+  filter: brightness();
+}
+.backgrounds .bg-pieces .one {
+  width: 77vw;
+  height: 5vw;
+  background-size: calc(100% + 100px);
+  background-position: -100px -100px;
+  top: 1vw;
+  mix-blend-mode: overlay;
+  filter: brightness(1.6) hue-rotate(10deg) contrast(1.2);
+}
+.backgrounds .bg-pieces .two {
+  width: 85vw;
+  height: 2vw;
+  z-index: 99;
+  background-position: 0px -120px;
+  mix-blend-mode: overlay;
+  background-size: 100% auto;
+}
+.backgrounds .bg-pieces .three {
+  width: 80vw;
+  height: 4vw;
+  background-size: 100% auto;
+  background-position: 0 -200px;
+  top: 3.2vw;
+  filter: brightness(1.3) saturate(0.9) hue-rotate(10deg);
+}
+.backgrounds .bg-pieces .four {
+  width: 75vw;
+  height: 6vw;
+  background-size: calc(100% + 20px) calc(100% + 300px);
+  background-position: 20px -300px;
+  mix-blend-mode: overlay;
+  filter: brightness(1.3) hue-rotate(20deg);
+  top: 170px;
+  left: 40px;
+  z-index: 99;
+}
+
+.pagination {
+  display: flex;
+  width: 80vw;
+  margin: 0.2vw auto;
+  justify-content: center;
+}
+.pagination > div {
+  border: 1px solid black;
+  padding: 0.5vw 1vw;
+  margin: 1vw;
+  cursor: pointer;
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
+    1px 1px 0 white;
+  font-weight: bold;
+
+  background-size: cover;
+  background-position: center;
+}
+.pagination > div.current {
+  opacity: 1;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  height: var(--height-max-space);
+}
