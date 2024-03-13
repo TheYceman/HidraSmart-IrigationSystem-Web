@@ -16,7 +16,7 @@ async function sendEmail(token, contactname, contactemail, contactmessage) {
         let mailOptions = {
             from: 'hidrasmarthydraulicinnovation@hotmail.com',
             to: contactemail,
-            bcc: 'carlos.merino@hidralab.com, hidrasmarthydraulicinnovation@hotmail.com',//, emilio.ruiz@hidralab.com',
+            bcc: 'carlos.merino@hidralab.com, hidrasmarthydraulicinnovation@hotmail.com, emilio.ruiz@hidralab.com',
             subject: 'Consulta Irrigation System',
             text: `Nombre: `+contactname+`\nEmail: `+contactemail+`\nMensaje: `+contactmessage
         };
