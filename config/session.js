@@ -3,9 +3,9 @@ const MySQLStore = require("express-mysql-session")(session);
 
 function createSessionStore() {
   const options = {
-    host: "adif-server.mysql.database.azure.com",
-    user: "Iago@adif-server",
-    password: "hidra22Azure23",
+    host: "hidralab-server.mysql.database.azure.com",
+    user: "Carlos",
+    password: "hdlAw23",
     port: 3306,
     database: "aplicaciones_web",
     createDatabaseTable: false,
