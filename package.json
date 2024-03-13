@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev_carlos": "nodemon app.js"
+    "dev_carlos": "nodemon app.js",
+    "dev_marian": "nodemon app.js"
   },
   "keywords": [],
   "author": "Hidralab",
