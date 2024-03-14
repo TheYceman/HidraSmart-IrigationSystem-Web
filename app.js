@@ -31,9 +31,10 @@ app.use(createSession());
 app.use(authMiddleware);
 
 app.use("/", initRoutes);
+app.use("/", authRoutes);
 app.use("/", loginRoutes);
 app.use("/", navbarRoutes);
-app.use("/", authRoutes);
+
 app.use("/visor-datos", visorDatosRoutes);
 app.use("/mapa-sig", mapaSigRoutes);
 
