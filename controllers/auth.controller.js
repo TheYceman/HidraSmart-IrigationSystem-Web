@@ -35,7 +35,7 @@ async function login(req, res) {
           req.session.token = user.email;
           //res.send('Inicio de sesión exitoso');
 
-          res.redirect("/mapa-sig");
+          res.redirect("/panel_aplicaciones");
         }
       });
     }
