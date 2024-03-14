@@ -1,95 +1,90 @@
 const {
-  getImagenesPresentacion,
-  getNoticiasData,
-  getServiciosData,
   getRedData,
   getUsuariosData,
 } = require("../data/placeholder_data");
 
 const { getGeData } = require("../controllers/visor-datos.controller");
 
+const { getGeDataContador } = require("../controllers/gestor-equipos.controller");
+const { getGeDataContadorPerPage } = require("../controllers/gestor-equipos.controller");
+const { getGeDataSensorPerPage } = require("../controllers/gestor-equipos.controller");
+const { getTotalPagesSensor } = require("../controllers/gestor-equipos.controller");
+const { getTotalPagesContador } = require("../controllers/gestor-equipos.controller");
+const { getAll } = require("../models/contador.model");
+const { getAllSensores } = require("../models/sensor.model");
+const {getGeDataClientes} = require("../controllers/gestor-equipos.controller");
+
+const { getGeDataUsuario } = require("../controllers/gestor-usuarios.controller");
+const { getGeDataUsuariosPerPage } = require("../controllers/gestor-usuarios.controller");
+const { getTotalPagesUsuarios } = require("../controllers/gestor-usuarios.controller");
+const { getAllUsuarios } = require("../models/usuario.model");
+
+const { getGeDataCliente } = require("../controllers/gestor-clientes.controller");
+const { getGeDataClientesPerPage } = require("../controllers/gestor-clientes.controller");
+const { getTotalPagesClientes } = require("../controllers/gestor-clientes.controller");
+const { getAllClientes } = require("../models/cliente.model");
+
+
 /********** Menú Inicio - Grupo 0 **********/
-function getInicio(req, res) {
-  res.render("navbar/inicio", {
-    navIndex: 0,
-    navGroup: 0,
-    pageTitle: "Inicio",
-    imagenesPresentacion: getImagenesPresentacion(),
-  });
-}
-
-function getConocenos(req, res) {
-  res.render("navbar/conocenos", {
-    navIndex: 1,
-    navGroup: 0,
-    pageTitle: "Conócenos",
-  });
-}
-
-function getNoticias(req, res) {
-  res.render("navbar/noticias", {
-    navIndex: 2,
-    navGroup: 0,
-    pageTitle: "Noticias",
-    noticias: getNoticiasData(),
-  });
-}
-
-function getJuntaGobierno(req, res) {
-  res.render("navbar/junta-de-gobierno", {
-    navIndex: 3,
-    navGroup: 0,
-    pageTitle: "Junta de gobierno",
-  });
-}
-
-function getServicios(req, res) {
-  res.render("navbar/servicios", {
-    navIndex: 4,
-    navGroup: 0,
-    pageTitle: "Servicios",
-    servicios: getServiciosData(),
-  });
-}
-
-function getMapa(req, res) {
-  res.render("navbar/mapa", {
-    navIndex: 5,
-    navGroup: 0,
-    pageTitle: "Mapa",
-  });
-}
-
-function getContacto(req, res) {
-  res.render("navbar/mapa", {
-    navIndex: 6,
-    navGroup: 0,
-    pageTitle: "Contacto",
-  });
-}
 
 function getLogin(req, res) {
   res.render("navbar/login", {
-    navIndex: 7,
+    navIndex: 6,
     navGroup: 0,
     pageTitle: "Iniciar sesión",
+    user:''
+    
   });
+}
+
+function getSoporte(req, res) {
+  res.render("navbar/support", {
+    navIndex: 6,
+    navGroup: 0,
+    pageTitle: "Contacto",    
+  });
+}
+
+function getRespuestaContacto(req, res) {
+  console.log("No encuentra form_send!");
+  res.render("navbar/form_send", {
+    navIndex: 6,
+    navGroup: 0,
+    pageTitle: "Contacto recibido",
+    user:''
+  });
+}
+
+function getLogout(req, res) {
+  // Destruye la sesión actual
+  req.session.destroy((err) => {
+    if (err) {
+        console.error('Error al cerrar la sesión: ' + err.message);
+        res.send('Error al cerrar la sesión');
+    } else {
+        res.redirect('/login'); // Redirige al usuario a la página de inicio u otra página deseada
+    }
+});
 }
 
 /********** Menú Herramientas - Grupo 1 **********/
-function getTramitacionProcedimientos(req, res) {
-  res.render("navbar/tramitacion-procedimientos", {
-    navIndex: 8,
-    navGroup: 1,
-    pageTitle: "Procedimientos",
+
+function getDashboard(req, res) {
+  res.render("navbar/panel_aplicaciones", {
+    navIndex: 7,
+    navGroup: 0,
+    pageTitle: "Panel de aplicacion",
+    user: req.session.username,
   });
 }
 
-function getMapaSig(req, res) {
+async function getMapaSig(req, res) {
   res.render("navbar/mapa-sig", {
     navIndex: 9,
     navGroup: 1,
     pageTitle: "Mapa SIG",
+    user: req.session.username,
+    todosLosContadores: await getAll(req, res),
   });
 }
 
@@ -100,68 +95,65 @@ async function getVisorDatos(req, res) {
     pageTitle: "Visor de datos",
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
+    user: req.session.username,
   });
 }
 
 /********** Menú Gestores - Grupo 2 **********/
-function getGestorNoticias(req, res) {
-  res.render("navbar/gestor-noticias", {
-    navIndex: 11,
-    navGroup: 2,
-    pageTitle: "Gestor de Noticias",
-    noticias: getNoticiasData(),
-  });
-}
 
-function getGestorEquipos(req, res) {
+async function getGestorEquipos(req, res) {
   res.render("navbar/gestor-equipos", {
     navIndex: 12,
     navGroup: 2,
     pageTitle: "Gestor de Equipos",
+    user: req.session.username,
+    contadores: await getGeDataContadorPerPage(req, res),
+    todosLosContadores: await getAll(req, res),
+    currentPage: parseInt(req.query.page) || 1,
+    totalPages: await getTotalPagesContador(req, res),
+    sensores: await getGeDataSensorPerPage(req, res),
+    currentPageSensor: parseInt(req.query.pageSensor) || 1,
+    totalPagesSensor: await getTotalPagesSensor(req, res),
+    todosLosSensores: await getAllSensores(req, res),
+    clientes:  await getGeDataClientes(req, res),
   });
 }
 
-function getGestorRiegos(req, res) {
-  res.render("navbar/gestor-riegos", {
-    navIndex: 13,
-    navGroup: 2,
-    pageTitle: "Gestor de Riegos",
-  });
-}
-
-function getGestorRed(req, res) {
-  res.render("navbar/gestor-red", {
+async function getGestorClientes(req, res) {
+  res.render("navbar/gestor-clientes", {
     navIndex: 14,
     navGroup: 2,
-    pageTitle: "Gestor de Red",
-    red: getRedData(),
+    pageTitle: "Gestor de clientes",
+    user: req.session.username,
+    clientes: await getGeDataClientesPerPage(req, res),
+    todosLosClientes : await getAllClientes(req, res),
+    currentPage: parseInt(req.query.page) || 1,
+    totalPages: await getTotalPagesClientes(req, res),
   });
 }
 
-function getGestorUsuarios(req, res) {
+async function getGestorUsuarios(req, res) {
   res.render("navbar/gestor-usuarios", {
     navIndex: 15,
     navGroup: 2,
     pageTitle: "Gestor de Usuarios",
-    usuarios: getUsuariosData(),
+    user: req.session.username,
+    usuarios: await getGeDataUsuariosPerPage(req, res),
+    todosLosUsuarios: await getAllUsuarios(req, res),
+    currentPage: parseInt(req.query.page) || 1,
+    totalPages: await getTotalPagesUsuarios(req, res),
   });
 }
 
 module.exports = {
-  getInicio,
-  getConocenos,
-  getNoticias,
-  getJuntaGobierno,
-  getServicios,
-  getMapa,
-  getContacto,
   getLogin,
-  getTramitacionProcedimientos,
   getMapaSig,
   getVisorDatos,
-  getGestorNoticias,
   getGestorEquipos,
-  getGestorRiegos,
-  getGestorRed,
+  getGestorClientes,
   getGestorUsuarios,
+  getLogout,
+  getDashboard,
+  getSoporte,
+  getRespuestaContacto,
 };

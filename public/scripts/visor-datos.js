@@ -868,6 +868,7 @@ updateElements();
 
 // Box 3
 async function loadData(params) {
+  //alert ("loadData " + params);
   params.fechaInicio = dateToObject(fechaInicio.value).toISOString();
   params.fechaFin = dateToObject(fechaFin.value).toISOString();
   const response = await fetch(
@@ -888,14 +889,14 @@ function dateToObject(date) {
 async function paintGraph() {
   let elements = Array.from(elementsList.querySelectorAll("li.selected"));
   let seriesData = [];
+  let tablaData = [];
   for (element of elements) {
     let data = await loadData({
       idSensor: element.id,
       tipo: element.dataset.tipo,
     });
     let highcharData = [];
-
-    for (d of data) {
+     for (d of data) {
       let valor;
       switch (element.dataset.tipo) {
         case "nivel":
@@ -912,6 +913,23 @@ async function paintGraph() {
           break;
       }
       highcharData.push([d.instante, valor]);
+
+      const valorTiempo = d.instante // Tu valor de tiempo en milisegundos
+
+      // Crea un objeto Date a partir del valor de tiempo
+      const fecha = new Date(valorTiempo);
+      
+      // Obtiene los componentes de la fecha
+      const dia = fecha.getDate();
+      const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, así que agregamos 1
+      const año = fecha.getFullYear();
+      const horas = fecha.getHours();
+      const minutos = fecha.getMinutes();
+      
+      // Formatea la fecha y hora en el formato deseado
+      const fechaFormateada = `${dia}-${mes}-${año} ${horas}:${minutos}`;
+
+      tablaData.push({"elemento":element.id,"instante":fechaFormateada, "valor": valor});
     }
     highcharData.sort(function (a, b) {
       return a[0] - b[0];
@@ -921,6 +939,25 @@ async function paintGraph() {
       data: highcharData,
       yAxis: ["caudalimetro", "presion"].includes(element.tipo) ? 1 : 0,
     });
+
+
+    // Obtén la referencia a la tabla
+    const tabla = document.getElementById('tablaDatos');
+
+    // Limpia la tabla (opcional)
+    tabla.innerHTML = ' <thead><tr><th>Elemento</th><th>Fecha</th><th>Valor</th></tr></thead>';
+
+    // Crea las filas de la tabla con los datos cargados
+    tablaData.forEach(function(dato) {
+      const fila = document.createElement('tr');
+      fila.innerHTML = `
+        <td>${dato.elemento}</td>
+        <td>${dato.instante}</td>
+        <td>${dato.valor}</td>
+      `;
+      tabla.appendChild(fila);
+    });
+
   }
 
   var chartOptions = {
@@ -964,10 +1001,312 @@ async function paintGraph() {
 
 paintGraph();
 
-//Box 4
-buildTable(
-  ["Nombre", "Apellidos", "Teléfono", "Email", "Dirección"],
-  registrosRegantes,
-  "tablas",
-  true
-);
+//Inicio Box 4
+var matrizDatos = [];
+var arrayFechas = [];
+var dataTabs = 2;
+var htmlDataTabs = "";
+var dataTabsLeft = 100 / dataTabs;
+var dataTabsLeftAdd = 0;
+var leftActiveOld;
+
+function updateDataTabs() {
+  dataTabs = selectedSubsectores.length;
+  dataTabsLeft = 100 / dataTabs;
+  dataTabsLeftAdd = 0;
+}
+
+async function updateMatrizDatos() {
+  matrizDatosAux = [];
+  if (selectedSubsectores.length >= 0) {
+    for (var i = 0; i < selectedSubsectores.length; i++) {
+      var subsectorName = selectedSubsectores[i];
+      var subsectorData = await getSubsectorData(subsectorName);
+      check_subsector_existence(subsectorName, subsectorData);
+      //matrizDatosAux.push({ name: subsectorName, data: subsectorData });
+    }
+    paint_tables(selectedSubsectores.length, matrizDatosAux);
+    var lastTable = document.getElementById("lastTable");
+    if (lastTable) {
+      var leftActiveNew = $(lastTable).css("left");
+      var leftActiveNewPx = parseFloat(leftActiveNew);
+      var parentWidth = $(lastTable).parent().width();
+      var leftActiveNewPercent = (leftActiveNewPx / parentWidth) * 100;
+      leftActiveOld = leftActiveNewPercent + "%";
+      if (selectedSubsectores.length < 2) {
+        lastTable.classList.add("activeOnly");
+        $(".table-container").css("height", "16.1vw");
+      } else {
+        lastTable.classList.add("active");
+      }
+
+      lastTable.style.left = "0%";
+      lastTable.style.width = "100%";
+    }
+  }
+}
+
+function check_subsector_existence(subsectorName, subsectorData) {
+  var existeSubsector = matrizDatosAux.some(function (item) {
+    return item.name === subsectorName;
+  });
+
+  // Agregar el nuevo elemento solo si no existe
+  if (!existeSubsector) {
+    matrizDatosAux.push({ name: subsectorName, data: subsectorData });
+  }
+
+  // Restablecer la variable existeSubsector
+  existeSubsector = false; // O cualquier otro valor que desees asignar
+}
+
+function getSubsectorData(subsectorName) {
+  let inicioAux = document.getElementById("inicio").value;
+  let finAux = document.getElementById("fin").value;
+
+  // Convertir las fechas de los inputs al formato 'aaaa-mm-ddThh:mm'
+  let inicioParts = inicioAux.split(" ");
+  let finParts = finAux.split(" ");
+
+  let inicioDateParts = inicioParts[0].split("-");
+  let finDateParts = finParts[0].split("-");
+
+  let inicioDate = new Date(
+    "20" +
+      inicioDateParts[2] +
+      "-" +
+      inicioDateParts[1] +
+      "-" +
+      inicioDateParts[0] +
+      "T" +
+      inicioParts[1]
+  );
+  let finDate = new Date(
+    "20" +
+      finDateParts[2] +
+      "-" +
+      finDateParts[1] +
+      "-" +
+      finDateParts[0] +
+      "T" +
+      finParts[1]
+  );
+
+  var match = subsectorName.match(/_(.*?)_/);
+  var typeElement = match ? match[1] : null;
+
+  var partes = subsectorName.split("_");
+  var nameElement = partes.slice(2).join("_");
+
+  var matrizDatas = [];
+
+  switch (typeElement) {
+    case "cau":
+      return fetch("public/json/dat_caudalimetros.json")
+        .then((response) => response.json())
+        .then(function (data) {
+          flowmetersDatArray = Array.from(data);
+          flowmeterDates = flowmetersDatArray.filter(function (flowmeter) {
+            let flowmeterDate = new Date(flowmeter.instante);
+            return (
+              flowmeter.ideSensor === nameElement &&
+              flowmeterDate >= inicioDate &&
+              flowmeterDate <= finDate
+            );
+          });
+          matrizDatas = flowmeterDates.map(function (flowmeter) {
+            return {
+              fecha: flowmeter.instante,
+              valor: flowmeter.caudal,
+              yAxis: 1,
+            };
+          });
+          return matrizDatas;
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    case "niv":
+      var match = subsectorName.match(/Sec(.*?)_/);
+      var sectorElement = match ? match[1] : null;
+      return fetch("public/json/dat_niveles.json")
+        .then((response) => response.json())
+        .then(function (data) {
+          levelsDatArray = Array.from(data);
+          levelDates = levelsDatArray.filter(function (level) {
+            return level.ideSector === sectorElement;
+          });
+          matrizDatas = levelDates.map(function (level) {
+            return {
+              fecha: level.instante,
+              valor: level.altura,
+              yAxis: 0,
+            };
+          });
+          return matrizDatas;
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    case "pre":
+      var match = subsectorName.match(/Sec(.*?)_/);
+      var sectorElement = match ? match[1] : null;
+      return fetch("public/json/dat_presiones.json")
+        .then((response) => response.json())
+        .then(function (data) {
+          pressuresDatArray = Array.from(data);
+          let pressureDates = pressuresDatArray.filter(function (pressure) {
+            return pressure.ideSector === sectorElement;
+          });
+          matrizDatas = pressureDates.map(function (pressure) {
+            return {
+              fecha: pressure.instante,
+              valor: parseFloat((pressure.presion / 100).toFixed(2)),
+              yAxis: 0,
+            };
+          });
+          return matrizDatas;
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    case "val":
+      var match = subsectorName.match(/Sec(.*?)_/);
+      var sectorElement = match ? match[1] : null;
+      return fetch("public/json/dat_valvulas.json")
+        .then((response) => response.json())
+        .then(function (data) {
+          valvesDatArray = Array.from(data);
+          valveDates = valvesDatArray.filter(function (valve) {
+            return valve.ideSensor === nameElement;
+          });
+          matrizDatas = valveDates.map(function (valve) {
+            return {
+              fecha: valve.instante,
+              valor: valve.estado,
+              yAxis: 0,
+            };
+          });
+          return matrizDatas;
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    default:
+      return Promise.resolve([]); // Devuelve una promesa resuelta con un array vacío por defecto
+  }
+}
+
+function paint_tables(dataTabs, matrizDatos) {
+  var htmlDataTabs = "";
+  var dataTabsLeft = 100 / dataTabs;
+  var dataTabsLeftAdd = 0;
+  for (i = 0; i < dataTabs; i++) {
+    if (i === dataTabs - 1) {
+      htmlDataTabs +=
+        `
+        <div class="slide" id="lastTable" style="left: ` +
+        dataTabsLeftAdd +
+        `%;">`;
+    } else {
+      htmlDataTabs +=
+        `
+        <div class="slide" style="left: ` +
+        dataTabsLeftAdd +
+        `%;">`;
+    }
+    htmlDataTabs +=
+      `
+          <a href="#">` +
+      matrizDatos[i].name +
+      `</a>
+          <div class="content">
+            <div class="table_container" id="table-container">
+              <div class="table-container">  
+                <table >
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table` +
+      i +
+      `">
+                    <!-- Aquí se generarán dinámicamente las filas de la tabla -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    dataTabsLeftAdd += dataTabsLeft;
+  }
+  $(".slides").html("");
+  $(".slides").html(htmlDataTabs);
+  $(".slides .slide").css("width", dataTabsLeft + "%");
+
+  for (c = 0; c < dataTabs; c++) {
+    var data = matrizDatos[c].data;
+    // Imprimir el array de valores
+    convertirDatos("Table_" + c, data);
+
+    // Obtener referencia a la tabla
+    var table = document.getElementById("table" + c);
+
+    // Agregar registros a la tabla
+    for (var i = 0; i < data.length; i++) {
+      var registro = data[i];
+      var row = table.insertRow();
+      row.insertCell().innerText = registro.fecha;
+      row.insertCell().innerText = registro.valor;
+    }
+  }
+
+  $(".slide a").click(function () {
+    var leftActiveNew = $(this).closest(".slide").css("left");
+    var leftActiveNewPx = parseFloat(leftActiveNew); // Obtiene el valor numérico en píxeles
+    var parentWidth = $(this).closest(".slide").parent().width(); // Obtiene el ancho del elemento padre
+    var leftActiveNewPercent = (leftActiveNewPx / parentWidth) * 100; // Convierte el valor a porcentaje
+    //var roundedPercent = Math.round(leftActiveNewPercent); // Redondea el valor a un número entero
+
+    $(".slide.active").css("width", dataTabsLeft + "%");
+    $(".slide.active").css("left", leftActiveOld);
+    $(".slide.active").removeClass("active");
+    $(this).closest(".slide").addClass("active");
+    $(this).closest(".slide").css("left", "0%");
+    $(this).closest(".slide").css("width", "100%");
+    leftActiveOld = leftActiveNewPercent + "%";
+    return false;
+  });
+  paint_graph(matrizDatosAux);
+}
+
+function convertirDatos(name, data) {
+  var valores = [];
+  arrayFechas = [];
+
+  for (var i = 0; i < data.length; i++) {
+    var item = data[i];
+    arrayFechas.push(item.fecha);
+    valores.push([
+      Date.UTC(convertirFechas(item.fecha)),
+      parseFloat(item.valor),
+    ]);
+  }
+  matrizDatos.push({ name: name, data: valores });
+  return matrizDatos;
+}
+
+function convertirFechas(fecha) {
+  var partes = fecha.split(" ");
+  var fechaPartes = partes[0].split("/");
+  var horaPartes = partes[1].split(":");
+  var dd = parseInt(fechaPartes[0], 10);
+  var mm = parseInt(fechaPartes[1], 10) - 1;
+  var yyyy = parseInt(fechaPartes[2], 10);
+  var hh = parseInt(horaPartes[0], 10);
+  var min = parseInt(horaPartes[1], 10);
+  return yyyy, mm, dd, hh, min;
+}

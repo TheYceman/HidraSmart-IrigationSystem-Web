@@ -35,7 +35,7 @@ var infowindowspipelines = new Map(); // Objeto de mapa para almacenar los infow
 // Coordenadas
 const targetLongitude = -3.070035423095705;
 const targetLatitude = 39.1430930560515;
-
+/*
 const viewer = new Cesium.Viewer("cesiumContainer", {
   animation: false,
   baseLayerPicker: false,
@@ -65,22 +65,22 @@ if (viewer.scene.globe.tilesLoaded) {
     tilesLoaded = true;
   });
 }
-
+*/
 // Función para verificar periódicamente si los azulejos del globo se han cargado por completo
-function checkGlobeLoadingProgress() {
-  if (tilesLoaded) {
-    // Los azulejos del globo se han cargado por completo, iniciar la animación de la cámara
-    animateCamera();
-  } else {
-    // Los azulejos del globo no se han cargado por completo, volver a verificar en 500 ms (ajusta este valor según sea necesario)
-    setTimeout(checkGlobeLoadingProgress, 500);
-  }
-}
+//function checkGlobeLoadingProgress() {
+// if (tilesLoaded) {
+// Los azulejos del globo se han cargado por completo, iniciar la animación de la cámara
+// animateCamera();
+// } else {
+// Los azulejos del globo no se han cargado por completo, volver a verificar en 500 ms (ajusta este valor según sea necesario)
+// setTimeout(checkGlobeLoadingProgress, 500);
+//}
+//}
 
 // Iniciar la verificación periódica de carga de los azulejos del globo
-checkGlobeLoadingProgress();
+//checkGlobeLoadingProgress();
 
-function animateCamera() {
+/*function animateCamera() {
   // Zoom deseado
   const targetZoom = 14000;
 
@@ -119,9 +119,9 @@ function animateCamera() {
     },
   });
 }
-
+*/
 myMap = new google.maps.Map(document.getElementById("map"), {
-  zoom: 13,
+  zoom: 12,
   streetViewControl: false,
   center: { lat: targetLatitude, lng: targetLongitude },
   mapTypeId: "satellite",
@@ -146,25 +146,25 @@ checkboxes.forEach(function (checkbox) {
           if (checkboxCounterList.length > 0) {
             checkboxCounterList[0].style.opacity = 1;
           }
-          paint_counter();
+          paint_counter_bbdd();
           break;
         case "item1-1-1":
-          paint_counter();
+          paint_counter_bbdd();
           break;
         case "item1-1-2":
-          paint_counter();
+          paint_counter_bbdd();
           break;
         case "item1-1-3":
-          paint_counter();
+          paint_counter_bbdd();
           break;
         case "item1-1-4":
-          paint_counter();
+          paint_counter_bbdd();
           break;
         case "item1-2":
-          paint_counter();
+          paint_counter_bbdd();
           break;
         case "item2-1":
-          paint_counter();
+          paint_counter_bbdd();
           var checkboxValve = document.getElementsByClassName("checkbox_valve");
           for (var i = 0; i < checkboxValve.length; i++) {
             checkboxValve[i].checked = true;
@@ -178,10 +178,10 @@ checkboxes.forEach(function (checkbox) {
           }
           break;
         case "item2-1-1":
-          paint_counter();
+          paint_counter_bbdd();
           break;
         case "item2-1-2":
-          paint_counter();
+          paint_counter_bbdd();
           break;
         case "item2-2":
           paint_plots();
@@ -428,6 +428,128 @@ function paint_counter() {
     .catch((error) => {
       console.log("Error:", error);
     });
+}
+
+function paint_counter_bbdd() {
+
+  fetch("/mapa-sig/getContadoresMapa")
+    .then((response) => response.json())
+    .then(function (data) {
+      //console.log(data);
+      var countersArray = Array.from(data);
+      //console.log(countersArray);
+      countersArray.forEach(function (counter) {
+        if (checkboxCountersWithoutWatering.checked) {
+          if (counter.tipoElemento == 2) {
+            console.log(counter.id)
+            var iconUrl = "/images/mapa_sig/counter_without_watering.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerCounter = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(30, 20),
+              },
+              title: counter.id,
+            });
+            // Agregar evento de clic al marker
+            markerCounter.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.id);
+            });
+            // Agregar el marker al arreglo
+            makersCountersArray.push(markerCounter);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+        if (checkboxCountersAnomalous.checked) {
+        }
+        if (checkboxCountersWatering.checked) {
+        }
+        if (checkboxCountersMaster.checked) {
+          if (counter.tipoElemento == 4) {
+            var iconUrl = "/images/mapa_sig/counter_master.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerCounterMaster = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(30, 20),
+              },
+              title: counter.id,
+            });
+            // Agregar evento de clic al marker
+            markerCounterMaster.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.id);
+            });
+            // Agregar el marker al arreglo
+            makersCountersMasterArray.push(markerCounterMaster);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+        if (checkboxPumpEstation.checked) {
+          if (counter.tipoElemento == 0) {
+            var iconUrl = "/images/mapa_sig/pump_station.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerPumpEstation = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(20, 20),
+              },
+              title: counter.id,
+            });
+            // Agregar evento de clic al marker
+            markerPumpEstation.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.id);
+            });
+            // Agregar el marker al arreglo
+            markerPumpEstationsArray.push(markerPumpEstation);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+        if (checkboxValveOpen.checked) {
+          if (counter.tipoElemento == 3) {
+            var iconUrl = "/images/mapa_sig/valve_open.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(counter.coorY);
+            var coorX = parseFloat(counter.coorX);
+            var markerValveOpen = new google.maps.Marker({
+              position: { lat: coorX, lng: coorY },
+              map: myMap,
+              icon: {
+                url: iconUrl,
+                scaledSize: new google.maps.Size(20, 20),
+              },
+              title: counter.id,
+            });
+            // Agregar evento de clic al marker
+            markerValveOpen.addListener("click", function (event) {
+              show_infowindow_plots(event, counter.id);
+            });
+            // Agregar el marker al arreglo
+            markerValveOpenArray.push(markerValveOpen);
+            // Guardar el infowindow asociado al polígono de parcela
+            //infowindowscounters.set(markerCounter, infowindow);
+          }
+        }
+      });
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+
 }
 
 // Función para eliminar los marcadores del array

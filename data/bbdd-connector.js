@@ -1,13 +1,19 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
+const fs = require('fs');
 
 function getDb() {
+  const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
+  console.log("bbb" + process.cwd())
   try {
     let conn = mysql.createConnection({
       host: "hidralab-server.mysql.database.azure.com",
-      user: "Iago",
-      password: "hidra22Azure23",
+      user: "telemedida_alcazar",
+      password: "Hidra2023Alcazar",
       port: 3306,
       database: "aplicaciones_web",
+      ssl : {
+        ca : fs.readFileSync(certPath),
+    }
     });
     return conn;
   } catch (err) {
@@ -24,16 +30,16 @@ function runQuery(query) {
         reject(err);
       } else {
         conn.query(query, function (err, result, fields) {
+          conn.destroy();
           if (err) {
             reject(err);
           } else {
             resolve(result);
           }
-          conn.destroy();
         });
       }
     });
   });
 }
 
-module.exports = { runQuery };
+module.exports = { getDb, runQuery };

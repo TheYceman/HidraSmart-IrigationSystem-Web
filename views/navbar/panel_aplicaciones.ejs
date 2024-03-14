@@ -1,0 +1,133 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/socialbar.css">
+    <script src="/scripts/navbar.js" defer></script>
+
+    <link rel="stylesheet" href="/styles/panel_aplicaciones.css">
+
+    </head>
+
+    <body>
+        <aside>
+            <%- include('../components/common/rrss.ejs') %>
+        </aside>
+        <header>
+            <%- include('../components/common/navbar.ejs') %>
+        </header>
+        <main>
+            <h2 class="titulo_seccion">
+                <p>Panel de aplicaciones</p>
+            </h2>
+            <div class="container_cards" id="container-cards">
+                <div class="card card_overall_record float_card" id="card-overall-record">
+                    <div class="card_body_container">
+                        <p class="title_float_card_gray">
+                            Bienvenido <%=user %><br>
+                                <img class="card_image"
+                                    src="/images/tramitacion-procedimientos/registro_general_white.png">
+                        </p>
+                        <div class="sub_container_cards sub_container_cards_owner_management">
+                            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit "</p>
+                            <div class="sub_card sub_card_overall_record float_sub_card" id="sub-card-overall-record-1">
+                                <p class="title_float_card">
+                                    Mi perfil
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card_owner_management float_card" id="card-owner-management">
+                    <div class="card_body_container">
+                        <p class="title_float_card">
+                            Gestor de usuarios<br>
+                            <img class="card_image"
+                                src="/images/tramitacion-procedimientos/gestion_propietarios_white.png">
+                        </p>
+                        <div class="sub_container_cards sub_card sub_container_cards_owner_management">
+                            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit "</p>
+                            <div class="sub_card sub_card_owner_management float_sub_card"
+                                id="sub_card-owner_management">
+                                <p class="title_float_card" onclick="window.location.href = '/gestor-usuarios';">
+                                    Acceder
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card_overall_record float_card" id="card-overall-record">
+                    <div class="card_body_container">
+                        <p class="title_float_card">
+                            Visor de datos<br>
+                            <img class="card_image" src="/images/tramitacion-procedimientos/registro_general_white.png">
+                        </p>
+                        <div class="sub_container_cards sub_container_cards_owner_management">
+                            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit "</p>
+                            <div class="sub_card sub_card_overall_record float_sub_card" id="sub-card-overall-record-1">
+
+                                <p class="title_float_card" onclick="window.location.href = '/visor-datos';">
+                                    Acceder
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card_irrigation_management float_card" id="card-irrigation-management">
+
+                    <div class="card_body_container">
+                        <p class="title_float_card">
+                            Mapa SIG<br>
+                            <img class="card_image" src="/images/tramitacion-procedimientos/gestion_regantes_white.png">
+                        </p>
+                        <div class="sub_container_cards sub_container_cards_irrigation_management">
+                            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit "</p>
+                            <div class="sub_card sub_card_irrigation_management float_sub_card"
+                                id="sub-card-irrigation-management-1">
+                                <p class="title_float_card" onclick="window.location.href = '/mapa-sig';">
+                                    Acceder
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card_authorization_works float_card" id="card-authorization-works">
+                    <div class="card_body_container">
+                        <p class="title_float_card">
+                            Gestor de equipos<br>
+                            <img class="card_image"
+                                src="/images/tramitacion-procedimientos/authorization_works_white.png">
+                        </p>
+                        <div class="sub_container_cards sub_container_cards_authorization_works">
+                            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit "</p>
+                            <div class="sub_card sub_card_authorization_works float_sub_card"
+                                id="sub_card-authorization-works">
+                                <p class="title_float_card" onclick="window.location.href = '/gestor-equipos?page=1&pageSensor=1';">
+                                    Acceder
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card_owner_management float_card" id="card-owner-management">
+                    <div class="card_body_container">
+                        <p class="title_float_card">
+                            Gestor de clientes<br>
+                            <img class="card_image"
+                                src="/images/tramitacion-procedimientos/gestion_propietarios_white.png">
+                        </p>
+                        <div class="sub_container_cards sub_card sub_container_cards_owner_management">
+                            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit "</p>
+                            <div class="sub_card sub_card_owner_management float_sub_card"
+                                id="sub_card-owner_management">
+                                <p class="title_float_card" onclick="window.location.href = '/gestor-clientes';"></p>
+                                Acceder
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include('../components/common/footer.ejs') %>
+        </main>
+    </body>
+
+    </html>

@@ -23,7 +23,7 @@ class Valvula {
 
   static async getFilteredData(sector, fechaInicio, fechaFin) {
     const data = await runQuery(
-      `SELECT * FROM dat_valvula WHERE ideSector=${sector} instante > "${fechaInicio
+      `SELECT * FROM dat_valvulas WHERE ideSector=${sector} instante > "${fechaInicio
         .slice(0, 19)
         .replace("T", " ")}" AND instante < "${fechaFin
         .slice(0, 19)

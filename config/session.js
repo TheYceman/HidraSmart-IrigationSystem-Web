@@ -1,35 +1,77 @@
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
+const fs = require('fs');
+const mysql = require("mysql2");
+
 
 function createSessionStore() {
-  const options = {
+
+  const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
+  console.log("bbb" + process.cwd())
+  const dbConfig = {
     host: "hidralab-server.mysql.database.azure.com",
-    user: "Carlos",
-    password: "hdlAw23",
-    port: 3306,
-    database: "aplicaciones_web",
-    createDatabaseTable: false,
-    schema: {
-      tableName: "sesiones_hidrasmart_regantes",
-      columnNames: {
-        session_id: "sesion",
-        expires: "expires",
-        data: "data",
-      },
-    },
+        user: "telemedida_alcazar",
+        password: "Hidra2023Alcazar",
+        port: 3306,
+        database: "aplicaciones_web",
+        ssl : {
+          ca : fs.readFileSync(certPath),
+      }
   };
 
-  const sessionStore = new MySQLStore(options);
+  const connection = mysql.createConnection(dbConfig);
+
+  const sessionStore = new MySQLStore({
+    clearExpired: true,
+      // Whether or not to automatically check for and clear expired sessions:
+      clearExpired: false,
+      // How frequently expired sessions will be cleared; milliseconds:
+      checkExpirationInterval: 900000,
+      // The maximum age of a valid session; milliseconds:
+      expiration: 86400000,
+      // Whether or not to create the sessions database table, if one does not already exist:
+      //createDatabaseTable: true,
+      // Whether or not to end the database connection when the store is closed.
+      // The default value of this option depends on whether or not a connection was passed to the constructor.
+      // If a connection object is passed to the constructor, the default value for this option is false.
+      endConnectionOnClose: true,
+      disableTouch: false,
+      charset: 'utf8mb4_bin',
+      schema: {
+        tableName: 'sessions',
+        columnNames: {
+          session_id: 'session_id',
+          expires: 'expires',
+          data: 'data',
+         
+      }
+    }
+  }, connection);
+  // Optionally use onReady() to get a promise that resolves when store is ready.
+  sessionStore.onReady().then(() => {
+  // MySQL session store ready for use.
+  console.log('MySQLStore ready');
+  }).catch(error => {
+  // Something went wrong.
+    console.error(error);
+  });
+
   return sessionStore;
 }
 
 function createSession() {
+  const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 hour
   return session({
-    key: "sesion_hidrasmart_regantes",
+    key: "sesion_hidrasmart_ca",
     secret: "session_cookie_secret",
     store: createSessionStore(),
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      //secure: true,
+      //httpOnly: true,
+      expires: expiryDate      
+    }
   });
 }
 

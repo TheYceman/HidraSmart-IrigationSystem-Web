@@ -12,6 +12,7 @@ async function getLogin(req, res) {
         const repo = 'HidraSmart-CommonFiles';
         const rutaHeadLogin = 'components/head-login.html';
         const rutaBodyLogin = 'components/body-login.html';
+        const rutaScriptLogin = 'scripts/login.js';
         
         // Obtener el commit más reciente del archivo head-login.html
         const commitShaHeadLogin = await obtenerCommitMasReciente(owner, repo, rutaHeadLogin);
@@ -34,10 +35,17 @@ async function getLogin(req, res) {
         const responseBodyLogin = await fetch(urlBodyLogin);
         const htmlBodyLogin = await responseBodyLogin.text();
 
+        // Obtener el commit más reciente del archivo head-login.html
+        const commitShaScriptLogin = await obtenerCommitMasReciente(owner, repo, rutaScriptLogin);
+
+        // Construir la URL con la SHA del commit más reciente
+        const urlScriptLogin = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${commitShaScriptLogin}/${rutaScriptLogin}`;
+
         // Renderizar la vista y enviar el contenido obtenido
-        res.render('login/login', { 
+        res.render('login', { 
           headLoginHTML: htmlHeadLogin,
           bodyLoginHTML: htmlBodyLogin,
+          scriptLoginURL: urlScriptLogin,
           headImage: ('/images/login/IS-positivo-horizontal.png'),
           title:'Login',
           sectionTitle: 'Inicio de Sesión',
