@@ -1,7 +1,7 @@
 const Sensor = require("../models/sensor.model");
 
 async function getGeData(req, res) {
-  const geData = [...(await Sensor.getAll())];
+  const geData = [...(await Sensor.getAllSensores())];
   return geData;
 }
 

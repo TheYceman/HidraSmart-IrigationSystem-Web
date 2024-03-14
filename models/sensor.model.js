@@ -10,12 +10,23 @@ class Sensor {
     this.coorY = geSensor.coorY;
   }
 
-  static async getAll() {
+  static async getPerPage(perPage, offset) {
+    const data = await runQuery("SELECT * FROM ge_sensores LIMIT " + perPage + " OFFSET " + offset + ";");
+    const geSensores = data.map((sensor) => new Sensor(sensor));
+    return geSensores;
+  }
+  static async getCountAll() {
+    const data = await runQuery("SELECT count(*) as total FROM ge_sensores;");
+    const geTotal = data.map((total) => total);
+    console.log(geTotal[0].total);
+    return geTotal[0].total;
+  }
+
+  static async getAllSensores() {
     const data = await runQuery("SELECT * FROM ge_sensores;");
     const geSensor = data.map((geSensor) => new Sensor(geSensor));
     return geSensor;
   }
-
   static async getCaudalimetros() {
     const data = await runQuery(
       "SELECT * FROM ge_sensores WHERE tipo='caudalimetro';"
@@ -31,6 +42,7 @@ class Sensor {
     const geSensor = data.map((geSensor) => new Sensor(geSensor));
     return geSensor;
   }
+  
   static async getPresiones() {
     const data = await runQuery(
       "SELECT * FROM ge_sensores WHERE tipo='presion';"

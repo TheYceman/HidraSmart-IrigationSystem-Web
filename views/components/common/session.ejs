@@ -1,0 +1,14 @@
+<div class="containerHead2">
+    <% if (typeof user !=='undefined' && user) { %>
+        ¡Bienvenid@, <%= user %>!
+            <form action="/logout" method="GET">
+                <button type="submit" class="btn_access">Cerrar Sesión</button>
+            </form>
+
+            <!-- Puedes mostrar más información del usuario aquí si es necesario -->
+            <% } else { %>
+                <form action="/login" method="GET">
+                    <button type="submit" class="btn_access">Iniciar Sesión</button>
+                </form>
+                <% } %>
+</div>
