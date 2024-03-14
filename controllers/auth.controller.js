@@ -17,7 +17,7 @@ async function login(req, res) {
       conn.destroy();
       reject(err);
     } else {
-      conn.query('SELECT * FROM usuarios WHERE login = ?', [user.email], (err, results) => {
+      conn.query('SELECT * FROM users WHERE username = ?', [user.email], (err, results) => {
         if (err) {
           conn.destroy();
           console.error('Error al buscar el usuario: ' + err.message);
@@ -35,7 +35,7 @@ async function login(req, res) {
           req.session.token = user.email;
           //res.send('Inicio de sesión exitoso');
 
-          res.redirect("/panel_aplicaciones");
+          res.redirect("/mapa-sig");
         }
       });
     }
