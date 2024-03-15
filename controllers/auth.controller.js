@@ -1,6 +1,8 @@
 const authUtil = require("../utils/auth");
 const sessionFlash = require("../utils/session-flash");
 
+const { getDb, runQuery } = require("../data/bbdd-connector");
+
 async function verifyUser(username, password){
   const conn = getDb();
   
@@ -14,7 +16,7 @@ async function login(req, res) {
   try{
       const { username, password, token} = req.body;
       
-      let resultLogin = await verifyUser(username, password);
+      let resultLogin = await verifyUser(username, password, req);
       
       // console.log(resultLogin);
       if (!resultLogin) {
@@ -28,7 +30,7 @@ async function login(req, res) {
   }
 }
 
-async function verifyUser(username, password) {
+async function verifyUser2(username, password) {
   // const user = { username: req.body.username, password: req.body.password };
 
 
