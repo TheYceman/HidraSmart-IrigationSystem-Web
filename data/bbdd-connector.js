@@ -11,9 +11,9 @@ function getDb() {
       password: "Hidra2023Alcazar",
       port: 3306,
       database: "aplicaciones_web",
-      ssl : {
-        ca : fs.readFileSync(certPath),
-    }
+      ssl: {
+        ca: fs.readFileSync(certPath),
+      }
     });
     return conn;
   } catch (err) {
@@ -26,11 +26,23 @@ function runQuery(query) {
     const conn = getDb();
     conn.connect(function (err) {
       if (err) {
-        conn.end();
+        conn.end((err) => {
+          if (err) {
+            console.error('Error al cerrar la conexión:', err.message);
+          } else {
+            console.log('Conexión cerrada correctamente.');
+          }
+        });
         reject(err);
       } else {
         conn.query(query, function (err, result, fields) {
-          conn.end();
+          conn.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err.message);
+            } else {
+              console.log('Conexión cerrada correctamente.');
+            }
+          });
           if (err) {
             reject(err);
           } else {
@@ -41,5 +53,6 @@ function runQuery(query) {
     });
   });
 }
+
 
 module.exports = { getDb, runQuery };

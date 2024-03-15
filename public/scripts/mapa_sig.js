@@ -1,3 +1,5 @@
+
+
 var myMap;
 
 var counterArray = [];
@@ -126,6 +128,33 @@ myMap = new google.maps.Map(document.getElementById("map"), {
   center: { lat: targetLatitude, lng: targetLongitude },
   mapTypeId: "satellite",
 });
+
+function paint_counter_bbdd() {
+  contadores.forEach(contador => {
+    console.log("Coordenada X:", contador.coorX);
+    console.log("Coordenada Y:", contador.coorY);
+
+    var iconUrl = "/images/mapa_sig/counter_without_watering.png";
+    // Obtener las coordenadas
+    var coorY = parseFloat(contador.coorY);
+    var coorX = parseFloat(contador.coorX);
+    var markerCounter = new google.maps.Marker({
+      position: { lat: coorX, lng: coorY },
+      map: myMap,
+      icon: {
+        url: iconUrl,
+        scaledSize: new google.maps.Size(30, 20),
+      },
+      title: contador.id,
+    });
+    // Agregar evento de clic al marker
+    markerCounter.addListener("click", function (event) {
+      show_infowindow_plots(event, contador.id);
+    });
+    // Agregar el marker al arreglo
+    makersCountersArray.push(markerCounter);
+  });
+}
 
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
@@ -430,7 +459,7 @@ function paint_counter() {
     });
 }
 
-function paint_counter_bbdd() {
+function paint_counter_bbdd1() {
 
   fetch("/mapa-sig/getContadoresMapa")
     .then((response) => response.json())

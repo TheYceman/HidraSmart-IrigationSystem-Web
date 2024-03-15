@@ -1,0 +1,67 @@
+[ 
+{ 
+"ideSensor":"1",
+"ideSector":"1",
+"ideRadio":45444,
+"tipo":"1",
+"parametro":0.5,
+"coorX":"39.07383",
+"coorY":"-3.05609",
+"comment":"Presión en bombeo",
+"estados":0
+},
+{ 
+"ideSensor":"1",
+"ideSector":"2",
+"ideRadio":45445,
+"tipo":"1",
+"parametro":0.5,
+"coorX":"39.06825",
+"coorY":"-3.061188",
+"comment":"Presión en bombeo",
+"estados":1
+},
+{ 
+"ideSensor":"1",
+"ideSector":"3",
+"ideRadio":45446,
+"tipo":"1",
+"parametro":0.5,
+"coorX":"39.13425",
+"coorY":"-3.104891",
+"comment":"Presión en bombeo",
+"estados":1
+},
+{ 
+"ideSensor":"1",
+"ideSector":"4",
+"ideRadio":45447,
+"tipo":"1",
+"parametro":0.5,
+"coorX":"39.14416",
+"coorY":"-3.070355",
+"comment":"Presión en bombeo",
+"estados":1
+},
+{ 
+"ideSensor":"1",
+"ideSector":"5",
+"ideRadio":45448,
+"tipo":"1",
+"parametro":0.5,
+"coorX":"39.15549",
+"coorY":"-3.055512",
+"comment":"Presión en bombeo",
+"estados":0
+},
+{ 
+"ideSensor":"1",
+"ideSector":"6",
+"ideRadio":45449,
+"tipo":"1",
+"parametro":0.5,
+"coorX":"39.06823",
+"coorY":"-3.061181",
+"comment":"Presión en bombeo",
+"estados":1
+}]

@@ -1,0 +1,89 @@
+[ 
+{ 
+"ideSensor":"1",
+"ideSector":"1",
+"ideRadio":56441,
+"tipo":"1",
+"parametro":0.3,
+"coorX":"39.073695",
+"coorY":"-3.05573",
+"comment":"Nivel en balsa",
+"estados":1
+},
+{ 
+"ideSensor":"1",
+"ideSector":"2",
+"ideRadio":56442,
+"tipo":"1",
+"parametro":0.3,
+"coorX":"39.067969",
+"coorY":"-3.061348",
+"comment":"Nivel en balsa",
+"estados":0
+},
+{ 
+"ideSensor":"1",
+"ideSector":"3",
+"ideRadio":56443,
+"tipo":"1",
+"parametro":0.3,
+"coorX":"39.134143",
+"coorY":"-3.105168",
+"comment":"Nivel en balsa",
+"estados":1
+},
+{ 
+"ideSensor":"1",
+"ideSector":"4",
+"ideRadio":56444,
+"tipo":"1",
+"parametro":0.3,
+"coorX":"39.14439",
+"coorY":"-3.070191",
+"comment":"Nivel en balsa",
+"estados":1
+},
+{ 
+"ideSensor":"1",
+"ideSector":"5",
+"ideRadio":56445,
+"tipo":"1",
+"parametro":0.3,
+"coorX":"39.155216",
+"coorY":"-3.05557",
+"comment":"Nivel en balsa",
+"estados":1
+},
+{ 
+"ideSensor":"2",
+"ideSector":"2",
+"ideRadio":56446,
+"tipo":"1",
+"parametro":0.3,
+"coorX":"39.067604",
+"coorY":"-3.059493",
+"comment":"Nivel en canal",
+"estados":1
+},
+{ 
+"ideSensor":"2",
+"ideSector":"4",
+"ideRadio":56448,
+"tipo":"1",
+"parametro":0.3,
+"coorX":"39.142791",
+"coorY":"-3.06816",
+"comment":"Nivel en canal",
+"estados":0
+},
+{ 
+"ideSensor":"3",
+"ideSector":"2",
+"ideRadio":56447,
+"tipo":"1",
+"parametro":0.3,
+"coorX":"39.068359",
+"coorY":"-3.060067",
+"comment":"Nivel en canal",
+"estados":1
+}]

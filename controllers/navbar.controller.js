@@ -82,7 +82,7 @@ async function getMapaSig(req, res) {
   res.render("navbar/mapa-sig", {
     navIndex: 9,
     navGroup: 1,
-    pageTitle: "Mapa SIG",
+    pageTitle: "Visor",
     user: req.session.username,
     todosLosContadores: await getAll(req, res),
   });
@@ -92,7 +92,40 @@ async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
     navIndex: 10,
     navGroup: 1,
-    pageTitle: "Visor de datos",
+    pageTitle: "Estado de la red",
+    today: new Date().toJSON().slice(0, 16),
+    geData: await getGeData(),
+    user: req.session.username,
+  });
+}
+
+async function getVisorDatos(req, res) {
+  res.render("navbar/visor-datos", {
+    navIndex: 11,
+    navGroup: 1,
+    pageTitle: "Información meteorológica",
+    today: new Date().toJSON().slice(0, 16),
+    geData: await getGeData(),
+    user: req.session.username,
+  });
+}
+
+async function getVisorDatos(req, res) {
+  res.render("navbar/visor-datos", {
+    navIndex: 12,
+    navGroup: 1,
+    pageTitle: "Gestor Parcelas",
+    today: new Date().toJSON().slice(0, 16),
+    geData: await getGeData(),
+    user: req.session.username,
+  });
+}
+
+async function getVisorDatos(req, res) {
+  res.render("navbar/visor-datos", {
+    navIndex: 13,
+    navGroup: 1,
+    pageTitle: "Planificador",
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
     user: req.session.username,

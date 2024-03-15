@@ -1,0 +1,50 @@
+[ 
+{ 
+"ideSensor":"C0008",
+"ideSector":"3",
+"instante":"2020-07-21 00:00:00",
+"estado":"0",
+"bandera":"0"
+},
+{ 
+"ideSensor":"C0008",
+"ideSector":"3",
+"instante":"2020-08-14 09:45:06",
+"estado":"0",
+"bandera":"0"
+},
+{ 
+"ideSensor":"C0008",
+"ideSector":"3",
+"instante":"2021-02-25 13:06:30",
+"estado":"1",
+"bandera":"0"
+},
+{ 
+"ideSensor":"C0008",
+"ideSector":"3",
+"instante":"2023-06-16 14:31:30",
+"estado":"0",
+"bandera":"0"
+},
+{ 
+"ideSensor":"C0009",
+"ideSector":"3",
+"instante":"2020-07-28 08:38:26",
+"estado":"0",
+"bandera":"0"
+},
+{ 
+"ideSensor":"C0009",
+"ideSector":"3",
+"instante":"2020-08-10 12:42:26",
+"estado":"1",
+"bandera":"0"
+},
+{ 
+"ideSensor":"C0009",
+"ideSector":"3",
+"instante":"2021-04-08 14:37:30",
+"estado":"0",
+"bandera":"0"
+}]

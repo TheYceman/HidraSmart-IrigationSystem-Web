@@ -13,10 +13,6 @@ router.get("/", Auth.requireLogin, function (req, res, html) {
     navbarController.getDashboard(req, res);
 });
 
-router.get("/login", Auth.requireLogin, function (req, res, html) {
-    console.log(req.session);
-    navbarController.getMapaSig(req, res);
-});
 router.get("/soporte", navbarController.getSoporte);
 
 router.get("/formulario_enviado", navbarController.getRespuestaContacto);
