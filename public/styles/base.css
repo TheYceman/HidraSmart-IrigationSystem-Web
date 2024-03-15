@@ -95,3 +95,89 @@ select {
 .red-btn:hover {
   background-color: var(--color-alert-300);
 }
+
+
+/* Estilos para el footer */
+.footer {
+  background-color: var(--color-primary-400);
+  color: #fff;
+  padding: 20px 0;
+}
+
+.container-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.footer-left, .footer-right {
+  flex: 1;
+  padding: 0 10px;
+}
+
+.footer h4 {
+  font-size: 18px;
+  margin-top: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  margin-bottom: 8px;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+hr {
+  border-color: #cfcfcf;
+}
+
+.copyright {
+  text-align: center;
+  margin-top: 20px;
+}
+.containerHead {
+  display: flex; /* Establece el contenedor como flex */
+  flex-direction: row; /* Dirección de los elementos: fila (horizontal) */
+}
+.containerHead2 {
+  display: flex; /* Establece el contenedor como flex */
+  flex-direction: row; /* Dirección de los elementos: fila (horizontal) */
+  /*background-color: red;*/
+  width: 200px;
+  display: inline;
+  margin-top: 1px;
+  color: var(--color-bg);
+}
+.btn_access {
+  padding: 1px 3px;
+  font: inherit;
+  background-color: var(--color-bg);
+  color: var( --color-primary-600);
+  border-radius: 7px;
+  border: none;
+  margin: 8px 4px;
+  width: 130px;
+}
+
+.btn_access:hover {
+  background-color: var(--color-primary-300);
+}
+
+

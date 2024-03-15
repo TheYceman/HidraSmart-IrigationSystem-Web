@@ -28,7 +28,7 @@ const { getAllClientes } = require("../models/cliente.model");
 /********** Menú Inicio - Grupo 0 **********/
 
 function getLogin(req, res) {
-  res.render("navbar/login", {
+  res.render("/", {
     navIndex: 6,
     navGroup: 0,
     pageTitle: "Iniciar sesión",
@@ -62,7 +62,7 @@ function getLogout(req, res) {
         console.error('Error al cerrar la sesión: ' + err.message);
         res.send('Error al cerrar la sesión');
     } else {
-        res.redirect('/login'); // Redirige al usuario a la página de inicio u otra página deseada
+        res.redirect('/'); // Redirige al usuario a la página de inicio u otra página deseada
     }
 });
 }

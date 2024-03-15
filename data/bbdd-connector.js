@@ -26,11 +26,11 @@ function runQuery(query) {
     const conn = getDb();
     conn.connect(function (err) {
       if (err) {
-        conn.destroy();
+        conn.end();
         reject(err);
       } else {
         conn.query(query, function (err, result, fields) {
-          conn.destroy();
+          conn.end();
           if (err) {
             reject(err);
           } else {

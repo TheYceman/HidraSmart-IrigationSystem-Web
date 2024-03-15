@@ -4,8 +4,7 @@ const obtenerCommitMasReciente  = require("../public/scripts/get-latest-commit")
 
 
 async function getLogin(req, res) {
-    req.session.headImage = '/images/login/US-positivo-horizontal.png';
-
+   
     try {
         
         const owner = 'HidralabIyD';

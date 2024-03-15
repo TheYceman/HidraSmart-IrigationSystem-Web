@@ -62,7 +62,7 @@ function createSessionStore() {
 function createSession() {
   const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 hour
   return session({
-    key: "sesion_hidrasmart_ca",
+    key: "sesion_hidrasmart_IR",
     secret: "session_cookie_secret",
     store: createSessionStore(),
     resave: false,
