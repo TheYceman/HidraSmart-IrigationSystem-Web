@@ -13,19 +13,21 @@
     <script src="/scripts/mapa_sig.js" defer></script>
     <link rel="stylesheet" href="/styles/globo.css">
     <link rel="stylesheet" href="/styles/mapa_sig.css">
-</head>
-<body>
-<aside>
-    <%- include('../components/common/rrss.ejs') %>
-</aside>
-<header>
-    <%- include('../components/common/navbar.ejs', {navIndex: navIndex}) %>
-</header>
-<main>
-    <h2 class="titulo_seccion">
-        <p>Mapa</p>
-    </h2>
-    <%- include('../components/mapa-sig/map-view.ejs') %>
-</main>
-</body>
-</html>
+    </head>
+
+    <body>
+        <aside>
+            <%- include('../components/common/rrss.ejs') %>
+        </aside>
+        <header>
+            <%- include('../components/common/navbar.ejs', {navIndex: navIndex}) %>
+        </header>
+        <main>
+            <%- include('../components/mapa-sig/map-view.ejs', { todosLosContadores: todosLosContadores }) %>
+                <p></p>
+                <p></p>
+                <%- include('../components/common/footer.ejs') %>
+        </main>
+    </body>
+
+    </html>

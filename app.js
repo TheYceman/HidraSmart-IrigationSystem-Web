@@ -14,7 +14,7 @@ const visorDatosRoutes = require("./routes/visor-datos.routes");
 const mapaSigRoutes = require("./routes/mapa-sig.routes");
 
 const app = express();
-const session = require('express-session');
+//const session = require('express-session');
 
 const faviconPath = 'https://cdn.jsdelivr.net/gh/HidralabIyD/HidraSmart-CommonFiles@latest/icon/hidrasmart-Isotipo-positivo.ico'; // Ruta del icono de favicon
 

@@ -6,7 +6,7 @@
     <section>
         <div class="containerHead">
             <h1 id="titulo-comunidad">
-                Comunidad de Regantes Canal de Hidralab
+                HidraSmart-Irrigation System
             </h1>
             <%- include('session.ejs') %>
         </div>
@@ -28,10 +28,16 @@
                     </li>
                 </ul>
                 <ul id="nav-herramientas-options" class="menu-options">
-                    <li><a <% if (navIndex===9) { %> class="active" <% } %> href="/mapa-sig">Herramientas
-                                Mapa SIG</a></li>
-                    <li><a <% if (navIndex===10) { %> class="active" <% } %> href="/visor-datos">Visor de
-                                Datos</a></li>
+                    <li><a <% if (navIndex===9) { %> class="active" <% } %> href="/mapa-sig">
+                                Visor</a></li>
+                    <li><a <% if (navIndex===10) { %> class="active" <% } %> href="/visor-datos">
+                                Estado de la red</a></li>
+                    <li><a <% if (navIndex===11) { %> class="active" <% } %> href="/visor-datos">
+                                Información meteorológica</a></li>
+                    <li><a <% if (navIndex===12) { %> class="active" <% } %> href="/visor-datos">
+                                Gestor parcelas</a></li>
+                    <li><a <% if (navIndex===13) { %> class="active" <% } %> href="/visor-datos">
+                                Planificador</a></li>
                 </ul>
                 <ul id="nav-gestor-options" class="menu-options">
                     <li><a <% if (navIndex===12) { %> class="active" <% } %> href="/gestor-equipos">Gestor
