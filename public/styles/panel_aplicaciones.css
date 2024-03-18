@@ -1,11 +1,12 @@
 .container_cards{
     width: 90vw;
-    height: 25vw;
+    height: 30vw;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     flex-wrap: wrap;
+    margin-bottom: 50px;
     
 }
 
@@ -40,7 +41,7 @@
     width: 50%;
     margin: 0%;
     padding: 2%;
-    background-color: #009BDB;
+    background-color: #91c124;
     color: #fff;
     font-size: 1.4rem;
     border-radius: 5px 0 0 5px;

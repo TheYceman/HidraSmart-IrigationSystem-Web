@@ -7,13 +7,13 @@
     <% for (let contador of todosLosContadores) { %>
 
         window.contadores.push({
-                id: '<%= contador.id %>' ,
-                coorY: '<%= contador.coorY %>',
-                coorX: '<%= contador.coorX %>',
-                sector: '<%= contador.sector %>',
-                ramal: '<%= contador.ramal %>',
-                titular: '<%= contador.titular %>'
-            });
+            id: '<%= contador.id %>',
+            coorY: '<%= contador.coorY %>',
+            coorX: '<%= contador.coorX %>',
+            sector: '<%= contador.sector %>',
+            ramal: '<%= contador.ramal %>',
+            titular: '<%= contador.titular %>'
+        });
 
     <% } %>
 
@@ -56,6 +56,26 @@
 <div id="container">
     <div id="mapContainer">
         <div id="map"></div><!--Fin mapa-->
+        <!-- Barra de herramientas -->
+        <div class="toolbar">
+            <button id="zoomInBtn">+</button>
+            <button id="zoomOutBtn">-</button>
+            <button id="toggleSatelliteBtn">Satélite</button>
+        </div>
+        <div id="informacion" style="display:none">
+            <a id="leyendaLabel">
+                <b>LEYENDA</b>
+            </a>
+            <p>
+                Este es el contenido de la ventana modal:
+            <ul>
+                <li>Atributo 1: Valor 1</li>
+                <li>Atributo 2: Valor 2</li>
+                <li>Atributo 3: Valor 3</li>
+            </ul>
+            También puedes agregar enlaces, imágenes, formularios, etc.
+            </p>
+        </div>
         <div id="leyenda">
             <a id="leyendaLabel">
                 <b>LEYENDA</b>

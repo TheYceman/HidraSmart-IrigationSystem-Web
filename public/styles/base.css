@@ -5,10 +5,11 @@
 html {
   font-family: "Nunito Sans", sans-serif;
 
-  --color-bg: rgb(226, 234, 238);
+  --color-bg: rgb(0, 58, 137);
   --color-bg-darker: rgb(191, 198, 201);
   /* --color-primary-bg: rgb(225, 244, 253); */
   --color-primary-contrast: rgb(225, 244, 253);
+  --color-white: rgb(225, 255, 255, 0);
   /* --color-primary-contrast: rgb(211, 229, 236); */
   --color-primary-300: rgb(48, 186, 245);
   --color-primary-400: rgb(0, 155, 219);
@@ -39,7 +40,7 @@ main {
 body,
 main {
   margin: 0;
-  background-color: var(--color-bg);
+  background-color: var(--color-white);
 }
 
 input,
@@ -62,9 +63,9 @@ select {
 .titulo_seccion {
   width: 85%;
   margin: 0 auto;
-  font-size: 3rem;
+  font-size: 1.9rem;
   color: var(--color-primary-400);
-  font-weight: 700;
+  font-weight: 600;
   border-bottom: 2px solid var(--color-primary-400);
   margin-bottom: 3%;
 }
@@ -168,12 +169,14 @@ hr {
 .btn_access {
   padding: 1px 3px;
   font: inherit;
+  padding: 5px;
+  font-size: 0.80rem;
   background-color: var(--color-bg);
-  color: var( --color-primary-600);
-  border-radius: 7px;
+  color: var( --color-bg-darker);
+  /*border-radius: 7px;*/
   border: none;
   margin: 8px 4px;
-  width: 130px;
+  width: 110px;
 }
 
 .btn_access:hover {

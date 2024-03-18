@@ -49,7 +49,7 @@ class Contador {
   static async getAll() {
     const data = await runQuery("SELECT * FROM ge_contadores WHERE coorX<>'' AND coorY<>'';");
     const geContadores = data.map((contador) => new Contador(contador));
-    console.log(geContadores);
+    //console.log(geContadores);
     //var result = [];
     //for(let contador of geContadores) {
     //  result.push({id: contador.id.replace(/&quot;/g, '"'), sector: contador.sector.replace(/&quot;/g, '"'), tramo: contador.tramo.replace(/&quot;/g, '"')});
