@@ -81,6 +81,34 @@
   margin-right: 5px;
 }
 
+#informacion b {
+  font-weight: bold; /* Texto en negrita */
+  color: #212529; /* Color de texto más oscuro */
+}
+
+#informacion p {
+  margin: 0 0 10px; /* Margen inferior */
+  line-height: 1.6; /* Espaciado entre líneas */
+}
+
+#informacion ul {
+  padding-left: 20px; /* Sangría de la lista */
+}
+
+#informacion li {
+  margin-bottom: 5px; /* Margen inferior */
+}
+
+#informacion hr {
+  border: none; /* Sin borde */
+  border-top: 1px solid #ced4da; /* Borde superior */
+  margin: 10px 0; /* Margen superior e inferior */
+}
+
+#informacion p:last-child {
+  margin-bottom: 0; /* Elimina el margen inferior para el último párrafo */
+}
+
 #leyendaLabel {
   color: #747474;
   margin: 1vh;

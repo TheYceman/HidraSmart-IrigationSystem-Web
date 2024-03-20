@@ -50,23 +50,23 @@
           </thead>
           <tbody id="table">
             <% for(let usuario of usuarios) { %>
-              <tr data-uid="<%= usuario.login %>">
-                <td data-field="login" data-id="<%= usuario.login %>">
-                  <%= usuario.login %>
+              <tr data-uid="<%= usuario.idusers %>">
+                <td data-field="login" data-id="<%= usuario.idusers %>">
+                  <%= usuario.username %>
                 </td>
-                <td contenteditable="true" class="editable" data-field="nombre" data-id="<%= usuario.login %>">
-                  <%= usuario.nombre %>
+                <td contenteditable="true" class="editable" data-field="nombre" data-id="<%= usuario.idusers %>">
+                  <%= usuario.name %>
                 </td>
-                <td contenteditable="true" class="editable" data-field="apellido" data-id="<%= usuario.login %>">
-                  <%= usuario.apellido %>
+                <td contenteditable="true" class="editable" data-field="apellido" data-id="<%= usuario.idusers %>">
+                  <%= usuario.surname %>
                 </td>
-                <td contenteditable="true" class="editable" data-field="grupo" data-id="<%= usuario.login %>">
-                  <%= usuario.grupo %>
+                <td contenteditable="true" class="editable" data-field="grupo" data-id="<%= usuario.idusers %>">
+                  <%= usuario.rol %>
                 </td>
-                <td contenteditable="true" class="editable" data-field="email" data-id="<%= usuario.login %>">
+                <td contenteditable="true" class="editable" data-field="email" data-id="<%= usuario.idusers %>">
                   <%= usuario.email %>
                 </td>
-                <td contenteditable="true" class="editable" data-field="phone" data-id="<%= usuario.login %>">
+                <td contenteditable="true" class="editable" data-field="phone" data-id="<%= usuario.idusers %>">
                   <%= usuario.phone %>
                 </td>
                 <td class="acciones">
