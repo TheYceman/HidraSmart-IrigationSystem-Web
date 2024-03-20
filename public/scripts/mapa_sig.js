@@ -129,6 +129,37 @@ myMap = new google.maps.Map(document.getElementById("map"), {
   mapTypeId: "satellite",
 });
 
+// Agregar un evento onclick al mapa
+myMap.addListener('click', function (event) {
+  // Obtener las coordenadas del lugar donde se hizo clic
+  var clickedLocation = event.latLng;
+
+  // Hacer algo con las coordenadas, como mostrarlas en un cuadro de diálogo
+  alert('Coordenadas: ' + clickedLocation.lat() + ', ' + clickedLocation.lng());
+
+  document.getElementById("informacion").style.display = "none";
+});
+
+// Evento para el botón de acercar
+document.getElementById('zoomInBtn').addEventListener('click', function () {
+  myMap.setZoom(myMap.getZoom() + 1);
+});
+
+// Evento para el botón de alejar
+document.getElementById('zoomOutBtn').addEventListener('click', function () {
+  myMap.setZoom(myMap.getZoom() - 1);
+});
+
+// Evento para el botón de alternar entre mapa normal y de satélite
+document.getElementById('toggleSatelliteBtn').addEventListener('click', function () {
+  var currentMapTypeId = myMap.getMapTypeId();
+  if (currentMapTypeId === 'satellite') {
+    myMap.setMapTypeId('roadmap');
+  } else {
+    myMap.setMapTypeId('satellite');
+  }
+});
+
 function paint_counter_bbdd() {
   contadores.forEach(contador => {
     console.log("Coordenada X:", contador.coorX);
@@ -150,6 +181,10 @@ function paint_counter_bbdd() {
     // Agregar evento de clic al marker
     markerCounter.addListener("click", function (event) {
       show_infowindow_plots(event, contador.id);
+      document.getElementById("informacion").style.display = "block";
+      var content = "<a id='leyendaLabel'><b> Contador " + contador.id + "</b></a><p>Este es el contenido de la ventana modal:<ul><li>Atributo 1: Valor 1</li><li>Atributo 2: Valor 2</li><li>Atributo 3: Valor 3</li>" +
+        "</ul>También puedes agregar enlaces, imágenes, formularios, etc.</p>";
+      document.getElementById("informacion").innerHTML = content;
     });
     // Agregar el marker al arreglo
     makersCountersArray.push(markerCounter);

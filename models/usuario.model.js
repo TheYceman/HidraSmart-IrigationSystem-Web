@@ -3,13 +3,15 @@ const { runQuery } = require("../data/bbdd-connector");
 class Usuario {
   constructor(usuario) {
     this.idusers = usuario.idusers;//idusers 
-    this.username = usuario.login;//username - login 
+    this.username = usuario.username;//username - login 
     this.password = usuario.password; //password - password
-    this.username = usuario.nombre; //username - nombre
-    this.apellido = usuario.apellido; //name - apellido
-    this.name = usuario.grupo; //rol - grupo
+    this.name = usuario.name; //username - nombre
+    this.surname = usuario.surname; //name - apellido
+    this.rol = usuario.rol; //rol - grupo
     this.email = usuario.email; //email - email
     this.phone = usuario.phone; //phone - phone
+    this.changecode = usuario.changecode; //email - email
+    this.bbdd = usuario.bbdd; //phone - phone
   }
 
   static async getAll() {

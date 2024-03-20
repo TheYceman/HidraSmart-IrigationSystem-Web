@@ -21,11 +21,11 @@
           <label for="Login">Login:</label>
           <input type="text" name="login" required>
           <label for="Nombre">Nombre:</label>
-          <input type="text" name="name" id="name" required>
+          <input type="text" name="nombre" id="nombre" required>
           <label for="Apellidos">Apellidos:</label>
-          <input type="text" name="surname" id="surname" required>
-          <label for="Grupo">Rol:</label>
-          <input type="text" name="rol" id="rol" required>
+          <input type="text" name="apellido" id="apellido" required>
+          <label for="Grupo">Grupo:</label>
+          <input type="text" name="grupo" id="grupo" required>
           <label for="Email">Email:</label>
           <input type="text" name="email" id="email" required>
           <label for="Phone">Phone:</label>
@@ -42,7 +42,7 @@
               <th>Usuario</th>
               <th>Nombre</th>
               <th>Apellidos</th>
-              <th>Rol</th>
+              <th>Grupo</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Acciones</th>
@@ -50,9 +50,9 @@
           </thead>
           <tbody id="table">
             <% for(let usuario of usuarios) { %>
-              <tr data-uid="<%= usuario.login %>">
+              <tr data-uid="<%= usuario.idusers %>">
                 <td data-field="login" data-id="<%= usuario.idusers %>">
-                  <%= usuario.idusers %>
+                  <%= usuario.username %>
                 </td>
                 <td contenteditable="true" class="editable" data-field="nombre" data-id="<%= usuario.idusers %>">
                   <%= usuario.name %>
@@ -70,8 +70,8 @@
                   <%= usuario.phone %>
                 </td>
                 <td class="acciones">
-                  <button class="btn" onclick="updateUsuario('<%= usuario.idusers %>')">Actualizar</button>
-                  <button class="btn red-btn" onclick="borrarUsuario('<%= usuario.idusers %>')">Borrar</button>
+                  <button class="btn" onclick="updateUsuario('<%= usuario.login %>')">Actualizar</button>
+                  <button class="btn red-btn" onclick="borrarUsuario('<%= usuario.login %>')">Borrar</button>
                 </td>
               </tr>
               <% } %>
@@ -81,7 +81,7 @@
       <script> var todos = [];</script>
       <% for(let usuario of todosLosUsuarios) { %>
         <script>
-          todos.push({ id: '<%= usuario.idusers %>', password: '<%= usuario.password %>' });
+          todos.push({ id: '<%= usuario.login %>', password: '<%= usuario.password %>' });
           //console.log(todos);
         </script>
         <% } %>

@@ -3,8 +3,8 @@
   <link rel="stylesheet" href="/styles/socialbar.css">
   <script src="/scripts/navbar.js" defer></script>
 
-  <link rel="stylesheet" href="/styles/gestor_usuarios.css">
-  <script src="/scripts/gestor-usuarios.js" defer></script>
+  <link rel="stylesheet" href="/styles/gestor_clientes.css">
+  <script src="/scripts/gestor-clientes.js" defer></script>
   </head>
 
   <body>
@@ -13,23 +13,21 @@
     </header>
     <main>
       <h2 class="titulo_seccion">
-        <p>Gestor de Usuarios</p>
+        <p>Gestor de Clientes</p>
       </h2>
       <div class="div-container">
-        <button id="mostrarFormUsuarios" class="btn">Añadir nuevo usuario</button>
-        <form action="/gestor-usuarios/agregarUsuario" method="POST" id="usuariosForm" style="display: none;">
-          <label for="Login">Login:</label>
-          <input type="text" name="login" required>
+        <button id="mostrarFormClientes" class="btn">Añadir nuevo cliente</button>
+        <form action="/gestor-clientes/agregarCliente" method="POST" id="clientesForm" style="display: none;">
+          <label for="numero">Número:</label>
+          <input type="text" name="numero" required>
           <label for="Nombre">Nombre:</label>
-          <input type="text" name="name" id="name" required>
-          <label for="Apellidos">Apellidos:</label>
-          <input type="text" name="surname" id="surname" required>
-          <label for="Grupo">Rol:</label>
-          <input type="text" name="rol" id="rol" required>
+          <input type="text" name="nombre" id="nombre" required>
+          <label for="DNI">DNI:</label>
+          <input type="text" name="dni" id="dni" required>
           <label for="Email">Email:</label>
           <input type="text" name="email" id="email" required>
-          <label for="Phone">Phone:</label>
-          <input type="text" name="phone" id="phone" required>
+          <label for="Telefono">Teléfono:</label>
+          <input type="text" name="telefono" id="telefono" required>
           <button type="submit" class="btn">Añadir</button>
         </form>
         <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">
@@ -39,39 +37,35 @@
         <table>
           <thead>
             <tr>
-              <th>Usuario</th>
+              <th>Número</th>
               <th>Nombre</th>
-              <th>Apellidos</th>
-              <th>Rol</th>
+              <th>DNI</th>
               <th>Email</th>
-              <th>Phone</th>
+              <th>Teléfono</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody id="table">
-            <% for(let usuario of usuarios) { %>
-              <tr data-uid="<%= usuario.login %>">
-                <td data-field="login" data-id="<%= usuario.idusers %>">
-                  <%= usuario.idusers %>
+            <% for(let cliente of clientes) { %>
+              <tr data-uid="<%= cliente.numero %>">
+                <td data-field="numero" data-id="<%= cliente.numero %>">
+                  <%= cliente.numero %>
                 </td>
-                <td contenteditable="true" class="editable" data-field="nombre" data-id="<%= usuario.idusers %>">
-                  <%= usuario.name %>
+                <td contenteditable="true" data-field="nombre" data-id="<%= cliente.numero %>">
+                  <%= cliente.nombre %>
                 </td>
-                <td contenteditable="true" class="editable" data-field="apellido" data-id="<%= usuario.idusers %>">
-                  <%= usuario.surname %>
+                <td contenteditable="true" class="editable" data-field="dni" data-id="<%= cliente.numero %>">
+                  <%= cliente.dni %>
                 </td>
-                <td contenteditable="true" class="editable" data-field="grupo" data-id="<%= usuario.idusers %>">
-                  <%= usuario.rol %>
+                <td contenteditable="true" class="editable" data-field="email" data-id="<%= cliente.numero %>">
+                  <%= cliente.email %>
                 </td>
-                <td contenteditable="true" class="editable" data-field="email" data-id="<%= usuario.idusers %>">
-                  <%= usuario.email %>
-                </td>
-                <td contenteditable="true" class="editable" data-field="phone" data-id="<%= usuario.idusers %>">
-                  <%= usuario.phone %>
+                <td contenteditable="true" class="editable" data-field="telefono" data-id="<%= cliente.numero %>">
+                  <%= cliente.telefono %>
                 </td>
                 <td class="acciones">
-                  <button class="btn" onclick="updateUsuario('<%= usuario.idusers %>')">Actualizar</button>
-                  <button class="btn red-btn" onclick="borrarUsuario('<%= usuario.idusers %>')">Borrar</button>
+                  <button class="btn" onclick="updateCliente('<%= cliente.numero %>')">Actualizar</button>
+                  <button class="btn red-btn" onclick="borrarCliente('<%= cliente.numero %>')">Borrar</button>
                 </td>
               </tr>
               <% } %>
@@ -79,9 +73,9 @@
         </table>
       </div>
       <script> var todos = [];</script>
-      <% for(let usuario of todosLosUsuarios) { %>
+      <% for(let cliente of todosLosClientes) { %>
         <script>
-          todos.push({ id: '<%= usuario.idusers %>', password: '<%= usuario.password %>' });
+          todos.push({ id: '<%= cliente.numero %>', nombre: '<%= cliente.nombre %>' });
           //console.log(todos);
         </script>
         <% } %>
@@ -92,7 +86,7 @@
         -->
             <div class="pagination">
               <label for="page-selector">Página:</label>
-              <select id="page-selector" onchange="window.location.href = '/gestor-usuarios?page=' + this.value;">
+              <select id="page-selector" onchange="window.location.href = '/gestor-cliente?page=' + this.value;">
                 <% for (let i=1; i <=totalPages; i++) { %>
                   <option value="<%= i %>" <%=i===currentPage ? 'selected' : '' %>><%= i %>
                   </option>
@@ -105,8 +99,8 @@
           <%- include('../components/common/footer.ejs') %>
     </main>
     <script>
-      const mostrarFormularioButton = document.getElementById('mostrarFormUsuarios');
-      const miFormulario = document.getElementById('usuariosForm');
+      const mostrarFormularioButton = document.getElementById('mostrarFormClientes');
+      const miFormulario = document.getElementById('clientesForm');
 
       mostrarFormularioButton.addEventListener('click', () => {
         // Cambia la visibilidad del formulario cuando se hace clic en el botón
@@ -143,7 +137,7 @@
           if (found) {
             var pagina = (i / 10) + 1;
             console.log("Página: " + parseInt(pagina));
-            location.href = "/gestor-usuarios?page=" + parseInt(pagina);
+            location.href = "/gestor-clientes?page=" + parseInt(pagina);
             //row.style.display = "";
           } else {
             //row.style.display = "none";

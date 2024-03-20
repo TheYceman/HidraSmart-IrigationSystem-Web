@@ -29,7 +29,7 @@
   overflow: hidden;
   text-align: center;
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgb(0, 0, 0, 0.5);
+ /* text-shadow: 0 0 10px rgb(0, 0, 0, 0.5);*/
 }
 
 #navbar section {
@@ -196,7 +196,7 @@
 .menu-options li a {
   padding: 5px;
   margin: 5px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   height: 2rem;
   width: 100%;
   min-width: 5vw;
@@ -205,16 +205,18 @@
   top: 0px;
   text-decoration: none;
   text-transform: uppercase;
-  text-shadow: 0 0 15px rgb(0, 0, 0, 0.5);
+  /*text-shadow: 0 0 15px rgb(0, 0, 0, 0.5);*/
   font-weight: bold;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  color: var(--color-bg);
+  /*border-top-right-radius: 5px;
+  border-top-left-radius: 5px;*/
+   /*color: var(--color-bg);*/
   height: 2.4rem;
   align-items: center;
   justify-content: center;
   text-align: center;
   transition: top 0.2s, box-shadow 0.2s;
+  box-shadow: var(--box-shadow-default);
+  background-color: var(--color-primary-300)
 }
 
 .menu-options a:hover,
