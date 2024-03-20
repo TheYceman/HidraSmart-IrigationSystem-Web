@@ -9,12 +9,9 @@
 
   <body>
     <header>
-        <%- include('../components/common/navbar.ejs') %>
+      <%- include('../components/common/navbar.ejs') %>
     </header>
     <main>
-      <h2 class="titulo_seccion">
-        <p>Gestor de Usuarios</p>
-      </h2>
       <div class="div-container">
         <button id="mostrarFormUsuarios" class="btn">Añadir nuevo usuario</button>
         <form action="/gestor-usuarios/agregarUsuario" method="POST" id="usuariosForm" style="display: none;">
