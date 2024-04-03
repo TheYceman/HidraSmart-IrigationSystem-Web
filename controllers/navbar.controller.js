@@ -56,6 +56,22 @@ function getRespuestaContacto(req, res) {
 }
 
 function getLogout(req, res) {
+  const userId = req.session.idUsuario; // Suponiendo que tienes el ID del usuario en la sesión
+  const endTime = new Date();
+
+  /*const query = 'UPDATE session_logs SET end_time = ? WHERE user_id = ? AND end_time IS NULL';
+  connection.query(query, [endTime, userId], (err, results) => {
+      if (err) {
+          console.error('Error updating session log: ' + err);
+          // Puedes manejar el error de manera apropiada, como enviar una respuesta de error al cliente
+          return res.status(500).send('Error updating session log');
+      }
+      // Destruir la sesión
+      req.session.destroy();
+      // Puedes enviar una respuesta de éxito al cliente si lo deseas
+      res.send('Sesión cerrada automáticamente');
+  });*/
+
   // Destruye la sesión actual
   req.session.destroy((err) => {
     if (err) {
@@ -125,7 +141,7 @@ async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
     navIndex: 13,
     navGroup: 1,
-    pageTitle: "Planificador",
+    pageTitle: "Planificador de riego",
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
     user: req.session.username,

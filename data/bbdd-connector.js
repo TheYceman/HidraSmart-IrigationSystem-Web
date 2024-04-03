@@ -1,16 +1,19 @@
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 const fs = require('fs');
 
-function getDb() {
-  const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
-  console.log("bbb" + process.cwd())
+const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
+
+function getDb(ddbb) {
+
+  console.log("bbb" + process.cwd());
+  
   try {
     let conn = mysql.createConnection({
       host: "hidralab-server.mysql.database.azure.com",
       user: "telemedida_alcazar",
       password: "Hidra2023Alcazar",
       port: 3306,
-      database: "aplicaciones_web",
+      database: ddbb, //"aplicaciones_web"
       ssl: {
         ca: fs.readFileSync(certPath),
       }
@@ -21,37 +24,17 @@ function getDb() {
   }
 }
 
-function runQuery(query) {
-  return new Promise((resolve, reject) => {
-    const conn = getDb();
-    conn.connect(function (err) {
-      if (err) {
-        conn.end((err) => {
-          if (err) {
-            console.error('Error al cerrar la conexión:', err.message);
-          } else {
-            console.log('Conexión cerrada correctamente.');
-          }
-        });
-        reject(err);
-      } else {
-        conn.query(query, function (err, result, fields) {
-          conn.end((err) => {
-            if (err) {
-              console.error('Error al cerrar la conexión:', err.message);
-            } else {
-              console.log('Conexión cerrada correctamente.');
-            }
-          });
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        });
-      }
-    });
-  });
+async function runQuery(query) {
+  try {
+    const ddbb ="aplicaciones_web";
+    const conn = await getDb(ddbb);
+    const [rows, fields] = await conn.execute(query);
+    await conn.end();
+    return rows;
+  } catch (error) {
+    console.error("Error al ejecutar la consulta:", error);
+    throw error;
+  }
 }
 
 
