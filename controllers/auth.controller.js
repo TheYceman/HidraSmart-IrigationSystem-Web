@@ -3,8 +3,8 @@ const sessionFlash = require("../utils/session-flash");
 
 const { runQuery } = require("../data/bbdd-connector");
 
-async function verifyUser(username, password) {
-  
+async function verifyUser(username, password, req) {
+
   const queryString = `SELECT * FROM users WHERE username='${username}' AND password='${password}';`;
   const results = await runQuery(queryString);
   return results;
@@ -21,10 +21,20 @@ async function login(req, res) {
     if (!resultLogin) {
       res.status(401).json({ success: false, message: 'Email y/o contraseña no son válidos' });
     } else {
+
+      const session_id = req.session.session_id;
+      const expires = 0;
+      const data = req.session.data;
+      const idusers = resultLogin[0].idusers;
+      const start_time = new Date().toISOString().slice(0, 19).replace('T', ' ');;
+      const end_time = '1999-01-01 00:00';
+
+      //const inserta = await runQuery(`INSERT INTO session_logs (session_id, expires, data, idusers, start_time, end_time) VALUES ('${session_id}', '${expires}', '${data}', '${idusers}', '${start_time}', '${end_time}');`);
+      //console.log("async function login " + inserta);
       console.log(" resultLogin BBDD OK " + resultLogin[0].username);
       req.session.loggedin = true;
       req.session.username = resultLogin[0].username;
-      req.session.idUsuario = username;
+      req.session.idUsuario = idusers;
       req.session.token = username;
       req.session.headImage = '/images/login/US-positivo-horizontal.png';
       res.status(200).json({ success: true, route: '/panel_aplicaciones' });

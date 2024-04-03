@@ -14,6 +14,9 @@ function createSessionStore() {
         password: "Hidra2023Alcazar",
         port: 3306,
         database: "aplicaciones_web",
+        connectTimeout : 1000000,
+        waitForConnections : true,
+        queueLimit : 0,
         ssl : {
           ca : fs.readFileSync(certPath),
       }
@@ -21,12 +24,21 @@ function createSessionStore() {
 
   const connection = mysql.createConnection(dbConfig);
 
+  connection.connect((error)=>{
+    if (error){
+        console.log("Error " + error);
+        connection = mysql.createConnection(dbConfig);
+        createSession();
+    } else {
+        console.log("Connected..")
+    }
+});
+
   const sessionStore = new MySQLStore({
-    clearExpired: true,
-      // Whether or not to automatically check for and clear expired sessions:
+     // Whether or not to automatically check for and clear expired sessions:
       clearExpired: false,
       // How frequently expired sessions will be cleared; milliseconds:
-      checkExpirationInterval: 900000,
+      checkExpirationInterval: 90000000,
       // The maximum age of a valid session; milliseconds:
       expiration: 86400000,
       // Whether or not to create the sessions database table, if one does not already exist:
@@ -42,8 +54,7 @@ function createSessionStore() {
         columnNames: {
           session_id: 'session_id',
           expires: 'expires',
-          data: 'data',
-         
+          data: 'data'
       }
     }
   }, connection);
