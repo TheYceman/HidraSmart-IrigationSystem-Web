@@ -58,7 +58,7 @@ app.use(function (error, req, res, next) {
 
 // Esta función se ejecutará cuando el proceso de Node.js esté a punto de terminar
 process.on('beforeExit', () => {
-  
+
   console.log("Se ejecuta beforeExit en app.js");
   // Realiza una solicitud al servidor para indicar que el usuario está cerrando la ventana
   const options = {
