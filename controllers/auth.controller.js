@@ -27,7 +27,7 @@ async function login(req, res) {
       const start_time = new Date().toISOString().slice(0, 19).replace('T', ' ');
       const end_time = '1999-01-01 00:00';
 
-      const inserta = await runQuery(`INSERT INTO session_logs (session_id, idusers, start_time, end_time) VALUES ('${session_id}', '${idusers}', '${start_time}', '${end_time}');`);
+      const inserta = await runQuery(`INSERT INTO session_logs (session_id, idusers, start_time, end_time, aplicacion) VALUES ('${session_id}', '${idusers}', '${start_time}', '${end_time}', "Irrigation");`);
       console.log("async function login " + inserta);
       console.log(" resultLogin BBDD OK " + resultLogin[0].username);
       req.session.loggedin = true;
@@ -38,7 +38,7 @@ async function login(req, res) {
       res.status(200).json({ success: true, route: '/panel_aplicaciones' });
     }
   } catch (error) {
-    console.error("Error al conectar a MySQL:", error);
+    console.error("Error login:", error);
     res.status(500).json({ error: 'Error al conectar a MySQL' });
   }
 }
