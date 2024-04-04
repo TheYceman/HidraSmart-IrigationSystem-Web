@@ -25,6 +25,8 @@ const { getTotalPagesClientes } = require("../controllers/gestor-clientes.contro
 const { getAllClientes } = require("../models/cliente.model");
 
 
+const { runQuery } = require("../data/bbdd-connector");
+
 /********** Menú Inicio - Grupo 0 **********/
 
 function getLogin(req, res) {
@@ -55,23 +57,14 @@ function getRespuestaContacto(req, res) {
   });
 }
 
-function getLogout(req, res) {
+async function getLogout(req, res) {
   const userId = req.session.idUsuario; // Suponiendo que tienes el ID del usuario en la sesión
-  const endTime = new Date();
+  const sesion_id = req.sessionID;
+  const endTime =  new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-  /*const query = 'UPDATE session_logs SET end_time = ? WHERE user_id = ? AND end_time IS NULL';
-  connection.query(query, [endTime, userId], (err, results) => {
-      if (err) {
-          console.error('Error updating session log: ' + err);
-          // Puedes manejar el error de manera apropiada, como enviar una respuesta de error al cliente
-          return res.status(500).send('Error updating session log');
-      }
-      // Destruir la sesión
-      req.session.destroy();
-      // Puedes enviar una respuesta de éxito al cliente si lo deseas
-      res.send('Sesión cerrada automáticamente');
-  });*/
-
+  const query = 'UPDATE session_logs SET end_time = "'+endTime+'" WHERE user_id = '+userId+' AND session_id = "'+sesion_id+'" AND end_time IS NULL';
+  const results = await runQuery(query);
+  console.log ("getLogout " + results); 
   // Destruye la sesión actual
   req.session.destroy((err) => {
     if (err) {

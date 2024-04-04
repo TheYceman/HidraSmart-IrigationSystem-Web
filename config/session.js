@@ -71,7 +71,7 @@ const sessionStore = new MySQLStore({
 
 function createSession() {
   const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 hour
-  console.log(session);
+  console.log("createSession "  + new Date());
   return session({
     key: "sesion_hidrasmart_IR",
     secret: "session_cookie_secret",
