@@ -2,7 +2,6 @@ const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
 const fs = require('fs');
 const mysql = require("mysql2");
-const { runQuery } = require("../data/bbdd-connector");
 
 function createSessionStore() {
 
@@ -16,6 +15,7 @@ function createSessionStore() {
     database: "aplicaciones_web",
     connectTimeout: 1000000,
     waitForConnections: true,
+    connectionLimit: 10,
     queueLimit: 0,
     ssl: {
       ca: fs.readFileSync(certPath),

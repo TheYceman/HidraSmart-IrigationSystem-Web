@@ -12,7 +12,7 @@ const { getTotalPagesSensor } = require("../controllers/gestor-equipos.controlle
 const { getTotalPagesContador } = require("../controllers/gestor-equipos.controller");
 const { getAll } = require("../models/contador.model");
 const { getAllSensores } = require("../models/sensor.model");
-const {getGeDataClientes} = require("../controllers/gestor-equipos.controller");
+const { getGeDataClientes } = require("../controllers/gestor-equipos.controller");
 
 const { getGeDataUsuario } = require("../controllers/gestor-usuarios.controller");
 const { getGeDataUsuariosPerPage } = require("../controllers/gestor-usuarios.controller");
@@ -34,8 +34,8 @@ function getLogin(req, res) {
     navIndex: 6,
     navGroup: 0,
     pageTitle: "Iniciar sesión",
-    user:''
-    
+    user: ''
+
   });
 }
 
@@ -43,7 +43,7 @@ function getSoporte(req, res) {
   res.render("navbar/support", {
     navIndex: 6,
     navGroup: 0,
-    pageTitle: "Contacto",    
+    pageTitle: "Contacto",
   });
 }
 
@@ -53,7 +53,7 @@ function getRespuestaContacto(req, res) {
     navIndex: 6,
     navGroup: 0,
     pageTitle: "Contacto recibido",
-    user:''
+    user: ''
   });
 }
 
@@ -61,20 +61,20 @@ async function getLogout(req, res) {
 
   const userId = req.session.idUsuario; // Suponiendo que tienes el ID del usuario en la sesión
   const sesion_id = req.sessionID;
-  const endTime =  new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const endTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-  const query = 'UPDATE session_logs SET end_time = "'+endTime+'" WHERE idusers = '+userId+' AND session_id = "'+sesion_id+'"';
+  const query = 'UPDATE session_logs SET end_time = "' + endTime + '" WHERE idusers = ' + userId + ' AND session_id = "' + sesion_id + '"';
   const results = await runQuery(query);
-  console.log ("getLogout " + results + " userId " + userId+ " sesión " + req.sessionID); 
+  console.log("getLogout " + results + " userId " + userId + " sesión " + req.sessionID);
   // Destruye la sesión actual
   req.session.destroy((err) => {
     if (err) {
-        console.error('Error al cerrar la sesión: ' + err.message);
-        res.send('Error al cerrar la sesión');
+      console.error('Error al cerrar la sesión: ' + err.message);
+      res.send('Error al cerrar la sesión');
     } else {
-        res.redirect('/'); // Redirige al usuario a la página de inicio u otra página deseada
+      res.redirect('/'); // Redirige al usuario a la página de inicio u otra página deseada
     }
-});
+  });
 }
 
 /********** Menú Herramientas - Grupo 1 **********/
@@ -158,7 +158,7 @@ async function getGestorEquipos(req, res) {
     currentPageSensor: parseInt(req.query.pageSensor) || 1,
     totalPagesSensor: await getTotalPagesSensor(req, res),
     todosLosSensores: await getAllSensores(req, res),
-    clientes:  await getGeDataClientes(req, res),
+    clientes: await getGeDataClientes(req, res),
   });
 }
 
@@ -169,7 +169,7 @@ async function getGestorClientes(req, res) {
     pageTitle: "Gestor de clientes",
     user: req.session.username,
     clientes: await getGeDataClientesPerPage(req, res),
-    todosLosClientes : await getAllClientes(req, res),
+    todosLosClientes: await getAllClientes(req, res),
     currentPage: parseInt(req.query.page) || 1,
     totalPages: await getTotalPagesClientes(req, res),
   });

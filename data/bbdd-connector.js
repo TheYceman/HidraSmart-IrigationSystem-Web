@@ -3,17 +3,20 @@ const fs = require('fs');
 
 const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
 
-function getDb(ddbb) {
+async function getDb(ddbb) {
 
   console.log("bbb" + process.cwd());
-  
+
   try {
-    let conn = mysql.createConnection({
+    let conn = await mysql.createConnection({
       host: "hidralab-server.mysql.database.azure.com",
       user: "telemedida_alcazar",
       password: "Hidra2023Alcazar",
       port: 3306,
       database: ddbb, //"aplicaciones_web"
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
       ssl: {
         ca: fs.readFileSync(certPath),
       }
@@ -26,7 +29,7 @@ function getDb(ddbb) {
 
 async function runQuery(query) {
   try {
-    const ddbb ="aplicaciones_web";
+    const ddbb = "aplicaciones_web";
     const conn = await getDb(ddbb);
     const [rows, fields] = await conn.execute(query);
     await conn.end();
