@@ -3,7 +3,6 @@ const MySQLStore = require("express-mysql-session")(session);
 const fs = require('fs');
 const mysql = require("mysql2");
 
-
 function createSessionStore() {
 
   const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
@@ -26,7 +25,7 @@ function createSessionStore() {
 
   connection.connect((error)=>{
     if (error){
-        console.log("Error " + error);
+        console.log("Error en connection.connect " + error);
         connection = mysql.createConnection(dbConfig);
         createSession();
     } else {
@@ -34,7 +33,7 @@ function createSessionStore() {
     }
 });
 
-  const sessionStore = new MySQLStore({
+const sessionStore = new MySQLStore({
      // Whether or not to automatically check for and clear expired sessions:
       clearExpired: false,
       // How frequently expired sessions will be cleared; milliseconds:
