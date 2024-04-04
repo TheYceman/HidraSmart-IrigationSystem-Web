@@ -12,7 +12,7 @@ async function verifyUser(username, password, req) {
 }
 
 async function login(req, res) {
-  console.log('Entra en Login');
+  console.log('Entra en Login ' + req.sessionID);
   try {
     const { username, password, token } = req.body;
 
@@ -22,15 +22,13 @@ async function login(req, res) {
       res.status(401).json({ success: false, message: 'Email y/o contraseña no son válidos' });
     } else {
 
-      const session_id = req.session.session_id;
-      const expires = 0;
-      const data = req.session.data;
+      const session_id = req.sessionID;
       const idusers = resultLogin[0].idusers;
-      const start_time = new Date().toISOString().slice(0, 19).replace('T', ' ');;
+      const start_time = new Date().toISOString().slice(0, 19).replace('T', ' ');
       const end_time = '1999-01-01 00:00';
 
-      //const inserta = await runQuery(`INSERT INTO session_logs (session_id, expires, data, idusers, start_time, end_time) VALUES ('${session_id}', '${expires}', '${data}', '${idusers}', '${start_time}', '${end_time}');`);
-      //console.log("async function login " + inserta);
+      const inserta = await runQuery(`INSERT INTO session_logs (session_id, idusers, start_time, end_time) VALUES ('${session_id}', '${idusers}', '${start_time}', '${end_time}');`);
+      console.log("async function login " + inserta);
       console.log(" resultLogin BBDD OK " + resultLogin[0].username);
       req.session.loggedin = true;
       req.session.username = resultLogin[0].username;
