@@ -12,7 +12,7 @@ async function verifyUser(username, password, req) {
 }
 
 async function login(req, res) {
-  console.log('Entra en Login ' + req.sessionID);
+  console.log('Entra en Login ' + req);
   try {
     const { username, password, token } = req.body;
 
