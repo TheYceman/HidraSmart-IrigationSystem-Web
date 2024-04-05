@@ -12,7 +12,7 @@ function createSessionStore() {
     user: "telemedida_alcazar",
     password: "Hidra2023Alcazar",
     port: 3306,
-    database: ddbb, //"aplicaciones_web"
+    database: "aplicaciones_web", //"aplicaciones_web"
     waitForConnections: true,
     connectionLimit: 10,
     maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
