@@ -176,3 +176,36 @@ td {
   background-color: #fff;
   color: #27b5f1;
 }
+
+/* Estilos para las pestañas */
+.tab {
+  display: none;
+}
+
+.tab-labels {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.tab-label {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.tab-content {
+  display: none;
+  height: 100vw;
+}
+
+/* Estilo activo para la pestaña seleccionada */
+.tab-label.active {
+  background-color: #ddd;
+}
+
+.tab-content.active {
+  display: block;
+}
