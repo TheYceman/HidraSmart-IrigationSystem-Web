@@ -1,0 +1,110 @@
+const Rol = require("../models/rol.model");
+
+const { runQuery } = require("../data/bbdd-connector");
+
+async function getGeDataRol(req, res) {
+  const geData = [...(await Rol.getAll())];
+  return geData;
+}
+
+
+async function getTotalPagesRoles(req, res) {
+
+  pages = 1;
+  const itemsPerPage = 10;
+  const number_registers = await Rol.getCountAll();
+
+  console.log("number_registers " + number_registers);
+
+  if (number_registers > 0) {
+    pages = number_registers / itemsPerPage;
+  }
+
+  return pages;
+}
+
+
+async function getGeDataRolesPerPage(req, res) {
+
+  const page = parseInt(req.query.page) || 1; // Página actual
+  const itemsPerPage = 10; // Cantidad de elementos por página
+  const offset = (page - 1) * itemsPerPage;
+  const geData = [...(await Rol.getPerPage(itemsPerPage, offset))];
+
+  /*const page =  parseInt(req.query.page) || 1; // Página actual
+  const itemsPerPage = 20; // Registros por página
+
+  // Calcular el índice inicial y final de los registros
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const geData = [...(await Contador.getPerPage(startIndex, endIndex))];*/
+
+  return geData;
+}
+
+async function getDataRol(req, res) {
+  const params = req.query;
+  let result = await Rol.getFilteredData(
+    params.ideSector
+  );
+  res.json(result);
+  // pasar a json el resultado de la linea anterior y añadir a la response
+}
+
+async function updateRol(req, res) {
+
+  // Obtener los parámetros del cuerpo de la solicitud
+  const nombre = req.body.nombre.trim();
+  const perUsu = req.body.perUsu.trim();
+  const perVisor = req.body.perVisor.trim();
+  const perMeteo = req.body.perMeteo.trim();
+  const perRed = req.body.perRed.trim();
+  const perDemandas = req.body.perDemandas.trim();
+  const perRiego = req.body.perRiego.trim();
+
+  console.log("updateRol " + login);
+
+  const data = await runQuery(`UPDATE grupos_usuario SET perUsu = '${perUsu}',perVisor = '${perVisor}',perMeteo = '${perMeteo}',perRed = '${perRed}',perDemandas = '${perDemandas}',perRiego = '${perRiego}' WHERE nombre = '${nombre}';`);
+  console.log(data);
+  return data;
+
+}
+
+async function deleteRol(req, res) {
+
+  // Obtener los parámetros del cuerpo de la solicitud
+  const nombre = req.body.nombre.trim();
+
+  console.log("deleteRol " + nombre);
+
+  const data = await runQuery(`DELETE FROM grupos_usuario WHERE nombre = '${nombre}';`);
+  console.log(data);
+  res.redirect('/gestor-usuarios');
+  //return data;
+
+}
+
+// Ruta para procesar el formulario de añadir
+async function agregaRol(req, res) {
+
+  if (!req.body)
+    return res.sendStatus(400)
+  console.log(req.body);
+
+  const nombre = req.body.nombre.trim();
+  const perUsu = req.body.perUsu.trim();
+  const perVisor = req.body.perVisor.trim();
+  const perMeteo = req.body.perMeteo.trim();
+  const perRed = req.body.perRed.trim();
+  const perDemandas = req.body.perDemandas.trim();
+  const perRiego = req.body.perRiego.trim();
+
+  const data = await runQuery(`INSERT INTO grupos_usuario (nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego) VALUES ('${nombre}', '${perUsu}', '${perVisor}', '${perMeteo}', '${perRed}', '${perDemandas}', '${perRiego}');`);
+  console.log(data);
+
+  res.redirect('/gestor-usuarios');
+}
+
+
+module.exports = { getGeDataRol, getDataRol, getGeDataRolesPerPage, updateRol, deleteRol, agregaRol, getTotalPagesRoles };

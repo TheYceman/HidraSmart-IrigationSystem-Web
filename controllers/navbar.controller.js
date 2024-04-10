@@ -19,6 +19,10 @@ const { getGeDataUsuariosPerPage } = require("../controllers/gestor-usuarios.con
 const { getTotalPagesUsuarios } = require("../controllers/gestor-usuarios.controller");
 const { getAllUsuarios } = require("../models/usuario.model");
 
+const { getGeDataRolesPerPage } = require("../controllers/gestor-roles.controller");
+const { getTotalPagesRoles } = require("../controllers/gestor-roles.controller");
+const { getAllRoles } = require("../models/Rol.model");
+
 const { getGeDataCliente } = require("../controllers/gestor-clientes.controller");
 const { getGeDataClientesPerPage } = require("../controllers/gestor-clientes.controller");
 const { getTotalPagesClientes } = require("../controllers/gestor-clientes.controller");
@@ -185,6 +189,10 @@ async function getGestorUsuarios(req, res) {
     todosLosUsuarios: await getAllUsuarios(req, res),
     currentPage: parseInt(req.query.page) || 1,
     totalPages: await getTotalPagesUsuarios(req, res),
+    roles: await getGeDataRolesPerPage(req, res),
+    todosLosRoles: await getAllRoles(req, res),
+    currentPageRoles: parseInt(req.query.page) || 1,
+    totalPagesRoles: await getTotalPagesRoles(req, res),
   });
 }
 
