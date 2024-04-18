@@ -61,8 +61,10 @@ function createSessionStore() {
 }
 
 function createSession() {
-
-  const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 hour
+  var offset = new Date().getTimezoneOffset();
+  var d = new Date();
+  var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
+  const expiryDate = new Date(madridTime + 1000 * 60 * 60 ); // 1 hour
   console.log("createSession " + new Date());
   return session({
     key: "sesion_hidrasmart_IR",

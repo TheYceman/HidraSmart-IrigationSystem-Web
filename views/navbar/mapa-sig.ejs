@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/styles/mapa_sig.css">
     </head>
 
-    <body>
+    <body onbeforeunload="ConfirmarCierre()" onunload="ManejadorCierre()">
         <aside>
             <%- include('../components/common/rrss.ejs') %>
         </aside>
@@ -26,6 +26,38 @@
             <%- include('../components/mapa-sig/map-view.ejs', { todosLosContadores: todosLosContadores }) %>
                 <%- include('../components/common/footer.ejs') %>
         </main>
+
+        <script>
+            var micierre = false;
+
+            function ConfirmarCierre() {
+                if (event.clientY < 0) {
+                    event.returnValue = "";
+                    setTimeout('micierre = false', 100);
+                    micierre = true;
+                }
+            }
+
+            function ManejadorCierre() {
+                if (micierre == true) {
+                    fetch("/logout", {
+                        method: 'POST',
+                    })
+                        .then((response) => {
+                            if (response.ok) {
+                                console.log('Cierre de sesión correcto');
+                            } else {
+                                console.log('Cierre de sesión incorrecto');
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error en la solicitud: ' + error.message);
+                        });
+                }
+            }
+
+
+        </script>
     </body>
 
     </html>

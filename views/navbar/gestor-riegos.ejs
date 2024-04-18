@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="/styles/gestor_riegos.css">
 </head>
 
-<body>
+<body onbeforeunload="ConfirmarCierre()" onunload="ManejadorCierre()">
     <header>
         <%- include('../components/common/navbar.ejs') %>
     </header>

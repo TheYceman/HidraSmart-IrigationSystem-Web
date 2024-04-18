@@ -55,33 +55,14 @@ app.use(function (error, req, res, next) {
     .render("errors/500", { error: error, navIndex: -1, navGroup: -1 });
   next();
 });
-
-// Esta función se ejecutará cuando el proceso de Node.js esté a punto de terminar
-process.on('beforeExit', () => {
-
-  console.log("Se ejecuta beforeExit en app.js");
-  // Realiza una solicitud al servidor para indicar que el usuario está cerrando la ventana
-  const options = {
-    hostname: 'localhost', // Cambia esto por la dirección del servidor
-    port: 3000, // Cambia esto por el puerto del servidor
-    path: '/logout',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-
-  const req = http.request(options, (res) => {
-    console.log(`Status de la solicitud: ${res.statusCode}`);
-  });
-
-  req.on('error', (error) => {
-    console.error(`Error en la solicitud: ${error}`);
-  });
-
-  req.end();
+process.stdin.resume();
+process.on('exit', function () {
+  console.log("Salida ");
 });
 
+
 app.listen(process.env.PORT || 3002);
+
+
 
 
