@@ -113,20 +113,18 @@
         <div class="div-container">
           <button id="mostrarFormRoles" class="btn">Añadir nuevo rol</button>
           <form action="/gestor-usuarios/agregarRoles" method="POST" id="rolesForm" style="display: none;">
-            <label for="Login">Nombre:</label>
-            <input type="text" name="nombre" required>
-            <input type="checkbox" name="perUsu" id="perUsu">
-            <label for="myCheckbox">Usuarios</label>
-            <input type="checkbox" name="perVisor" id="perVisor">
-            <label for="myCheckbox">Visor</label>
-            <input type="checkbox" name="perMeteo" id="perMeteo">
-            <label for="myCheckbox">Meteorológicos</label>
-            <input type="checkbox" name="perRed" id="perRed">
-            <label for="myCheckbox">Red</label>
-            <input type="checkbox" name="perDemandas" id="perDemandas">
-            <label for="myCheckbox">Demandas</label>
-            <input type="checkbox" name="perRiego" id="perRiego">
-            <label for="myCheckbox">Riego</label>
+            <label for="Usuarios">Usuarios:</label>
+            <input type="text" name="perUsu" id="perUsu" required>
+            <label for="Visor">Visor:</label>
+            <input type="text" name="perVisor" id="perVisor" required>
+            <label for="Meteorológicos">Meteorológicos:</label>
+            <input type="text" name="perMeteo" id="perMeteo" required>
+            <label for="Red">Red:</label>
+            <input type="text" name="perRed" id="perRed" required>
+            <label for="Demandas">Demandas:</label>
+            <input type="text" name="perDemandas" id="perDemandas" required>
+            <label for="Riego">Riego:</label>
+            <input type="text" name="perRiego" id="perRiego" required>
             <button type="submit" class="btn">Añadir</button>
           </form>
           <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">
