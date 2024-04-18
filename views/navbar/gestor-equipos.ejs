@@ -13,7 +13,7 @@
       <%- include('../components/common/navbar.ejs') %>
     </header>
     <main>
-       <h2 class="titulo_seccion">
+      <h2 class="titulo_seccion">
       </h2>
       <div class="tab-labels">
         <div class="tab-label active" data-tab="tabla1" onclick="showTab('tabla1')">Equipos</div>
@@ -63,8 +63,10 @@
               <label for="clientes">Clientes:</label>
               <select name="clientes">
                 <% for(let cliente of clientes) { %>
-                  <option value="<%= cliente.numero %>"><%= cliente.nombre %></option>
-                <% } %>
+                  <option value="<%= cliente.numero %>">
+                    <%= cliente.nombre %>
+                  </option>
+                  <% } %>
               </select>
               <button type="submit" class="btn">Añadir</button>
             </div>
@@ -78,11 +80,11 @@
               <label for="ideRadio">IdeRadio:</label>
               <input type="text" name="ideRadio" required>
               <select name="tipo">
-                  <option value="caudalimetro">caudalimetro</option>
-                  <option value="nivel">nivel</option>
-                  <option value="pluviometro">pluviómetro</option>
+                <option value="caudalimetro">caudalimetro</option>
+                <option value="nivel">nivel</option>
+                <option value="pluviometro">pluviómetro</option>
               </select>
-               <label for="coorX">Coordenada X:</label>
+              <label for="coorX">Coordenada X:</label>
               <input type="text" name="coorX" required>
               <label for="coorY">Coordenada Y:</label>
               <input type="text" name="coorY" required>
@@ -469,3 +471,4 @@ app.get('/generar-excel', (req, res) => {
     -->
 
   </body>
+  

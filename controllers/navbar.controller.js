@@ -65,7 +65,10 @@ async function getLogout(req, res) {
 
   const userId = req.session.idUsuario; // Suponiendo que tienes el ID del usuario en la sesión
   const sesion_id = req.sessionID;
-  const endTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  var offset = new Date().getTimezoneOffset();
+  var d = new Date();
+  var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
+  const endTime = madridTime.toISOString().slice(0, 19).replace('T', ' ');
 
   const query = 'UPDATE session_logs SET end_time = "' + endTime + '" WHERE idusers = ' + userId + ' AND session_id = "' + sesion_id + '"';
   const results = await runQuery(query);

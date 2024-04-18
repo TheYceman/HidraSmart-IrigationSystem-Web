@@ -18,13 +18,16 @@ async function login(req, res) {
 
     let resultLogin = await verifyUser(username, password, req);
 
-    if (!resultLogin) {
+    if (resultLogin[0]==undefined) {
       res.status(401).json({ success: false, message: 'Email y/o contraseña no son válidos' });
     } else {
 
       const session_id = req.sessionID;
       const idusers = resultLogin[0].idusers;
-      const start_time = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      var offset = new Date().getTimezoneOffset();
+      var d = new Date();
+      var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
+      const start_time = madridTime.toISOString().slice(0, 19).replace('T', ' ');
       const end_time = '1999-01-01 00:00';
 
       const inserta = await runQuery(`INSERT INTO session_logs (session_id, idusers, start_time, end_time, aplicacion) VALUES ('${session_id}', '${idusers}', '${start_time}', '${end_time}', "Irrigation");`);
@@ -35,6 +38,7 @@ async function login(req, res) {
       req.session.idUsuario = idusers;
       req.session.token = username;
       req.session.headImage = '/images/login/US-positivo-horizontal.png';
+      console.log("¿Porque no redirige?" );
       res.status(200).json({ success: true, route: '/panel_aplicaciones' });
     }
   } catch (error) {
