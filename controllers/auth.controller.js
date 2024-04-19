@@ -39,6 +39,7 @@ async function login(req, res) {
       req.session.token = username;
       req.session.headImage = '/images/login/US-positivo-horizontal.png';
       console.log("¿Porque no redirige?" );
+      console.log(" Login req.session.loggedin " + req.session.loggedin);
       res.status(200).json({ success: true, route: '/panel_aplicaciones' });
     }
   } catch (error) {
