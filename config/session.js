@@ -75,7 +75,7 @@ function createSession() {
     cookie: {
       //secure: true,
       //httpOnly: true,
-      expires: expiryDate
+      //expires: expiryDate
     }
   });
 }
