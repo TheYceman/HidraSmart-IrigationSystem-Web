@@ -13,6 +13,8 @@ const authRoutes = require("./routes/auth.routes");
 const visorDatosRoutes = require("./routes/visor-datos.routes");
 const mapaSigRoutes = require("./routes/mapa-sig.routes");
 
+const dotenv = require('dotenv').config();
+
 const app = express();
 
 const http = require('http');
@@ -55,13 +57,10 @@ app.use(function (error, req, res, next) {
     .render("errors/500", { error: error, navIndex: -1, navGroup: -1 });
   next();
 });
-process.stdin.resume();
-process.on('exit', function () {
-  console.log("Salida ");
-});
 
+console.log(process.env.PORT);
 
-app.listen(process.env.PORT || 3002);
+app.listen(process.env.PORT);
 
 
 
