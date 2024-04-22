@@ -61,10 +61,10 @@ function createSessionStore() {
 }
 
 function createSession() {
-  var offset = new Date().getTimezoneOffset();
-  var d = new Date();
-  var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
-  const expiryDate = new Date(madridTime + 1000 * 60 * 60 * 24 ); // 24 hour
+  //var offset = new Date().getTimezoneOffset();
+  //var d = new Date();
+  //var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
+  //const expiryDate = new Date(madridTime + 1000 * 60 * 60 * 24 ); // 24 hour
   console.log("createSession " + new Date());
   return session({
     key: "sesion_hidrasmart_IR",
@@ -72,11 +72,11 @@ function createSession() {
     store: createSessionStore(),
     resave: false,
     saveUninitialized: false,
-    cookie: {
+    //cookie: {
       //secure: true,
       //httpOnly: true,
       //expires: expiryDate
-    }
+    //}
   });
 }
 

@@ -70,9 +70,14 @@ async function getLogout(req, res) {
   var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
   const endTime = madridTime.toISOString().slice(0, 19).replace('T', ' ');
 
-  const query = 'UPDATE session_logs SET end_time = "' + endTime + '" WHERE idusers = ' + userId + ' AND session_id = "' + sesion_id + '"';
-  const results = await runQuery(query);
-  console.log("getLogout " + results + " userId " + userId + " sesión " + req.sessionID);
+  if (userId) {
+    const query = 'UPDATE session_logs SET end_time = "' + endTime + '" WHERE idusers = ' + userId + ' AND session_id = "' + sesion_id + '"';
+    const results = await runQuery(query);
+    if(results){
+      console.log("getLogout " + results + " userId " + userId + " sesión " + req.sessionID);
+    }
+  }
+
   // Destruye la sesión actual
   req.session.destroy((err) => {
     if (err) {
