@@ -12,8 +12,8 @@ async function getDb(ddbb) {
     // Create the connection pool. The pool-specific settings are the defaults
     const pool = mysql.createPool({
       host: "hidralab-server.mysql.database.azure.com",
-      user: process.env.USUARIO,
-      password: process.env.CLAVE,
+      user: "telemedida_alcazar",
+      password: "Hidra2023Alcazar",
       port: 3306,
       database: ddbb, //"aplicaciones_web"
       waitForConnections: true,

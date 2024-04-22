@@ -18,7 +18,7 @@ async function login(req, res) {
 
     let resultLogin = await verifyUser(username, password, req);
 
-    if (resultLogin[0]==undefined) {
+    if (resultLogin[0] == undefined) {
       res.status(401).json({ success: false, message: 'Email y/o contraseña no son válidos' });
     } else {
 
@@ -38,7 +38,7 @@ async function login(req, res) {
       req.session.idUsuario = idusers;
       req.session.token = username;
       req.session.headImage = '/images/login/US-positivo-horizontal.png';
-      console.log("¿Porque no redirige?" );
+      console.log("¿Porque no redirige?");
       console.log(" Login req.session.loggedin " + req.session.loggedin);
       res.status(200).json({ success: true, route: '/panel_aplicaciones' });
     }
@@ -47,7 +47,6 @@ async function login(req, res) {
     res.status(500).json({ error: 'Error al conectar a MySQL' });
   }
 }
-
 
 /*   req.session.headImage 
  
