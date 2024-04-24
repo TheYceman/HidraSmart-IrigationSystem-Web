@@ -20,6 +20,8 @@ const app = express();
 const http = require('http');
 //const session = require('express-session');
 
+const { runQuery } = require("./data/bbdd-connector");
+
 const faviconPath = 'https://cdn.jsdelivr.net/gh/HidralabIyD/HidraSmart-CommonFiles@latest/icon/hidrasmart-Isotipo-positivo.ico'; // Ruta del icono de favicon
 
 app.locals.faviconPath = faviconPath;
@@ -31,7 +33,11 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(createSession());
+//app.use(createSession());
+// Configuración de express-session
+const sessionMiddleware = createSession();
+app.use(sessionMiddleware);
+
 app.use(authMiddleware);
 
 app.use("/", initRoutes);
@@ -64,24 +70,66 @@ const socketIo = require('socket.io');
 const server = http.createServer(app);
 const io = socketIo(server);
 
+// Middleware para Socket.IO
+io.use((socket, next) => {
+  sessionMiddleware(socket.request, socket.request.res || {}, next);
+});
+
 let lastActiveTime = {}; // Objeto para almacenar la última vez que se recibió una señal del cliente
 
 io.on('connection', (socket) => {
   console.log('Cliente conectado ');
-
+  conectado = false;
   socket.on('active', () => {
     console.log('Señal recibida del cliente');
     lastActiveTime[socket.id] = Date.now(); // Registrar el tiempo de la última señal recibida
+    conectado = true;
   });
 
-  socket.on('disconnect', (req, res) => {
-    console.log('Cliente desconectado ' );
+  socket.on('disconnect', () => {
+    console.log('Cliente desconectado ' + socket.request.session);
+    conectado = false;
     delete lastActiveTime[socket.id]; // Eliminar la entrada cuando el cliente se desconecta
+    // Almacena el identificador del intervalo en una variable
+    const intervalId = setInterval(() => {
+      if (!conectado) {
 
+        console.log("ventana cerrada");
+        const userId = socket.request.session.idUsuario; // Suponiendo que tienes el ID del usuario en la sesión
+        const sesion_id = socket.request.sessionID;
+        var offset = new Date().getTimezoneOffset();
+        var d = new Date();
+        var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
+        const endTime = madridTime.toISOString().slice(0, 19).replace('T', ' ');
+
+        if (userId) {
+          const query = 'UPDATE session_logs SET end_time = "' + endTime + '" WHERE idusers = ' + userId + ' AND session_id = "' + sesion_id + '"';
+          console.log(query);
+          const results = runQuery(query);
+          if (results) {
+            console.log("getLogout " + results + " userId " + userId + " sesión " + socket.request.sessionID);
+          }
+        }
+
+        // Destruye la sesión actual
+        socket.request.session.destroy((err) => {
+          if (err) {
+            console.error('Error al cerrar la sesión: ' + err.message);
+           //res.send('Error al cerrar la sesión');
+          } else {
+            //res.redirect('/'); // Redirige al usuario a la página de inicio u otra página deseada
+          }
+        });
+
+
+        clearInterval(intervalId); // Detiene el intervalo usando el identificador almacenado
+      }
+    }, 10000); // Intervalo de 10 segundos
   });
 });
 
 // Función para verificar la ventana activa
+/*
 setInterval(() => {
   const currentTime = Date.now();
   Object.keys(lastActiveTime).forEach((clientId) => {
@@ -89,9 +137,10 @@ setInterval(() => {
     console.log("lastActiveTime " + lastActiveTime[clientId] );
     if (currentTime - lastActiveTime[clientId] > 5000) { // Considerar inactiva si no hay señales durante más de 5 segundos
       console.log(`La ventana del cliente ${clientId} está inactiva`);
+
     }
   });
-}, 1000); // Verificar cada segundo
+}, 1000); // Verificar cada segundo*/
 
 const PORT = process.env.PORT || 3002;
 
