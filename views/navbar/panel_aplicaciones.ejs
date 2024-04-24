@@ -1,13 +1,20 @@
 <%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/socialbar.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
     <script src="/scripts/navbar.js" defer></script>
-
     <link rel="stylesheet" href="/styles/panel_aplicaciones.css">
-
     </head>
-
     <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+        <script>
+            const socket = io('http://localhost:3002');
+
+            // Enviar señales periódicas al servidor para indicar que la ventana está activa
+            setInterval(() => {
+                socket.emit('active');
+            }, 2000); // Enviar señal cada 2 segundos
+        </script>
         <aside>
             <%- include('../components/common/rrss.ejs') %>
         </aside>
@@ -15,7 +22,7 @@
             <%- include('../components/common/navbar.ejs') %>
         </header>
         <main>
-          <h2 class="titulo_seccion">
+            <h2 class="titulo_seccion">
             </h2>
             <div class="container_cards" id="container-cards">
                 <div class="card card_overall_record float_card" id="card-overall-record">
@@ -38,7 +45,7 @@
                 <div class="card card_owner_management float_card" id="card-owner-management">
                     <div class="card_body_container">
                         <p class="title_float_card">
-                           Información meteorológica<br>
+                            Información meteorológica<br>
                             <img class="card_image"
                                 src="/images/tramitacion-procedimientos/gestion_propietarios_white.png">
                         </p>
@@ -118,7 +125,7 @@
                             <div class="sub_card sub_card_owner_management float_sub_card"
                                 id="sub_card-owner_management">
                                 <p class="title_float_card" onclick="window.location.href = '/visor-datos';">
-                                Acceder
+                                    Acceder
                                 </p>
                             </div>
                         </div>
@@ -127,6 +134,7 @@
             </div>
             <%- include('../components/common/footer.ejs') %>
         </main>
+
     </body>
 
     </html>
