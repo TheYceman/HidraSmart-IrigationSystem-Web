@@ -60,8 +60,44 @@ app.use(function (error, req, res, next) {
 
 console.log(process.env.PORT);
 
-app.listen(process.env.PORT || 3002);
+const socketIo = require('socket.io');
+const server = http.createServer(app);
+const io = socketIo(server);
 
+let lastActiveTime = {}; // Objeto para almacenar la última vez que se recibió una señal del cliente
+
+io.on('connection', (socket) => {
+  console.log('Cliente conectado ');
+
+  socket.on('active', () => {
+    console.log('Señal recibida del cliente');
+    lastActiveTime[socket.id] = Date.now(); // Registrar el tiempo de la última señal recibida
+  });
+
+  socket.on('disconnect', (req, res) => {
+    console.log('Cliente desconectado ' );
+    delete lastActiveTime[socket.id]; // Eliminar la entrada cuando el cliente se desconecta
+
+  });
+});
+
+// Función para verificar la ventana activa
+setInterval(() => {
+  const currentTime = Date.now();
+  Object.keys(lastActiveTime).forEach((clientId) => {
+    console.log("currentTime " + currentTime);
+    console.log("lastActiveTime " + lastActiveTime[clientId] );
+    if (currentTime - lastActiveTime[clientId] > 5000) { // Considerar inactiva si no hay señales durante más de 5 segundos
+      console.log(`La ventana del cliente ${clientId} está inactiva`);
+    }
+  });
+}, 1000); // Verificar cada segundo
+
+const PORT = process.env.PORT || 3002;
+
+server.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
+});
 
 
 

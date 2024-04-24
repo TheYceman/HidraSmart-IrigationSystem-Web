@@ -51,7 +51,7 @@ const verificarCertificado = (req, res, next) => {
   };
 
 router.get('/panel_aplicaciones', Auth.requireLogin, function (req, res, html) {
-    console.log(req.session);
+    //console.log(req.session);
     navbarController.getDashboard(req, res);
 });
 
