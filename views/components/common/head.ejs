@@ -24,7 +24,6 @@
     <script src="/scripts/common/popup-session-closed.js"></script>
 
 
-    <link rel="stylesheet" href="/styles/head.css">
     <script src="/scripts/head.js" defer></script>
     <!-- <link rel="stylesheet" href="/styles/head-login.css"> -->
 
@@ -45,16 +44,11 @@
                 <%- include('./navbar.ejs') %>
             </div>
             <div class="head_image_logo_location_container">
-                <a target="_blank" href="<%= headComunityUrl %>">
-                    <img class="head_image_logo_location" src = "<%= headComunityLogo %>">
-                </a>
                 <div class="head_button_container">
                     <a id="button-log-out">
                         <img class="head_image_button_logout" title="Mi Perfil" src = "/images/head/icon/icon_profile.png">
-                        CUENTA
                     </a>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -73,7 +67,12 @@
                 <img id="profile-image-logo-location" class="profile_image_logo_location" src = "<%= headComunityLogo %>">
             </a>
             <div id="profile-body-right" class="profile_body_right">
-                <%= profileUserName %>
+                <div id="profile-body-right-name" class="profile_body_right_name">
+                    <%= profileUserName %>
+                </div>
+                <div id="profile-body-right-email" class="profile_body_right_email">
+                    <%= profileUserEmail %>
+                </div>
             </div>
         </div>
     </div>

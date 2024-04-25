@@ -75,11 +75,13 @@ html {
 }
 
 .head_image_logo_location_container{
+    height: 100%;
     display: flex;
     width: 7.6vw;
     flex-direction: column;
     align-items: center;
     z-index: 99;
+    justify-content: center;
 }
 
 .head_image_logo_location_container a{
@@ -91,26 +93,18 @@ html {
 }
 
 .head_button_container{
-    width: 100%;
+    height: 60%;
+    width: 60%;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
 
-#button-sinac{
-    width: 60%;
-    background-image: url('/images/fondo-sinac-claro.jpg');
-    border-radius: 5px;
-}
-
-.head_image_button_sinac{
-    width: 100%;
-}
-
 #button-log-out{
 
     width: 90%;
-    border-radius: 5px;
+    height: 90%;
+    border-radius: 50%;
     background: #e3f2fd;
 }
 
@@ -118,9 +112,8 @@ html {
     height: 100%;;
 }
 
-#button-log-out,
-#button-sinac {
-    height: 1.5vw;
+#button-log-out{
+    height: auto;
     display: inline-block;
     font-size: 0.8vw;
     background: rgba(255,255,255,0) url('/images/fondo-sinac-claro.jpg') no-repeat center center;
@@ -132,15 +125,13 @@ html {
     cursor: pointer;
   }
   
-  #button-log-out:active,
-  #button-sinac:active {
+  #button-log-out:active{
     position: relative;
     background-image: url('/images/fondo-sinac-oscuro.jpg');
     box-shadow: inset 0 1px 1px rgba(0,0,0,0.4), inset 0 0 35px rgba(0,0,0,0.6), 0 1px 1px rgba(255,255,255,0.1), inset 0 6px 4px rgba(0,0,0,0.4);
   }
 
-#button-log-out::before,
-#button-sinac::before {
+#button-log-out::before {
     content: '';
     position: absolute;
     top: 0;
@@ -155,8 +146,9 @@ html {
     right: 8px;
     width: 5%;
     height: 5%;
-    background-color: #fff;
-    border: 1px solid #f0f0f0;
+    background-color:aliceblue;
+    /* background: rgba(255, 255, 255, 0) url(/images/fondo-sinac-claro.jpg) no-repeat center center; */
+    /* border: 1px solid #f0f0f0; */
     box-sizing: border-box;
     z-index: 1000;
     border-radius: 5px;
@@ -192,8 +184,8 @@ html {
 
 .profile_head_left{
     width: 67%;
-    font-size: 2em;
-    color: black;
+    font-size: 1.5em;
+    color: #000;
 }
 
 .profile_head_right{
@@ -206,6 +198,7 @@ html {
 
 .profile_head_right:hover{
     background-color: var(--color-bg-darker);
+    color: var(--color-primary-400);
 }
 
 .profile_body{
@@ -216,13 +209,42 @@ html {
 }
 
 .profile_body_left {
-    width: 100%;
+    width: 40%;
     height: 100%;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.profile_body_right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 60%;
+    height: 100%;
+    overflow: hidden;
+    padding-right: 3%;
+}
+
+.profile_body_right_name,
+.profile_body_right_email{
+    font-size: 0.8rem;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 3%;
+    text-align: left;
+}
+
+
 
 .profile_image_logo_location{
     height: 94%;
     margin-left: 4%;
+    filter:drop-shadow(1px 1px 3px #888)
 }
 
+.profile_image_logo_location:hover{
+    transform: scale(1.05);
+    filter:drop-shadow(1px 1px 3px var(--color-primary-400))
+}
