@@ -1,0 +1,60 @@
+
+html {
+    font-family: "Nunito Sans", sans-serif;
+  
+    --color-bg: rgb(226, 234, 238);
+    --color-bg-darker: rgb(191, 198, 201);
+    /* --color-primary-bg: rgb(225, 244, 253); */
+    --color-primary-contrast: rgb(225, 244, 253);
+    /* --color-primary-contrast: rgb(211, 229, 236); */
+    --color-primary-300: rgb(48, 186, 245);
+    --color-primary-400: rgb(0, 155, 219);
+    --color-primary-600: rgb(19, 113, 221);
+    --color-primary-800: rgb(19, 22, 221);
+  
+    --color-alert-300: rgb(245, 127, 127);
+    --color-alert-500: red;
+  
+    --box-shadow-default: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  
+    --height-max-space: calc(100% - 7rem);
+  
+    height: 100%;
+  }
+
+
+
+.container_head{
+    display: flex;
+    height: 7vw;
+}
+
+.head_image_logo{
+    width: 18vw;
+    padding: 1vw 3vw;
+}
+
+.head_image_services_container{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.head_image_services{
+    height: 5vw;
+}
+
+.titulo_seccion {
+    width: 85%;
+    margin: 0 auto;
+    font-size: 2rem;
+    color: var(--color-primary-400);
+    font-weight: 700;
+    border-bottom: 2px solid var(--color-primary-400);
+    margin-bottom: 1%;
+}
+
+.titulo_seccion p {
+    margin: 0;
+    margin-top: 2%;
+}

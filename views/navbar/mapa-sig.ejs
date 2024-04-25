@@ -16,12 +16,7 @@
     </head>
 
     <body onbeforeunload="ConfirmarCierre()" onunload="ManejadorCierre()">
-        <aside>
-            <%- include('../components/common/rrss.ejs') %>
-        </aside>
-        <header>
-            <%- include('../components/common/navbar.ejs', {navIndex: navIndex}) %>
-        </header>
+        
         <main>
             <%- include('../components/mapa-sig/map-view.ejs', { todosLosContadores: todosLosContadores }) %>
                 <%- include('../components/common/footer.ejs') %>
