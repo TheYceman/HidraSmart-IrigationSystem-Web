@@ -40,7 +40,7 @@ async function login(req, res) {
       req.session.token = username;
       req.session.headImage = '/images/login/IS-positivo-horizontal.png';
       req.session.headCommunityName = 'Pantano Estrecho de Peñarroya';
-      req.session.headCommunityImage ='/images/head/argamasilla-de-alba.jpg';
+      req.session.headCommunityImage ='/images/head/argamasilla-de-alba.png';
       req.session.headCommunityUrl = 'https://www.crpenarroya.org/';
 
       console.log("¿Porque no redirige?");
