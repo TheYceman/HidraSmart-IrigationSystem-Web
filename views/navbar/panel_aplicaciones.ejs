@@ -6,15 +6,6 @@
     <link rel="stylesheet" href="/styles/panel_aplicaciones.css">
     </head>
     <body>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
-        <script>
-            const socket = io('http://localhost:3002');
-
-            // Enviar señales periódicas al servidor para indicar que la ventana está activa
-            setInterval(() => {
-                socket.emit('active');
-            }, 2000); // Enviar señal cada 2 segundos
-        </script>
         <aside>
             <%- include('../components/common/rrss.ejs') %>
         </aside>
