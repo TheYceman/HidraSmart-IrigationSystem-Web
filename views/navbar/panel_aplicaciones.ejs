@@ -3,19 +3,72 @@
     <link rel="stylesheet" href="/styles/socialbar.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
     <script src="/scripts/navbar.js" defer></script>
-    <link rel="stylesheet" href="/styles/panel_aplicaciones.css">
+
+    <!-- <link rel="stylesheet" href="/styles/panel_aplicaciones.css"> -->
+
+    <link rel="stylesheet" href="/styles/application-panel/application-panel.css">
+        
+    <script src="/scripts/application-panel/application-panel.js" defer></script>
+
     </head>
     <body>
-        <aside>
-            <%- include('../components/common/rrss.ejs') %>
-        </aside>
-        <header>
-            <%- include('../components/common/navbar.ejs') %>
-        </header>
         <main>
             <h2 class="titulo_seccion">
             </h2>
-            <div class="container_cards" id="container-cards">
+            <div  class="container_application_panel">
+                <div id="drag-container">
+                    <div id="spin-container">
+                        <!-- Add your images (or video) here -->
+                        <a class="carousel_card" href="">
+                            <img
+                            src="/images/tramitacion-procedimientos/registro_general_white.png"
+                            alt=""
+                            />
+                        </a>
+                        <a class="carousel_card" href="/visor-datos">
+                            <img
+                            src="/images/tramitacion-procedimientos/gestion_propietarios_white.png"
+                            alt=""
+                            />
+                        </a>
+                        <a class="carousel_card" href="/visor-datos">
+                            <img
+                            src="/images/tramitacion-procedimientos/registro_general_white.png"
+                            alt=""
+                            />
+                        </a>
+                        <a class="carousel_card" href="/mapa-sig">
+                            <img
+                            src="/images/tramitacion-procedimientos/gestion_regantes_white.png"
+                            alt=""
+                            />
+                        </a>
+                        <a class="carousel_card" href="/visor-datos">
+                            <img
+                            src="/images/tramitacion-procedimientos/authorization_works_white.png"
+                            alt=""
+                            />
+                        </a>
+                        <a class="carousel_card" href="/visor-datos">
+                            <img
+                            src="/images/tramitacion-procedimientos/gestion_propietarios_white.png"
+                            alt=""
+                            />
+                        </a>
+                        <!-- Text at center of ground -->
+                        <div class="img_centro">
+                            <a href="simulador">
+                                <img
+                                src="/images/SelectorAplicaciones/h-hidralab.png"
+                                alt=""
+                                />
+                            </a>
+                        </div>
+                    </div>
+                    <div id="ground"></div>
+                </div>
+            </div>
+            <!-- <div class="container_cards" id="container-cards">
                 <div class="card card_overall_record float_card" id="card-overall-record">
                     <div class="card_body_container">
                         <p class="title_float_card_gray">
@@ -122,7 +175,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <%- include('../components/common/footer.ejs') %>
         </main>
 

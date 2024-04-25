@@ -31,13 +31,18 @@ async function login(req, res) {
       const end_time = '1999-01-01 00:00';
 
       const inserta = await runQuery(`INSERT INTO session_logs (session_id, idusers, start_time, end_time, aplicacion) VALUES ('${session_id}', '${idusers}', '${start_time}', '${end_time}', "Irrigation");`);
+      req.session.user = resultLogin;
       console.log("async function login " + inserta);
-      console.log(" resultLogin BBDD OK " + resultLogin[0].username);
+      console.log(" resultLogin BBDD OK " + resultLogin[0].user);
       req.session.loggedin = true;
       req.session.username = resultLogin[0].username;
       req.session.idUsuario = idusers;
       req.session.token = username;
-      req.session.headImage = '/images/login/US-positivo-horizontal.png';
+      req.session.headImage = '/images/login/IS-positivo-horizontal.png';
+      req.session.headCommunityName = 'Pantano Estrecho de Peñarroya';
+      req.session.headCommunityImage ='/images/head/argamasilla-de-alba.jpg';
+      req.session.headCommunityUrl = 'https://www.crpenarroya.org/';
+
       console.log("¿Porque no redirige?");
       console.log(" Login req.session.loggedin " + req.session.loggedin);
       res.status(200).json({ success: true, route: '/panel_aplicaciones' });
