@@ -29,9 +29,9 @@ function createSessionStore() {
     // Whether or not to automatically check for and clear expired sessions:
     clearExpired: false,
     // How frequently expired sessions will be cleared; milliseconds:
-    checkExpirationInterval: 90000000,
+    //checkExpirationInterval: 90000000,
     // The maximum age of a valid session; milliseconds:
-    expiration: 86400000,
+    //expiration: 86400000,
     // Whether or not to create the sessions database table, if one does not already exist:
     //createDatabaseTable: true,
     // Whether or not to end the database connection when the store is closed.

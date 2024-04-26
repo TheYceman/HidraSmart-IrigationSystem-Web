@@ -97,6 +97,7 @@ function getDashboard(req, res) {
     navGroup: 0,
     pageTitle: "Panel de aplicacion",
     user: req.session.username,
+    
   });
 }
 

@@ -1,10 +1,23 @@
 const mysql = require("mysql2/promise");
-const fs = require('fs');
+const fetch = require('node-fetch');
 
-const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
+async function downloadBlob() {
+  //console.log('process.env.BLOB_SAS_URL:', process.env.BLOB_SAS_URL);
+  const blobSasUrl = process.env.BLOB_SAS_URL;
+
+  const response = await fetch(blobSasUrl);
+  const certContent = await response.text();
+  //console.log('Descargado el archivo .pem con éxito:\n', certContent);
+  return certContent;
+}
+
+downloadBlob().catch((err) => {
+  console.error('Error al descargar el archivo .pem 3232:', err.message);
+});
 
 async function getDb(ddbb) {
 
+  const certContent = await downloadBlob();
   console.log("bbb" + process.cwd());
 
   try {
@@ -24,8 +37,8 @@ async function getDb(ddbb) {
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
       ssl: {
-        ca: fs.readFileSync(certPath),
-      }
+        ca: certContent,
+      },
     });
 
     return pool;

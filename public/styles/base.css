@@ -99,34 +99,30 @@ select {
 
 
 /* Estilos para el footer */
-.footer {
-  background-color: var(--color-primary-400);
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--color-primary-300);
   color: #fff;
-  padding: 20px 0;
+  text-align: center;
+  padding: 1px;
 }
 
-.container-footer {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+footer nav ul {
+  list-style: none;
+  padding: 0;
 }
 
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+footer nav ul li {
+  display: inline;
+  margin-right: 20px; /* Espacio entre opciones */
 }
 
-.footer-left, .footer-right {
-  flex: 1;
-  padding: 0 10px;
+footer nav ul li a {
+  color: #fff;
+  text-decoration: none;
 }
-
-.footer h4 {
-  font-size: 18px;
-  margin-top: 0;
-}
-
 ul {
   list-style: none;
   padding: 0;
