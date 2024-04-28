@@ -39,7 +39,7 @@ async function login(req, res) {
       req.session.idUsuario = idusers;
       req.session.token = username;
       req.session.headImage = '/images/login/IS-positivo-horizontal.png';
-      req.session.headCommunityName = 'Pantano Estrecho de Peñarroya';
+      req.session.headCommunityName = 'Estrecho de Peñarroya';
       req.session.headCommunityImage ='/images/head/argamasilla-de-alba.png';
       req.session.headCommunityUrl = 'https://www.crpenarroya.org/';
 
