@@ -8,11 +8,11 @@ function createSessionStore() {
   const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
   console.log("bbb" + process.cwd())
   const pool = mysql.createPool({
-    host: "hidralab-server.mysql.database.azure.com",
-    user: "telemedida_alcazar",
-    password: "Hidra2023Alcazar",
-    port: 3306,
-    database: "aplicaciones_web", //"aplicaciones_web"
+    host: process.env.AZURE_MYSQL_HOST,
+    user: process.env.AZURE_MYSQL_USER,
+    password: process.env.AZURE_MYSQL_PASSWORD,
+    port: process.env.AZURE_MYSQL_PORT,
+    database: process.env.AZURE_MYSQL_DATABASE, //"aplicaciones_web"
     waitForConnections: true,
     connectionLimit: 10,
     maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
@@ -61,10 +61,10 @@ function createSessionStore() {
 }
 
 function createSession() {
-  var offset = new Date().getTimezoneOffset();
-  var d = new Date();
-  var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
-  const expiryDate = new Date(madridTime + 1000 * 60 * 60 ); // 1 hour
+  //var offset = new Date().getTimezoneOffset();
+  //var d = new Date();
+  //var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
+  //const expiryDate = new Date(madridTime + 1000 * 60 * 60 * 24 ); // 24 hour
   console.log("createSession " + new Date());
   return session({
     key: "sesion_hidrasmart_IR",
@@ -72,11 +72,11 @@ function createSession() {
     store: createSessionStore(),
     resave: false,
     saveUninitialized: false,
-    cookie: {
+    //cookie: {
       //secure: true,
       //httpOnly: true,
-      expires: expiryDate
-    }
+      //expires: expiryDate
+    //}
   });
 }
 

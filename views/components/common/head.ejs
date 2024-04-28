@@ -1,16 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" defer></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js"></script> 
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3/animate.min.css">
+    <script src="/scripts/common/sweet-alert-config.js"></script>
+    <link rel="stylesheet" href="/styles/common/sweet-alert-config.css">
+
+    <script src="/scripts/common/popup-session-closed.js"></script>
+
+    <link rel="stylesheet" href="/styles/head.css">
+    <script src="/scripts/head.js" defer></script>
+    <!-- <link rel="stylesheet" href="/styles/head-login.css"> -->
+
+    <link rel="icon" href="<%= faviconPath %>" type="image/x-icon" />
     
-    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+
+    <!-- Inicio cabecera -->
+    <div class="head_web" id="head-web"style="background: none;">
+        <div class="container_head" id="container-head">
+            <a class="container_head_image_logo" href="https://hidrasmart-mainselector.azurewebsites.net/" target="_blank">
+                <img class="head_image_logo" src="https://dev.azure.com/Hidralab/HidraSmart-Common_File/_apis/git/repositories/HidraSmart-Common_File/items?path=%2Fimages%2Flogo_water_texture.png">
+            </a>
+            <div class="head_image_services_container">
+                <a class="head_image_services_subcontainer" href="/panel-aplicaciones">
+                    <img class="head_image_services" src = "<%= headImage %>">
+                </a>
+                <%- include('./navbar.ejs') %>
+            </div>
+            <div class="head_image_logo_location_container">
+                <div class="head_button_container">
+                    <a id="button-log-out">
+                        <img class="head_image_button_logout" title="Mi Perfil" src = "/images/head/icon/icon_profile.png">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="container-profile" class="container_profile">
+        <div id="profile-head" class="profile_head">
+            <a id="profile-head-left" class="profile_head_left">
+                <%= headComunityName %>
+            </a>
+            <a id="profile-head-right" class="profile_head_right" href="#">
+                Cerrar Sesión
+            </a>
+
+        </div>
+        <div id="profile-body" class="profile_body">
+            <a id="profile-body-left" class="profile_body_left" target="_blank" href="<%= headComunityUrl %>">
+                <img id="profile-image-logo-location" class="profile_image_logo_location" src = "<%= headComunityLogo %>">
+            </a>
+            <div id="profile-body-right" class="profile_body_right">
+                <div id="profile-body-right-name" class="profile_body_right_name">
+                    <%= profileUserName %>
+                </div>
+                <div id="profile-body-right-email" class="profile_body_right_email">
+                    <%= profileUserEmail %>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Fin cabecera -->
+
     <title><%= pageTitle %></title>
+
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+        //const socket = io('http://localhost:3002'); //Desarrollo
+        const socket = io('https://hidrasmart-irrigationsystem.azurewebsites.net/'); //Producción
+
+        // Enviar señales periódicas al servidor para indicar que la ventana está activa
+        setInterval(() => {
+            socket.emit('active');
+        }, 1000); // Enviar señal cada 2 segundos
+        // Escuchar el evento 'redirect'
+        /*socket.on('redirect', function (destination) {
+            console.log('Redirigiendo a:', destination);
+            window.location.href = destination; // Redirigir a la ruta especificada
+        });
+
+        // Enviar señal al servidor cuando la ventana está activa
+        window.addEventListener('focus', function () {
+            socket.emit('active');
+        });
+
+        // Redirigir a la ruta de logout cuando la ventana se cierre o pierda el foco
+        window.addEventListener('blur', function () {
+            socket.emit('redirect', '/logout');
+        });*/
+    </script>

@@ -39,4 +39,15 @@ function selectMenu(menu) {
   menu.classList.add("active");
 }
 
+window.onpagehide = (event) => {
+  if (event.persisted) {
+    //alert(document.cookie);
+    
+    //window.location.href = "http://localhost:3002/logout";
+  }
+};
+
+
+
+
 

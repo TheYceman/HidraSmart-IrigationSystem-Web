@@ -7,7 +7,6 @@ async function getGeDataCliente(req, res) {
   return geData;
 }
 
-
 async function getTotalPagesClientes(req, res) {
 
   pages = 1;
@@ -22,7 +21,6 @@ async function getTotalPagesClientes(req, res) {
 
   return pages;
 }
-
 
 async function getGeDataClientesPerPage(req, res) {
 
@@ -101,6 +99,5 @@ async function agregaCliente(req, res) {
 
   res.redirect('/gestor-clientes');
 }
-
 
 module.exports = { getGeDataCliente, getDataCliente, getGeDataClientesPerPage, updateCliente, deleteCliente, agregaCliente, getTotalPagesClientes };

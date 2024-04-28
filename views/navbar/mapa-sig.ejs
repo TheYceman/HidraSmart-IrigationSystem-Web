@@ -2,62 +2,21 @@
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/socialbar.css">
     <script src="/scripts/navbar.js" defer></script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" defer></script>
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxEYV_9I3yALB6JE1kanVt4qdvDURH3zg" defer></script>
     <!-- <script src="/cesium/Build/Cesium/Cesium.js" defer></script>
     <link href="/cesium/Build/Cesium/Widgets/widgets.css" rel="stylesheet"> -->
-
     <script src="/scripts/mapa_sig.js" defer></script>
     <link rel="stylesheet" href="/styles/globo.css">
     <link rel="stylesheet" href="/styles/mapa_sig.css">
     </head>
 
     <body onbeforeunload="ConfirmarCierre()" onunload="ManejadorCierre()">
-        <aside>
-            <%- include('../components/common/rrss.ejs') %>
-        </aside>
-        <header>
-            <%- include('../components/common/navbar.ejs', {navIndex: navIndex}) %>
-        </header>
+        
         <main>
             <%- include('../components/mapa-sig/map-view.ejs', { todosLosContadores: todosLosContadores }) %>
                 <%- include('../components/common/footer.ejs') %>
         </main>
-
-        <script>
-            var micierre = false;
-
-            function ConfirmarCierre() {
-                if (event.clientY < 0) {
-                    event.returnValue = "";
-                    setTimeout('micierre = false', 100);
-                    micierre = true;
-                }
-            }
-
-            function ManejadorCierre() {
-                if (micierre == true) {
-                    fetch("/logout", {
-                        method: 'POST',
-                    })
-                        .then((response) => {
-                            if (response.ok) {
-                                console.log('Cierre de sesión correcto');
-                            } else {
-                                console.log('Cierre de sesión incorrecto');
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('Error en la solicitud: ' + error.message);
-                        });
-                }
-            }
-
-
-        </script>
     </body>
-
     </html>

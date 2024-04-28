@@ -21,7 +21,7 @@ const { getAllUsuarios } = require("../models/usuario.model");
 
 const { getGeDataRolesPerPage } = require("../controllers/gestor-roles.controller");
 const { getTotalPagesRoles } = require("../controllers/gestor-roles.controller");
-const { getAllRoles } = require("../models/Rol.model");
+const { getAllRoles } = require("../models/rol.model");
 
 const { getGeDataCliente } = require("../controllers/gestor-clientes.controller");
 const { getGeDataClientesPerPage } = require("../controllers/gestor-clientes.controller");
@@ -70,9 +70,14 @@ async function getLogout(req, res) {
   var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
   const endTime = madridTime.toISOString().slice(0, 19).replace('T', ' ');
 
-  const query = 'UPDATE session_logs SET end_time = "' + endTime + '" WHERE idusers = ' + userId + ' AND session_id = "' + sesion_id + '"';
-  const results = await runQuery(query);
-  console.log("getLogout " + results + " userId " + userId + " sesión " + req.sessionID);
+  if (userId) {
+    const query = 'UPDATE session_logs SET end_time = "' + endTime + '" WHERE idusers = ' + userId + ' AND session_id = "' + sesion_id + '"';
+    const results = await runQuery(query);
+    if(results){
+      console.log("getLogout " + results + " userId " + userId + " sesión " + req.sessionID);
+    }
+  }
+
   // Destruye la sesión actual
   req.session.destroy((err) => {
     if (err) {
@@ -88,18 +93,30 @@ async function getLogout(req, res) {
 
 function getDashboard(req, res) {
   res.render("navbar/panel_aplicaciones", {
+    headImage: req.session.headImage,
     navIndex: 7,
     navGroup: 0,
     pageTitle: "Panel de aplicacion",
+    headComunityLogo: req.session.headCommunityImage,
+    headComunityName: req.session.headCommunityName,
+    headComunityUrl: req.session.headCommunityUrl,
+    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserEmail: req.session.user[0].email,
     user: req.session.username,
   });
 }
 
 async function getMapaSig(req, res) {
   res.render("navbar/mapa-sig", {
+    headImage: req.session.headImage,
     navIndex: 9,
     navGroup: 1,
     pageTitle: "Visor",
+    headComunityLogo: req.session.headCommunityImage,
+    headComunityName: req.session.headCommunityName,
+    headComunityUrl: req.session.headCommunityUrl,
+    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserEmail: req.session.user[0].email,
     user: req.session.username,
     todosLosContadores: await getAll(req, res),
   });
@@ -107,9 +124,15 @@ async function getMapaSig(req, res) {
 
 async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
+    headImage: req.session.headImage,
     navIndex: 10,
     navGroup: 1,
     pageTitle: "Estado de la red",
+    headComunityLogo: req.session.headCommunityImage,
+    headComunityName: req.session.headCommunityName,
+    headComunityUrl: req.session.headCommunityUrl,
+    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
     user: req.session.username,
@@ -118,9 +141,15 @@ async function getVisorDatos(req, res) {
 
 async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
+    headImage: req.session.headImage,
     navIndex: 11,
     navGroup: 1,
     pageTitle: "Información meteorológica",
+    headComunityLogo: req.session.headCommunityImage,
+    headComunityName: req.session.headCommunityName,
+    headComunityUrl: req.session.headCommunityUrl,
+    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
     user: req.session.username,
@@ -129,9 +158,15 @@ async function getVisorDatos(req, res) {
 
 async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
+    headImage: req.session.headImage,
     navIndex: 12,
     navGroup: 1,
     pageTitle: "Gestor Parcelas",
+    headComunityLogo: req.session.headCommunityImage,
+    headComunityName: req.session.headCommunityName,
+    headComunityUrl: req.session.headCommunityUrl,
+    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
     user: req.session.username,
@@ -140,9 +175,15 @@ async function getVisorDatos(req, res) {
 
 async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
+    headImage: req.session.headImage,
     navIndex: 13,
     navGroup: 1,
     pageTitle: "Planificador de riego",
+    headComunityLogo: req.session.headCommunityImage,
+    headComunityName: req.session.headCommunityName,
+    headComunityUrl: req.session.headCommunityUrl,
+    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
     user: req.session.username,
@@ -153,9 +194,15 @@ async function getVisorDatos(req, res) {
 
 async function getGestorEquipos(req, res) {
   res.render("navbar/gestor-equipos", {
+    headImage: req.session.headImage,
     navIndex: 12,
     navGroup: 2,
     pageTitle: "Gestor de Equipos",
+    headComunityLogo: req.session.headCommunityImage,
+    headComunityName: req.session.headCommunityName,
+    headComunityUrl: req.session.headCommunityUrl,
+    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserEmail: req.session.user[0].email,
     user: req.session.username,
     contadores: await getGeDataContadorPerPage(req, res),
     todosLosContadores: await getAll(req, res),
@@ -171,9 +218,15 @@ async function getGestorEquipos(req, res) {
 
 async function getGestorClientes(req, res) {
   res.render("navbar/gestor-clientes", {
+    headImage: req.session.headImage,
     navIndex: 14,
     navGroup: 2,
     pageTitle: "Gestor de clientes",
+    headComunityLogo: req.session.headCommunityImage,
+    headComunityName: req.session.headCommunityName,
+    headComunityUrl: req.session.headCommunityUrl,
+    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserEmail: req.session.user[0].email,
     user: req.session.username,
     clientes: await getGeDataClientesPerPage(req, res),
     todosLosClientes: await getAllClientes(req, res),
@@ -184,9 +237,15 @@ async function getGestorClientes(req, res) {
 
 async function getGestorUsuarios(req, res) {
   res.render("navbar/gestor-usuarios", {
+    headImage: req.session.headImage,
     navIndex: 15,
     navGroup: 2,
     pageTitle: "Gestor de Usuarios",
+    headComunityLogo: req.session.headCommunityImage,
+    headComunityName: req.session.headCommunityName,
+    headComunityUrl: req.session.headCommunityUrl,
+    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserEmail: req.session.user[0].email,
     user: req.session.username,
     usuarios: await getGeDataUsuariosPerPage(req, res),
     todosLosUsuarios: await getAllUsuarios(req, res),
