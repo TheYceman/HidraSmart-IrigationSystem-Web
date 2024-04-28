@@ -29,7 +29,7 @@ async function getContactUsLogin(req,res){
     const responseBodyContactUs = await fetch(urlBodyContactUs);
     const htmlBodyContactUs = await responseBodyContactUs.text();
     
-    res.render('login/contact-us', {
+    res.render('/contact-us', {
       headLoginHTML: htmlHeadLogin,
       bodyContactUsHTML: htmlBodyContactUs,
       title: 'Contacto' , 
