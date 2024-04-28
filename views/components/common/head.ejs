@@ -31,9 +31,6 @@
     
     <link rel="stylesheet" href="/styles/footer.css">
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/scripts/utils/socketEvents.js"></script>
-
     <!-- Inicio cabecera -->
     <div class="head_web" id="head-web"style="background: none;">
         <div class="container_head" id="container-head">
@@ -83,3 +80,30 @@
 
     <title><%= pageTitle %></title>
 
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+        //const socket = io('http://localhost:3002'); //Desarrollo
+        const socket = io('https://hidrasmart-irrigationsystem.azurewebsites.net/'); //Producción
+
+        // Enviar señales periódicas al servidor para indicar que la ventana está activa
+        setInterval(() => {
+            socket.emit('active');
+        }, 1000); // Enviar señal cada 2 segundos
+        // Escuchar el evento 'redirect'
+        /*socket.on('redirect', function (destination) {
+            console.log('Redirigiendo a:', destination);
+            window.location.href = destination; // Redirigir a la ruta especificada
+        });
+
+        // Enviar señal al servidor cuando la ventana está activa
+        window.addEventListener('focus', function () {
+            socket.emit('active');
+        });
+
+        // Redirigir a la ruta de logout cuando la ventana se cierre o pierda el foco
+        window.addEventListener('blur', function () {
+            socket.emit('redirect', '/logout');
+        });*/
+    </script>
