@@ -7,21 +7,30 @@ function createSessionStore() {
 
   const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
   console.log("bbb" + process.cwd())
-  const pool = mysql.createPool({
-    host: process.env.AZURE_MYSQL_HOST,
-    user: process.env.AZURE_MYSQL_USER,
-    password: process.env.AZURE_MYSQL_PASSWORD,
-    port: process.env.AZURE_MYSQL_PORT,
-    database: process.env.AZURE_MYSQL_DATABASE, //"aplicaciones_web"
+  const dbConfig = {
+    host: "hidralab-server.mysql.database.azure.com",
+    user: "telemedida_alcazar",
+    password: "Hidra2023Alcazar",
+    port: 3306,
+    database: "aplicaciones_web",
+    connectTimeout: 1000000,
     waitForConnections: true,
     connectionLimit: 10,
-    maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
-    idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
     queueLimit: 0,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 0,
     ssl: {
       ca: fs.readFileSync(certPath),
+    }
+  };
+
+  const connection = mysql.createConnection(dbConfig);
+
+  connection.connect((error) => {
+    if (error) {
+      console.log("Error en connection.connect " + error);
+      connection = mysql.createConnection(dbConfig);
+      createSession();
+    } else {
+      console.log("Connected..")
     }
   });
 
@@ -37,6 +46,7 @@ function createSessionStore() {
     // Whether or not to end the database connection when the store is closed.
     // The default value of this option depends on whether or not a connection was passed to the constructor.
     // If a connection object is passed to the constructor, the default value for this option is false.
+    endConnectionOnClose: true,
     disableTouch: false,
     charset: 'utf8mb4_bin',
     schema: {
@@ -47,7 +57,7 @@ function createSessionStore() {
         data: 'data'
       }
     }
-  }, pool);
+  }, connection);
   // Optionally use onReady() to get a promise that resolves when store is ready.
   sessionStore.onReady().then(() => {
     // MySQL session store ready for use.
@@ -61,10 +71,8 @@ function createSessionStore() {
 }
 
 function createSession() {
-  //var offset = new Date().getTimezoneOffset();
-  //var d = new Date();
-  //var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
-  //const expiryDate = new Date(madridTime + 1000 * 60 * 60 * 24 ); // 24 hour
+
+  const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 hour
   console.log("createSession " + new Date());
   return session({
     key: "sesion_hidrasmart_IR",
@@ -72,11 +80,11 @@ function createSession() {
     store: createSessionStore(),
     resave: false,
     saveUninitialized: false,
-    //cookie: {
+    cookie: {
       //secure: true,
       //httpOnly: true,
-      //expires: expiryDate
-    //}
+      expires: expiryDate
+    }
   });
 }
 
