@@ -21,11 +21,6 @@
     <script src="/scripts/common/sweet-alert-config.js"></script>
     <link rel="stylesheet" href="/styles/common/sweet-alert-config.css">
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/scripts/utils/socketEvents.js"></script>
-
-    <script src="/scripts/common/common-functions.js"></script>
-    <script src="/scripts/common/contol-time-session.js"></script>
     <script src="/scripts/common/popup-session-closed.js"></script>
 
     <link rel="stylesheet" href="/styles/head.css">
@@ -35,6 +30,9 @@
     <link rel="icon" href="<%= faviconPath %>" type="image/x-icon" />
     
     <link rel="stylesheet" href="/styles/footer.css">
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/scripts/utils/socketEvents.js"></script>
 
     <!-- Inicio cabecera -->
     <div class="head_web" id="head-web"style="background: none;">
@@ -83,9 +81,5 @@
     </div>
 <!-- Fin cabecera -->
 
-
-
-    <title>
-        <%= pageTitle %>
-    </title>
+    <title><%= pageTitle %></title>
 
