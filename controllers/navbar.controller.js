@@ -103,7 +103,6 @@ function getDashboard(req, res) {
     profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     user: req.session.username,
-    
   });
 }
 
