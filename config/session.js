@@ -7,7 +7,7 @@ const { obtenerHoraActualEspania } = require("../utils/get-current-time-in-spain
 
 function createSessionStore() {
 
-  const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
+  //const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
   console.log("bbb" + process.cwd())
   const pool = mysql.createPool({
     host: process.env.AZURE_MYSQL_HOST,
@@ -23,7 +23,7 @@ function createSessionStore() {
     enableKeepAlive: true,
     keepAliveInitialDelay: 0,
     ssl: {
-      ca: fs.readFileSync(certPath),
+      //ca: fs.readFileSync(certPath),
     }
   });
 
