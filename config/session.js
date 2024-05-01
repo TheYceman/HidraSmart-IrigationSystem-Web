@@ -3,8 +3,11 @@ const MySQLStore = require("express-mysql-session")(session);
 const fs = require('fs');
 const mysql = require("mysql2");
 
-function createSessionStore() {
+const { getDb } = require("../data/bbdd-connector");
 
+
+async function createSessionStore() {
+/*
   const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
   console.log("bbb" + process.cwd())
   const pool = mysql.createPool({
@@ -24,7 +27,8 @@ function createSessionStore() {
       ca: fs.readFileSync(certPath),
     }
   });
-
+  */
+  const conn = await getDb("aplicaciones_web");
   const sessionStore = new MySQLStore({
     // Whether or not to automatically check for and clear expired sessions:
     clearExpired: false,
@@ -47,7 +51,7 @@ function createSessionStore() {
         data: 'data'
       }
     }
-  }, pool);
+  }, conn);
   // Optionally use onReady() to get a promise that resolves when store is ready.
   sessionStore.onReady().then(() => {
     // MySQL session store ready for use.
