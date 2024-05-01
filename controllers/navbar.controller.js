@@ -94,7 +94,7 @@ async function getLogout(req, res) {
 function getDashboard(req, res) {
   res.render("navbar/panel_aplicaciones", {
     headImage: req.session.headImage,
-    navIndex: 7,
+    navIndex: 1,
     navGroup: 0,
     pageTitle: "Panel de aplicacion",
     headComunityLogo: req.session.headCommunityImage,
@@ -109,7 +109,7 @@ function getDashboard(req, res) {
 async function getMapaSig(req, res) {
   res.render("navbar/mapa-sig", {
     headImage: req.session.headImage,
-    navIndex: 9,
+    navIndex: 2,
     navGroup: 1,
     pageTitle: "Visor",
     headComunityLogo: req.session.headCommunityImage,
@@ -125,7 +125,7 @@ async function getMapaSig(req, res) {
 async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
     headImage: req.session.headImage,
-    navIndex: 10,
+    navIndex: 3,
     navGroup: 1,
     pageTitle: "Estado de la red",
     headComunityLogo: req.session.headCommunityImage,
@@ -142,7 +142,7 @@ async function getVisorDatos(req, res) {
 async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
     headImage: req.session.headImage,
-    navIndex: 11,
+    navIndex: 4,
     navGroup: 1,
     pageTitle: "Información meteorológica",
     headComunityLogo: req.session.headCommunityImage,
@@ -159,9 +159,9 @@ async function getVisorDatos(req, res) {
 async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
     headImage: req.session.headImage,
-    navIndex: 12,
+    navIndex: 5,
     navGroup: 1,
-    pageTitle: "Gestor Parcelas",
+    pageTitle: "Gestor demandas y cultivos",
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
@@ -176,7 +176,7 @@ async function getVisorDatos(req, res) {
 async function getVisorDatos(req, res) {
   res.render("navbar/visor-datos", {
     headImage: req.session.headImage,
-    navIndex: 13,
+    navIndex: 6,
     navGroup: 1,
     pageTitle: "Planificador de riego",
     headComunityLogo: req.session.headCommunityImage,
@@ -195,8 +195,8 @@ async function getVisorDatos(req, res) {
 async function getGestorEquipos(req, res) {
   res.render("navbar/gestor-equipos", {
     headImage: req.session.headImage,
-    navIndex: 12,
-    navGroup: 2,
+    navIndex: 7,
+    navGroup: 1,
     pageTitle: "Gestor de Equipos",
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
@@ -216,10 +216,10 @@ async function getGestorEquipos(req, res) {
   });
 }
 
-async function getGestorClientes(req, res) {
+/*async function getGestorClientes(req, res) {
   res.render("navbar/gestor-clientes", {
     headImage: req.session.headImage,
-    navIndex: 14,
+    navIndex: 1,
     navGroup: 2,
     pageTitle: "Gestor de clientes",
     headComunityLogo: req.session.headCommunityImage,
@@ -233,12 +233,12 @@ async function getGestorClientes(req, res) {
     currentPage: parseInt(req.query.page) || 1,
     totalPages: await getTotalPagesClientes(req, res),
   });
-}
+}*/
 
 async function getGestorUsuarios(req, res) {
   res.render("navbar/gestor-usuarios", {
     headImage: req.session.headImage,
-    navIndex: 15,
+    navIndex: 8,
     navGroup: 2,
     pageTitle: "Gestor de Usuarios",
     headComunityLogo: req.session.headCommunityImage,
@@ -263,7 +263,7 @@ module.exports = {
   getMapaSig,
   getVisorDatos,
   getGestorEquipos,
-  getGestorClientes,
+  //getGestorClientes,
   getGestorUsuarios,
   getLogout,
   getDashboard,

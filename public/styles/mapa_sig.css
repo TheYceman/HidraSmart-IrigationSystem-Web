@@ -19,7 +19,7 @@
   position: absolute;
   margin-top: 6vh;
   margin-right: 8.55vw;
-  top: 0px;
+  top: 22px;
   right: 0px;
   display: inline-block;
   height: auto;
@@ -39,6 +39,17 @@
   align-items: center;
   overflow: hidden;
 }
+
+/*
+#toggle-button {
+  position: absolute;
+  margin-top: 6vh;
+  margin-right: 8.55vw;
+  top: 0px;
+  right: 10px; 
+  z-index: 99999;
+}
+*/
 
 #informacion {
   display: none;
@@ -68,7 +79,7 @@
 
 .toolbar {
   position: absolute;
-  top: 10px;
+  top: 50px;
   left: 10px;
   z-index: 9999;
   background-color: white;

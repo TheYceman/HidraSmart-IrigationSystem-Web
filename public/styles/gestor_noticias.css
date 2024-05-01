@@ -3,7 +3,7 @@
   max-height: 65vh;
   width: 85%;
   margin: auto;
-  overflow-y: scroll;
+  overflow-y: hidden;
   border: 2px solid var(--color-primary-400);
   border-radius: 5px;
 }

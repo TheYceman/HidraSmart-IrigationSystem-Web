@@ -132,3 +132,22 @@
       transform: rotateY(0deg);
     }
   }
+
+  .text-overlay {
+    height: 27%;
+    width: 100%;
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var( --color-bg-darker);
+    color: var( --color-primary-400);
+    /* padding: 10px; */
+    border-radius: 5px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
