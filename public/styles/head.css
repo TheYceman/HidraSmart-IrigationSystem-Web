@@ -100,6 +100,10 @@ html {
     justify-content: space-around;
 }
 
+.head_image_button_sinac{
+    width: 80%;
+}
+
 #button-log-out{
 
     width: 90%;

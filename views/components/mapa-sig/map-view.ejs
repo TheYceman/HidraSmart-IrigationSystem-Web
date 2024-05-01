@@ -51,16 +51,13 @@
 
 </script>
 
-
-
 <div id="container" style="margin:0px; padding:0px; position: relative; width:100%">
     <div id="mapContainer" style="margin:0px; padding:0px; position: relative; width:100%">
         <div id="map" style="width:100%;"></div><!--Fin mapa-->
         <!-- Barra de herramientas -->
         <div class="toolbar">
-            <button id="zoomInBtn">+</button>
-            <button id="zoomOutBtn">-</button>
-            <button id="toggleSatelliteBtn">Satélite</button>
+            <button class="btn" onclick="exportDataToExcel(contadores, 'Datos_seleccionados')">Exportar a Excel</button>
+            <button onclick="toggleLeyenda()" id="toggle-button">MostrarLeyenda</button>
         </div>
         <div id="informacion" style="display:none">
             <a id="leyendaLabel">
@@ -76,7 +73,8 @@
             También puedes agregar enlaces, imágenes, formularios, etc.
             </p>
         </div>
-        <div id="leyenda">
+        
+        <div id="leyenda" style="display: none;">
             <a id="leyendaLabel">
                 <b>LEYENDA</b>
             </a>

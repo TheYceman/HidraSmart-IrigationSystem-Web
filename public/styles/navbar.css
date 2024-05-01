@@ -184,14 +184,14 @@
   
   /****** Navbar Options - Class ******/
   .menu-options {
-    padding: 0;
+    padding: 1px;
     margin: 0;
     display: flex;
     flex-direction: row;
     list-style: none;
     position: relative;
     justify-content: space-around;
-    min-width: 100%;
+    min-width: 99%;
   }
   
   .menu-options li {
@@ -204,13 +204,13 @@
   
   .menu-options li a {
     padding: 5px;
-    /* margin: 5px; */
-    font-size: 0.6vw;
-    /* height: 2rem; */
-    width: 100%;
-    min-width: 5vw;
+    /*margin: 12px; */
+    font-size: 0.7vw;
+    height: 2rem;
+    width: 90%;
+    /*min-width: 5vw;*/
     display: flex;
-    position: relative;
+    /*position: relative;*/
     top: 6px;
     text-decoration: none;
     text-transform: uppercase;

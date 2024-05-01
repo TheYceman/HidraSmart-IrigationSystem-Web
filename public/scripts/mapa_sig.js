@@ -124,10 +124,15 @@ if (viewer.scene.globe.tilesLoaded) {
 */
 myMap = new google.maps.Map(document.getElementById("map"), {
   zoom: 12,
-  streetViewControl: false,
+  streetViewControl: true,
   center: { lat: targetLatitude, lng: targetLongitude },
   mapTypeId: "satellite",
+  mapTypeControl: true,
+  mapTypeControlOptions: {
+    mapTypeIds: ['roadmap', 'satellite']
+  }
 });
+
 
 // Agregar un evento onclick al mapa
 myMap.addListener('click', function (event) {
@@ -894,6 +899,88 @@ function add_arrowhead(polyline) {
     ],
   });
 }
+
+function toggleLeyenda() {
+  var leyenda = document.getElementById('leyenda');
+
+  if (leyenda.style.display === 'none') {
+    document.getElementById('toggle-button').textContent = 'Ocultar Leyenda';
+    leyenda.style.display = 'block'; // Muestra la capa leyenda
+  } else {
+    document.getElementById('toggle-button').textContent = 'Mostrar Leyenda';
+    leyenda.style.display = 'none'; // Oculta la capa leyenda
+
+  }
+}
+
+
+function exportTableToExcel(tableID, filename = '') {
+  var downloadLink;
+  var dataType = 'application/vnd.ms-excel';
+  var tableSelect = document.getElementById(tableID);
+  var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+  // Specify file name
+  filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+  // Create download link element
+  downloadLink = document.createElement("a");
+
+  document.body.appendChild(downloadLink);
+
+  if (navigator.msSaveOrOpenBlob) {
+    var blob = new Blob(['ufeff', tableHTML], {
+      type: dataType
+    });
+    navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    // Create a link to the file
+    downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+    // Setting the file name
+    downloadLink.download = filename;
+
+    //triggering the function
+    downloadLink.click();
+  }
+}
+
+function exportDataToExcel(data, filename = '') {
+  const header = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Sheet 1</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>';
+  const footer = '</body></html>';
+  let table = '<table>';
+
+  // Add table headers
+  const headers = Object.keys(data[0]);
+  table += '<tr>';
+  headers.forEach(header => {
+    table += `<th>${header}</th>`;
+  });
+  table += '</tr>';
+
+  // Add table rows
+  data.forEach(row => {
+    table += '<tr>';
+    headers.forEach(header => {
+      table += `<td>${row[header]}</td>`;
+    });
+    table += '</tr>';
+  });
+
+  table += '</table>';
+  const blob = new Blob([header + table + footer], {
+    type: 'application/vnd.ms-excel'
+  });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${filename}.xls`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 //Cómo realizo una animación donde al carga la página se vea el globo terráqueo y haga un zoom progresivo hasta situarse en las coordenadas lat: 39.144025, lng: -3.094583 sobre mi mapade google, para el inicio de la animación otra biblioteca distintaa la de google?
 // function hide_arrowhead {
 
