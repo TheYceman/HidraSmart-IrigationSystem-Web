@@ -17,9 +17,9 @@
 
 #leyenda {
   position: absolute;
-  margin-top: 6vh;
-  margin-right: 8.55vw;
-  top: 22px;
+  /*margin-top: 6vh;
+  margin-right: 8.55vw;*/
+  top:52px;
   right: 0px;
   display: inline-block;
   height: auto;
@@ -54,7 +54,7 @@
 #informacion {
   display: none;
   position: absolute;
-  top: 70px; /* Ajusta la posición superior según sea necesario */
+  top: 60px; /* Ajusta la posición superior según sea necesario */
   left: 10px; /* Ajusta la posición izquierda según sea necesario */
   background-color: white;
   padding: 20px;
@@ -79,8 +79,8 @@
 
 .toolbar {
   position: absolute;
-  top: 50px;
-  left: 10px;
+  top: 10px;
+  left: 200px;
   z-index: 9999;
   background-color: white;
   padding: 10px;
@@ -130,10 +130,6 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-}
-
-.gm-style-mtc {
-  display: none;
 }
 
 /* CSS checkbox lista presión*/
