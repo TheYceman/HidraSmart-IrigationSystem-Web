@@ -124,12 +124,16 @@ if (viewer.scene.globe.tilesLoaded) {
 */
 myMap = new google.maps.Map(document.getElementById("map"), {
   zoom: 12,
-  streetViewControl: true,
+  streetViewControl: false,
   center: { lat: targetLatitude, lng: targetLongitude },
+  zoomControl: true, // Deshabilita el control de zoom
   mapTypeId: "satellite",
-  mapTypeControl: true,
+  mapTypeControl: true, // Habilita el control de tipo de mapa
   mapTypeControlOptions: {
-    mapTypeIds: ['roadmap', 'satellite']
+    //style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR, // Estilo del control de tipo de mapa
+    position: google.maps.ControlPosition.TOP_LEFT, // Posición del control de tipo de mapa
+    mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain'], // Tipos de mapas disponibles
+    // Ajustes adicionales si es necesario
   }
 });
 
@@ -140,11 +144,11 @@ myMap.addListener('click', function (event) {
   var clickedLocation = event.latLng;
 
   // Hacer algo con las coordenadas, como mostrarlas en un cuadro de diálogo
-  alert('Coordenadas: ' + clickedLocation.lat() + ', ' + clickedLocation.lng());
+  //alert('Coordenadas: ' + clickedLocation.lat() + ', ' + clickedLocation.lng());
 
   document.getElementById("informacion").style.display = "none";
 });
-
+/*
 // Evento para el botón de acercar
 document.getElementById('zoomInBtn').addEventListener('click', function () {
   myMap.setZoom(myMap.getZoom() + 1);
@@ -164,6 +168,7 @@ document.getElementById('toggleSatelliteBtn').addEventListener('click', function
     myMap.setMapTypeId('satellite');
   }
 });
+*/
 
 function paint_counter_bbdd() {
   contadores.forEach(contador => {
