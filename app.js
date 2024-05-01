@@ -1,9 +1,11 @@
 const express = require("express");
 const http = require('http');
 const configureSocket = require("./middlewares/socket");
+const saveSession = require("./middlewares/session-midleware");
 const path = require("path");
 
 const createSession = require("./config/session");
+
 const authMiddleware = require("./middlewares/check-auth");
 
 const initRoutes = require("./routes/init.routes");
@@ -27,7 +29,6 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
 
 const sessionMiddleware = createSession();
 app.use(sessionMiddleware);
@@ -65,6 +66,7 @@ const io = configureSocket(server);
 // Middleware para Socket.IO
 io.use((socket, next) => {
   sessionMiddleware(socket.request, socket.request.res || {}, next);
+  saveSession(socket.request);
 });
 
 const PORT = process.env.PORT || 3002;

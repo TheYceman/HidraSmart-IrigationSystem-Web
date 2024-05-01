@@ -189,9 +189,6 @@ async function getVisorDatos(req, res) {
     user: req.session.username,
   });
 }
-
-/********** Menú Gestores - Grupo 2 **********/
-
 async function getGestorEquipos(req, res) {
   res.render("navbar/gestor-equipos", {
     headImage: req.session.headImage,
@@ -216,12 +213,16 @@ async function getGestorEquipos(req, res) {
   });
 }
 
-/*async function getGestorClientes(req, res) {
-  res.render("navbar/gestor-clientes", {
+
+/********** Menú Gestores - Grupo 2 **********/
+
+
+async function getGestorPeticiones(req, res) {
+  res.render("navbar/gestor-peticiones", {
     headImage: req.session.headImage,
-    navIndex: 1,
+    navIndex: 8,
     navGroup: 2,
-    pageTitle: "Gestor de clientes",
+    pageTitle: "Gestor de peticiones",
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
@@ -233,12 +234,12 @@ async function getGestorEquipos(req, res) {
     currentPage: parseInt(req.query.page) || 1,
     totalPages: await getTotalPagesClientes(req, res),
   });
-}*/
+}
 
 async function getGestorUsuarios(req, res) {
   res.render("navbar/gestor-usuarios", {
     headImage: req.session.headImage,
-    navIndex: 8,
+    navIndex: 9,
     navGroup: 2,
     pageTitle: "Gestor de Usuarios",
     headComunityLogo: req.session.headCommunityImage,
@@ -263,7 +264,7 @@ module.exports = {
   getMapaSig,
   getVisorDatos,
   getGestorEquipos,
-  //getGestorClientes,
+  getGestorPeticiones,
   getGestorUsuarios,
   getLogout,
   getDashboard,

@@ -3,11 +3,10 @@ const MySQLStore = require("express-mysql-session")(session);
 const fs = require('fs');
 const mysql = require("mysql2");
 
-const { getDb } = require("../data/bbdd-connector");
+const { obtenerHoraActualEspania } = require("../utils/get-current-time-in-spain");
 
+function createSessionStore() {
 
-async function createSessionStore() {
-/*
   const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
   console.log("bbb" + process.cwd())
   const pool = mysql.createPool({
@@ -27,8 +26,7 @@ async function createSessionStore() {
       ca: fs.readFileSync(certPath),
     }
   });
-  */
-  const conn = await getDb("aplicaciones_web");
+
   const sessionStore = new MySQLStore({
     // Whether or not to automatically check for and clear expired sessions:
     clearExpired: false,
@@ -51,7 +49,7 @@ async function createSessionStore() {
         data: 'data'
       }
     }
-  }, conn);
+  }, pool);
   // Optionally use onReady() to get a promise that resolves when store is ready.
   sessionStore.onReady().then(() => {
     // MySQL session store ready for use.
@@ -70,17 +68,18 @@ function createSession() {
   //var madridTime = new Date(d.getTime() - (offset * 60 * 1000));
   //const expiryDate = new Date(madridTime + 1000 * 60 * 60 * 24 ); // 24 hour
   console.log("createSession " + new Date());
-  return session({
+
+  return  session({
     key: "sesion_hidrasmart_IR",
     secret: "session_cookie_secret",
-    store: createSessionStore(),
+    //store: createSessionStore(),
     resave: false,
     saveUninitialized: false,
-    //cookie: {
-      //secure: true,
-      //httpOnly: true,
-      //expires: expiryDate
-    //}
+    cookie: {
+    //secure: true,
+    //httpOnly: true,
+    //expires: expiryDate
+    }
   });
 }
 

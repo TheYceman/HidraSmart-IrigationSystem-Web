@@ -74,9 +74,14 @@ router.get('/gestor-equipos', Auth.requireLogin, function (req, res, html) {
     navbarController.getGestorEquipos(req, res);
 });
 
-router.get('/gestor-clientes', Auth.requireLogin, function (req, res, html) {
+/*router.get('/gestor-clientes', Auth.requireLogin, function (req, res, html) {
     console.log(req.session);
     navbarController.getGestorClientes(req, res);
+});*/
+
+router.get('/gestor-peticiones', Auth.requireLogin, function (req, res, html) {
+    console.log(req.session);
+    navbarController.getGestorPeticiones(req, res);
 });
 
 router.get('/gestor-usuarios', Auth.requireLogin, function (req, res, html) {
