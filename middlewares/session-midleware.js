@@ -12,7 +12,9 @@ function saveSession(req) {
     const sessionData = req.sessionStore.sessions[sessionId];
 
     const queryString = `INSERT INTO sessions_manual (session_id, expires, data) VALUES ('${sessionId}', '${expires}', '${sessionData}');`;
-    runQuery(queryString);
+    const values = [sessionId, expires, sessionData];
+    const database = 'aplicaciones_web';
+    runQuery(queryString, values, database);
 
 }
 

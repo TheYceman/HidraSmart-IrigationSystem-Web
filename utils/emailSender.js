@@ -70,8 +70,11 @@ async function verifyCaptcha(username, password, token){
         response.riskAnalysis.reasons.forEach((reason) => {
             console.log(reason);
         });
-        const  queryString = `SELECT * FROM users WHERE username='${username}' AND password='${password}';`;
-        const [results, fields] = await runQuery(queryString);
+
+        const queryString = `SELECT * FROM users WHERE username=? AND password=?;`;
+        const values = [username,password];
+        const database = 'aplicaciones_web';
+        const [results, fields] = await runQuery(queryString, values, database);
 
         return results;//response.riskAnalysis.score;
     } else {

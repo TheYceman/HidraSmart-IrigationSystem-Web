@@ -61,9 +61,15 @@ async function updateCliente(req, res) {
 
   console.log("updateCliente " + login);
 
-  const data = await runQuery(`UPDATE Clientes SET nombre = '${nombre}',dni = '${dni}',email = '${email}',telefono = '${telefono}' WHERE idcliente = '${numero}';`);
-  console.log(data);
-  return data;
+  const queryString = `UPDATE Clientes SET nombre = ?, dni = ?, email = ?, telefono = ? WHERE idcliente = ?;`;
+  const values = [nombre, dni, email, telefono, numero];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Cliente actualizado con éxito");
+  }
+  console.log(result.data.rows);
+  return result.data.rows;;
 
 }
 
@@ -74,7 +80,13 @@ async function deleteCliente(req, res) {
 
   console.log("deleteCliente " + numero);
 
-  const data = await runQuery(`DELETE FROM clientes WHERE idcliente = '${numero}';`);
+  const queryString = `DELETE FROM clientes WHERE idcliente = ?;`
+  const values = [numero];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Cliente borrado correctamente");
+  }
   console.log(data);
   res.redirect('/gestor-clientes');
   //return data;
@@ -94,7 +106,13 @@ async function agregaCliente(req, res) {
   const email = req.body.email.trim();
   const telefono = req.body.telefono.trim();
 
-  const data = await runQuery(`INSERT INTO clientes (idcliente, nombre, dni, email, telefono) VALUES ('${numero}', '${nombre}', '${dni}', '${email}', '${telefono}');`);
+  const queryString = `INSERT INTO clientes (idcliente, nombre, dni, email, telefono) VALUES (?, ?, ?, ?, ?);`;
+  const values = [nombre, dni, email, telefono, numero];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+      console.log("Cliente insertado correctamente");
+  }
   console.log(data);
 
   res.redirect('/gestor-clientes');

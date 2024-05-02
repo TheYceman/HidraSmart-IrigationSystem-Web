@@ -65,9 +65,14 @@ async function updateUsuario(req, res) {
 
   console.log("updateUsuario " + login);
 
-  const data = await runQuery(`UPDATE users SET name = '${nombre}',surname = '${apellido}',rol = '${grupo}',email = '${email}',phone = '${phone}' WHERE username = '${login}';`);
-  console.log(data);
-  return data;
+  const queryString = `UPDATE users SET name = ?, surname = ?, rol = ?, email = ?, phone = ? WHERE username = ?;`;
+  const values = [nombre, apellido, grupo, email, phone, login];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Usuario actualizado con éxito");
+  }
+  return result.data.rows;;
 
 }
 
@@ -78,8 +83,13 @@ async function deleteUsuario(req, res) {
 
   console.log("deleteUsuario " + login);
 
-  const data = await runQuery(`DELETE FROM users WHERE username = '${login}';`);
-  console.log(data);
+  const queryString = `DELETE FROM users WHERE username = ?;`;
+  const values = [login];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Usuario borrado con éxito");
+  }
   res.redirect('/gestor-usuarios');
   //return data;
 
@@ -102,11 +112,15 @@ async function agregaUsuario(req, res) {
   const password = "Pruebas2023";
   //const nuevoRegistro = { login, password, nombre, apellido, grupo, email, phone };
 
-  const data = await runQuery(`INSERT INTO users (username, password, name, surname, rol, email, phone) VALUES ('${login}', '${password}', '${nombre}', '${apellido}', '${grupo}', '${email}', '${phone}');`);
-  console.log(data);
+  const queryString = `INSERT INTO users (username, password, name, surname, rol, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?);`;
+  const values = [login, password, nombre, apellido, grupo, email, phone];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Usuario insertado con éxito");
+  }
 
   res.redirect('/gestor-usuarios');
 }
-
 
 module.exports = { getGeDataUsuario, getDataUsuario, getGeDataUsuariosPerPage, updateUsuario, deleteUsuario, agregaUsuario, getTotalPagesUsuarios };

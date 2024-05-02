@@ -65,9 +65,14 @@ async function updateRol(req, res) {
 
   console.log("updateRol " + login);
 
-  const data = await runQuery(`UPDATE grupos_usuario SET perUsu = '${perUsu}',perVisor = '${perVisor}',perMeteo = '${perMeteo}',perRed = '${perRed}',perDemandas = '${perDemandas}',perRiego = '${perRiego}' WHERE nombre = '${nombre}';`);
-  console.log(data);
-  return data;
+  const queryString = `UPDATE grupos_usuario SET perUsu = ?,perVisor = ?, perMeteo = ?, perRed = ?, perDemandas = ?, perRiego = ? WHERE nombre = ?;`;
+  const values = [perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, nombre];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Rol actualizado con éxito");
+  }
+  return result.data.rows;;
 
 }
 
@@ -78,8 +83,13 @@ async function deleteRol(req, res) {
 
   console.log("deleteRol " + nombre);
 
-  const data = await runQuery(`DELETE FROM grupos_usuario WHERE nombre = '${nombre}';`);
-  console.log(data);
+  const queryString = `DELETE FROM grupos_usuario WHERE nombre = ?;`
+  const values = [nombre];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Rol borrado con éxito");
+  }
   res.redirect('/gestor-usuarios');
   //return data;
 
@@ -100,11 +110,16 @@ async function agregaRol(req, res) {
   const perDemandas = req.body.perDemandas.trim();
   const perRiego = req.body.perRiego.trim();
 
-  const data = await runQuery(`INSERT INTO grupos_usuario (nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego) VALUES ('${nombre}', '${perUsu}', '${perVisor}', '${perMeteo}', '${perRed}', '${perDemandas}', '${perRiego}');`);
-  console.log(data);
+  const queryString = `INSERT INTO grupos_usuario (nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego) VALUES (?, ?, ?, ?, ?, ?, ?);`;
+  const values = [nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego];
+  const database = 'aplicaciones_web';
+  const resullt = await runQuery(queryString, values, database);
+
+  if (result.success) {
+    console.log("Rol insertado con éxito");
+  }
 
   res.redirect('/gestor-usuarios');
 }
-
 
 module.exports = { getGeDataRol, getDataRol, getGeDataRolesPerPage, updateRol, deleteRol, agregaRol, getTotalPagesRoles };
