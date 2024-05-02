@@ -12,54 +12,72 @@ class Rol {
   }
 
   static async getAll() {
-    const data = await runQuery("SELECT * FROM grupos_usuario;");
-    const rol = data.map((rol) => new Rol(rol));
+    const queryString = "SELECT * FROM grupos_usuario;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const rol = results.data.rows.map((rol) => new Rol(rol));
     return rol;
   }
 
   static async getFilteredData(nombre) {
-    const data = await runQuery(
-      `SELECT * FROM grupos_usuario WHERE nombre="${nombre}";`
-    );
+
+    const queryString = `SELECT * FROM grupos_usuario WHERE nombre=?;`;
+    const values = [nombre];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
     console.log(
       `SELECT * FROM grupos_usuario WHERE nombre="${nombre}";`
     );
     return data;
   }
   static async getFilteredDataGrupo(idGrupo) {
-    const data = await runQuery(
-      `SELECT * FROM grupos_usuario WHERE nombre="${idGrupo}";`
-    );
+    const queryString = `SELECT * FROM grupos_usuario WHERE nombre=?;`;
+    const values = [idGrupo];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
     console.log(
       `SELECT * FROM grupos_usuario WHERE nombre="${idGrupo}";`
     );
-    return data;
+    return result.data.rows;;
   }
 
   static async getPerPage(perPage, offset) {
-    const data = await runQuery("SELECT * FROM grupos_usuario LIMIT " + perPage + " OFFSET " + offset + ";");
-    const roles = data.map((rol) => new Rol(rol));
+
+    const queryString = "SELECT * FROM grupos_usuario LIMIT " + perPage + " OFFSET " + offset;
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const roles = results.data.rows.map((rol) => new Rol(rol));
     return roles;
   }
 
   static async getCountAll() {
-    const data = await runQuery("SELECT count(*) as total FROM grupos_usuario;");
-    const geTotal = data.map((total) => total);
+
+    const queryString = "SELECT count(*) as total FROM grupos_usuario;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geTotal = results.data.rows.map((total) => total);
     console.log(geTotal[0].total);
     return geTotal[0].total;
   }
 
   static async getAllRoles() {
-    const data = await runQuery("SELECT * FROM grupos_usuario;");
-    const roles = data.map((rol) => new Rol(rol));
+    const queryString = "SELECT * FROM grupos_usuario;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const roles = results.data.rows.map((rol) => new Rol(rol));
     return roles;
   }
 
   static async getFilteredData(nombre) {
-    const data = await runQuery(
-      `SELECT * FROM grupos_usuario WHERE nombre=${nombre}";`
-    );
-    return data;
+    const queryString = `SELECT * FROM grupos_usuario WHERE nombre=?";`;
+    const values = [nombre];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
+    return result.data.rows;;
   }
 }
 

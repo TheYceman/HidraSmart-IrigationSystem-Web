@@ -143,11 +143,14 @@ async function verHistorico(req, res) {
   const sector = req.body.sector.trim();
   const tramo = req.body.tramo.trim();
 
-  console.log("updateContador " + id);
+  console.log("Ver histórico " + id);
 
-  const data = await runQuery(`UPDATE ge_contadores SET ideSector = "${sector}" WHERE ideEle = "${id}";`);
-  console.log(data);
-  return data;
+  //const queryString = `UPDATE ge_contadores SET ideSector = ? WHERE ideEle = ?;`
+  //const values = [sector, id];
+  //const database = 'aplicaciones_web';
+  //const data = await runQuery(queryString, values, database);
+  //console.log(data);
+  //return data;
 
 }
 
@@ -156,13 +159,17 @@ async function updateContador(req, res) {
   // Obtener los parámetros del cuerpo de la solicitud
   const id = req.body.id.trim();
   const sector = req.body.sector.trim();
-  const tramo = req.body.tramo.trim();
 
   console.log("updateContador " + id);
 
-  const data = await runQuery(`UPDATE ge_contadores SET ideSector = "${sector}" WHERE ideEle = "${id}";`);
-  console.log(data);
-  return data;
+  const queryString = `UPDATE ge_contadores SET ideSector = ? WHERE ideEle = ?;`
+  const values = [sector, id];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Contador actualizado con éxito");
+  }
+  return result.data.rows;
 
 }
 
@@ -173,8 +180,13 @@ async function deleteContador(req, res) {
 
   console.log("deleteContador " + id);
 
-  const data = await runQuery(`DELETE FROM ge_contadores WHERE ideEle = "${id}";`);
-  console.log(data);
+  const queryString = `DELETE FROM ge_contadores WHERE ideEle = ?;`
+  const values = [id];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Contador borrado correctamente");
+  }
   res.redirect('/gestor-equipos');
   //return data;
 
@@ -183,19 +195,16 @@ async function deleteContador(req, res) {
 // Ruta para procesar el formulario de añadir
 async function getAgregaEquipo(req, res) {
   const tipoEquipo = req.body.tipoEquipo;
-  if(tipoEquipo=="contador"){
+  if (tipoEquipo == "contador") {
     const { ideEle, ideSector, ideRamal, ideRadio, marca, dimension, qNominal, volAsignado, coorX, coorY, calle_num, cliente } = req.body;
-    const nuevoRegistro = {  ideEle, ideSector, ideRamal, ideRadio, marca, dimension, qNominal, volAsignado, coorX, coorY, calle_num, cliente };
-    connection.query('INSERT INTO ge_contadores SET ?', nuevoRegistro, (err) => {
-      if (err) {
-        console.error('Error al insertar en la base de datos: ' + err.message);
-        res.status(500).send('Error en el servidor');
-        return;
-      }
-      res.redirect('/');
-    });
+    //const nuevoRegistro = { ideEle, ideSector, ideRamal, ideRadio, marca, dimension, qNominal, volAsignado, coorX, coorY, calle_num, cliente };
+    const queryString = 'INSERT INTO ge_contadores VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [ideEle, ideSector, ideRamal, ideRadio, marca, dimension, qNominal, volAsignado, coorX, coorY, calle_num, cliente];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
+    return result.data.rows;;
   }
-  else{
+  /*else{
     const { ideEle, ideSector, ideRadio, tipo, coorX, coorY } = req.body;
     const nuevoRegistro = {  ideEle, ideSector, ideRadio, tipo, coorX, coorY  };
     connection.query('INSERT INTO ge_sensores SET ?', nuevoRegistro, (err) => {
@@ -206,10 +215,10 @@ async function getAgregaEquipo(req, res) {
       }
       res.redirect('/');
     });
-  }
+}*/
 
 
-  
+
 }
 
 // Ruta para procesar el formulario de añadir
@@ -220,12 +229,12 @@ async function mostrarHistorico(req, res) {
   // Realiza una consulta a la base de datos y obtén los datos
   connection.query('SELECT * FROM tu_tabla', (err, result) => {
     if (err) {
-        console.error('Error al consultar la base de datos:', err);
+      console.error('Error al consultar la base de datos:', err);
     } else {
-        res.render('historico', { datos: result });
+      res.render('historico', { datos: result });
     }
-});
+  });
 }
 
 
-module.exports = { getGeDataContador, getDataContador, getGeDataContadorPerPage, updateContador, deleteContador, getAgregaEquipo, getTotalPagesContador, getGeDataContadorMapa, verHistorico, mostrarHistorico,getGeDataContadorMapaTelemedida, getGeDataContadorMapaNoTelemedida, getGeDataSensorMapa, getGeDataCaudalimetroMapa, getGeDataSensor, getTotalPagesSensor, getGeDataSensorPerPage, getGeDataClientes };
+module.exports = { getGeDataContador, getDataContador, getGeDataContadorPerPage, updateContador, deleteContador, getAgregaEquipo, getTotalPagesContador, getGeDataContadorMapa, verHistorico, mostrarHistorico, getGeDataContadorMapaTelemedida, getGeDataContadorMapaNoTelemedida, getGeDataSensorMapa, getGeDataCaudalimetroMapa, getGeDataSensor, getTotalPagesSensor, getGeDataSensorPerPage, getGeDataClientes };

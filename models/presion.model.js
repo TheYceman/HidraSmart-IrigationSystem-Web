@@ -16,28 +16,36 @@ class Presion {
   }
 
   static async getAll() {
-    const data = await runQuery("SELECT * FROM ge_presiones;");
-    const gePresiones = data.map((presion) => new Presion(presion));
+
+    const queryString = "SELECT * FROM ge_presiones;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const gePresiones = results.data.rows.map((presion) => new Presion(presion));
     return gePresiones;
   }
 
-  
+
   static async getPresionesTelemedida() {
-    const data = await runQuery("SELECT ge_sensores.ideEle, dat_presion.presion, dat_presion.bateria, dat_presion.RSSI, dat_presion.instante, ge_sensores.coorX, ge_sensores.coorY FROM aplicaciones_web.ge_sensores, dat_presion WHERE ge_sensores.ideEle=dat_presion.ideSensor  ORDER BY instante DESC LIMIT 1 ;");
-    const gePresion = data.map((gePresion) => new Presion(gePresion));
+    const queryString = "SELECT ge_sensores.ideEle, dat_presion.presion, dat_presion.bateria, dat_presion.RSSI, dat_presion.instante, ge_sensores.coorX, ge_sensores.coorY FROM aplicaciones_web.ge_sensores, dat_presion WHERE ge_sensores.ideEle=dat_presion.ideSensor  ORDER BY instante DESC LIMIT 1 ;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const gePresion = results.data.rows.map((gePresion) => new Presion(gePresion));
     return gePresion;
-  } 
+  }
 
 
   static async getFilteredData(sector, fechaInicio, fechaFin) {
-    const data = await runQuery(
-      `SELECT * FROM dat_presion WHERE ideSector="${sector}" AND instante > "${fechaInicio
-        .slice(0, 19)
-        .replace("T", " ")}" AND instante < "${fechaFin
+    const queryString = `SELECT * FROM dat_presion WHERE ideSector="${sector}" AND instante > "${fechaInicio
+      .slice(0, 19)
+      .replace("T", " ")}" AND instante < "${fechaFin
         .slice(0, 19)
         .replace("T", " ")}";`
-    );
-    return data;
+    const values = [];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
+    return result.data.rows;;
   }
 }
 

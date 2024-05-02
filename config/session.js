@@ -75,11 +75,11 @@ function createSession() {
     //store: createSessionStore(),
     resave: false,
     saveUninitialized: false,
-    cookie: {
+    //cookie: {
     //secure: true,
     //httpOnly: true,
     //expires: expiryDate
-    }
+    //}
   });
 }
 

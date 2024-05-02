@@ -12,7 +12,7 @@ async function getSession(session_id) {
 // Función para actualizar un registro de sesión existente
 async function updateSessionLog(session_id, end_time) {
     var actual_time = obtenerHoraActualEspania();
-    const queryString = 'UPDATE session_logs SET end_time = "' + end_time + '" WHERE session_id = "' + session_id + '"';
+    const queryString = 'UPDATE session_logs SET end_time = ? WHERE session_id = ?';
     const database = 'aplicaciones_web';
     if(end_time === 'null'){
         end_time = actual_time;

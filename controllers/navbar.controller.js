@@ -71,9 +71,12 @@ async function getLogout(req, res) {
   const endTime = madridTime.toISOString().slice(0, 19).replace('T', ' ');
 
   if (userId) {
-    const query = 'UPDATE session_logs SET end_time = "' + endTime + '" WHERE idusers = ' + userId + ' AND session_id = "' + sesion_id + '"';
-    const results = await runQuery(query);
-    if(results){
+
+    const queryString =  'UPDATE session_logs SET end_time = ? WHERE idusers = ? AND session_id = ?';
+    const values = [endTime, userId, sesion_id];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    if(results.success){
       console.log("getLogout " + results + " userId " + userId + " sesión " + req.sessionID);
     }
   }
