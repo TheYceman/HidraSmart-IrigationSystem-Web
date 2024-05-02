@@ -122,7 +122,7 @@ async function getMapaSig(req, res) {
   });
 }
 
-async function getVisorDatos(req, res) {
+async function getEstadoRed(req, res) {
   res.render("navbar/visor-datos", {
     headImage: req.session.headImage,
     navIndex: 3,
@@ -139,7 +139,7 @@ async function getVisorDatos(req, res) {
   });
 }
 
-async function getVisorDatos(req, res) {
+async function getInfoMeteo(req, res) {
   res.render("navbar/visor-datos", {
     headImage: req.session.headImage,
     navIndex: 4,
@@ -156,7 +156,7 @@ async function getVisorDatos(req, res) {
   });
 }
 
-async function getVisorDatos(req, res) {
+async function getDemandasCultivos(req, res) {
   res.render("navbar/visor-datos", {
     headImage: req.session.headImage,
     navIndex: 5,
@@ -173,7 +173,7 @@ async function getVisorDatos(req, res) {
   });
 }
 
-async function getVisorDatos(req, res) {
+async function getPlanRiego(req, res) {
   res.render("navbar/visor-datos", {
     headImage: req.session.headImage,
     navIndex: 6,
@@ -262,7 +262,10 @@ async function getGestorUsuarios(req, res) {
 module.exports = {
   getLogin,
   getMapaSig,
-  getVisorDatos,
+  getEstadoRed,
+  getInfoMeteo,
+  getDemandasCultivos,
+  getPlanRiego,
   getGestorEquipos,
   getGestorPeticiones,
   getGestorUsuarios,

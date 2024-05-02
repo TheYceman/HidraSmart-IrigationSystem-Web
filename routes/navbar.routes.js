@@ -62,9 +62,24 @@ router.get('/mapa-sig', Auth.requireLogin, function (req, res, html) {
     navbarController.getMapaSig(req, res);
 });
 
-router.get('/visor-datos', Auth.requireLogin, function (req, res, html) {
+router.get('/estado-red', Auth.requireLogin, function (req, res, html) {
     console.log(req.session);
-    navbarController.getVisorDatos(req, res);
+    navbarController.getEstadoRed(req, res);
+});
+
+router.get('/info-meteo', Auth.requireLogin, function (req, res, html) {
+    console.log(req.session);
+    navbarController.getInfoMeteo(req, res);
+});
+
+router.get('/demandas-cultivos', Auth.requireLogin, function (req, res, html) {
+    console.log(req.session);
+    navbarController.getDemandasCultivos(req, res);
+});
+
+router.get('/plan-riego', Auth.requireLogin, function (req, res, html) {
+    console.log(req.session);
+    navbarController.getPlanRiego(req, res);
 });
 
 /********** Menú Gestores - Grupo 2 **********/
