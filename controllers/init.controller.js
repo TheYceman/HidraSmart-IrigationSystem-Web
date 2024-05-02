@@ -75,11 +75,7 @@ async function getLogin(req, res) {
             // Si hubo un error o no se encontró ningún commit, intentar obtener el archivo directamente desde la rama principal
             urlScriptLogin = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${rutaScriptLogin}`;
        }
-
-        
-
-        
-        
+         
         // Renderizar la vista y enviar el contenido obtenido
         res.render('login', { 
           headLoginHTML: htmlHeadLogin,
