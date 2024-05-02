@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require('http');
 const configureSocket = require("./middlewares/socket");
-//const saveSession = require("./middlewares/session-midleware");
+const saveSession = require("./middlewares/session-midleware");
 const path = require("path");
 
 const createSession = require("./config/session");
@@ -66,7 +66,7 @@ const io = configureSocket(server);
 // Middleware para Socket.IO
 io.use((socket, next) => {
   sessionMiddleware(socket.request, socket.request.res || {}, next);
-  //saveSession(socket.request);
+  saveSession(socket.request);
 });
 
 const PORT = process.env.PORT || 3002;
