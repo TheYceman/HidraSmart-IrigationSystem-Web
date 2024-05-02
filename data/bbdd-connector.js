@@ -1,34 +1,21 @@
 const mysql = require("mysql2/promise");
-const fetch = require('node-fetch');
+const fs = require('fs');
 
-async function downloadBlob() {
-  //console.log('process.env.BLOB_SAS_URL:', process.env.BLOB_SAS_URL);
-  const blobSasUrl = process.env.BLOB_SAS_URL;
-
-  const response = await fetch(blobSasUrl);
-  const certContent = await response.text();
-  //console.log('Descargado el archivo .pem con éxito:\n', certContent);
-  return certContent;
-}
-
-downloadBlob().catch((err) => {
-  console.error('Error al descargar el archivo .pem 3232:', err.message);
-});
+const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
 
 async function getDb(ddbb) {
 
-  const certContent = await downloadBlob();
   console.log("bbb" + process.cwd());
 
   try {
 
     // Create the connection pool. The pool-specific settings are the defaults
     const pool = mysql.createPool({
-      host: process.env.AZURE_MYSQL_HOST,
-      user: process.env.AZURE_MYSQL_USER,
-      password: process.env.AZURE_MYSQL_PASSWORD,
-      port: process.env.AZURE_MYSQL_PORT,
-      database: ddbb, //"aplicaciones_web" //Hay que meterla como argumento
+      host: "hidralab-server.mysql.database.azure.com",
+      user: "telemedida_alcazar",
+      password: "Hidra2023Alcazar",
+      port: 3306,
+      database: ddbb, //"aplicaciones_web"
       waitForConnections: true,
       connectionLimit: 10,
       maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
@@ -37,8 +24,8 @@ async function getDb(ddbb) {
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
       ssl: {
-        ca: certContent,
-      },
+        ca: fs.readFileSync(certPath),
+      }
     });
 
     return pool;
