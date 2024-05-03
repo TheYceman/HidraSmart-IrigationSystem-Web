@@ -1,4 +1,4 @@
-/*const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise');
 const fetch = require('node-fetch');
 
 async function downloadBlob() {
@@ -46,79 +46,24 @@ async function getDb(ddbb) {
   }
 }
 
-async function runQuery(query) {
+async function runQuery(queryString, values, database) {
   try {
-    const ddbb = "aplicaciones_web";
-    const conn = await getDb(ddbb);
-    const [rows, fields] = await conn.query(query);
-    await conn.end();
-    return rows;
+      const connection = await getDb(database);
+      const [rows, fields] = await connection.execute(queryString, values);
+      await connection.end();
+      
+      return {
+          success: true,
+          data: {
+              rows,
+              fields
+          }
+      };
   } catch (error) {
-    console.error("Error al ejecutar la consulta:", error);
-    throw error;
+      console.error('Error al ejecutar la consulta:', error);
+      throw error;
   }
 }
 
-
-module.exports = { getDb, runQuery };
-*/
-
-const mysql = require('mysql2/promise');
-const fetch = require('node-fetch');
-
-async function downloadBlob() {
-    // console.log('process.env.BLOB_SAS_URL:', process.env.BLOB_SAS_URL);
-    const blobSasUrl = process.env.BLOB_SAS_URL
-
-    const response = await fetch(blobSasUrl);
-    const certContent = await response.text();
-    // console.log('Descargado el archivo .pem con éxito:\n', certContent);
-    return certContent;
-}
-
-downloadBlob().catch((err) => {
-    console.error('Error al descargar el archivo .pem:', err.message);
-});
-
-async function getDb(ddbb) {      
-    try {
-        const certContent = await downloadBlob();
-      
-        const conn = mysql.createConnection({
-            host: process.env.AZURE_MYSQL_HOST,
-            user: process.env.AZURE_MYSQL_USER,
-            password: process.env.AZURE_MYSQL_PASSWORD,
-            port:  process.env.AZURE_MYSQL_PORT,
-            database: ddbb,
-            ssl: {
-                ca: certContent,
-            },
-        });
-        console.log('Conexión exitosa a MySQL.');
-        return conn;
-    } catch (err) {
-        console.error('Error al conectar a MySQL:', err);
-        throw err;
-    }
-}
-
-async function runQuery(queryString, values, database) {
-    try {
-        const connection = await getDb(database);
-        const [rows, fields] = await connection.execute(queryString, values);
-        await connection.end();
-        
-        return {
-            success: true,
-            data: {
-                rows,
-                fields
-            }
-        };
-    } catch (error) {
-        console.error('Error al ejecutar la consulta:', error);
-        throw error;
-    }
-}
 
 module.exports = { runQuery };
