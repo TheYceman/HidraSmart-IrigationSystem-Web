@@ -1,25 +1,13 @@
-const mysql = require('mysql2/promise');
-const fetch = require('node-fetch');
+const mysql = require("mysql2/promise");
+const fs = require('fs');
 
-async function downloadBlob() {
-    // console.log('process.env.BLOB_SAS_URL:', process.env.BLOB_SAS_URL);
-    const blobSasUrl = process.env.BLOB_SAS_URL
-
-    const response = await fetch(blobSasUrl);
-    const certContent = await response.text();
-    // console.log('Descargado el archivo .pem con éxito:\n', certContent);
-    return certContent;
-}
-
-downloadBlob().catch((err) => {
-    console.error('Error al descargar el archivo .pem:', err.message);
-});
+const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
 
 async function getDb(ddbb) {
-  try {
-    const certContent = await downloadBlob();
 
-    console.log("bbb" + process.cwd());
+  console.log("bbb" + process.cwd());
+
+  try {
 
     // Create the connection pool. The pool-specific settings are the defaults
     const pool = mysql.createPool({
@@ -36,8 +24,8 @@ async function getDb(ddbb) {
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
       ssl: {
-        ca: certContent,
-      },
+        ca: fs.readFileSync(certPath),
+      }
     });
 
     return pool;
@@ -46,24 +34,18 @@ async function getDb(ddbb) {
   }
 }
 
-async function runQuery(queryString, values, database) {
-    try {
-        const connection = await getDb(database);
-
-        const [rows, fields] = await connection.execute(queryString, values);
-        await connection.end();
-        
-        return {
-            success: true,
-            data: {
-                rows,
-                fields
-            }
-        };
-    } catch (error) {
-        console.error('Error al ejecutar la consulta:', error);
-        throw error;
-    }
+async function runQuery(query) {
+  try {
+    const ddbb = "aplicaciones_web";
+    const conn = await getDb(ddbb);
+    const [rows, fields] = await conn.query(query);
+    await conn.end();
+    return rows;
+  } catch (error) {
+    console.error("Error al ejecutar la consulta:", error);
+    throw error;
+  }
 }
 
-module.exports = { runQuery };
+
+module.exports = { getDb, runQuery };
