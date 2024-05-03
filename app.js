@@ -59,7 +59,6 @@ app.use(function (error, req, res, next) {
   next();
 });
 
-const socketIo = require('socket.io');
 const server = http.createServer(app);
 const io = configureSocket(server);
 
