@@ -5,7 +5,7 @@ async function downloadBlob() {
   // console.log('process.env.BLOB_SAS_URL:', process.env.BLOB_SAS_URL);
   const blobSasUrl = process.env.BLOB_SAS_URL
 
-  const response = await fetch("https://girfodt.blob.core.windows.net/certificates-hshi/DigiCertGlobalRootCA.crt.pem?sp=r&st=2024-04-23T19:53:39Z&se=2050-04-24T03:53:39Z&spr=https&sv=2022-11-02&sr=c&sig=jQRfzZsZCu1zQ5Isg50pHQSbsmEK2%2B0amxTF%2B2YLgg8%3D");
+  const response = await fetch(blobSasUrl);
   const certContent = await response.text();
   // console.log('Descargado el archivo .pem con éxito:\n', certContent);
   return certContent;
