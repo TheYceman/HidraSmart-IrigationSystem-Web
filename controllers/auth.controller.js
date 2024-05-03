@@ -13,7 +13,7 @@ const { runQuery } = require("../data/bbdd-connector");
 async function verifyCaptcha(username, password, token) {
   const blobSasUrl = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON
 
-  const responseGoogle = await fetch("https://girfodt.blob.core.windows.net/certificates-hshi/intense-emblem-415011-b892b5269f66.json?sp=r&st=2024-04-23T19:53:39Z&se=2050-04-24T03:53:39Z&spr=https&sv=2022-11-02&sr=c&sig=jQRfzZsZCu1zQ5Isg50pHQSbsmEK2%2B0amxTF%2B2YLgg8%3D");
+  const responseGoogle = await fetch(blobSasUrl);
   const certContentGoogle = await responseGoogle.text();
 
   const auth = new GoogleAuth({
