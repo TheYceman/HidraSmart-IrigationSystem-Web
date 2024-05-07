@@ -1,12 +1,13 @@
 async function updateRol(nombre) {
     alert(nombre);
 
-    const perUsu = document.querySelector(`[data-field="perUsu"][data-id="${nombre}"]`).textContent;
-    const perVisor = document.querySelector(`[data-field="perVisor"][data-id="${nombre}"]`).textContent;
-    const perMeteo = document.querySelector(`[data-field="perMeteo"][data-id="${nombre}"]`).textContent;
-    const perRed = document.querySelector(`[data-field="perRed"][data-id="${nombre}"]`).textContent;
-    const perDemandas = document.querySelector(`[data-field="perDemandas"][data-id="${nombre}"]`).textContent;
-    const perRiego = document.querySelector(`[data-field="perRiego"][data-id="${nombre}"]`).textContent;
+    const perUsu = document.querySelector(`[data-field="perUsu"][data-id="${nombre}"] select`).value;
+    const perVisor = document.querySelector(`[data-field="perVisor"][data-id="${nombre}"] select`).value;
+    const perMeteo = document.querySelector(`[data-field="perMeteo"][data-id="${nombre}"] select`).value;
+    const perRed = document.querySelector(`[data-field="perRed"][data-id="${nombre}"] select`).value;
+    const perDemandas = document.querySelector(`[data-field="perDemandas"][data-id="${nombre}"] select`).value;
+    const perRiego = document.querySelector(`[data-field="perRiego"][data-id="${nombre}"] select`).value;
+    const perEquipos = document.querySelector(`[data-field="perEquipos"][data-id="${nombre}"] select`).value;
    
     const data = {
         nombre: nombre,
@@ -16,6 +17,7 @@ async function updateRol(nombre) {
         perRed: perRed,
         perDemandas: perDemandas,
         perRiego: perRiego,
+        perEquipos: perEquipos
     };
 
     fetch("/gestor-usuarios/actualizarRol", {

@@ -9,6 +9,7 @@ class Rol {
     this.perRed = rol.perRed; //permiso para el gestor de red 
     this.perDemandas = rol.perDemandas; //permiso para el gestor de demandas 
     this.perRiego = rol.perRiego; //permiso para el gestor de riegos
+    this.perEquipos = rol.perEquipos; //permiso para el gestor de riegos
   }
 
   static async getAll() {

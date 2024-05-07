@@ -22,14 +22,16 @@
         <div class="div-container">
           <button id="mostrarFormUsuarios" class="btn">Añadir nuevo usuario</button>
           <form action="/gestor-usuarios/agregarUsuario" method="POST" id="usuariosForm" style="display: none;">
-            <label for="Login">Login:</label>
-            <input type="text" name="login" required>
+            <label for="Login">Username:</label>
+            <input type="text" name="username" required>
             <label for="Nombre">Nombre:</label>
             <input type="text" name="name" id="name" required>
             <label for="Apellidos">Apellidos:</label>
             <input type="text" name="surname" id="surname" required>
             <label for="Grupo">Rol:</label>
-            <input type="text" name="rol" id="rol" required>
+            <select name="grupo" id="grupo" required>
+              <!-- Aquí puedes agregar opciones generadas dinámicamente desde JavaScript -->
+            </select>
             <label for="Email">Email:</label>
             <input type="text" name="email" id="email" required>
             <label for="Phone">Phone:</label>
@@ -54,74 +56,111 @@
             </thead>
             <tbody id="table">
               <% for(let usuario of usuarios) { %>
-                <tr data-uid="<%= usuario.login %>">
-                  <td data-field="login" data-id="<%= usuario.idusers %>">
-                    <%= usuario.idusers %>
+                <tr data-uid="<%= usuario.idusers %>">
+                  <td data-field="username" data-id="<%= usuario.username %>">
+                    <%= usuario.username %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="nombre" data-id="<%= usuario.idusers %>">
+                  <td contenteditable="true" class="editable" data-field="name" data-id="<%= usuario.username %>">
                     <%= usuario.name %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="apellido" data-id="<%= usuario.idusers %>">
+                  <td contenteditable="true" class="editable" data-field="surname" data-id="<%= usuario.username %>">
                     <%= usuario.surname %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="grupo" data-id="<%= usuario.idusers %>">
-                    <%= usuario.rol %>
+                  <td contenteditable="true" class="editable" data-field="grupo" data-id="<%= usuario.username %>">
+                    <select>
+                      <% for(let rol of todosLosRoles) { %>
+                        <option <%=(usuario.rol===rol.nombre) ? 'selected' : '' %>><%= rol.nombre %>
+                        </option>
+                        <% } %>
+                    </select>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="email" data-id="<%= usuario.idusers %>">
+                  <td contenteditable="true" class="editable" data-field="email" data-id="<%= usuario.username %>">
                     <%= usuario.email %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="phone" data-id="<%= usuario.idusers %>">
+                  <td contenteditable="true" class="editable" data-field="phone" data-id="<%= usuario.username %>">
                     <%= usuario.phone %>
                   </td>
                   <td class="acciones">
-                    <button class="btn" onclick="updateUsuario('<%= usuario.idusers %>')">Actualizar</button>
-                    <button class="btn red-btn" onclick="borrarUsuario('<%= usuario.idusers %>')">Borrar</button>
+                    <button class="btn" onclick="updateUsuario('<%= usuario.username %>')">Actualizar</button>
+                    <button class="btn red-btn" onclick="borrarUsuario('<%= usuario.username %>')">Borrar</button>
                   </td>
                 </tr>
                 <% } %>
             </tbody>
           </table>
         </div>
-        <script> var todos = [];</script>
-        <% for(let usuario of todosLosUsuarios) { %>
-          <script>
-            todos.push({ id: '<%= usuario.idusers %>', password: '<%= usuario.password %>' });
-            //console.log(todos);
-          </script>
+        <script>var selectRol = document.getElementById("grupo");</script>
+        <% for(let rol of todosLosRoles) { %>
+          <script>var option = document.createElement("option");
+            option.text = '<%= rol.nombre %>'; // Aquí solo se asigna el nombre del rol como valor del option
+            selectRol.add(option);</script>
           <% } %>
-            <div class="div-container">
-              <!-- Botones de paginación -->
-              <!-- 
+            <script> var todos = [];</script>
+            <% for(let usuario of todosLosUsuarios) { %>
+              <script>
+                todos.push({ id: '<%= usuario.idusers %>', password: '<%= usuario.password %>' });
+                //console.log(todos);
+              </script>
+              <% } %>
+                <div class="div-container">
+                  <!-- Botones de paginación -->
+                  <!-- 
          
         -->
-              <div class="pagination">
-                <label for="page-selector">Página:</label>
-                <select id="page-selector" onchange="window.location.href = '/gestor-usuarios?page=' + this.value;">
-                  <% for (let i=1; i <=totalPages; i++) { %>
-                    <option value="<%= i %>" <%=i===currentPage ? 'selected' : '' %>><%= i %>
-                    </option>
-                    <% } %>
-                </select>
-              </div>
-            </div>
+                  <div class="pagination">
+                    <label for="page-selector">Página:</label>
+                    <select id="page-selector" onchange="window.location.href = '/gestor-usuarios?page=' + this.value;">
+                      <% for (let i=1; i <=totalPages; i++) { %>
+                        <option value="<%= i %>" <%=i===currentPage ? 'selected' : '' %>><%= i %>
+                        </option>
+                        <% } %>
+                    </select>
+                  </div>
+                </div>
       </div>
 
       <div class="tab-content" id="tabla2">
         <div class="div-container">
           <button id="mostrarFormRoles" class="btn">Añadir nuevo rol</button>
           <form action="/gestor-usuarios/agregarRoles" method="POST" id="rolesForm" style="display: none;">
-            <label for="Usuarios">Usuarios:</label>
+            <label for="Usuarios">Grupo:</label>
             <input type="text" name="perUsu" id="perUsu" required>
             <label for="Visor">Visor:</label>
-            <input type="text" name="perVisor" id="perVisor" required>
+            <select name="perVisor" id="perVisor" class="select-mod" required>
+              <option value="0" selected>Ninguno</option>
+              <option value="1">Lectura</option>
+              <option value="2">Edición</option>
+            </select>
             <label for="Meteorológicos">Meteorológicos:</label>
-            <input type="text" name="perMeteo" id="perMeteo" required>
+            <select name="perMeteo" id="perMeteo" class="select-mod" required>
+              <option value="0" selected>Ninguno</option>
+              <option value="1">Lectura</option>
+              <option value="2">Edición</option>
+            </select>
             <label for="Red">Red:</label>
-            <input type="text" name="perRed" id="perRed" required>
+            <select name="perRed" id="perRed" class="select-mod" required>
+              <option value="0" selected>Ninguno</option>
+              <option value="1">Lectura</option>
+              <option value="2">Edición</option>
+            </select>
             <label for="Demandas">Demandas:</label>
-            <input type="text" name="perDemandas" id="perDemandas" required>
+            <select name="perDemandas" id="perDemandas" class="select-mod" required>
+              <option value="0" selected>Ninguno</option>
+              <option value="1">Lectura</option>
+              <option value="2">Edición</option>
+            </select>
             <label for="Riego">Riego:</label>
-            <input type="text" name="perRiego" id="perRiego" required>
+            <select name="perRiego" id="perRiego" class="select-mod" required>
+              <option value="0" selected>Ninguno</option>
+              <option value="1">Lectura</option>
+              <option value="2">Edición</option>
+            </select>
+            <label for="Equipos">Equipos:</label>
+            <select name="perEquipos" id="perEquipos" class="select-mod" required>
+              <option value="0" selected>Ninguno</option>
+              <option value="1">Lectura</option>
+              <option value="2">Edición</option>
+            </select>
             <button type="submit" class="btn">Añadir</button>
           </form>
           <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">
@@ -138,6 +177,7 @@
                 <th>Red</th>
                 <th>Demandas</th>
                 <th>Riego</th>
+                <th>Equipos</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -148,22 +188,53 @@
                     <%= rol.nombre %>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perUsu" data-id="<%= rol.nombre %>">
-                    <%= rol.perUsu %>
+                    <select class="select-mod">
+                      <option value="0" <%= rol.perUsu===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%= rol.perUsu===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%= rol.perUsu===2 ? 'selected' : '' %>>Edición</option>
+                    </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perVisor" data-id="<%= rol.nombre %>">
-                    <%= rol.perVisor %>
+                    <select class="select-mod">
+                      <option value="0" <%= rol.perVisor===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%= rol.perVisor===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%= rol.perVisor===2 ? 'selected' : '' %>>Edición</option>
+                    </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perMeteo" data-id="<%= rol.nombre %>">
-                    <%= rol.perMeteo %>
+                    <select class="select-mod">
+                      <option value="0" <%= rol.perMeteo===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%= rol.perMeteo===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%= rol.perMeteo===2 ? 'selected' : '' %>>Edición</option>
+                    </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perRed" data-id="<%= rol.nombre %>">
-                    <%= rol.perRed %>
+                    <select class="select-mod">
+                      <option value="0" <%= rol.perRed===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%= rol.perRed===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%= rol.perRed===2 ? 'selected' : '' %>>Edición</option>
+                    </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perDemandas" data-id="<%= rol.nombre %>">
-                    <%= rol.perDemandas %>
+                    <select class="select-mod">
+                      <option value="0" <%= rol.perDemandas===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%= rol.perDemandas===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%= rol.perDemandas===2 ? 'selected' : '' %>>Edición</option>
+                    </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perRiego" data-id="<%= rol.nombre %>">
-                    <%= rol.perRiego %>
+                    <select class="select-mod">
+                      <option value="0" <%= rol.perRiego===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%= rol.perRiego===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%= rol.perRiego===2 ? 'selected' : '' %>>Edición</option>
+                    </select>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="perEquipos" data-id="<%= rol.nombre %>">
+                    <select class="select-mod">
+                      <option value="0" <%= rol.perEquipos===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%= rol.perEquipos===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%= rol.perEquipos===2 ? 'selected' : '' %>>Edición</option>
+                    </select>
                   </td>
                   <td class="acciones">
                     <button class="btn" onclick="updateRol('<%= rol.nombre %>')">Actualizar</button>
@@ -177,7 +248,7 @@
         <script> var todos = [];</script>
         <% for(let rol of todosLosRoles) { %>
           <script>
-            todos.push({ id: '<%= rol.nombre %>'});
+            todos.push({ id: '<%= rol.nombre %>' });
             //console.log(todos);
           </script>
           <% } %>
@@ -188,7 +259,8 @@
             -->
               <div class="pagination">
                 <label for="page-selector">Página:</label>
-                <select id="page-selector" onchange="window.location.href = '/gestor-usuarios?pageRoles=' + this.value;">
+                <select id="page-selector"
+                  onchange="window.location.href = '/gestor-usuarios?pageRoles=' + this.value;">
                   <% for (let i=1; i <=totalPagesRoles; i++) { %>
                     <option value="<%= i %>" <%=i===currentPageRoles ? 'selected' : '' %>><%= i %>
                     </option>
