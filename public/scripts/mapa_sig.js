@@ -170,6 +170,8 @@ document.getElementById('toggleSatelliteBtn').addEventListener('click', function
 });
 */
 
+paint_counter_bbdd();
+
 function paint_counter_bbdd() {
   contadores.forEach(contador => {
     console.log("Coordenada X:", contador.coorX);
