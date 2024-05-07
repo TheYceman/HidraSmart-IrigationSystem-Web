@@ -57,12 +57,12 @@
         <!-- Barra de herramientas -->
         <div class="toolbar">
             <button class="btn" onclick="exportDataToExcel(contadores, 'Datos_seleccionados')">Exportar a Excel</button>
-            <button onclick="toggleLeyenda()" id="toggle-button">MostrarLeyenda</button>
+            <button onclick="toggleLeyenda()" id="toggle-button">Ocultar Leyenda</button>
         </div>
         <div id="informacion" style="display:none">
         </div>
         
-        <div id="leyenda" style="display: none;">
+        <div id="leyenda" style="display: block;">
             <p id="leyendaLabel">
                 <b>LEYENDA</b>
             </p>
@@ -70,7 +70,7 @@
                 <div class="checkbox_selector_left" id="checkbox-selector-left">
                     <div class="checkbox_counter_line checkbox_line">
                         <div>
-                            <input class="checkbox_custom" type="checkbox" id="item1-1" value="item1-1">
+                            <input class="checkbox_custom" type="checkbox" id="item1-1" value="item1-1" checked>
                             <label for="item1-1" class="checkbox_label checkbox_label_counter">
                                 <img class="checkbox_icon_counter" src="/images/icons/counter_logo.png">
                                 Contadores
