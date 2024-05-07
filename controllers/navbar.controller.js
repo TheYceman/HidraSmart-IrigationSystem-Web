@@ -23,10 +23,12 @@ const { getGeDataRolesPerPage } = require("../controllers/gestor-roles.controlle
 const { getTotalPagesRoles } = require("../controllers/gestor-roles.controller");
 const { getAllRoles } = require("../models/rol.model");
 
-const { getGeDataCliente } = require("../controllers/gestor-clientes.controller");
-const { getGeDataClientesPerPage } = require("../controllers/gestor-clientes.controller");
-const { getTotalPagesClientes } = require("../controllers/gestor-clientes.controller");
-const { getAllClientes } = require("../models/cliente.model");
+const { getGeDataPeticion } = require("../controllers/gestor-peticiones.controller");
+const { getGeDataPeticionesPerPage } = require("../controllers/gestor-peticiones.controller");
+const { getTotalPagesPeticiones } = require("../controllers/gestor-peticiones.controller");
+const { getAllPeticiones } = require("../models/peticion.model");
+
+
 
 
 const { runQuery } = require("../data/bbdd-connector");
@@ -221,6 +223,7 @@ async function getGestorEquipos(req, res) {
 
 
 async function getGestorPeticiones(req, res) {
+  console.log("GetGestorPeticiones " + req.session.headImage);
   res.render("navbar/gestor-peticiones", {
     headImage: req.session.headImage,
     navIndex: 8,
@@ -232,10 +235,10 @@ async function getGestorPeticiones(req, res) {
     profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     user: req.session.username,
-    clientes: await getGeDataClientesPerPage(req, res),
-    todosLosClientes: await getAllClientes(req, res),
+    peticiones: await getGeDataPeticionesPerPage(req, res),
+    todasLasPeticiones: await getAllPeticiones(req, res),
     currentPage: parseInt(req.query.page) || 1,
-    totalPages: await getTotalPagesClientes(req, res),
+    totalPages: await getTotalPagesPeticiones(req, res),
   });
 }
 
