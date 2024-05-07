@@ -103,7 +103,7 @@ async function login(req, res) {
       };
 
       if (req.session.user[0].idusers) {
-        insertSessionLog(req.sessionID, req.session.user[0].idusers, "urbansupply");
+        insertSessionLog(req.sessionID, req.session.user[0].idusers, "irrigation");
       } else {
         console.error('Alguno de los valores necesarios para insertar la sesión es undefined.');
       }
