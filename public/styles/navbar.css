@@ -97,25 +97,28 @@
   #icon-home {
     background-image: url("/images/navbar/inicio_white.png");
     z-index: 1;
+    height:35px;
   }
   
   #icon-home.active,
   #icon-home::before {
     background-image: url("/images/navbar/inicio_blue.png");
+    margin-left: 1.05%;
   }
   
   #icon-herramientas {
     position: relative;
     z-index: 2;
     background-image: url("/images/navbar/herramientas_white.png");
+    height:35px;
   }
   
   #icon-herramientas.left {
-    left: 0;
+    left: 1px;
   }
   
   #icon-herramientas.right {
-    left: calc(87.5% - var(--width-icon) * 3 );
+    left: calc(85.5% - var(--width-icon) * 3 );
   }
   
   #icon-herramientas.active,
@@ -124,17 +127,18 @@
   }
   
   #icon-gestores {
+    height: 35px;
     position: relative;
     z-index: 3;
     background-image: url("/images/navbar/gestores_white.png");
   }
   
   #icon-gestores.left {
-    left: 0;
+    left: 1px;
   }
   
   #icon-gestores.right {
-    left: calc(87.5% - var(--width-icon) * 3);
+    left: calc(86.5% - var(--width-icon) * 3);
   }
   
   #icon-gestores.active,

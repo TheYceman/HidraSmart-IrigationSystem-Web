@@ -19,7 +19,7 @@ main > div {
   width: 85%;
   max-height: 65vh;
   margin: auto;
-  overflow-y: hidden;
+  overflow-y: scroll;
   border: 2px solid var(--color-primary-400);
   border-radius: 5px;
 }

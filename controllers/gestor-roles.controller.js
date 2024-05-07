@@ -62,11 +62,12 @@ async function updateRol(req, res) {
   const perRed = req.body.perRed.trim();
   const perDemandas = req.body.perDemandas.trim();
   const perRiego = req.body.perRiego.trim();
+  const perEquipos = req.body.perEquipos.trim();
 
-  console.log("updateRol " + login);
+  console.log("updateRol " + nombre);
 
-  const queryString = `UPDATE grupos_usuario SET perUsu = ?,perVisor = ?, perMeteo = ?, perRed = ?, perDemandas = ?, perRiego = ? WHERE nombre = ?;`;
-  const values = [perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, nombre];
+  const queryString = `UPDATE grupos_usuario SET perUsu = ?,perVisor = ?, perMeteo = ?, perRed = ?, perDemandas = ?, perRiego = ?, perRiego = ? WHERE nombre = ?;`;
+  const values = [perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos, nombre];
   const database = 'aplicaciones_web';
   const result = await runQuery(queryString, values, database);
   if (result.success) {
@@ -109,9 +110,10 @@ async function agregaRol(req, res) {
   const perRed = req.body.perRed.trim();
   const perDemandas = req.body.perDemandas.trim();
   const perRiego = req.body.perRiego.trim();
+  const perEquipos = req.body.perEquipos.trim();
 
-  const queryString = `INSERT INTO grupos_usuario (nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego) VALUES (?, ?, ?, ?, ?, ?, ?);`;
-  const values = [nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego];
+  const queryString = `INSERT INTO grupos_usuario (nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`;
+  const values = [nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos];
   const database = 'aplicaciones_web';
   const resullt = await runQuery(queryString, values, database);
 

@@ -9,6 +9,7 @@
     overflow-y: hiddenmenu-options;
     border: 2px solid #009BDB;
     border-radius: 5px;
+    overflow-y: scroll;
   }
 
   table {

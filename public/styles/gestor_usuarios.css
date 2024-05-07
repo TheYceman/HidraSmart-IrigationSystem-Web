@@ -19,7 +19,7 @@ main > div {
   width: 85%;
   max-height: 65vh;
   margin: auto;
-  overflow-y: hidden;
+  overflow-y: scroll;
   border: 2px solid var(--color-primary-400);
   border-radius: 5px;
 }
@@ -208,4 +208,27 @@ td {
 
 .tab-content.active {
   display: block;
+}
+
+/* Estilos para el select */
+.select-mod {
+  /*appearance: none;*/ /* Elimina el estilo nativo del sistema operativo */
+  /*-webkit-appearance: none;*/ /* Para navegadores basados en WebKit como Chrome y Safari */
+  /*-moz-appearance: none;*/ /* Para navegadores basados en Gecko como Firefox */
+  padding: 8px 12px; /* Añade relleno alrededor del texto */
+  border: 1px solid #ccc; /* Añade un borde */
+  border-radius: 4px; /* Añade esquinas redondeadas */
+  background-color: #fff; /* Fondo blanco */
+  font-size: 14px; /* Tamaño de fuente */
+  color: #333; /* Color del texto */
+}
+
+/* Estilos para la flecha desplegable */
+.select-mod::after {
+  content: '\25BC'; /* Flecha hacia abajo */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Evita que la flecha sea seleccionable */
 }

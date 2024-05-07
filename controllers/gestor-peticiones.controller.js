@@ -60,7 +60,7 @@ async function updatePeticion(req, res) {
   const comentarios = req.body.comentarios.trim();
   const asignadaa = req.body.asignadaa.trim();
 
-  console.log("updatePeticion " + login);
+  console.log("updatePeticion " + idPeticion);
 
   const queryString = `UPDATE peticiones SET tipo = ?, usuario = ?, estado = ?, comentarios = ?, asignadaa = ? WHERE idPeticion = ?;`;
   const values = [tipo, usuario, estado, comentarios, asignadaa, idPeticion];

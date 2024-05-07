@@ -32,6 +32,40 @@ async function sendEmail(token, contactname, contactemail, contactmessage) {
     }
 }
 
+
+async function sendEmailNewUser(nombre, email, claveGenerada) {
+    const asunto = '¡Bienvenido a nuestra plataforma!';
+    const mensaje = `
+        <p>Hola ${nombre},</p>
+        <p>¡Gracias por registrarte en nuestra plataforma!</p>
+        <p>Tu cuenta ha sido creada exitosamente.</p>
+        <p>Su clave de acceso es ${claveGenerada}</p>
+        <p>Esperamos que disfrutes de nuestra plataforma y que tengas una excelente experiencia.</p>
+        <p>¡Bienvenido y que tengas un gran día!</p>
+        <p>Atentamente,<br/>El equipo de Irrigation System</p>
+    `;
+  
+    try {
+      let mailOptions = {
+        from: 'hidrasmarthydraulicinnovation@hotmail.com',
+        to: email,
+        bcc: 'carlos.merino@hidralab.com, hidrasmarthydraulicinnovation@hotmail.com, emilio.ruiz@hidralab.com',
+        subject: asunto,
+        text: mensaje
+      };
+  
+      let info = await transporter.sendMail(mailOptions);
+      //console.log('Correo electrónico enviado:', info.response);
+      return info;
+      // Llama al callback para redirigir después de enviar el correo
+      //callback();
+    } catch (error) {
+      console.error('Error al enviar el correo electrónico:', error);
+      return false;
+    }
+  
+  };
+
 async function verifyCaptcha(username, password, token){
     const credentialsJSON = JSON.parse(fs.readFileSync('./data/intense-emblem-415011-b892b5269f66.json'));//fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON, 'utf8'));
     const auth = new GoogleAuth({
@@ -83,4 +117,4 @@ async function verifyCaptcha(username, password, token){
     }
 }
 
-module.exports = { sendEmail };
+module.exports = { sendEmail, sendEmailNewUser };

@@ -14,6 +14,8 @@ const navbarRoutes = require("./routes/navbar.routes");
 const authRoutes = require("./routes/auth.routes");
 const visorDatosRoutes = require("./routes/visor-datos.routes");
 const mapaSigRoutes = require("./routes/mapa-sig.routes");
+const gestorEquiposRoutes = require("./routes/gestor-equipos.routes");
+const gestorUsuariosRoutes = require("./routes/gestor-usuarios.routes");
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
@@ -42,6 +44,8 @@ app.use("/", navbarRoutes);
 
 app.use("/visor-datos", visorDatosRoutes);
 app.use("/mapa-sig", mapaSigRoutes);
+app.use("/gestor-equipos", gestorEquiposRoutes);
+app.use("/gestor-usuarios", gestorUsuariosRoutes);
 
 var Auth = require('./controllers/auth.service');
 app.use(function (error, req, res, next) {
