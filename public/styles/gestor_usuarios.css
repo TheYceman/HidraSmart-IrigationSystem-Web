@@ -16,7 +16,7 @@ main > div {
 
 .table-container {
   height: 100%;
-  width: 85%;
+  width: 90%;
   max-height: 65vh;
   margin: auto;
   overflow-y: scroll;
@@ -215,11 +215,11 @@ td {
   /*appearance: none;*/ /* Elimina el estilo nativo del sistema operativo */
   /*-webkit-appearance: none;*/ /* Para navegadores basados en WebKit como Chrome y Safari */
   /*-moz-appearance: none;*/ /* Para navegadores basados en Gecko como Firefox */
-  padding: 8px 12px; /* Añade relleno alrededor del texto */
+  padding: 4px 6px; /* Añade relleno alrededor del texto */
   border: 1px solid #ccc; /* Añade un borde */
-  border-radius: 4px; /* Añade esquinas redondeadas */
+  border-radius: 2px; /* Añade esquinas redondeadas */
   background-color: #fff; /* Fondo blanco */
-  font-size: 14px; /* Tamaño de fuente */
+  font-size: 0.8vp; /* Tamaño de fuente */
   color: #333; /* Color del texto */
 }
 
@@ -231,4 +231,95 @@ td {
   right: 10px;
   transform: translateY(-50%);
   pointer-events: none; /* Evita que la flecha sea seleccionable */
+}
+/*Estilos para el formulario*/
+
+/* Estilos específicos para el formulario con el identificador "usuariosForm" */
+#usuariosForm.custom-form .form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+#usuariosForm.custom-form .form-group {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+#usuariosForm.custom-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#usuariosForm.custom-form input,
+#usuariosForm.custom-form select {
+  width: calc(50% - 5px);
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#usuariosForm.custom-form button {
+  padding: 10px 20px;
+  background-color: var(--color-primary-400);;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#usuariosForm.custom-form button:hover {
+  background-color: var(--color-primary-300);
+}
+
+/* Estilos específicos para el formulario con el identificador "rolesForm" y la clase "custom-form" */
+/* Estilos específicos para el formulario con el identificador "rolesForm" y la clase "custom-form" */
+#rolesForm.custom-form .form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+#rolesForm.custom-form .form-group {
+  flex-basis: calc(50% - 10px); /* Ancho del 50% del contenedor menos el espacio entre los campos */
+}
+
+#rolesForm.custom-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#rolesForm.custom-form input,
+#rolesForm.custom-form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#rolesForm.custom-form button {
+  padding: 10px 20px;
+  background-color: var(--color-primary-400);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#rolesForm.custom-form button:hover {
+  background-color: var(--color-primary-300);
+}
+/*Clase para los botones*/
+
+.btn {
+  padding: 2px 6px;
+  font: inherit;
+  background-color: var(--color-primary-400);
+  color: var(--color-primary-contrast);
+  border-radius: 3px;
+  border: none;
+  margin: 10px 5px;
+}
+
+.btn:hover {
+  background-color: var(--color-primary-300);
 }

@@ -96,7 +96,6 @@ async function login(req, res) {
       req.session.headCommunityUrl = 'https://www.crpenarroya.org/';
       process.env.USER_SESSION = JSON.stringify(req.session.userSession);
 
-
       const sessionData = {
         cookie: req.session.cookie,
         headImage: req.session.headImage
