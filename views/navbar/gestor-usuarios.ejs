@@ -21,26 +21,44 @@
       <div class="tab-content active" id="tabla1">
         <div class="div-container">
           <button id="mostrarFormUsuarios" class="btn">Añadir nuevo usuario</button>
-          <form action="/gestor-usuarios/agregarUsuario" method="POST" id="usuariosForm" style="display: none;">
-            <label for="Login">Username:</label>
-            <input type="text" name="username" required>
-            <label for="Nombre">Nombre:</label>
-            <input type="text" name="name" id="name" required>
-            <label for="Apellidos">Apellidos:</label>
-            <input type="text" name="surname" id="surname" required>
-            <label for="Grupo">Rol:</label>
-            <select name="grupo" id="grupo" required>
-              <!-- Aquí puedes agregar opciones generadas dinámicamente desde JavaScript -->
-            </select>
-            <label for="Email">Email:</label>
-            <input type="text" name="email" id="email" required>
-            <label for="Phone">Phone:</label>
-            <input type="text" name="phone" id="phone" required>
+          <form action="/gestor-usuarios/agregarUsuario" method="POST" id="usuariosForm" class="custom-form" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" required>
+              </div>
+              <div class="form-group">
+                <label for="name">Nombre:</label>
+                <input type="text" name="name" id="name" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="surname">Apellidos:</label>
+                <input type="text" name="surname" id="surname" required>
+              </div>
+              <div class="form-group">
+                <label for="grupo">Grupo:</label>
+                <select name="grupo" id="grupo" required>
+                  <!-- Aquí puedes agregar opciones generadas dinámicamente desde JavaScript -->
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" name="email" id="email" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" name="phone" id="phone" required>
+              </div>
+            </div>
             <button type="submit" class="btn">Añadir</button>
           </form>
           <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">
         </div>
-
+        <br/>
         <div class="table-container">
           <table>
             <thead>
@@ -67,7 +85,7 @@
                     <%= usuario.surname %>
                   </td>
                   <td contenteditable="true" class="editable" data-field="grupo" data-id="<%= usuario.username %>">
-                    <select>
+                    <select class="select-mod">
                       <% for(let rol of todosLosRoles) { %>
                         <option <%=(usuario.rol===rol.nombre) ? 'selected' : '' %>><%= rol.nombre %>
                         </option>
@@ -122,50 +140,73 @@
       <div class="tab-content" id="tabla2">
         <div class="div-container">
           <button id="mostrarFormRoles" class="btn">Añadir nuevo rol</button>
-          <form action="/gestor-usuarios/agregarRoles" method="POST" id="rolesForm" style="display: none;">
-            <label for="Usuarios">Grupo:</label>
-            <input type="text" name="perUsu" id="perUsu" required>
-            <label for="Visor">Visor:</label>
-            <select name="perVisor" id="perVisor" class="select-mod" required>
-              <option value="0" selected>Ninguno</option>
-              <option value="1">Lectura</option>
-              <option value="2">Edición</option>
-            </select>
-            <label for="Meteorológicos">Meteorológicos:</label>
-            <select name="perMeteo" id="perMeteo" class="select-mod" required>
-              <option value="0" selected>Ninguno</option>
-              <option value="1">Lectura</option>
-              <option value="2">Edición</option>
-            </select>
-            <label for="Red">Red:</label>
-            <select name="perRed" id="perRed" class="select-mod" required>
-              <option value="0" selected>Ninguno</option>
-              <option value="1">Lectura</option>
-              <option value="2">Edición</option>
-            </select>
-            <label for="Demandas">Demandas:</label>
-            <select name="perDemandas" id="perDemandas" class="select-mod" required>
-              <option value="0" selected>Ninguno</option>
-              <option value="1">Lectura</option>
-              <option value="2">Edición</option>
-            </select>
-            <label for="Riego">Riego:</label>
-            <select name="perRiego" id="perRiego" class="select-mod" required>
-              <option value="0" selected>Ninguno</option>
-              <option value="1">Lectura</option>
-              <option value="2">Edición</option>
-            </select>
-            <label for="Equipos">Equipos:</label>
-            <select name="perEquipos" id="perEquipos" class="select-mod" required>
-              <option value="0" selected>Ninguno</option>
-              <option value="1">Lectura</option>
-              <option value="2">Edición</option>
-            </select>
+          <form action="/gestor-usuarios/agregarRoles" method="POST" id="rolesForm" class="custom-form" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="perUsu">Usuarios:</label>
+                <input type="text" name="perUsu" id="perUsu" required>
+              </div>
+              <div class="form-group">
+                <label for="perVisor">Visor:</label>
+                <select name="perVisor" id="perVisor" class="select-mod" required>
+                  <option value="0" selected>Ninguno</option>
+                  <option value="1">Lectura</option>
+                  <option value="2">Edición</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="perMeteo">Meteorológicos:</label>
+                <select name="perMeteo" id="perMeteo" class="select-mod" required>
+                  <option value="0" selected>Ninguno</option>
+                  <option value="1">Lectura</option>
+                  <option value="2">Edición</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="perRed">Red:</label>
+                <select name="perRed" id="perRed" class="select-mod" required>
+                  <option value="0" selected>Ninguno</option>
+                  <option value="1">Lectura</option>
+                  <option value="2">Edición</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="perDemandas">Demandas:</label>
+                <select name="perDemandas" id="perDemandas" class="select-mod" required>
+                  <option value="0" selected>Ninguno</option>
+                  <option value="1">Lectura</option>
+                  <option value="2">Edición</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="perRiego">Riego:</label>
+                <select name="perRiego" id="perRiego" class="select-mod" required>
+                  <option value="0" selected>Ninguno</option>
+                  <option value="1">Lectura</option>
+                  <option value="2">Edición</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="perEquipos">Equipos:</label>
+                <select name="perEquipos" id="perEquipos" class="select-mod" required>
+                  <option value="0" selected>Ninguno</option>
+                  <option value="1">Lectura</option>
+                  <option value="2">Edición</option>
+                </select>
+              </div>
+            </div>
             <button type="submit" class="btn">Añadir</button>
           </form>
+          
           <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">
         </div>
-
+        <br/>
         <div class="table-container">
           <table>
             <thead>
