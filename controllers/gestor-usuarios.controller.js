@@ -5,6 +5,7 @@ const { runQuery } = require("../data/bbdd-connector");
 const emailSender = require('../utils/emailSender');
 
 const crypto = require('crypto');
+const { encrypt } = require("../helpers/handleBcrypt");
 
 async function getGeDataUsuario(req, res) {
   const geData = [...(await Usuario.getAll())];
@@ -117,7 +118,7 @@ async function agregaUsuario(req, res) {
   const claveGenerada = generarClave();
   console.log(claveGenerada);
 
-  const password = claveGenerada;
+  const password =await encrypt(claveGenerada);
   //const nuevoRegistro = { login, password, nombre, apellido, grupo, email, phone };
 
   const queryString = "INSERT INTO users (username, password, name, surname, rol, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?);";

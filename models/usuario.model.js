@@ -16,7 +16,7 @@ class Usuario {
 
   static async getAll() {
 
-    const queryString = "SELECT * FROM users;";
+    const queryString = "SELECT * FROM users WHERE username<>'HidraSmart';";
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
@@ -27,7 +27,7 @@ class Usuario {
 
   static async getFilteredData(login) {
 
-    const queryString = "SELECT * FROM users WHERE username=?;";
+    const queryString = "SELECT * FROM users WHERE username=? AND username<>'HidraSmart';";
     const values = [login];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
@@ -38,7 +38,7 @@ class Usuario {
   }
   static async getFilteredDataGrupo(idGrupo) {
 
-    const queryString = "SELECT * FROM users WHERE rol=?;";
+    const queryString = "SELECT * FROM users WHERE rol=? AND username<>'HidraSmart';";
     const values = [idGrupo];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
@@ -50,7 +50,7 @@ class Usuario {
 
   static async getPerPage(perPage, offset) {
 
-    const queryString = "SELECT * FROM users LIMIT " + perPage + " OFFSET " + offset;
+    const queryString = "SELECT * FROM users WHERE username<>'HidraSmart' LIMIT " + perPage + " OFFSET " + offset ;
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, [], database);
     console.log("results.data.rows " + results.data.rows);
@@ -60,7 +60,7 @@ class Usuario {
 
   static async getCountAll() {
 
-    const queryString = "SELECT count(*) as total FROM users;";
+    const queryString = "SELECT count(*) as total FROM users WHERE username<>'HidraSmart';";
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
@@ -71,7 +71,7 @@ class Usuario {
 
   static async getAllUsuarios() {
 
-    const queryString = "SELECT * FROM users;";
+    const queryString = "SELECT * FROM users WHERE username<>'HidraSmart';";
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
@@ -81,7 +81,7 @@ class Usuario {
 
   static async getFilteredData(login) {
 
-    const queryString = `SELECT * FROM users WHERE login=${login}";`
+    const queryString = `SELECT * FROM users WHERE login=${login}" AND username<>'HidraSmart';`
     const values = [login];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);

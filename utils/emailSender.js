@@ -35,23 +35,40 @@ async function sendEmail(token, contactname, contactemail, contactmessage) {
 
 async function sendEmailNewUser(nombre, email, claveGenerada) {
     const asunto = '¡Bienvenido a nuestra plataforma!';
-    const mensaje = `
-        <p>Hola ${nombre},</p>
-        <p>¡Gracias por registrarte en nuestra plataforma!</p>
-        <p>Tu cuenta ha sido creada exitosamente.</p>
-        <p>Su clave de acceso es ${claveGenerada}</p>
-        <p>Esperamos que disfrutes de nuestra plataforma y que tengas una excelente experiencia.</p>
-        <p>¡Bienvenido y que tengas un gran día!</p>
-        <p>Atentamente,<br/>El equipo de Irrigation System</p>
+    const mensajeHTML = `
+        <html>
+        <head>
+            <style>
+                /* Aquí puedes agregar estilos CSS para personalizar tu correo */
+                body {
+                    font-family: Arial, sans-serif;
+                    color: #009bdb;
+                }
+                .logo {
+                    width: 100px; /* Tamaño del logo */
+                }
+                /* Puedes definir más estilos según tus necesidades */
+            </style>
+        </head>
+        <body>
+            <img src="https://hidrasmart-irrigationsystem.azurewebsites.net/" alt="Irrigation system" class="logo" width="200px"> 
+            <p>Hola ${nombre},</p>
+            <p>¡Gracias por registrarte en nuestra plataforma!</p>
+            <p>Tu cuenta ha sido creada exitosamente.</p>
+            <p>Su clave de acceso es ${claveGenerada}</p>
+            <p>Esperamos que disfrutes de nuestra plataforma y que tengas una excelente experiencia.</p>
+            <p>Atentamente,<br/>El equipo de Irrigation System</p>
+        </body>
+        </html>
     `;
   
     try {
       let mailOptions = {
         from: 'hidrasmarthydraulicinnovation@hotmail.com',
         to: email,
-        bcc: 'carlos.merino@hidralab.com, hidrasmarthydraulicinnovation@hotmail.com, emilio.ruiz@hidralab.com',
+        //bcc: 'emilio.ruiz@hidralab.com',
         subject: asunto,
-        text: mensaje
+        text: mensajeHTML
       };
   
       let info = await transporter.sendMail(mailOptions);

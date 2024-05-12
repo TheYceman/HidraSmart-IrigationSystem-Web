@@ -13,7 +13,7 @@ class Rol {
   }
 
   static async getAll() {
-    const queryString = "SELECT * FROM grupos_usuario;";
+    const queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin';";
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
@@ -23,7 +23,7 @@ class Rol {
 
   static async getFilteredData(nombre) {
 
-    const queryString = `SELECT * FROM grupos_usuario WHERE nombre=?;`;
+    const queryString = `SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin';`;
     const values = [nombre];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
@@ -33,7 +33,7 @@ class Rol {
     return data;
   }
   static async getFilteredDataGrupo(idGrupo) {
-    const queryString = `SELECT * FROM grupos_usuario WHERE nombre=?;`;
+    const queryString = `SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin';`;
     const values = [idGrupo];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
@@ -45,7 +45,7 @@ class Rol {
 
   static async getPerPage(perPage, offset) {
 
-    const queryString = "SELECT * FROM grupos_usuario LIMIT " + perPage + " OFFSET " + offset;
+    const queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin' LIMIT " + perPage + " OFFSET " + offset;
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
@@ -55,7 +55,7 @@ class Rol {
 
   static async getCountAll() {
 
-    const queryString = "SELECT count(*) as total FROM grupos_usuario;";
+    const queryString = "SELECT count(*) as total FROM grupos_usuario WHERE nombre<>'admin';";
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
@@ -65,7 +65,7 @@ class Rol {
   }
 
   static async getAllRoles() {
-    const queryString = "SELECT * FROM grupos_usuario;";
+    const queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin';";
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
@@ -74,7 +74,7 @@ class Rol {
   }
 
   static async getFilteredData(nombre) {
-    const queryString = `SELECT * FROM grupos_usuario WHERE nombre=?";`;
+    const queryString = `SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin'";`;
     const values = [nombre];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
