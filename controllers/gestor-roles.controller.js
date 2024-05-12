@@ -3,7 +3,7 @@ const Rol = require("../models/rol.model");
 const { runQuery } = require("../data/bbdd-connector");
 
 async function getGeDataRol(req, res) {
-  const geData = [...(await Rol.getAll())];
+  const geData = [...(await Rol.getAll(req, res))];
   return geData;
 }
 
@@ -12,7 +12,7 @@ async function getTotalPagesRoles(req, res) {
 
   pages = 1;
   const itemsPerPage = 10;
-  const number_registers = await Rol.getCountAll();
+  const number_registers = await Rol.getCountAll(req, res);
 
   console.log("number_registers " + number_registers);
 
@@ -29,7 +29,7 @@ async function getGeDataRolesPerPage(req, res) {
   const page = parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 10; // Cantidad de elementos por página
   const offset = (page - 1) * itemsPerPage;
-  const geData = [...(await Rol.getPerPage(itemsPerPage, offset))];
+  const geData = [...(await Rol.getPerPage(req, res, itemsPerPage, offset))];
 
   /*const page =  parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 20; // Registros por página
@@ -46,7 +46,7 @@ async function getGeDataRolesPerPage(req, res) {
 async function getDataRol(req, res) {
   const params = req.query;
   let result = await Rol.getFilteredData(
-    params.ideSector
+    req, res, params.ideSector
   );
   res.json(result);
   // pasar a json el resultado de la linea anterior y añadir a la response
@@ -111,11 +111,15 @@ async function agregaRol(req, res) {
   const perDemandas = req.body.perDemandas.trim();
   const perRiego = req.body.perRiego.trim();
   const perEquipos = req.body.perEquipos.trim();
+  let propietario=0;
+  if (req.session.user[0].idusers) {
+    propietario=req.session.user[0].idusers;
+  }
 
-  const queryString = `INSERT INTO grupos_usuario (nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`;
-  const values = [nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos];
+  const queryString = `INSERT INTO grupos_usuario (nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos, propietario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  const values = [nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos, propietario];
   const database = 'aplicaciones_web';
-  const resullt = await runQuery(queryString, values, database);
+  const result = await runQuery(queryString, values, database);
 
   if (result.success) {
     console.log("Rol insertado con éxito");

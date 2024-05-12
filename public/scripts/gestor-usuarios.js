@@ -3,7 +3,7 @@ async function updateUsuario(login) {
     //const login = document.querySelector(`[data-field="login"][data-id="${id}"]`).textContent;
     const nombre = document.querySelector(`[data-field="name"][data-id="${login}"]`).textContent;
     const apellido = document.querySelector(`[data-field="surname"][data-id="${login}"]`).textContent;
-    const grupo = document.querySelector(`[data-field="grupo"][data-id="${login}"]`).textContent;
+    const grupo = document.querySelector(`[data-field="grupo"][data-id="${login}"] select`).value;
     const email = document.querySelector(`[data-field="email"][data-id="${login}"]`).textContent;
     const phone = document.querySelector(`[data-field="phone"][data-id="${login}"]`).textContent;
     const data = {

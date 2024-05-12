@@ -10,7 +10,7 @@ class Sensor {
     this.coorY = geSensor.coorY;
   }
 
-  static async getPerPage(perPage, offset) {
+  static async getPerPage(req, res, perPage, offset) {
 
     const queryString = "SELECT * FROM ge_sensores LIMIT " + perPage + " OFFSET " + offset;
     const values = [];
@@ -30,7 +30,7 @@ class Sensor {
     return geTotal[0].total;
   }
 
-  static async getAllSensores() {
+  static async getAllSensores(res, req) {
 
     const queryString = "SELECT * FROM ge_sensores;";
     const values = [];
@@ -49,7 +49,7 @@ class Sensor {
     return geSensor;
   }
 
-  static async getValvulas() {
+  static async getValvulas(res, req) {
 
     const queryString = "SELECT * FROM ge_sensores WHERE tipo='valvula';";
     const values = [];
@@ -59,7 +59,7 @@ class Sensor {
     return geSensor;
   }
 
-  static async getPresiones() {
+  static async getPresiones(res, req) {
 
     const queryString = "SELECT * FROM ge_sensores WHERE tipo='presion';";
     const values = [];
@@ -69,7 +69,7 @@ class Sensor {
     return geSensor;
   }
 
-  static async getNiveles() {
+  static async getNiveles(res, req) {
 
     const queryString = "SELECT * FROM ge_sensores WHERE tipo='nivel';";
     const values = [];
@@ -79,7 +79,7 @@ class Sensor {
     return geSensor;
   }
 
-  static async getFilteredData(tipo, idSensor, fechaInicio, fechaFin) {
+  static async getFilteredData(res, req, tipo, idSensor, fechaInicio, fechaFin) {
 
     const queryString = `SELECT * FROM dat_${tipo} WHERE ideSensor="${idSensor}" AND instante > "${fechaInicio
       .slice(0, 19)

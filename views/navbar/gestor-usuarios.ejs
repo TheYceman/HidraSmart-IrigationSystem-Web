@@ -21,7 +21,8 @@
       <div class="tab-content active" id="tabla1">
         <div class="div-container">
           <button id="mostrarFormUsuarios" class="btn">Añadir nuevo usuario</button>
-          <form action="/gestor-usuarios/agregarUsuario" method="POST" id="usuariosForm" class="custom-form" style="display: none;">
+          <form action="/gestor-usuarios/agregarUsuario" method="POST" id="usuariosForm" class="custom-form"
+            style="display: none;">
             <div class="form-row">
               <div class="form-group">
                 <label for="username">Username:</label>
@@ -58,7 +59,7 @@
           </form>
           <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">
         </div>
-        <br/>
+        <br />
         <div class="table-container">
           <table>
             <thead>
@@ -136,15 +137,15 @@
                   </div>
                 </div>
       </div>
-
       <div class="tab-content" id="tabla2">
         <div class="div-container">
           <button id="mostrarFormRoles" class="btn">Añadir nuevo rol</button>
-          <form action="/gestor-usuarios/agregarRoles" method="POST" id="rolesForm" class="custom-form" style="display: none;">
+          <form action="/gestor-usuarios/agregarRol" method="POST" id="rolesForm" class="custom-form"
+            style="display: none;">
             <div class="form-row">
               <div class="form-group">
-                <label for="perUsu">Usuarios:</label>
-                <input type="text" name="perUsu" id="perUsu" required>
+                <label for="perUsu">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" required>
               </div>
               <div class="form-group">
                 <label for="perVisor">Visor:</label>
@@ -200,13 +201,21 @@
                   <option value="2">Edición</option>
                 </select>
               </div>
+              <div class="form-group">
+                <label for="perUsu">Usuarios:</label>
+                <select name="perUsu" id="perUsu" class="select-mod" required>
+                  <option value="0" selected>Ninguno</option>
+                  <option value="1">Lectura</option>
+                  <option value="2">Edición</option>
+                </select>
+              </div>
             </div>
             <button type="submit" class="btn">Añadir</button>
           </form>
-          
+
           <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">
         </div>
-        <br/>
+        <br />
         <div class="table-container">
           <table>
             <thead>
@@ -230,51 +239,51 @@
                   </td>
                   <td contenteditable="true" class="editable" data-field="perUsu" data-id="<%= rol.nombre %>">
                     <select class="select-mod">
-                      <option value="0" <%= rol.perUsu===0 ? 'selected' : '' %>>Ninguno</option>
-                      <option value="1" <%= rol.perUsu===1 ? 'selected' : '' %>>Lectura</option>
-                      <option value="2" <%= rol.perUsu===2 ? 'selected' : '' %>>Edición</option>
+                      <option value="0" <%=rol.perUsu===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%=rol.perUsu===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%=rol.perUsu===2 ? 'selected' : '' %>>Edición</option>
                     </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perVisor" data-id="<%= rol.nombre %>">
                     <select class="select-mod">
-                      <option value="0" <%= rol.perVisor===0 ? 'selected' : '' %>>Ninguno</option>
-                      <option value="1" <%= rol.perVisor===1 ? 'selected' : '' %>>Lectura</option>
-                      <option value="2" <%= rol.perVisor===2 ? 'selected' : '' %>>Edición</option>
+                      <option value="0" <%=rol.perVisor===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%=rol.perVisor===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%=rol.perVisor===2 ? 'selected' : '' %>>Edición</option>
                     </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perMeteo" data-id="<%= rol.nombre %>">
                     <select class="select-mod">
-                      <option value="0" <%= rol.perMeteo===0 ? 'selected' : '' %>>Ninguno</option>
-                      <option value="1" <%= rol.perMeteo===1 ? 'selected' : '' %>>Lectura</option>
-                      <option value="2" <%= rol.perMeteo===2 ? 'selected' : '' %>>Edición</option>
+                      <option value="0" <%=rol.perMeteo===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%=rol.perMeteo===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%=rol.perMeteo===2 ? 'selected' : '' %>>Edición</option>
                     </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perRed" data-id="<%= rol.nombre %>">
                     <select class="select-mod">
-                      <option value="0" <%= rol.perRed===0 ? 'selected' : '' %>>Ninguno</option>
-                      <option value="1" <%= rol.perRed===1 ? 'selected' : '' %>>Lectura</option>
-                      <option value="2" <%= rol.perRed===2 ? 'selected' : '' %>>Edición</option>
+                      <option value="0" <%=rol.perRed===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%=rol.perRed===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%=rol.perRed===2 ? 'selected' : '' %>>Edición</option>
                     </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perDemandas" data-id="<%= rol.nombre %>">
                     <select class="select-mod">
-                      <option value="0" <%= rol.perDemandas===0 ? 'selected' : '' %>>Ninguno</option>
-                      <option value="1" <%= rol.perDemandas===1 ? 'selected' : '' %>>Lectura</option>
-                      <option value="2" <%= rol.perDemandas===2 ? 'selected' : '' %>>Edición</option>
+                      <option value="0" <%=rol.perDemandas===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%=rol.perDemandas===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%=rol.perDemandas===2 ? 'selected' : '' %>>Edición</option>
                     </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perRiego" data-id="<%= rol.nombre %>">
                     <select class="select-mod">
-                      <option value="0" <%= rol.perRiego===0 ? 'selected' : '' %>>Ninguno</option>
-                      <option value="1" <%= rol.perRiego===1 ? 'selected' : '' %>>Lectura</option>
-                      <option value="2" <%= rol.perRiego===2 ? 'selected' : '' %>>Edición</option>
+                      <option value="0" <%=rol.perRiego===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%=rol.perRiego===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%=rol.perRiego===2 ? 'selected' : '' %>>Edición</option>
                     </select>
                   </td>
                   <td contenteditable="true" class="editable" data-field="perEquipos" data-id="<%= rol.nombre %>">
                     <select class="select-mod">
-                      <option value="0" <%= rol.perEquipos===0 ? 'selected' : '' %>>Ninguno</option>
-                      <option value="1" <%= rol.perEquipos===1 ? 'selected' : '' %>>Lectura</option>
-                      <option value="2" <%= rol.perEquipos===2 ? 'selected' : '' %>>Edición</option>
+                      <option value="0" <%=rol.perEquipos===0 ? 'selected' : '' %>>Ninguno</option>
+                      <option value="1" <%=rol.perEquipos===1 ? 'selected' : '' %>>Lectura</option>
+                      <option value="2" <%=rol.perEquipos===2 ? 'selected' : '' %>>Edición</option>
                     </select>
                   </td>
                   <td class="acciones">
