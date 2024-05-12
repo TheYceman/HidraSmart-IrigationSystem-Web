@@ -3,7 +3,7 @@ const Cliente = require("../models/cliente.model");
 const { runQuery } = require("../data/bbdd-connector");
 
 async function getGeDataCliente(req, res) {
-  const geData = [...(await Cliente.getAll())];
+  const geData = [...(await Cliente.getAll(req, res))];
   return geData;
 }
 
@@ -11,7 +11,7 @@ async function getTotalPagesClientes(req, res) {
 
   pages = 1;
   const itemsPerPage = 10;
-  const number_registers = await Cliente.getCountAll();
+  const number_registers = await Cliente.getCountAll(req, res);
 
   console.log("number_registers " + number_registers);
 
@@ -27,7 +27,7 @@ async function getGeDataClientesPerPage(req, res) {
   const page = parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 10; // Cantidad de elementos por página
   const offset = (page - 1) * itemsPerPage;
-  const geData = [...(await Cliente.getPerPage(itemsPerPage, offset))];
+  const geData = [...(await Cliente.getPerPage(req, res, itemsPerPage, offset))];
 
   /*const page =  parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 20; // Registros por página
@@ -44,7 +44,7 @@ async function getGeDataClientesPerPage(req, res) {
 async function getDataCliente(req, res) {
   const params = req.query;
   let result = await Cliente.getFilteredData(
-    params.ideSector
+    req, res, params.ideSector
   );
   res.json(result);
   // pasar a json el resultado de la linea anterior y añadir a la response
@@ -111,7 +111,7 @@ async function agregaCliente(req, res) {
   const database = 'aplicaciones_web';
   const result = await runQuery(queryString, values, database);
   if (result.success) {
-      console.log("Cliente insertado correctamente");
+    console.log("Cliente insertado correctamente");
   }
   console.log(data);
 

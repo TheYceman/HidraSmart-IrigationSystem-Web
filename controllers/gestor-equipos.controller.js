@@ -7,43 +7,43 @@ const Cliente = require("../models/cliente.model");
 const { runQuery } = require("../data/bbdd-connector");
 
 async function getGeDataClientes(req, res) {
-  const geData = [...(await Cliente.getAll())];
+  const geData = [...(await Cliente.getAll(req, res))];
   return geData;
 }
 
 async function getGeDataContador(req, res) {
-  const geData = [...(await Contador.getAll())];
+  const geData = [...(await Contador.getAll(req, res))];
   return geData;
 }
 
 async function getGeDataSensor(req, res) {
-  const geData = [...(await Sensor.getAll())];
+  const geData = [...(await Sensor.getAll(req, res))];
   return geData;
 }
 
 async function getGeDataContadorMapa(req, res) {
-  const geData = [...(await Contador.getAll())];
+  const geData = [...(await Contador.getAll(req, res))];
   console.log("Entra a getGeDataContador desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
 }
 
 async function getGeDataContadorMapaTelemedida(req, res) {
-  const geData = [...(await Contador.getTelemedida())];
+  const geData = [...(await Contador.getTelemedida(req, res))];
   console.log("Entra a getGeDataContadorMapaTelemedida desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
 }
 
 async function getGeDataContadorMapaNoTelemedida(req, res) {
-  const geData = [...(await Contador.getNoTelemedida())];
+  const geData = [...(await Contador.getNoTelemedida(req, res))];
   console.log("Entra a getGeDataContadorMapaNoTelemedida desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
 }
 
 async function getGeDataSensorMapa(req, res) {
-  const geData = [...(await Presion.getPresionesTelemedida())];
+  const geData = [...(await Presion.getPresionesTelemedida(req, res))];
   console.log("Entra a getGeDataSensorMapa desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
@@ -51,7 +51,7 @@ async function getGeDataSensorMapa(req, res) {
 
 
 async function getGeDataCaudalimetroMapa(req, res) {
-  const geData = [...(await Caudalimetro.getAll())];
+  const geData = [...(await Caudalimetro.getAll(req, res))];
   console.log("Entra a getGeDataCaudalimetroMapa desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
@@ -62,7 +62,7 @@ async function getTotalPagesContador(req, res) {
 
   pages = 1;
   const itemsPerPage = 10;
-  const number_registers = await Contador.getCountAll();
+  const number_registers = await Contador.getCountAll(req, res);
 
   console.log("number_registers " + number_registers);
 
@@ -77,7 +77,7 @@ async function getTotalPagesSensor(req, res) {
 
   pages = 1;
   const itemsPerPage = 10;
-  const number_registers = await Sensor.getCountAll();
+  const number_registers = await Sensor.getCountAll(req, res);
 
   console.log("number_registers " + number_registers);
 
@@ -93,7 +93,7 @@ async function getGeDataSensorPerPage(req, res) {
   const page = parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 10; // Cantidad de elementos por página
   const offset = (page - 1) * itemsPerPage;
-  const geData = [...(await Sensor.getPerPage(itemsPerPage, offset))];
+  const geData = [...(await Sensor.getPerPage(req, res, itemsPerPage, offset))];
 
   /*const page =  parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 20; // Registros por página
@@ -113,7 +113,7 @@ async function getGeDataContadorPerPage(req, res) {
   const page = parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 10; // Cantidad de elementos por página
   const offset = (page - 1) * itemsPerPage;
-  const geData = [...(await Contador.getPerPage(itemsPerPage, offset))];
+  const geData = [...(await Contador.getPerPage(req, res, itemsPerPage, offset))];
 
   /*const page =  parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 20; // Registros por página
@@ -130,7 +130,7 @@ async function getGeDataContadorPerPage(req, res) {
 async function getDataContador(req, res) {
   const params = req.query;
   let result = await Contador.getFilteredData(
-    params.ideSector
+    req, res, params.ideSector
   );
   res.json(result);
   // pasar a json el resultado de la linea anterior y añadir a la response

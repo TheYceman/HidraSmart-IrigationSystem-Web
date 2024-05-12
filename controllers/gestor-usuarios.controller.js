@@ -8,7 +8,7 @@ const crypto = require('crypto');
 const { encrypt } = require("../helpers/handleBcrypt");
 
 async function getGeDataUsuario(req, res) {
-  const geData = [...(await Usuario.getAll())];
+  const geData = [...(await Usuario.getAll(req, res))];
   return geData;
 }
 
@@ -17,7 +17,7 @@ async function getTotalPagesUsuarios(req, res) {
 
   pages = 1;
   const itemsPerPage = 10;
-  const number_registers = await Usuario.getCountAll();
+  const number_registers = await Usuario.getCountAll(req, res);
 
   console.log("number_registers " + number_registers);
 
@@ -33,7 +33,7 @@ async function getGeDataUsuariosPerPage(req, res) {
   const page = parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 10; // Cantidad de elementos por página
   const offset = (page - 1) * itemsPerPage;
-  const geData = [...(await Usuario.getPerPage(itemsPerPage, offset))];
+  const geData = [...(await Usuario.getPerPage(req, res, itemsPerPage, offset))];
 
   /*const page =  parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 20; // Registros por página
@@ -50,7 +50,7 @@ async function getGeDataUsuariosPerPage(req, res) {
 async function getDataUsuario(req, res) {
   const params = req.query;
   let result = await Usuario.getFilteredData(
-    params.ideSector
+    req, res, params.ideSector
   );
   res.json(result);
   // pasar a json el resultado de la linea anterior y añadir a la response
@@ -68,7 +68,7 @@ async function updateUsuario(req, res) {
   const phone = req.body.phone.trim();
   //const password = req.body.password.trim();
 
-  console.log("updateUsuario " + username);
+  console.log("updateUsuario " + username + " " + grupo);
 
   const queryString = `UPDATE users SET name = ?, surname = ?, rol = ?, email = ?, phone = ? WHERE username = ?;`;
   const values = [nombre, apellido, grupo, email, phone, username];
@@ -114,15 +114,20 @@ async function agregaUsuario(req, res) {
   const email = req.body.email.trim();
   const phone = req.body.phone.trim();
 
+  let propietario=0;
+  if (req.session.user[0].idusers) {
+    propietario=req.session.user[0].idusers;
+  }
+
   // Generar y mostrar la clave
   const claveGenerada = generarClave();
   console.log(claveGenerada);
 
-  const password =await encrypt(claveGenerada);
+  const password = await encrypt(claveGenerada);
   //const nuevoRegistro = { login, password, nombre, apellido, grupo, email, phone };
 
-  const queryString = "INSERT INTO users (username, password, name, surname, rol, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?);";
-  const values = [login, password, nombre, apellido, grupo, email, phone];
+  const queryString = "INSERT INTO users (username, password, name, surname, rol, email, phone, owner) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+  const values = [login, password, nombre, apellido, grupo, email, phone, propietario];
   const database = 'aplicaciones_web';
   const result = await runQuery(queryString, values, database);
   if (result.success) {
@@ -133,10 +138,14 @@ async function agregaUsuario(req, res) {
       console.log('Correo electrónico enviado con éxito');
     } else {
       console.log('Error al enviar el correo electrónico');
+      alert('Error al enviar el correo electrónico'); // Muestra un mensaje emergente al usuario
     }
+    res.redirect('/gestor-usuarios');
+  } else {
+    console.log('Error al insertar el usuario en la base de datos');
+    alert('Error al insertar el usuario en la base de datos'); // Muestra un mensaje emergente al usuario
   }
-
-  res.redirect('/gestor-usuarios');
+  
 }
 
 

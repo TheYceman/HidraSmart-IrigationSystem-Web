@@ -33,7 +33,7 @@ class Contador {
  }*/
 
 
-  static async getPerPage(perPage, offset) {
+  static async getPerPage(res, req, perPage, offset) {
 
     const queryString = "SELECT * FROM ge_contadores LIMIT " + perPage + " OFFSET " + offset;
     const values = [];
@@ -43,7 +43,7 @@ class Contador {
     return geContadores;
   }
 
-  static async getCountAll() {
+  static async getCountAll(res, req) {
 
     const queryString = "SELECT count(*) as total FROM ge_contadores;";
     const values = [];
@@ -54,7 +54,7 @@ class Contador {
     return geTotal[0].total;
   }
 
-  static async getAll() {
+  static async getAll(res, req) {
 
     const queryString = "SELECT * FROM ge_contadores WHERE coorX<>'' AND coorY<>'';";
     const values = [];
@@ -70,7 +70,7 @@ class Contador {
     return geContadores;
   }
 
-  static async getTelemedida() {
+  static async getTelemedida(res, req) {
    
     const queryString = "SELECT ge_contadores.*, dat_contadores.acumulado, dat_contadores.instante, dat_contadores.bateria, dat_contadores.RSSI FROM dat_contadores, ge_contadores WHERE dat_contadores.ideEle=ge_contadores.ideEle ORDER BY instante DESC;";
     const values = [];
@@ -86,7 +86,7 @@ class Contador {
     return geContadores;
   }
 
-  static async getSinTelemedida() {
+  static async getSinTelemedida(res, req) {
    
     const queryString = "SELECT ge_contadores.*, dat_contadores.acumulado, dat_contadores.instante FROM dat_contadores, ge_contadores WHERE dat_contadores.ideEle=ge_contadores.ideEle ORDER BY instante DESC LIMIT 1;";
     const values = [];
@@ -102,7 +102,7 @@ class Contador {
     return geContadores;
   }
 
-  static async getFilteredData(sector) {
+  static async getFilteredData(res, req, sector) {
     const queryString =  `SELECT * FROM ge_contadores WHERE ideSector=?;`;
     const values = [sector];
     const database = 'aplicaciones_web';

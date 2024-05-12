@@ -6,8 +6,9 @@ const { RecaptchaEnterpriseServiceClient } = require('@google-cloud/recaptcha-en
 
 const { GoogleAuth } = require('google-auth-library');
 
-
 const { runQuery } = require("../data/bbdd-connector");
+
+const { compare } = require("../helpers/handleBcrypt");
 
 
 async function verifyCaptcha(username, password, token) {
@@ -52,8 +53,8 @@ async function verifyCaptcha(username, password, token) {
     response.riskAnalysis.reasons.forEach((reason) => {
       console.log(reason);
     });
-    const queryString = `SELECT * FROM users WHERE username=? AND password=?;`;
-    const values = [username, password];
+    const queryString = `SELECT * FROM users WHERE username=?;`;
+    const values = [username];
     const database = 'aplicaciones_web';
 
     try {
@@ -61,7 +62,11 @@ async function verifyCaptcha(username, password, token) {
 
       if (result.success) {
         const rows = result.data.rows;
-        return rows;
+        console.log("rows.password " + result.data.rows[0].password);
+        if (compare(password, result.data.rows[0].password)) {
+          return rows;
+        }
+
       } else {
         console.error('Error al ejecutar la consulta:', result.message);
         // Maneja el caso de error según sea necesario
@@ -126,8 +131,6 @@ function logout(req, res) {
     }
   });
 }
-
-
 
 module.exports = { login, logout };
 module.exports = { login };

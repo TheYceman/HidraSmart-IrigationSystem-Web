@@ -74,11 +74,11 @@ async function getLogout(req, res) {
 
   if (userId) {
 
-    const queryString =  'UPDATE session_logs SET end_time = ? WHERE idusers = ? AND session_id = ?';
+    const queryString = 'UPDATE session_logs SET end_time = ? WHERE idusers = ? AND session_id = ?';
     const values = [endTime, userId, sesion_id];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
-    if(results.success){
+    if (results.success) {
       console.log("getLogout " + results + " userId " + userId + " sesión " + req.sessionID);
     }
   }
@@ -105,7 +105,7 @@ function getDashboard(req, res) {
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
-    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     user: req.session.username,
   });
@@ -120,7 +120,7 @@ async function getMapaSig(req, res) {
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
-    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     user: req.session.username,
     todosLosContadores: await getAll(req, res),
@@ -136,7 +136,7 @@ async function getEstadoRed(req, res) {
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
-    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
@@ -153,7 +153,7 @@ async function getInfoMeteo(req, res) {
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
-    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
@@ -170,7 +170,7 @@ async function getDemandasCultivos(req, res) {
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
-    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
@@ -187,7 +187,7 @@ async function getPlanRiego(req, res) {
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
-    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
@@ -203,7 +203,7 @@ async function getGestorEquipos(req, res) {
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
-    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     user: req.session.username,
     contadores: await getGeDataContadorPerPage(req, res),
@@ -232,7 +232,7 @@ async function getGestorPeticiones(req, res) {
     headComunityLogo: req.session.headCommunityImage,
     headComunityName: req.session.headCommunityName,
     headComunityUrl: req.session.headCommunityUrl,
-    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
+    profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     user: req.session.username,
     peticiones: await getGeDataPeticionesPerPage(req, res),
@@ -243,26 +243,38 @@ async function getGestorPeticiones(req, res) {
 }
 
 async function getGestorUsuarios(req, res) {
-  res.render("navbar/gestor-usuarios", {
-    headImage: req.session.headImage,
-    navIndex: 9,
-    navGroup: 2,
-    pageTitle: "Gestor de Usuarios",
-    headComunityLogo: req.session.headCommunityImage,
-    headComunityName: req.session.headCommunityName,
-    headComunityUrl: req.session.headCommunityUrl,
-    profileUserName:  req.session.user[0].name + " " + req.session.user[0].surname,
-    profileUserEmail: req.session.user[0].email,
-    user: req.session.username,
-    usuarios: await getGeDataUsuariosPerPage(req, res),
-    todosLosUsuarios: await getAllUsuarios(req, res),
-    currentPage: parseInt(req.query.page) || 1,
-    totalPages: await getTotalPagesUsuarios(req, res),
-    roles: await getGeDataRolesPerPage(req, res),
-    todosLosRoles: await getAllRoles(req, res),
-    currentPageRoles: parseInt(req.query.page) || 1,
-    totalPagesRoles: await getTotalPagesRoles(req, res),
-  });
+
+  const rol = req.session.user[0].rol;
+  console.log("req.session.user[0].rol " + rol);
+
+  if (rol == 'hidra' || rol == 'admin' || rol == 'userp') {
+    res.render("navbar/gestor-usuarios", {
+      headImage: req.session.headImage,
+      navIndex: 9,
+      navGroup: 2,
+      pageTitle: "Gestor de Usuarios",
+      headComunityLogo: req.session.headCommunityImage,
+      headComunityName: req.session.headCommunityName,
+      headComunityUrl: req.session.headCommunityUrl,
+      profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
+      profileUserEmail: req.session.user[0].email,
+      user: req.session.username,
+      usuarios: await getGeDataUsuariosPerPage(req, res),
+      todosLosUsuarios: await getAllUsuarios(req, res),
+      currentPage: parseInt(req.query.page) || 1,
+      totalPages: await getTotalPagesUsuarios(req, res),
+      roles: await getGeDataRolesPerPage(req, res),
+      todosLosRoles: await getAllRoles(req, res),
+      currentPageRoles: parseInt(req.query.page) || 1,
+      totalPagesRoles: await getTotalPagesRoles(req, res),
+    });
+  }
+  else {
+    console.log("No tiene permisos para ver este recurso");
+    res.redirect('/panel_aplicaciones');
+  }
+
+
 }
 
 module.exports = {
