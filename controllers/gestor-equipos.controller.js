@@ -1,3 +1,4 @@
+const Equipo = require("../models/equipo.model");
 const Contador = require("../models/contador.model");
 const Sensor = require("../models/sensor.model");
 const Presion = require("../models/presion.model");
@@ -73,6 +74,21 @@ async function getTotalPagesContador(req, res) {
   return pages;
 }
 
+async function getTotalPagesEquipos(req, res) {
+
+  pages = 1;
+  const itemsPerPage = 10;
+  const number_registers = await Equipo.getCountAll(req, res);
+
+  console.log("number_registers " + number_registers);
+
+  if (number_registers > 0) {
+    pages = number_registers / itemsPerPage;
+  }
+
+  return pages;
+}
+
 async function getTotalPagesSensor(req, res) {
 
   pages = 1;
@@ -114,6 +130,25 @@ async function getGeDataContadorPerPage(req, res) {
   const itemsPerPage = 10; // Cantidad de elementos por página
   const offset = (page - 1) * itemsPerPage;
   const geData = [...(await Contador.getPerPage(req, res, itemsPerPage, offset))];
+
+  /*const page =  parseInt(req.query.page) || 1; // Página actual
+  const itemsPerPage = 20; // Registros por página
+
+  // Calcular el índice inicial y final de los registros
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const geData = [...(await Contador.getPerPage(startIndex, endIndex))];*/
+
+  return geData;
+}
+
+async function getGeDataEquipoPerPage(req, res) {
+
+  const page = parseInt(req.query.page) || 1; // Página actual
+  const itemsPerPage = 10; // Cantidad de elementos por página
+  const offset = (page - 1) * itemsPerPage;
+  const geData = [...(await Equipo.getPerPage(req, res, itemsPerPage, offset))];
 
   /*const page =  parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 20; // Registros por página
@@ -237,4 +272,4 @@ async function mostrarHistorico(req, res) {
 }
 
 
-module.exports = { getGeDataContador, getDataContador, getGeDataContadorPerPage, updateContador, deleteContador, getAgregaEquipo, getTotalPagesContador, getGeDataContadorMapa, verHistorico, mostrarHistorico, getGeDataContadorMapaTelemedida, getGeDataContadorMapaNoTelemedida, getGeDataSensorMapa, getGeDataCaudalimetroMapa, getGeDataSensor, getTotalPagesSensor, getGeDataSensorPerPage, getGeDataClientes };
+module.exports = { getGeDataContador, getDataContador, getGeDataContadorPerPage, updateContador, deleteContador, getAgregaEquipo, getTotalPagesContador, getGeDataContadorMapa, verHistorico, mostrarHistorico, getGeDataContadorMapaTelemedida, getGeDataContadorMapaNoTelemedida, getGeDataSensorMapa, getGeDataCaudalimetroMapa, getGeDataSensor, getTotalPagesSensor, getGeDataSensorPerPage, getGeDataClientes, getGeDataEquipoPerPage, getTotalPagesEquipos };

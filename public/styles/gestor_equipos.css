@@ -10,13 +10,13 @@ main>div {
 }
 
 .div-container {
-  width: 85%;
+  width: 99%;
   margin: auto;
 }
 
 .table-container {
   height: 100%;
-  width: 85%;
+  width: 99%;
   max-height: 65vh;
   margin: auto;
   overflow-y: scroll;
@@ -237,3 +237,42 @@ hr {
 .tab-content.active {
   display: block;
 }
+
+/***Toolbar**/
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+.toolbar-item {
+  margin-right: 10px;
+}
+
+.toolbar-item label {
+  margin-right: 5px;
+}
+
+.toolbar-item input[type="text"],
+.toolbar-item select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.toolbar-item button {
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.toolbar-item button:hover {
+  background-color: #45a049;
+}
+

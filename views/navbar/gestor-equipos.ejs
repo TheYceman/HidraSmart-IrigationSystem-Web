@@ -5,11 +5,9 @@
 
   <link rel="stylesheet" href="/styles/gestor_equipos.css">
   <script src="/scripts/gestor-equipos.js" defer></script>
-
   </head>
 
   <body>
-   
     <main>
       <h2 class="titulo_seccion">
       </h2>
@@ -22,17 +20,17 @@
       <!-- Contenido de las pestañas -->
       <div class="tab-content active" id="tabla1">
         <div class="div-container">
-
-          <button id="mostrarFormulario" class="btn">Añadir nuevo equipo</button>
-          <form action="/gestor-equipos/agregarContador" method="POST" id="miFormulario" style="display: none;">
+          <!--
+          <button id="mostrarFormulario" class="btn">Añadir nuevo equipo</button>-->
+          <!--<form action="/gestor-equipos/agregarContador" method="POST" id="miFormulario" style="display: none;">
             <label for="selector">Selecciona una opción:</label>
             <select id="selector" name="tipoEquipo">
               <option value="contador">Contador</option>
               <option value="sensor">Sensor</option>
-            </select>
+            </select>-->
 
-            <!-- Campos para el contador -->
-            <div id="camposContador" style="display: none">
+          <!-- Campos para el contador -->
+          <!--<div id="camposContador" style="display: none">
               <label for="IdeEle">IdeEle:</label>
               <input type="text" name="ideEle" required>
               <label for="calle_num">Calle/Nº:</label>
@@ -67,10 +65,10 @@
                   <% } %>
               </select>
               <button type="submit" class="btn">Añadir</button>
-            </div>
+            </div>-->
 
-            <!-- Campos para el sensor -->
-            <div id="camposSensor" style="display: none">
+          <!-- Campos para el sensor -->
+          <!-- <div id="camposSensor" style="display: none">
               <label for="IdeEle">IdeEle:</label>
               <input type="text" name="ideEle" required>
               <label for="ideSector">IdeSector:</label>
@@ -89,80 +87,186 @@
               <button type="submit" class="btn">Añadir</button>
             </div>
 
-          </form>
+          </form>-->
+          <div class="toolbar">
+            <div class="toolbar-item">
+              <label for="sector">Sector:</label>
+              <select id="sector">
+                <option value="">Todos</option>
+                <% 
+                // Crear un conjunto para almacenar los valores únicos de sector
+                let sectoresSet = new Set();
+                // Iterar sobre los contadores para añadir los valores únicos al conjunto
+                for (let contador of contadores) {
+                    sectoresSet.add(contador.sector);
+                }
+                // Iterar sobre los valores únicos del conjunto para generar las opciones
+                for (let sector of sectoresSet) { %>
+                    <option value="<%= sector %>"><%= sector %></option>
+                <% } %>
+            </select>
+            </div>
+            <div class="toolbar-item">
+              <label for="estado">Estado:</label>
+              <select id="estado">
+                <option value="">Todos</option>
+                <% 
+                // Crear un conjunto para almacenar los valores únicos de estado
+                let estadosSet = new Set();
+                // Iterar sobre los contadores para añadir los valores únicos al conjunto
+                for (let contador of contadores) {
+                    estadosSet.add(contador.estado);
+                }
+                // Iterar sobre los valores únicos del conjunto para generar las opciones
+                for (let estado of estadosSet) { %>
+                    <option value="<%= estado %>"><%= estado %></option>
+                <% } %>
+            </select>
+            </div>
+            <div class="toolbar-item">
+              <label for="search">Buscar registro:</label>
+              <input type="text" id="search" class="search-input" placeholder="Buscar">
+            </div>
+            <div class="toolbar-item">
+              <button onclick="exportToExcel()">Exportar a Excel</button>
+            </div>
+          </div>
+
           <br />
-          <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">
         </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Selección</th>
+                <th>Identificador</th>
+                <th>Sector</th>
+                <th>Ide.Elemento</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Dimensión</th>
+                <th>Q.Nominal</th>
+                <th>Tipo</th>
+                <th>Titular</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="table">
+              <% for(let contador of contadores) { %>
+                <tr data-uid="<%= contador.identificador %>">
+                  <td>
+                    <input type="checkbox" <%=contador.identificador ? 'checked' : '' %> >
+                  </td>
+                  <td>
+                    <%= contador.identificador %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="sector" data-id="<%= contador.ideElemento %>">
+                    <%= contador.ideElemento %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="sector" data-id="<%= contador.ideElemento %>">
+                    <%= contador.sector %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="marca" data-id="<%= contador.ideElemento %>">
+                    <%= contador.marca %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="modelo" data-id="<%= contador.ideElemento %>">
+                    <%= contador.modelo %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="dimension"
+                    data-id="<%= contador.ideElemento %>">
+                    <%= contador.dimension %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="Qnominal"
+                    data-id="<%= contador.ideElemento %>">
+                    <%= contador.Qnominal %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="tipo" data-id="<%= contador.ideElemento %>">
+                    <%= contador.tipo %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="titular"
+                    data-id="<%= contador.ideElemento %>">
+                    <%= contador.titular %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="estado" data-id="<%= contador.ideElemento %>">
+                    <%= contador.estado %>
+                  </td>
+                  <td>
+                    <button class="btn" id="openHistorico">Ver histórico</button>
+                    <button class="btn" onclick="updateContador('<%= contador.id %>')">Actualizar</button>
+                    <button class="btn red-btn" onclick="borrarContador('<%= contador.id %>')">Borrar</button>
+                  </td>
+                </tr>
+                <% } %>
+            </tbody>
+          </table>
+        </div>
+        <script> var todos = [];</script>
+        <% for(let contador of todosLosContadores) { %>
+          <script>
+            todos.push({ id: '<%= contador.identificador %>' });
+            //console.log(todos);
+          </script>
+          <% } %>
+            <div class="div-container">
+              <!-- Botones de paginación -->
+            </div>
+            <div class="pagination">
+              <label for="page-selector">Página:</label>
+              <select id="page-selector" onchange="window.location.href = '/gestor-equipos?page=' + this.value;">
+                <% for (let i=1; i <=totalPages; i++) { %>
+                  <option value="<%= i %>" <%=i===currentPage ? 'selected' : '' %>><%= i %>
+                  </option>
+                  <% } %>
+              </select>
+            </div>
+
+      </div>
+      </div>
+      <div class="tab-content" id="tabla2">
+        <!--Tabla sensores-->
         <div style="margin: auto;width: 85%;">
-          <p>Contadores</p>
+          <p>Sensores</p>
         </div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
                 <th>IdeEle</th>
-                <th>Calle/Nº</th>
-                <th>Cliente</th>
                 <th>Sector</th>
-                <th>Tramo</th>
-                <th>Ramal</th>
                 <th>Radio</th>
-                <th>Marca</th>
-                <th>Dimension</th>
-                <th>Qnominal</th>
-                <th>Vol. Asignado</th>
+                <th>Tipo</th>
                 <th>CoorX</th>
                 <th>CoorY</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody id="table">
-              <% for(let contador of contadores) { %>
+              <% for(let sensor of sensores) { %>
 
-                <tr data-uid="<%= contador.id %>">
+                <tr data-uid="<%= sensor.id %>">
                   <td>
-                    <%= contador.id %>
+                    <%= sensor.id %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="sector" data-id="<%= contador.id %>">
-                    <%= contador.sector %>
+                  <td contenteditable="true" class="editable" data-field="sector" data-id="<%= sensor.id %>">
+                    <%= sensor.sector %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="calle_num" data-id="<%= contador.id %>">
-                    <%= contador.calle_num %>
+                  <td contenteditable="true" class="editable" data-field="radio" data-id="<%= sensor.id %>">
+                    <%= sensor.radio %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="cliente" data-id="<%= contador.id %>">
-                    <%= contador.cliente %>
+                  <td contenteditable="true" class="editable" data-field="tipo" data-id="<%= sensor.id %>">
+                    <%= sensor.tipo %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="tramo" data-id="<%= contador.id %>">
-                    <%= contador.tramo %>
+                  <td contenteditable="true" class="editable" data-field="coorX" data-id="<%= sensor.id %>">
+                    <%= sensor.coorX %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="ramal" data-id="<%= contador.id %>">
-                    <%= contador.ramal %>
-                  </td>
-                  <td contenteditable="true" class="editable" data-field="radio" data-id="<%= contador.id %>">
-                    <%= contador.radio %>
-                  </td>
-                  <td contenteditable="true" class="editable" data-field="marca" data-id="<%= contador.id %>">
-                    <%= contador.marca %>
-                  </td>
-                  <td contenteditable="true" class="editable" data-field="dimension" data-id="<%= contador.id %>">
-                    <%= contador.dimension %>
-                  </td>
-                  <td contenteditable="true" class="editable" data-field="qnominal" data-id="<%= contador.id %>">
-                    <%= contador.qnominal %>
-                  </td>
-                  <td contenteditable="true" class="editable" data-field="volAsignado" data-id="<%= contador.id %>">
-                    <%= contador.volAsignado %>
-                  </td>
-                  <td contenteditable="true" class="editable" data-field="coorX" data-id="<%= contador.id %>">
-                    <%= contador.coorX %>
-                  </td>
-                  <td contenteditable="true" class="editable" data-field="coorY" data-id="<%= contador.id %>">
-                    <%= contador.coorY %>
+                  <td contenteditable="true" class="editable" data-field="coorY" data-id="<%= sensor.id %>">
+                    <%= sensor.coorY %>
                   </td>
                   <td>
                     <button class="btn" id="openHistorico">Ver histórico</button>
-                    <button class="btn" onclick="updateContador('<%= contador.id %>')">Actualizar</button>
-                    <button class="btn red-btn" onclick="borrarContador('<%= contador.id %>')">Borrar</button>
+                    <button class="btn" onclick="updateSensor('<%= sensor.id %>')">Actualizar</button>
+                    <button class="btn red-btn" onclick="borrarSensor('<%= sensor.id %>')">Borrar</button>
 
                   </td>
                 </tr>
@@ -171,95 +275,20 @@
             </tbody>
           </table>
         </div>
-        <script> var todos = [];</script>
-        <% for(let contador of todosLosContadores) { %>
+        <% for(let sensor of todosLosSensores) { %>
           <script>
-            todos.push({ id: '<%= contador.id %>', sector: '<%= contador.sector %>', tramo: '<%= contador.tramo %>' });
+            todos.push({ id: '<%= sensor.id %>', sector: '<%= sensor.sector %>', tramo: '<%= sensor.tipo %>' });
             //console.log(todos);
           </script>
           <% } %>
-            <div class="div-container">
+          
+            <div class="div-container">-->
               <!-- Botones de paginación -->
               <!-- 
-        
-          </div>
-        -->
-              <div class="pagination">
-                <label for="page-selector">Página:</label>
-                <select id="page-selector" onchange="window.location.href = '/gestor-equipos?page=' + this.value;">
-                  <% for (let i=1; i <=totalPages; i++) { %>
-                    <option value="<%= i %>" <%=i===currentPage ? 'selected' : '' %>><%= i %>
-                    </option>
-                    <% } %>
-                </select>
-              </div>
-
-            </div>
-
-            <!-- Tabla sensores-->
-            <div style="margin: auto;width: 85%;">
-              <p>Sensores</p>
-            </div>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>IdeEle</th>
-                    <th>Sector</th>
-                    <th>Radio</th>
-                    <th>Tipo</th>
-                    <th>CoorX</th>
-                    <th>CoorY</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody id="table">
-                  <% for(let sensor of sensores) { %>
-
-                    <tr data-uid="<%= sensor.id %>">
-                      <td>
-                        <%= sensor.id %>
-                      </td>
-                      <td contenteditable="true" class="editable" data-field="sector" data-id="<%= sensor.id %>">
-                        <%= sensor.sector %>
-                      </td>
-                      <td contenteditable="true" class="editable" data-field="radio" data-id="<%= sensor.id %>">
-                        <%= sensor.radio %>
-                      </td>
-                      <td contenteditable="true" class="editable" data-field="tipo" data-id="<%= sensor.id %>">
-                        <%= sensor.tipo %>
-                      </td>
-                      <td contenteditable="true" class="editable" data-field="coorX" data-id="<%= sensor.id %>">
-                        <%= sensor.coorX %>
-                      </td>
-                      <td contenteditable="true" class="editable" data-field="coorY" data-id="<%= sensor.id %>">
-                        <%= sensor.coorY %>
-                      </td>
-                      <td>
-                        <button class="btn" id="openHistorico">Ver histórico</button>
-                        <button class="btn" onclick="updateSensor('<%= sensor.id %>')">Actualizar</button>
-                        <button class="btn red-btn" onclick="borrarSensor('<%= sensor.id %>')">Borrar</button>
-
-                      </td>
-                    </tr>
-                    <% } %>
-
-                </tbody>
-              </table>
-            </div>
-            <% for(let sensor of todosLosSensores) { %>
-              <script>
-                todos.push({ id: '<%= sensor.id %>', sector: '<%= sensor.sector %>', tramo: '<%= sensor.tipo %>' });
-                //console.log(todos);
-              </script>
-              <% } %>
-                <div class="div-container">
-                  <!-- Botones de paginación -->
-                  <!-- 
 
   </div>
--->
-                  <div class="pagination">
+
+                <div class="pagination">
                     <label for="page-selector">Página:</label>
                     <select id="page-selector"
                       onchange="window.location.href = '/gestor-equipos?pageSensor=' + this.value;">
@@ -272,15 +301,11 @@
 
                 </div>
       </div>
-      <div class="tab-content" id="tabla2">
-        <table>
-          <!-- Contenido de la segunda pestaña -->
-        </table>
-      </div>
 
 
       <%- include('../components/common/footer.ejs') %>
     </main>
+     <!--
     <script>
       const mostrarFormularioButton = document.getElementById('mostrarFormulario');
       const miFormulario = document.getElementById('miFormulario');
@@ -301,100 +326,139 @@
         }
       });
     </script>
+ <script>
 
-    <!-- Script para la búsqueda en tiempo real -->
-    <script>
-      //Solo busca en la página actual
-      document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.getElementById("search");
+      // Obtener referencia a los selectores
+      const selectSector = document.getElementById('selectSector');
+      const selectEstado = document.getElementById('selectEstado');
 
-        searchInput.addEventListener("keyup", function () {
-          const searchTerm = this.value.toLowerCase();
+      // Agregar evento change a cada selector
+      selectSector.addEventListener('change', filtrarContadores);
+      selectEstado.addEventListener('change', filtrarContadores);
 
-          // Accede a la variable de Node.js (miVariable) y asígnala a una variable de JavaScript
+      function filtrarContadores() {
+        // Obtener valores seleccionados
+        const sectorSeleccionado = selectSector.value;
+        const estadoSeleccionado = selectEstado.value;
 
-          console.log("todos " + todos[0].id);
-          /*var contadores = <%= JSON.stringify(todosLosContadores)%>;
-          contadores=contadores.replace("&#34;", "'");
+        // Filtrar contadores según los valores seleccionados
+        const filasContadores = document.querySelectorAll('#table tbody tr');
 
-          var primerObjeto = contadores[0];
-          console.log('ID del primer objeto:', primerObjeto.id);
-          console.log('sector del primer objeto:', primerObjeto.sector);
-          console.log('tramo del primer objeto:', primerObjeto.tramo);
-        
+        filasContadores.forEach(fila => {
+          const sectorFila = fila.querySelector('[data-field="sector"]').textContent;
+          const estadoFila = fila.querySelector('[data-field="estado"]').textContent;
 
-*/
-          var found = false;
-          for (var i = 0; i < todos.length; i++) {
-            //console.log("contador['id'] " + todos[i].id + " " + searchTerm);
-            if ((todos[i].id.toLowerCase()).includes(searchTerm)) {
-              found = true;
-              break;
-            }
-
-          }
-          if (found) {
-            var pagina = (i / 10) + 1;
-            console.log("Página: " + parseInt(pagina));
-            location.href = "/gestor-equipos?page=" + parseInt(pagina);
-            //row.style.display = "";
+          if ((sectorSeleccionado === '' || sectorFila === sectorSeleccionado) &&
+            (estadoSeleccionado === '' || estadoFila === estadoSeleccionado)) {
+            fila.style.display = ''; // Mostrar fila
           } else {
-            //row.style.display = "none";
+            fila.style.display = 'none'; // Ocultar fila
           }
-
-          /*<% for (let contador of todosLosContadores) { %>
-            if (contador.id.includes(searchTerm)) {
-                found = true;
-                break;
-              }
-          <% } %>
-  
-          if (found) {
-              row.style.display = "";
-            } else {
-              row.style.display = "none";
-            }
-            */
         });
-      });
-    </script>
-    <script>
-      document.getElementById('openHistorico').addEventListener('click', function () {
-        window.open('/historico', 'Popup', 'width=600,height=400');
-      });
-    </script>
-    <script>
-      // Función para mostrar la pestaña seleccionada
-      function showTab(tabId) {
-        const tabs = document.querySelectorAll('.tab-content');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-
-        const tabLabels = document.querySelectorAll('.tab-label');
-        tabLabels.forEach(label => label.classList.remove('active'));
-        const activeLabel = document.querySelector(`.tab-label[data-tab="${tabId}"]`);
-        activeLabel.classList.add('active');
       }
     </script>
-    <script>
+    <!-- Script para la búsqueda en tiempo real -->
+              <script>
+                //Solo busca en la página actual
+                document.addEventListener("DOMContentLoaded", function () {
+                  const searchInput = document.getElementById("search");
 
-      const selector = document.getElementById("selector");
-      const camposContador = document.getElementById("camposContador");
-      const camposSensor = document.getElementById("camposSensor");
+                  searchInput.addEventListener("keyup", function () {
+                    const searchTerm = this.value.toLowerCase();
 
-      selector.addEventListener("change", function () {
-        if (selector.value === "contador") {
-          camposContador.style.display = "block";
-          camposSensor.style.display = "none";
-        } else if (selector.value === "sensor") {
-          camposContador.style.display = "none";
-          camposSensor.style.display = "block";
-        }
-      });
+                    // Accede a la variable de Node.js (miVariable) y asígnala a una variable de JavaScript
 
-    </script>
+                    console.log("todos " + todos[0].id);
+                    /*var contadores = <%= JSON.stringify(todosLosContadores)%>;
+                    contadores=contadores.replace("&#34;", "'");
+          
+                    var primerObjeto = contadores[0];
+                    console.log('ID del primer objeto:', primerObjeto.id);
+                    console.log('sector del primer objeto:', primerObjeto.sector);
+                    console.log('tramo del primer objeto:', primerObjeto.tramo);
+                  
+          
+          */
+                    var found = false;
+                    for (var i = 0; i < todos.length; i++) {
+                      //console.log("contador['id'] " + todos[i].id + " " + searchTerm);
+                      if ((todos[i].id.toLowerCase()).includes(searchTerm)) {
+                        found = true;
+                        break;
+                      }
 
-    <!--
+                    }
+                    if (found) {
+                      var pagina = (i / 10) + 1;
+                      console.log("Página: " + parseInt(pagina));
+                      location.href = "/gestor-equipos?page=" + parseInt(pagina);
+                      //row.style.display = "";
+                    } else {
+                      //row.style.display = "none";
+                    }
+
+                    /*<% for (let contador of todosLosContadores) { %>
+                      if (contador.id.includes(searchTerm)) {
+                          found = true;
+                          break;
+                        }
+                    <% } %>
+            
+                    if (found) {
+                        row.style.display = "";
+                      } else {
+                        row.style.display = "none";
+                      }
+                      */
+                  });
+                });
+              </script>
+              <script>
+                document.getElementById('openHistorico').addEventListener('click', function () {
+                  window.open('/historico', 'Popup', 'width=600,height=400');
+                });
+              </script>
+              <script>
+                // Función para mostrar la pestaña seleccionada
+                function showTab(tabId) {
+                  const tabs = document.querySelectorAll('.tab-content');
+                  tabs.forEach(tab => tab.classList.remove('active'));
+                  document.getElementById(tabId).classList.add('active');
+
+                  const tabLabels = document.querySelectorAll('.tab-label');
+                  tabLabels.forEach(label => label.classList.remove('active'));
+                  const activeLabel = document.querySelector(`.tab-label[data-tab="${tabId}"]`);
+                  activeLabel.classList.add('active');
+                }
+              </script>
+              <script>
+
+                const selector = document.getElementById("selector");
+                const camposContador = document.getElementById("camposContador");
+                const camposSensor = document.getElementById("camposSensor");
+
+                selector.addEventListener("change", function () {
+                  if (selector.value === "contador") {
+                    camposContador.style.display = "block";
+                    camposSensor.style.display = "none";
+                  } else if (selector.value === "sensor") {
+                    camposContador.style.display = "none";
+                    camposSensor.style.display = "block";
+                  }
+                });
+
+              </script>
+              <script>
+                function exportToExcel() {
+                  // Aquí puedes implementar la lógica para exportar a Excel
+                  // Por ejemplo, puedes usar una librería como SheetJS: https://sheetjs.com/
+                  // O puedes crear un archivo CSV con los datos y forzar la descarga del mismo
+                  alert("Función de exportar a Excel");
+                }
+
+              </script>
+
+              <!--
 //Código para exportar una tabla a excel
 
 const excel = require('exceljs');
@@ -469,4 +533,3 @@ app.get('/generar-excel', (req, res) => {
     -->
 
   </body>
-  
