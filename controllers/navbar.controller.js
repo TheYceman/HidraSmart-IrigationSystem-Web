@@ -6,11 +6,12 @@ const {
 const { getGeData } = require("../controllers/visor-datos.controller");
 
 const { getGeDataContador } = require("../controllers/gestor-equipos.controller");
-const { getGeDataContadorPerPage } = require("../controllers/gestor-equipos.controller");
+const { getGeDataEquipoPerPage } = require("../controllers/gestor-equipos.controller");
 const { getGeDataSensorPerPage } = require("../controllers/gestor-equipos.controller");
 const { getTotalPagesSensor } = require("../controllers/gestor-equipos.controller");
 const { getTotalPagesContador } = require("../controllers/gestor-equipos.controller");
-const { getAll } = require("../models/contador.model");
+const { getTotalPagesEquipos } = require("../controllers/gestor-equipos.controller");
+const { getAll } = require("../models/equipo.model");
 const { getAllSensores } = require("../models/sensor.model");
 const { getGeDataClientes } = require("../controllers/gestor-equipos.controller");
 
@@ -206,10 +207,10 @@ async function getGestorEquipos(req, res) {
     profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     user: req.session.username,
-    contadores: await getGeDataContadorPerPage(req, res),
+    contadores: await getGeDataEquipoPerPage(req, res),
     todosLosContadores: await getAll(req, res),
     currentPage: parseInt(req.query.page) || 1,
-    totalPages: await getTotalPagesContador(req, res),
+    totalPages: await getTotalPagesEquipos(req, res),
     sensores: await getGeDataSensorPerPage(req, res),
     currentPageSensor: parseInt(req.query.pageSensor) || 1,
     totalPagesSensor: await getTotalPagesSensor(req, res),
