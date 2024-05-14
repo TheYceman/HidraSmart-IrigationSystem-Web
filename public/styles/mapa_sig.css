@@ -9,9 +9,14 @@
   z-index: 99;
 }
 
+.div-container {
+  width:90%;
+  margin:auto;
+}
+
 #map {
   width: 83vw;
-  height: 70vh;
+  height: 79vh;
   z-index: 0;
 }
 
@@ -19,11 +24,11 @@
   position: absolute;
   /*margin-top: 6vh;
   margin-right: 8.55vw;*/
-  top:52px;
+  top:62px;
   right: 0px;
   display: inline-block;
   height: auto;
-  background: none rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.9); 
   border: 0px;
   text-transform: none;
   appearance: none;
@@ -31,7 +36,7 @@
   user-select: none;
   border-radius: 2px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
-  padding: 0 1vw;
+  padding: 1 1vw;
   z-index: 99;
   font-size: 0.8rem;
   display: flex;
@@ -79,8 +84,10 @@
 
 .toolbar {
   position: absolute;
-  top: 10px;
-  left: 200px;
+  /*margin-top: 6vh;
+  margin-right: 8.55vw;*/
+  top:10px;
+  right: 0px;
   z-index: 9999;
   background-color: white;
   padding: 10px;
@@ -130,6 +137,8 @@
   display: flex;
   flex-direction: row;
   width: 100%;
+  padding: 10px;
+  opacity: 1;
 }
 
 /* CSS checkbox lista presión*/
@@ -285,4 +294,14 @@
 
 .checkbox_icon_label_item2_3_7 {
   background-color: red;
+}
+
+/* Estilo para mover el control de pantalla completa */
+.gm-fullscreen-control {
+  top: auto !important;
+  bottom: 20px;
+  left: 0;
+  right: auto !important;
+  margin: 10px;
+  z-index: 1;
 }

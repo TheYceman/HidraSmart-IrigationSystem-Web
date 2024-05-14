@@ -30,7 +30,7 @@ class Sensor {
     return geTotal[0].total;
   }
 
-  static async getAllSensores(res, req) {
+  static async getAllSensores(req, res) {
 
     const queryString = "SELECT * FROM ge_sensores;";
     const values = [];
@@ -79,7 +79,7 @@ class Sensor {
     return geSensor;
   }
 
-  static async getFilteredData(res, req, tipo, idSensor, fechaInicio, fechaFin) {
+  static async getFilteredData(req, res, tipo, idSensor, fechaInicio, fechaFin) {
 
     const queryString = `SELECT * FROM dat_${tipo} WHERE ideSensor="${idSensor}" AND instante > "${fechaInicio
       .slice(0, 19)

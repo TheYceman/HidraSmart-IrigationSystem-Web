@@ -1,13 +1,13 @@
 const Sensor = require("../models/sensor.model");
 
 async function getGeData(req, res) {
-  const geData = [...(await Sensor.getAllSensores())];
+  const geData = [...(await Sensor.getAllSensores(req, res))];
   return geData;
 }
 
 async function getData(req, res) {
   const params = req.query;
-  let result = await Sensor.getFilteredData(
+  let result = await Sensor.getFilteredData(req, res,
     params.tipo,
     params.idSensor,
     params.fechaInicio,

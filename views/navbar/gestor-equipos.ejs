@@ -2,11 +2,9 @@
   <link rel="stylesheet" href="/styles/navbar.css">
   <link rel="stylesheet" href="/styles/socialbar.css">
   <script src="/scripts/navbar.js" defer></script>
-
   <link rel="stylesheet" href="/styles/gestor_equipos.css">
   <script src="/scripts/gestor-equipos.js" defer></script>
   </head>
-
   <body>
     <main>
       <h2 class="titulo_seccion">
@@ -16,7 +14,6 @@
         <div class="tab-label" data-tab="tabla2" onclick="showTab('tabla2')">Elementos</div>
         <!-- Agrega más pestañas según sea necesario -->
       </div>
-
       <!-- Contenido de las pestañas -->
       <div class="tab-content active" id="tabla1">
         <div class="div-container">
@@ -131,8 +128,7 @@
               <button onclick="exportToExcel()">Exportar a Excel</button>
             </div>
           </div>
-
-          <br />
+         <br />
         </div>
         <div class="table-container">
           <table>
@@ -281,13 +277,9 @@
             //console.log(todos);
           </script>
           <% } %>
-          
-            <div class="div-container">-->
+
               <!-- Botones de paginación -->
-              <!-- 
-
-  </div>
-
+              
                 <div class="pagination">
                     <label for="page-selector">Página:</label>
                     <select id="page-selector"
@@ -298,14 +290,9 @@
                         <% } %>
                     </select>
                   </div>
-
                 </div>
       </div>
-
-
-      <%- include('../components/common/footer.ejs') %>
     </main>
-     <!--
     <script>
       const mostrarFormularioButton = document.getElementById('mostrarFormulario');
       const miFormulario = document.getElementById('miFormulario');
@@ -325,8 +312,7 @@
           miFormulario.style.display = 'none';
         }
       });
-    </script>
- <script>
+
 
       // Obtener referencia a los selectores
       const selectSector = document.getElementById('selectSector');
@@ -531,5 +517,5 @@ app.get('/generar-excel', (req, res) => {
 
 
     -->
-
+    <%- include('../components/common/footer.ejs') %>
   </body>
