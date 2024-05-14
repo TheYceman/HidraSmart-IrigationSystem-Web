@@ -87,7 +87,7 @@ class Equipo {
         return geTotal[0].total;
     }
 
-    static async getAll(res, req) {
+    static async getAllEquipos(req, res) {
 
         const queryString = "SELECT " +
             "ge_contadores.ideEle, " +

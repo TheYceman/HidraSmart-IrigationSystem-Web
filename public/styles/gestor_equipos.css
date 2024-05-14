@@ -226,7 +226,8 @@ hr {
 
 .tab-content {
   display: none;
-  height: 100vw;
+  /*height: 100vw;
+  background-color: #007bff;*/
 }
 
 /* Estilo activo para la pestaña seleccionada */

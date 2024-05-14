@@ -11,7 +11,8 @@ const { getGeDataSensorPerPage } = require("../controllers/gestor-equipos.contro
 const { getTotalPagesSensor } = require("../controllers/gestor-equipos.controller");
 const { getTotalPagesContador } = require("../controllers/gestor-equipos.controller");
 const { getTotalPagesEquipos } = require("../controllers/gestor-equipos.controller");
-const { getAll } = require("../models/equipo.model");
+const { getAllEquipos } = require("../models/equipo.model");
+const { getAll } = require("../models/contador.model");
 const { getAllSensores } = require("../models/sensor.model");
 const { getGeDataClientes } = require("../controllers/gestor-equipos.controller");
 
@@ -208,7 +209,7 @@ async function getGestorEquipos(req, res) {
     profileUserEmail: req.session.user[0].email,
     user: req.session.username,
     contadores: await getGeDataEquipoPerPage(req, res),
-    todosLosContadores: await getAll(req, res),
+    todosLosContadores: await getAllEquipos(req, res),
     currentPage: parseInt(req.query.page) || 1,
     totalPages: await getTotalPagesEquipos(req, res),
     sensores: await getGeDataSensorPerPage(req, res),

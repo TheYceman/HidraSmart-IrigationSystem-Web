@@ -115,6 +115,37 @@ body {
     margin-left: 5px;
 }
 
+/* Estilo para el texto del botón SAIH */
+/* Estilo para el texto del botón SAIH */
+.head_text_button_sinac {
+    font-size: 14px;
+    /* Tamaño de fuente más pequeño */
+    font-weight: bold;
+    text-decoration: none;
+    color: #3fa7fc;
+    /* Color del texto */
+    background-color: #e3f2fd;
+    /* Nuevo color de fondo del botón */
+    padding: 4px 8px;
+    /* Espaciado interno del botón reducido */
+    border-radius: 2px;
+    /* Bordes redondeados */
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Estilo para cambiar el cursor al pasar sobre el botón */
+#button-sinac {
+    cursor: pointer;
+}
+
+/* Estilo para cambiar el cursor al pasar sobre el botón */
+.head_text_button_sinac:hover {
+    background-color:#2b2b2b;
+    /* Cambia el color de fondo al pasar sobre el botón */
+}
+
+
 #button-log-out {
 
     width: 90%;
@@ -125,7 +156,7 @@ body {
 
 .head_image_button_logout {
     height: 100%;
-    ;
+    
 }
 
 #button-log-out {
