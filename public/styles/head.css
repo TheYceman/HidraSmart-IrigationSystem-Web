@@ -104,9 +104,8 @@ body {
     width: 60%;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     margin-top: 5px;
-
 }
 
 .head_image_button_sinac {
@@ -131,7 +130,7 @@ body {
     border-radius: 2px;
     /* Bordes redondeados */
     display: inline-block;
-    margin-right: 10px;
+    margin: 0px;
 }
 
 /* Estilo para cambiar el cursor al pasar sobre el botón */
