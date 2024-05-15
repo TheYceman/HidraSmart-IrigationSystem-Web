@@ -220,9 +220,43 @@
       </div>
       </div>
       <div class="tab-content" id="tabla2">
+        
         <!--Tabla sensores-->
-        <div style="margin: auto;width: 85%;">
-          <p>Sensores</p>
+
+        <div class="toolbar">
+          <div class="toolbar-item">
+            <label for="sector2">Sector:</label>
+            <select id="sector2">
+              <option value="">Todos</option>
+            </select>
+          </div>
+
+          <div class="toolbar-item">
+            <label for="tipoContador2">Tipo de Contador:</label>
+            <select id="tipoContador2">
+              <option value="">Todos</option>
+            </select>
+          </div>
+
+             <div class="toolbar-item">
+            <label for="operario2">Operario:</label>
+            <select id="operario2">
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <div class="toolbar-item">
+            <label for="estado2">Estado:</label>
+            <select id="estado2">
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <div class="toolbar-item">
+            <label for="search">Buscar registro:</label>
+            <input type="text" id="search" class="search-input" placeholder="Buscar">
+          </div>
+          <div class="toolbar-item">
+            <button onclick="exportToExcel()">Exportar a Excel</button>
+          </div>
         </div>
         <div class="table-container">
           <table>

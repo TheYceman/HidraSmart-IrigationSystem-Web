@@ -72,12 +72,12 @@ router.get('/info-meteo', Auth.requireLogin, function (req, res, html) {
     navbarController.getInfoMeteo(req, res);
 });
 
-router.get('/demandas-cultivos', Auth.requireLogin, function (req, res, html) {
+router.get('/gestor-cultivos', Auth.requireLogin, function (req, res, html) {
     console.log(req.session);
     navbarController.getDemandasCultivos(req, res);
 });
 
-router.get('/plan-riego', Auth.requireLogin, function (req, res, html) {
+router.get('/planificador-riego', Auth.requireLogin, function (req, res, html) {
     console.log(req.session);
     navbarController.getPlanRiego(req, res);
 });

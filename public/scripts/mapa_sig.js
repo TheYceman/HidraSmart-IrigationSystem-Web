@@ -192,10 +192,50 @@ function paint_counter_bbdd() {
     });
     // Agregar evento de clic al marker
     markerCounter.addListener("click", function (event) {
-      show_infowindow_plots(event, contador.id);
+
+      var content = `
+    <div class="infowindow-content">
+        <div class="infowindow-header">
+            <h2>Contador `+ contador.id + `</h2>
+        </div>
+        <div class="infowindow-body">
+            <ul>
+                <li><strong>Sector:</strong> S3</li>
+                <li><strong>Tramo:</strong> Valor 2</li>
+                <li><strong>Vol. Acum (m3):</strong> Valor 3</li>
+                <li><strong>Vol. Rest (m3):</strong> Valor 1</li>
+                <li><strong>Caudal (m3/h):</strong> Valor 2</li>
+                <li><strong>Presión (mca):</strong> Valor 3</li>
+                <li><strong>Parcela:</strong> Valor 1</li>
+                <li class="infowindow-section-title">DATOS IRRINET</li>
+                <li><strong>Vol. Global (m3):</strong> Valor 3</li>
+                <li><strong>Caudal (m3/h):</strong> Valor 1</li>
+                <li><strong>Vol. Parc (m3):</strong> Valor 2</li>
+                <li><strong>Vol. Rest (m3):</strong> Valor 3</li>
+                <li><strong>Válvula:</strong></li>
+            </ul>
+        </div>
+    </div>
+`;
+      show_infowindow_plots(event, content);
       document.getElementById("informacion").style.display = "block";
-      var content = "<a id='leyendaLabel'><b> Contador " + contador.id + "</b></a><p>Este es el contenido de la ventana modal:<ul><li>Atributo 1: Valor 1</li><li>Atributo 2: Valor 2</li><li>Atributo 3: Valor 3</li>" +
-        "</ul>También puedes agregar enlaces, imágenes, formularios, etc.</p>";
+      var content = "<div class='leyenda-container'>";
+      content += "<span id='leyendaLabel'><b>Contador " + contador.id + "</b></span>";
+      content += "<ul class='leyenda-list'>";
+      content += "<li><span class='leyenda-item'>Sector:</span> S3</li>";
+      content += "<li><span class='leyenda-item'>Tramo:</span> Valor 2</li>";
+      content += "<li><span class='leyenda-item'>Vol. Acum (m3):</span> Valor 3</li>";
+      content += "<li><span class='leyenda-item'>Vol. Rest (m3):</span> Valor 1</li>";
+      content += "<li><span class='leyenda-item'>Caudal (m3/h):</span> Valor 2</li>";
+      content += "<li><span class='leyenda-item'>Presión (mca):</span> Valor 3</li>";
+      content += "<li><span class='leyenda-item'>Parcela:</span> Valor 1</li>";
+      content += "<li class='leyenda-section-title'>DATOS IRRINET</li>";
+      content += "<li><span class='leyenda-item'>Vol. Global (m3):</span> Valor 3</li>";
+      content += "<li><span class='leyenda-item'>Caudal (m3/h):</span> Valor 1</li>";
+      content += "<li><span class='leyenda-item'>Vol. Parc (m3):</span> Valor 2</li>";
+      content += "<li><span class='leyenda-item'>Vol. Rest (m3):</span> Valor 3</li>";
+      content += "<li><span class='leyenda-item'>Válvula:</span></li>";
+      content += "</ul></div>";
       document.getElementById("informacion").innerHTML = content;
     });
     // Agregar el marker al arreglo
@@ -908,15 +948,20 @@ function add_arrowhead(polyline) {
 }
 
 function toggleLeyenda() {
-  var leyenda = document.getElementById('leyenda');
+  var leyenda = document.getElementById('leyenda'); // Asegúrate de que este es el ID de tu capa de leyenda
+  var button = document.getElementById('toggle-button');
+  var icon = document.getElementById('leyenda-icon');
 
-  if (leyenda.style.display === 'none') {
-    document.getElementById('toggle-button').textContent = 'Ocultar Leyenda';
+  if (leyenda.style.display === 'none' || leyenda.style.display === '') {
+    icon.classList.add('fa-eye-slash');
+    icon.classList.remove('fa-eye');
+    button.querySelector('span').textContent = 'Leyenda';
     leyenda.style.display = 'block'; // Muestra la capa leyenda
   } else {
-    document.getElementById('toggle-button').textContent = 'Mostrar Leyenda';
+    icon.classList.add('fa-eye');
+    icon.classList.remove('fa-eye-slash');
+    button.querySelector('span').textContent = 'Leyenda';
     leyenda.style.display = 'none'; // Oculta la capa leyenda
-
   }
 }
 
