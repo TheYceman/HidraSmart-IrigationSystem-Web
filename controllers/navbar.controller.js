@@ -1,22 +1,20 @@
-const {
-  getRedData,
-  getUsuariosData,
-} = require("../data/placeholder_data");
+//const {  getRedData,  getUsuariosData,} = require("../data/placeholder_data");
 
 const { getGeData } = require("../controllers/visor-datos.controller");
+const { getGeDataRiego } = require("../controllers/planificador-riego.controller");
 
-const { getGeDataContador } = require("../controllers/gestor-equipos.controller");
+//const { getGeDataContador } = require("../controllers/gestor-equipos.controller");
 const { getGeDataEquipoPerPage } = require("../controllers/gestor-equipos.controller");
 const { getGeDataSensorPerPage } = require("../controllers/gestor-equipos.controller");
 const { getTotalPagesSensor } = require("../controllers/gestor-equipos.controller");
-const { getTotalPagesContador } = require("../controllers/gestor-equipos.controller");
+//const { getTotalPagesContador } = require("../controllers/gestor-equipos.controller");
 const { getTotalPagesEquipos } = require("../controllers/gestor-equipos.controller");
 const { getAllEquipos } = require("../models/equipo.model");
 const { getAll } = require("../models/contador.model");
 const { getAllSensores } = require("../models/sensor.model");
 const { getGeDataClientes } = require("../controllers/gestor-equipos.controller");
 
-const { getGeDataUsuario } = require("../controllers/gestor-usuarios.controller");
+//const { getGeDataUsuario } = require("../controllers/gestor-usuarios.controller");
 const { getGeDataUsuariosPerPage } = require("../controllers/gestor-usuarios.controller");
 const { getTotalPagesUsuarios } = require("../controllers/gestor-usuarios.controller");
 const { getAllUsuarios } = require("../models/usuario.model");
@@ -25,12 +23,10 @@ const { getGeDataRolesPerPage } = require("../controllers/gestor-roles.controlle
 const { getTotalPagesRoles } = require("../controllers/gestor-roles.controller");
 const { getAllRoles } = require("../models/rol.model");
 
-const { getGeDataPeticion } = require("../controllers/gestor-peticiones.controller");
+//const { getGeDataPeticion } = require("../controllers/gestor-peticiones.controller");
 const { getGeDataPeticionesPerPage } = require("../controllers/gestor-peticiones.controller");
 const { getTotalPagesPeticiones } = require("../controllers/gestor-peticiones.controller");
 const { getAllPeticiones } = require("../models/peticion.model");
-
-
 
 
 const { runQuery } = require("../data/bbdd-connector");
@@ -147,7 +143,7 @@ async function getEstadoRed(req, res) {
 }
 
 async function getInfoMeteo(req, res) {
-  res.render("navbar/visor-datos", {
+  res.render("navbar/info-meteo", {
     headImage: req.session.headImage,
     navIndex: 4,
     navGroup: 1,
@@ -158,13 +154,13 @@ async function getInfoMeteo(req, res) {
     profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
-    geData: await getGeData(),
+    //geData: await getGeData(),
     user: req.session.username,
   });
 }
 
 async function getDemandasCultivos(req, res) {
-  res.render("navbar/visor-datos", {
+  res.render("navbar/gestor-cultivos", {
     headImage: req.session.headImage,
     navIndex: 5,
     navGroup: 1,
@@ -181,7 +177,7 @@ async function getDemandasCultivos(req, res) {
 }
 
 async function getPlanRiego(req, res) {
-  res.render("navbar/visor-datos", {
+  res.render("navbar/planificador-riego", {
     headImage: req.session.headImage,
     navIndex: 6,
     navGroup: 1,
@@ -192,7 +188,7 @@ async function getPlanRiego(req, res) {
     profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
-    geData: await getGeData(),
+    getGeDataRiego: await getGeDataRiego(),
     user: req.session.username,
   });
 }

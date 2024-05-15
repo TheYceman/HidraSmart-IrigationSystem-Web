@@ -1,0 +1,134 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/socialbar.css">
+    <script src="/scripts/navbar.js" defer></script>
+    <script src="/scripts/planificador-riego.js" defer></script>
+    <link rel="stylesheet" href="/styles/planificador-riego.css">
+    </head>
+
+    <body>
+        <main>
+            <h2 class="titulo_seccion">
+            </h2>
+            <div class="tab-labels">
+                <div class="tab-label active" data-tab="peticiones" onclick="showTab('peticiones')">Peticiones de agua
+                </div>
+                <div class="tab-label" data-tab="lectura" onclick="showTab('lectura')">Lectura contadores</div>
+                <div class="tab-label" data-tab="control" onclick="showTab('control')">Control de maniobras</div>
+                <!-- Agrega más pestañas según sea necesario -->
+            </div>
+
+            <!-- Contenido de las pestañas -->
+            <div class="tab-content active" id="peticiones">
+                <div id="data-viewer">
+                    <div class="div-container">
+                        <section id="filtros">
+                            <article id="selectores">
+                                <div>
+                                    <label for="sector-dropdown">Sectores</label>
+                                    <select id="sector-dropdown" onchange="updateElements()">
+                                        <option selected value="0">Todos</option>
+                                        <option value="S1">Sector 1</option>
+                                        <option value="S2">Sector 2</option>
+                                        <option value="S3">Sector 3</option>
+                                        <option value="S4">Sector 4</option>
+                                        <option value="S5">Sector 5</option>
+                                        <option value="S6">Sector 6</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="tipo-dropdown">Tipo</label>
+                                    <select id="tipo-dropdown" onchange="updateElements()">
+                                        <option selected value="todos">Todos</option>
+                                        <option value="caudalimetro">Caudalímetro</option>
+                                        <option value="nivel">Sensor de nivel</option>
+                                        <option value="presion">Sensor de presión</option>
+                                        <option value="valvula">Válvula</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="fecha-inicio">Inicio</label>
+                                    <input type="datetime-local" id="fecha-inicio" max="<%= today %>"
+                                        onchange="updateTime(this)" />
+                                </div>
+                                <div>
+                                    <label for="fecha-fin">Fin</label>
+                                    <input type="datetime-local" id="fecha-fin" max="<%= today %>"
+                                        onchange="updateTime(this)" />
+                                </div>
+                                <button class="btn" onclick="paintGraph()">Cargar datos</button>
+                            </article>
+                            <article id="lista-elementos">
+                                <ul>
+                                    <% for (element of getGeDataRiego) { %>
+                                        <li id="<%= element.id %>" data-sector="<%= element.sector %>"
+                                            data-tipo="<%= element.tipo %>" data-coorX="<%- element.coorX %>"
+                                            data-coorY="<%- element.coorY %>" onclick="selectElement(this)">
+                                            <%= element.id %>
+                                        </li>
+                                        <% } %>
+                                </ul>
+                            </article>
+                            <article id="selectores">
+                                <div class="contenedor">
+                                    <div class="fila">
+                                        <table id="tablaDatos">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha Inicio</th>
+                                                    <th>Hora Inicio</th>
+                                                    <th>Hora Fin</th>
+                                                    <th>Caudal</th>
+                                                    <th>Vol.Acum</th>
+                                                    <th>Vol.Parcial</th>
+                                                    <th>Vol.Restante</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Aquí se generarán dinámicamente las filas de la tabla -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="contenido">
+                                            <button id="btnAddTurno">Añadir Turno</button>
+                                            <button id="btnActualizar">Actualizar</button>
+                                            <button id="btnSmartMap">SmartMap</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </article>
+                        </section>
+                        <section id="highchart-graph"></section>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content active" id="lectura">
+                <div class="div-container">
+                </div>
+            </div>
+            <div class="tab-content active" id="control">
+                <div class="div-container">
+                </div>
+            </div>
+        </main>
+        <script>
+            // Función para mostrar la pestaña seleccionada
+            function showTab(tabId) {
+                const tabs = document.querySelectorAll('.tab-content');
+                tabs.forEach(tab => tab.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+
+                const tabLabels = document.querySelectorAll('.tab-label');
+                tabLabels.forEach(label => label.classList.remove('active'));
+                const activeLabel = document.querySelector(`.tab-label[data-tab="${tabId}"]`);
+                activeLabel.classList.add('active');
+            }
+        </script>
+        <%- include('../components/common/footer.ejs') %>
+    </body>
+
+    </html>
