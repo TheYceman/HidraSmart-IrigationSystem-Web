@@ -5,11 +5,13 @@ const { getGeDataRiego } = require("../controllers/planificador-riego.controller
 
 //const { getGeDataContador } = require("../controllers/gestor-equipos.controller");
 const { getGeDataEquipoPerPage } = require("../controllers/gestor-equipos.controller");
+const { getGeDataElementoPerPage } = require("../controllers/gestor-equipos.controller");
 const { getGeDataSensorPerPage } = require("../controllers/gestor-equipos.controller");
 const { getTotalPagesSensor } = require("../controllers/gestor-equipos.controller");
 //const { getTotalPagesContador } = require("../controllers/gestor-equipos.controller");
 const { getTotalPagesEquipos } = require("../controllers/gestor-equipos.controller");
 const { getAllEquipos } = require("../models/equipo.model");
+const { getAllElementos } = require("../models/elemento.model");
 const { getAll } = require("../models/contador.model");
 const { getAllSensores } = require("../models/sensor.model");
 const { getGeDataClientes } = require("../controllers/gestor-equipos.controller");
@@ -213,6 +215,8 @@ async function getGestorEquipos(req, res) {
     totalPagesSensor: await getTotalPagesSensor(req, res),
     todosLosSensores: await getAllSensores(req, res),
     clientes: await getGeDataClientes(req, res),
+    todosLosElementos: await getAllElementos(req, res),
+    equipos: await getGeDataElementoPerPage(req, res),
   });
 }
 

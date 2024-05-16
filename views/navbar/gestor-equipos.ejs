@@ -88,7 +88,7 @@
           <div class="toolbar">
             <div class="toolbar-item">
               <label for="sector">Sector:</label>
-              <select id="sector">
+              <select id="selectSector">
                 <option value="">Todos</option>
                 <% 
                 // Crear un conjunto para almacenar los valores únicos de sector
@@ -105,7 +105,7 @@
             </div>
             <div class="toolbar-item">
               <label for="estado">Estado:</label>
-              <select id="estado">
+              <select id="selectEstado">
                 <option value="">Todos</option>
                 <% 
                 // Crear un conjunto para almacenar los valores únicos de estado
@@ -128,7 +128,6 @@
               <button onclick="exportToExcel()">Exportar a Excel</button>
             </div>
           </div>
-         <br />
         </div>
         <div class="table-container">
           <table>
@@ -230,14 +229,12 @@
               <option value="">Todos</option>
             </select>
           </div>
-
           <div class="toolbar-item">
             <label for="tipoContador2">Tipo de Contador:</label>
             <select id="tipoContador2">
               <option value="">Todos</option>
             </select>
           </div>
-
              <div class="toolbar-item">
             <label for="operario2">Operario:</label>
             <select id="operario2">
@@ -262,50 +259,51 @@
           <table>
             <thead>
               <tr>
-                <th>IdeEle</th>
+                <th>Selección</th>
+                <th>Identificador</th>
                 <th>Sector</th>
-                <th>Radio</th>
                 <th>Tipo</th>
-                <th>CoorX</th>
-                <th>CoorY</th>
+                <th>Ide.Tramo</th>
+                <th>Estado</th>
+                <th>Observaciones</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody id="table">
-              <% for(let sensor of sensores) { %>
-
-                <tr data-uid="<%= sensor.id %>">
+              <% for(let contador of equipos) { %>
+                <tr data-uid="<%= contador.identificador %>">
                   <td>
-                    <%= sensor.id %>
+                    <input type="checkbox" <%=contador.identificador ? 'checked' : '' %> >
                   </td>
-                  <td contenteditable="true" class="editable" data-field="sector" data-id="<%= sensor.id %>">
-                    <%= sensor.sector %>
+                  <td>
+                    <%= contador.identificador %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="radio" data-id="<%= sensor.id %>">
-                    <%= sensor.radio %>
+                  <td contenteditable="true" class="editable" data-field="sector" data-id="<%= contador.identificador %>">
+                    <%= contador.sector %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="tipo" data-id="<%= sensor.id %>">
-                    <%= sensor.tipo %>
+                  <td contenteditable="true" class="editable" data-field="tipo" data-id="<%= contador.identificador %>">
+                    <%= contador.tipo %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="coorX" data-id="<%= sensor.id %>">
-                    <%= sensor.coorX %>
+                  <td contenteditable="true" class="editable" data-field="marca" data-id="<%= contador.identificador %>">
+                    <%= contador.tramo %>
                   </td>
-                  <td contenteditable="true" class="editable" data-field="coorY" data-id="<%= sensor.id %>">
-                    <%= sensor.coorY %>
+                  <td contenteditable="true" class="editable" data-field="estado" data-id="<%= contador.identificador %>">
+                    <%= contador.estado %>
+                  </td>
+                  <td contenteditable="true" class="editable" data-field="modelo" data-id="<%= contador.identificador %>">
+                    <%= contador.observaciones %>
                   </td>
                   <td>
                     <button class="btn" id="openHistorico">Ver histórico</button>
-                    <button class="btn" onclick="updateSensor('<%= sensor.id %>')">Actualizar</button>
-                    <button class="btn red-btn" onclick="borrarSensor('<%= sensor.id %>')">Borrar</button>
-
+                    <button class="btn" onclick="updateContador('<%= contador.id %>')">Actualizar</button>
+                    <button class="btn red-btn" onclick="borrarContador('<%= contador.id %>')">Borrar</button>
                   </td>
                 </tr>
                 <% } %>
-
             </tbody>
           </table>
         </div>
-        <% for(let sensor of todosLosSensores) { %>
+        <% for(let sensor of todosLosElementos) { %>
           <script>
             todos.push({ id: '<%= sensor.id %>', sector: '<%= sensor.sector %>', tramo: '<%= sensor.tipo %>' });
             //console.log(todos);
@@ -328,24 +326,23 @@
       </div>
     </main>
     <script>
-      const mostrarFormularioButton = document.getElementById('mostrarFormulario');
-      const miFormulario = document.getElementById('miFormulario');
+      //const mostrarFormularioButton = document.getElementById('mostrarFormulario');
+      //const miFormulario = document.getElementById('miFormulario');
 
-      mostrarFormularioButton.addEventListener('click', () => {
-        // Cambia la visibilidad del formulario cuando se hace clic en el botón
-        if (miFormulario.style.display === 'none') {
-          miFormulario.style.display = 'block';
-          if (selector.value === "contador") {
-            camposContador.style.display = "block";
-            camposSensor.style.display = "none";
-          } else if (selector.value === "sensor") {
-            camposContador.style.display = "none";
-            camposSensor.style.display = "block";
-          }
-        } else {
-          miFormulario.style.display = 'none';
-        }
-      });
+      //mostrarFormularioButton.addEventListener('click', () => {
+      //  if (miFormulario.style.display === 'none') {
+      //    miFormulario.style.display = 'block';
+      //    if (selector.value === "contador") {
+      //      camposContador.style.display = "block";
+      //      camposSensor.style.display = "none";
+      //    } else if (selector.value === "sensor") {
+      //      camposContador.style.display = "none";
+      //      camposSensor.style.display = "block";
+      //    }
+      //  } else {
+      //    miFormulario.style.display = 'none';
+      //  }
+      //});
 
 
       // Obtener referencia a los selectores
@@ -453,7 +450,7 @@
               </script>
               <script>
 
-                const selector = document.getElementById("selector");
+                /*const selector = document.getElementById("selector");
                 const camposContador = document.getElementById("camposContador");
                 const camposSensor = document.getElementById("camposSensor");
 
@@ -465,7 +462,7 @@
                     camposContador.style.display = "none";
                     camposSensor.style.display = "block";
                   }
-                });
+                });*/
 
               </script>
               <script>
