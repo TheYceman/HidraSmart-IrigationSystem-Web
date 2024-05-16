@@ -17,7 +17,6 @@
                 <div class="tab-label" data-tab="control" onclick="showTab('control')">Control de maniobras</div>
                 <!-- Agrega más pestañas según sea necesario -->
             </div>
-
             <!-- Contenido de las pestañas -->
             <div class="tab-content active" id="peticiones">
                 <div id="data-viewer">
@@ -26,7 +25,7 @@
                             <article id="selectores">
                                 <div>
                                     <label for="fecha-inicio">Día</label>
-                                    <input type="datetime-local" id="fecha-inicio" max="<%= today %>"/>
+                                    <input type="datetime-local" id="fecha-inicio" max="<%= today %>" />
                                 </div>
                                 <div>
                                     <label for="sector-dropdown">Sector</label>
@@ -67,7 +66,7 @@
                             </article>
                             <article id="selectores2">
                                 <div class="contenedor">
-                                    <div style="width: 100%;">
+                                    <div class="table-container">
                                         <table id="tablaDatos">
                                             <thead>
                                                 <tr>
@@ -100,31 +99,186 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                             </article>
                         </section>
                         <section id="containerChart" class="clearfix">
                             <div class="container-left">
                                 <!-- Contenido de la primera parte -->
-                                <ul id="selected-elements"></ul>
+                                <div class="selected-elements-container">
+                                    <h4>Contadores Seleccionados</h4>
+                                    <ul id="selected-elements"></ul>
+                                </div>
                             </div>
                             <div class="container-right">
                                 <!-- Contenido de la segunda parte, incluido el gráfico Highcharts -->
                                 <div id="highchart-graph"></div>
                             </div>
                         </section>
-                        
-                        
                     </div>
                 </div>
             </div>
-            <div class="tab-content active" id="lectura">
-                <div class="div-container">
+            <div class="tab-content" id="lectura">
+                <div id="data-viewer">
+                    <div class="div-container">
+                        <section id="filtros">
+                            <article id="selectores">
+                                <div>
+                                    <label for="fecha-inicio">Seleccione día</label>
+                                    <input type="datetime-local" id="fecha-inicio" max="<%= today %>" />
+                                </div>
+                                <div>
+                                    <label for="sector-dropdown">Sector</label>
+                                    <select id="sector-dropdown" onchange="updateElements()">
+                                        <option selected value="0">Todos</option>
+                                        <option value="S1">Sector 1</option>
+                                        <option value="S2">Sector 2</option>
+                                        <option value="S3">Sector 3</option>
+                                        <option value="S4">Sector 4</option>
+                                        <option value="S5">Sector 5</option>
+                                        <option value="S6">Sector 6</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="sector-dropdown">Contador</label>
+                                    <select style="font-size: 12px;" onchange="addToSelectedListLectura(this)" id="contadoresLectura">
+                                        <% for (element of getGeDataRiego) { %>
+                                            <option id="<%= element.id %>" data-sector="<%= element.sector %>"
+                                                data-tipo="<%= element.tipo %>" data-coorX="<%- element.coorX %>"
+                                                data-coorY="<%- element.coorY %>">
+                                                <%= element.id %>
+                                            </option>
+                                            <% } %>
+                                    </select>
+                                </div>
+                                <div class="button-container">
+                                    <button class="btn" onclick="paintGraph()">
+                                        <i class="fas fa-folder-open"></i> Export Excel
+                                    </button>
+                                </div>
+                            </article>
+                            <article id="selectores22">
+                                <div class="contenedor">
+                                    <div class="table-container">
+                                        <table id="tablaDatos">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha Inicio</th>
+                                                    <th>Hora</th>
+                                                    <th>Volumen(m3)</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Aquí se generarán dinámicamente las filas de la tabla -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="button-container">
+                                            <button id="btnAddLectura">
+                                                <i class="fas fa-plus"></i> Añadir Lectura
+                                            </button>
+                                            <button id="btnPeticion">
+                                                <i class="fas fa-sync-alt"></i> Petición
+                                            </button>
+                                            <button id="btnSmartMapLectura">
+                                                <i class="fas fa-map"></i> SmartMap
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                            <article id="selectores3">
+                                <div class="contenedor">
+                                    <div class="table-container">
+                                        <table id="tablaDatos">
+                                            <thead>
+                                                <tr>
+                                                    <th>Contador</th>
+                                                    <th>Fecha Petición</th>
+                                                    <th>Usuario</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Aquí se generarán dinámicamente las filas de la tabla -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </article>
+                        </section>
+                        <section id="containerChart" class="clearfix">
+                            <div class="container-left">
+                                <!-- Contenido de la primera parte -->
+                                <div class="selected-elements-container">
+                                    <h4>Contadores Seleccionados</h4>
+                                    <ul id="selected-elements-lectura"></ul>
+                                </div>
+                            </div>
+
+                            <div class="container-right">
+                                <!-- Contenido de la segunda parte, incluido el gráfico Highcharts -->
+                                <div id="highchart-graph-lectura"></div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
-            <div class="tab-content active" id="control">
+            <div class="tab-content" id="control">
                 <div class="div-container">
+                    <!--Tabla maniobras-->
+
+                    <div class="toolbar">
+                        <div class="toolbar-item">
+                            <label for="fecha-inicio">Inicio</label>
+                            <input type="datetime-local" id="fecha-inicio-man" max="<%= today %>" />
+                        </div>
+                        <div class="toolbar-item">
+                            <label for="fecha-fin">Fin</label>
+                            <input type="datetime-local" id="fecha-fin-man" max="<%= today %>" />
+                        </div>
+                        <div class="toolbar-item">
+                            <label for="sector-dropdown">Sector</label>
+                            <select id="sector-dropdown" onchange="updateElements()">
+                                <option selected value="0">Todos</option>
+                                <option value="S1">Sector 1</option>
+                                <option value="S2">Sector 2</option>
+                                <option value="S3">Sector 3</option>
+                                <option value="S4">Sector 4</option>
+                                <option value="S5">Sector 5</option>
+                                <option value="S6">Sector 6</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-item">
+                            <label for="search">Buscar</label>
+                            <input type="text" id="search" class="search-input" placeholder="Buscar">
+                        </div>
+                        <div class="toolbar-item">
+                            <button onclick="exportToExcel()">Próximas maniobras</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Identificador</th>
+                                    <th>Caudal N.</th>
+                                    <th>Estado </th>
+                                    <th>Acción 1</th>
+                                    <th>Instante Ac1</th>
+                                    <th>Estado Ac1.</th>
+                                    <th>Acción 2</th>
+                                    <th>Instante Ac2</th>
+                                    <th>Estado Ac2.</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table">
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>

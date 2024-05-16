@@ -3,13 +3,13 @@ const { runQuery } = require("../data/bbdd-connector");
 class Elemento {
 
     constructor(Elemento) {
-        this.identificador = Elemento.ideEle; //Identificador número de serie 11-06-10695
+        this.identificador = Elemento.ideEle; //Identificador dentro del sistema A001
         this.sector = Elemento.ideSector; //Sector
         this.tipo = Elemento.tipo;//Tipo
-        this.tramo = Elemento.tramo; //Tramo
+        this.tramo = Elemento.ideTramo; //Tramo
         this.estado = Elemento.estado;//Estado
-        this.observaciones = Elemento.observaciones;//Marca
-        this.historico = Elemento.observaciones;//Marca
+        this.observaciones = Elemento.Observaciones;//Marca
+        this.historico = Elemento.Observaciones;//Marca
         this.tipo = Elemento.tipo;//Tipo
         this.titular = Elemento.ideTitular;//Titular
     }
@@ -19,12 +19,13 @@ class Elemento {
             "ge_contadores.ideEle, " +
             "ge_contadores.ideSector, " +
             "ge_equipos.ideCont, " +
-            "ge_equipos.marca, " +
+            "ge_contadores.ideTramo, " +
             "ge_equipos.modelo, " +
             "ge_equipos.dimension, " +
             "ge_equipos.Qnominal," +
             "ge_contadores.ideTitular, " +
             "ve.newEstado AS estado," +
+            "ve.Observaciones AS Observaciones, " +
             "'contador' AS tipo " +
             "FROM " +
             "   aplicaciones_web.ge_equipos " +
@@ -33,18 +34,19 @@ class Elemento {
             "LEFT JOIN " +
             "   (SELECT " +
             "      ideElemento, " +
-            "      MAX(instante) AS ultimaFecha " +
+            "      MAX(instante) AS ultimaFecha, Observaciones " +
             "   FROM " +
             "      val_estados_equipos " +
             "   GROUP BY " +
-            "      ideElemento) AS ultimos_estados ON ge_equipos.ideEle = ultimos_estados.ideElemento " +
+            "      ideElemento, Observaciones) AS ultimos_estados ON ge_equipos.ideEle = ultimos_estados.ideElemento " +
             "LEFT JOIN " +
             "    val_estados_equipos AS ve ON ultimos_estados.ideElemento = ve.ideElemento AND ultimos_estados.ultimaFecha = ve.instante " +
             "    LIMIT " + perPage + " OFFSET " + offset;
         const values = [];
         const database = 'aplicaciones_web';
         const results = await runQuery(queryString, values, database);
-        const geContadores = results.data.rows.map((Elemento) => new Elemento(Elemento));
+        const geContadores = results.data.rows.map((elemento) => new Elemento(elemento));
+        console.log(geContadores);
         return geContadores;
     }
 
@@ -56,13 +58,14 @@ class Elemento {
             "   ge_equipos.ideCont, " +
             "   ge_contadores.ideSector, " +
             "   ge_equipos.ideEle, " +
-            "   ge_equipos.marca, " +
+            "   ge_contadores.ideTramo, " +
             "   ge_equipos.modelo, " +
             "   ge_equipos.dimension, " +
             "   ge_equipos.Qnominal," +
             "   ge_contadores.ideTitular, " +
             "   'contador' AS tipo," +
             "   ve.newEstado AS ultimoEstado " +
+            "   ve.Observaciones AS Observaciones, " +
             "FROM " +
             "    aplicaciones_web.ge_equipos " +
             "INNER JOIN " +
@@ -70,11 +73,11 @@ class Elemento {
             "LEFT JOIN " +
             "   (SELECT " +
             "       ideElemento, " +
-            "      MAX(instante) AS ultimaFecha " +
+            "      MAX(instante) AS ultimaFecha, Observaciones " +
             "  FROM " +
             "      val_estados_equipos " +
             "  GROUP BY " +
-            "    ideElemento) AS ultimos_estados ON ge_equipos.ideEle = ultimos_estados.ideElemento " +
+            "    ideElemento, Observaciones) AS ultimos_estados ON ge_equipos.ideEle = ultimos_estados.ideElemento " +
             "LEFT JOIN " +
             "    val_estados_equipos AS ve ON ultimos_estados.ideElemento = ve.ideElemento AND ultimos_estados.ultimaFecha = ve.instante" +
             ") AS consulta_original;";
@@ -86,18 +89,19 @@ class Elemento {
         return geTotal[0].total;
     }
 
-    static async getAllEquipos(req, res) {
+    static async getAllElementos(req, res) {
 
         const queryString = "SELECT " +
             "ge_contadores.ideEle, " +
             "ge_contadores.ideSector, " +
             "ge_equipos.ideCont, " +
-            "ge_equipos.marca, " +
+            "ge_contadores.ideTramo, " +
             "ge_equipos.modelo, " +
             "ge_equipos.dimension, " +
             "ge_equipos.Qnominal," +
             "ge_contadores.ideTitular, " +
             "ve.newEstado AS estado," +
+            "ve.Observaciones AS Observaciones, " +
             "'contador' AS tipo " +
             "FROM " +
             "   aplicaciones_web.ge_equipos " +
@@ -106,18 +110,19 @@ class Elemento {
             "LEFT JOIN " +
             "   (SELECT " +
             "      ideElemento, " +
-            "      MAX(instante) AS ultimaFecha " +
+            "      MAX(instante) AS ultimaFecha, Observaciones " +
             "   FROM " +
             "      val_estados_equipos " +
             "   GROUP BY " +
-            "      ideElemento) AS ultimos_estados ON ge_equipos.ideEle = ultimos_estados.ideElemento " +
+            "      ideElemento, Observaciones) AS ultimos_estados ON ge_equipos.ideEle = ultimos_estados.ideElemento " +
             "LEFT JOIN " +
             "    val_estados_equipos AS ve ON ultimos_estados.ideElemento = ve.ideElemento AND ultimos_estados.ultimaFecha = ve.instante " +
             "    WHERE   ge_contadores.coorX <> '' AND ge_contadores.coorY <> ''";
         const values = [];
         const database = 'aplicaciones_web';
         const results = await runQuery(queryString, values, database);
-        const geContadores = results.data.rows.map((Elemento) => new Elemento(Elemento));
+        console.log(queryString);
+        const geContadores = results.data.rows.map((elemento) => new Elemento(elemento));
 
         return geContadores;
     }
@@ -127,12 +132,13 @@ class Elemento {
             "ge_contadores.ideEle, " +
             "ge_contadores.ideSector, " +
             "ge_equipos.ideCont, " +
-            "ge_equipos.marca, " +
+            "ge_contadores.ideTramo, " +
             "ge_equipos.modelo, " +
             "ge_equipos.dimension, " +
             "ge_equipos.Qnominal, " +
             "ge_contadores.ideTitular, " +
             "ve.newEstado AS estado, " +
+            "ve.Observaciones AS Observaciones, " +
             "'contador' AS tipo " +
             "FROM " +
             "   aplicaciones_web.ge_equipos " +
@@ -141,11 +147,11 @@ class Elemento {
             "LEFT JOIN " +
             "   (SELECT " +
             "      ideElemento, " +
-            "      MAX(instante) AS ultimaFecha " +
+            "      MAX(instante) AS ultimaFecha, Observaciones " +
             "   FROM " +
             "      val_estados_equipos " +
             "   GROUP BY " +
-            "      ideElemento) AS ultimos_estados ON ge_equipos.ideEle = ultimos_estados.ideElemento " +
+            "      ideElemento, Observaciones) AS ultimos_estados ON ge_equipos.ideEle = ultimos_estados.ideElemento " +
             "LEFT JOIN " +
             "    val_estados_equipos AS ve ON ultimos_estados.ideElemento = ve.ideElemento AND ultimos_estados.ultimaFecha = ve.instante " +
             "    WHERE ideSector=?;";
