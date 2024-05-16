@@ -871,6 +871,8 @@ async function loadData(params) {
   //alert ("loadData " + params);
   params.fechaInicio = dateToObject(fechaInicio.value).toISOString();
   params.fechaFin = dateToObject(fechaFin.value).toISOString();
+
+  alert(fechaInicio);
   const response = await fetch(
     "/visor-datos/data?" + new URLSearchParams(params)
   );
