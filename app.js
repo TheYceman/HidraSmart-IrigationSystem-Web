@@ -13,6 +13,7 @@ const loginRoutes = require("./routes/login.routes");
 const navbarRoutes = require("./routes/navbar.routes");
 const authRoutes = require("./routes/auth.routes");
 const visorDatosRoutes = require("./routes/visor-datos.routes");
+const planificadorRiegoRoutes = require("./routes/planificador-riego.routes");
 const mapaSigRoutes = require("./routes/mapa-sig.routes");
 const gestorEquiposRoutes = require("./routes/gestor-equipos.routes");
 const gestorUsuariosRoutes = require("./routes/gestor-usuarios.routes");
@@ -42,6 +43,7 @@ app.use("/", authRoutes);
 app.use("/", loginRoutes);
 app.use("/", navbarRoutes);
 
+app.use("/planificador-riego", planificadorRiegoRoutes);
 app.use("/visor-datos", visorDatosRoutes);
 app.use("/mapa-sig", mapaSigRoutes);
 app.use("/gestor-equipos", gestorEquiposRoutes);

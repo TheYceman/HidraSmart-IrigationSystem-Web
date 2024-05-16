@@ -25,7 +25,11 @@
                         <section id="filtros">
                             <article id="selectores">
                                 <div>
-                                    <label for="sector-dropdown">Sectores</label>
+                                    <label for="fecha-inicio">Día</label>
+                                    <input type="datetime-local" id="fecha-inicio" max="<%= today %>"/>
+                                </div>
+                                <div>
+                                    <label for="sector-dropdown">Sector</label>
                                     <select id="sector-dropdown" onchange="updateElements()">
                                         <option selected value="0">Todos</option>
                                         <option value="S1">Sector 1</option>
@@ -37,41 +41,33 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="tipo-dropdown">Tipo</label>
-                                    <select id="tipo-dropdown" onchange="updateElements()">
-                                        <option selected value="todos">Todos</option>
-                                        <option value="caudalimetro">Caudalímetro</option>
-                                        <option value="nivel">Sensor de nivel</option>
-                                        <option value="presion">Sensor de presión</option>
-                                        <option value="valvula">Válvula</option>
+                                    <label for="sector-dropdown">Contador</label>
+                                    <select style="font-size: 12px;" onchange="addToSelectedList(this)" id="contadores">
+                                        <% for (element of getGeDataRiego) { %>
+                                            <option id="<%= element.id %>" data-sector="<%= element.sector %>"
+                                                data-tipo="<%= element.tipo %>" data-coorX="<%- element.coorX %>"
+                                                data-coorY="<%- element.coorY %>">
+                                                <%= element.id %>
+                                            </option>
+                                            <% } %>
                                     </select>
                                 </div>
-                                <div>
-                                    <label for="fecha-inicio">Inicio</label>
-                                    <input type="datetime-local" id="fecha-inicio" max="<%= today %>"
-                                        onchange="updateTime(this)" />
+                                <div class="button-container" style="display: flex; flex-direction: row; width: 99%;">
+                                    <label style="width: 33%;"> Pres. Consig. (mca)</label>
+                                    <input type="number" id="cantidad" name="cantidad" value="20" style="width:100px; ">
+                                    <button class="btn" style="width: 33%;">
+                                        <i class="fas fa-play"></i> Previsión
+                                    </button>
                                 </div>
-                                <div>
-                                    <label for="fecha-fin">Fin</label>
-                                    <input type="datetime-local" id="fecha-fin" max="<%= today %>"
-                                        onchange="updateTime(this)" />
+                                <div class="button-container">
+                                    <button class="btn" onclick="paintGraph()">
+                                        <i class="fas fa-folder-open"></i> Carga Excel
+                                    </button>
                                 </div>
-                                <button class="btn" onclick="paintGraph()">Cargar datos</button>
                             </article>
-                            <article id="lista-elementos">
-                                <ul>
-                                    <% for (element of getGeDataRiego) { %>
-                                        <li id="<%= element.id %>" data-sector="<%= element.sector %>"
-                                            data-tipo="<%= element.tipo %>" data-coorX="<%- element.coorX %>"
-                                            data-coorY="<%- element.coorY %>" onclick="selectElement(this)">
-                                            <%= element.id %>
-                                        </li>
-                                        <% } %>
-                                </ul>
-                            </article>
-                            <article id="selectores">
+                            <article id="selectores2">
                                 <div class="contenedor">
-                                    <div class="fila">
+                                    <div style="width: 100%;">
                                         <table id="tablaDatos">
                                             <thead>
                                                 <tr>
@@ -91,10 +87,16 @@
                                         </table>
                                     </div>
                                     <div class="fila">
-                                        <div class="contenido">
-                                            <button id="btnAddTurno">Añadir Turno</button>
-                                            <button id="btnActualizar">Actualizar</button>
-                                            <button id="btnSmartMap">SmartMap</button>
+                                        <div class="button-container">
+                                            <button id="btnAddTurno">
+                                                <i class="fas fa-plus"></i> Añadir Turno
+                                            </button>
+                                            <button id="btnActualizar">
+                                                <i class="fas fa-sync-alt"></i> Actualizar
+                                            </button>
+                                            <button id="btnSmartMap">
+                                                <i class="fas fa-map"></i> SmartMap
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -102,7 +104,18 @@
 
                             </article>
                         </section>
-                        <section id="highchart-graph"></section>
+                        <section id="containerChart" class="clearfix">
+                            <div class="container-left">
+                                <!-- Contenido de la primera parte -->
+                                <ul id="selected-elements"></ul>
+                            </div>
+                            <div class="container-right">
+                                <!-- Contenido de la segunda parte, incluido el gráfico Highcharts -->
+                                <div id="highchart-graph"></div>
+                            </div>
+                        </section>
+                        
+                        
                     </div>
                 </div>
             </div>

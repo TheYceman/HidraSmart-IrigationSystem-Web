@@ -7,7 +7,7 @@ let selectedElements = [];
 
 Highcharts.setOptions({
     chart: {
-        backgroundColor: "var(--color-bg-darker)",
+        backgroundColor: '#FFFFFF',
     },
     lang: {
         loading: "Cargando...",
@@ -70,13 +70,17 @@ Highcharts.setOptions({
 });
 
 async function paintGraph() {
-    let elements = Array.from(elementsList.querySelectorAll("li.selected"));
+    //let elements = Array.from(document.getElementById("contadores").querySelectorAll("option:checked"));
+    var elementsList = document.getElementById("selected-elements");
+    var selectedOptions = elementsList.querySelectorAll(".selected-element");
+    var elements = Array.from(selectedOptions).map(option => option.textContent);
     let seriesData = [];
     let tablaData = [];
     for (element of elements) {
         let data = await loadData({
             idSensor: element.id,
-            tipo: element.dataset.tipo,
+            tipo: "caudalimetro",
+            //tipo: element.dataset.tipo,
         });
         let highcharData = [];
         for (d of data) {
@@ -201,3 +205,62 @@ document.getElementById("btnSmartMap").addEventListener("click", function () {
     // Lógica para SmartMap aquí
     console.log("Se ha hecho clic en el botón 'SmartMap'");
 });
+
+// Box 3
+async function loadData(params) {
+    //alert ("loadData " + params);
+    params.fechaInicio = dateToObject(fechaInicio.value).toISOString();
+    params.fechaFin = dateToObject(fechaInicio.value).toISOString();
+    //params.fechaInicio = dateToObject(fechaInicio.value).toISOString();
+    //params.fechaFin = dateToObject(fechaFin.value).toISOString();
+    const response = await fetch(
+        "/planificador-riego/data?" + new URLSearchParams(params)
+    );
+    const data = await response.json();
+    console.log(data);
+    for (d of data) {
+        d.instante = new Date(d.instante).getTime();
+    }
+    return data;
+}
+
+function dateToObject(date) {
+    return new Date(date + ":00Z");
+}
+
+function updateTime(element) {
+    if (element.id === "fecha-inicio") {
+        fechaFin.setAttribute("min", element.value);
+    } else if (element.id === "fecha-fin") {
+        fechaInicio.setAttribute("max", element.value);
+    }
+}
+
+
+function addToSelectedList() {
+    var select = document.getElementById("contadores");
+    var selectedOption = select.options[select.selectedIndex];
+    var selectedElementsList = document.getElementById("selected-elements");
+
+    if (selectedOption && selectedOption.value) {
+        // Crear un nuevo elemento de lista
+        var listItem = document.createElement("li");
+        listItem.className = "selected-element";
+        listItem.textContent = selectedOption.text;
+
+        // Añadir la opción para eliminar el elemento de la lista
+        var deleteButton = document.createElement("span");
+        deleteButton.className = "delete-element";
+        deleteButton.textContent = "×";
+        deleteButton.onclick = function () {
+            listItem.remove();
+        };
+        listItem.appendChild(deleteButton);
+
+        // Añadir el elemento de lista a la lista de elementos seleccionados
+        selectedElementsList.appendChild(listItem);
+
+        paintGraph();
+    }
+}
+
