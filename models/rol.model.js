@@ -15,7 +15,6 @@ class Rol {
 
   static async getAll(req, res) {
 
-    console.log("getAll " + req.session.user[0].idusers);
     let queryString = "";
     if (req.session.user[0].rol == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin' AND propietario =?;";
@@ -34,7 +33,6 @@ class Rol {
   }
 
   static async getFilteredData(req, res, nombre) {
-    console.log("getFilteredData " + req.session.user[0].idusers);
     let queryString = "";
     if (req.session.user[0].rol  == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin' AND propietario =?;";
@@ -48,13 +46,9 @@ class Rol {
 
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
-    console.log(
-      `SELECT * FROM grupos_usuario WHERE nombre="${nombre}";`
-    );
     return result.data.rows;
   }
   static async getFilteredDataGrupo(req, res, idGrupo) {
-    console.log("getFilteredDataGrupo " + req.session.user[0].idusers);
     let queryString = "";
     if (req.session.user[0].rol == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin' AND propietario =?;";
@@ -67,14 +61,10 @@ class Rol {
     const values = [idGrupo, req.session.user[0].idusers];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
-    console.log(
-      `SELECT * FROM grupos_usuario WHERE nombre="${idGrupo}";`
-    );
     return result.data.rows;
   }
 
   static async getPerPage(req, res, perPage, offset) {
-    console.log("getPerPage " + req.session.user[0].idusers );
 
     let queryString = "";
     let values = [];
@@ -90,12 +80,10 @@ class Rol {
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
     const roles = results.data.rows.map((rol) => new Rol(rol));
-    console.log("getPerPage " + roles );
     return roles;
   }
 
   static async getCountAll(req, res) {
-    console.log("getCountAll " + req.session.user[0].idusers );
     let queryString = "";
     if (req.session.user[0].rol == 'userp') {
       queryString = "SELECT count(*) as total FROM grupos_usuario WHERE nombre<>'admin' AND propietario =?;";
@@ -114,7 +102,6 @@ class Rol {
   }
 
   static async getAllRoles(req, res) {
-    console.log("getCountAll " + req.session.user[0].idusers );
     let queryString = "";
     if (req.session.user[0].rol  == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin' AND propietario =?;";
@@ -132,7 +119,6 @@ class Rol {
   }
 
   static async getFilteredData(req, res, nombre) {
-    console.log("getFilteredData " + req.session.user[0].idusers);
     let queryString = "";
     let values = [];
     if (req.session.user[0].rol  == 'userp') {

@@ -24,9 +24,6 @@ class Cliente {
     const values = [numero];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
-    console.log(
-      `SELECT * FROM clientes WHERE idcliente="${numero}";`
-    );
     return result.data.rows;;
   }
 

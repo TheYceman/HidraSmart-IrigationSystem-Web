@@ -25,28 +25,28 @@ async function getGeDataSensor(req, res) {
 
 async function getGeDataContadorMapa(req, res) {
   const geData = [...(await Contador.getAll(req, res))];
-  console.log("Entra a getGeDataContador desde mapa");
+  //console.log("Entra a getGeDataContador desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
 }
 
 async function getGeDataContadorMapaTelemedida(req, res) {
   const geData = [...(await Contador.getTelemedida(req, res))];
-  console.log("Entra a getGeDataContadorMapaTelemedida desde mapa");
+  //console.log("Entra a getGeDataContadorMapaTelemedida desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
 }
 
 async function getGeDataContadorMapaNoTelemedida(req, res) {
   const geData = [...(await Contador.getNoTelemedida(req, res))];
-  console.log("Entra a getGeDataContadorMapaNoTelemedida desde mapa");
+  //console.log("Entra a getGeDataContadorMapaNoTelemedida desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
 }
 
 async function getGeDataSensorMapa(req, res) {
   const geData = [...(await Presion.getPresionesTelemedida(req, res))];
-  console.log("Entra a getGeDataSensorMapa desde mapa");
+  //console.log("Entra a getGeDataSensorMapa desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
 }
@@ -54,7 +54,7 @@ async function getGeDataSensorMapa(req, res) {
 
 async function getGeDataCaudalimetroMapa(req, res) {
   const geData = [...(await Caudalimetro.getAll(req, res))];
-  console.log("Entra a getGeDataCaudalimetroMapa desde mapa");
+  //console.log("Entra a getGeDataCaudalimetroMapa desde mapa");
   //console.log(JSON.stringify(geData));
   return res.json(geData);
 }
@@ -66,7 +66,7 @@ async function getTotalPagesContador(req, res) {
   const itemsPerPage = 10;
   const number_registers = await Contador.getCountAll(req, res);
 
-  console.log("number_registers " + number_registers);
+  //console.log("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -81,7 +81,7 @@ async function getTotalPagesEquipos(req, res) {
   const itemsPerPage = 10;
   const number_registers = await Equipo.getCountAll(req, res);
 
-  console.log("number_registers " + number_registers);
+  //("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -96,7 +96,7 @@ async function getTotalPagesElementos(req, res) {
   const itemsPerPage = 10;
   const number_registers = await Elemento.getCountAll(req, res);
 
-  console.log("number_registers " + number_registers);
+  //console.log("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -111,7 +111,7 @@ async function getTotalPagesSensor(req, res) {
   const itemsPerPage = 10;
   const number_registers = await Sensor.getCountAll(req, res);
 
-  console.log("number_registers " + number_registers);
+  //console.log("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -213,7 +213,7 @@ async function verHistorico(req, res) {
   const sector = req.body.sector.trim();
   const tramo = req.body.tramo.trim();
 
-  console.log("Ver histórico " + id);
+  //console.log("Ver histórico " + id);
 
   //const queryString = `UPDATE ge_contadores SET ideSector = ? WHERE ideEle = ?;`
   //const values = [sector, id];
@@ -230,7 +230,7 @@ async function updateContador(req, res) {
   const id = req.body.id.trim();
   const sector = req.body.sector.trim();
 
-  console.log("updateContador " + id);
+  //console.log("updateContador " + id);
 
   const queryString = `UPDATE ge_contadores SET ideSector = ? WHERE ideEle = ?;`
   const values = [sector, id];
@@ -248,7 +248,7 @@ async function deleteContador(req, res) {
   // Obtener los parámetros del cuerpo de la solicitud
   const id = req.body.id.trim();
 
-  console.log("deleteContador " + id);
+  //console.log("deleteContador " + id);
 
   const queryString = `DELETE FROM ge_contadores WHERE ideEle = ?;`
   const values = [id];
@@ -288,22 +288,28 @@ async function getAgregaEquipo(req, res) {
 }*/
 
 
-
 }
 
 // Ruta para procesar el formulario de añadir
 async function mostrarHistorico(req, res) {
   const { sector, tramo } = req.body;
   const nuevoRegistro = { sector, tramo };
+  res.render('/gestor-equipos/historico_equipo');
+  res.render('/gestor-equipos/historico_equipo', {
+    title: 'Histórico',
+    sectionTitle: 'Histórico',
+  });
 
-  // Realiza una consulta a la base de datos y obtén los datos
+  /* Realiza una consulta a la base de datos y obtén los datos
   connection.query('SELECT * FROM tu_tabla', (err, result) => {
     if (err) {
       console.error('Error al consultar la base de datos:', err);
     } else {
       res.render('historico', { datos: result });
     }
-  });
+  });*/
+
+  console.log('MOSTRAR HISTÓRICO');
 }
 
 

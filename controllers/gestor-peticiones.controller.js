@@ -13,7 +13,7 @@ async function getTotalPagesPeticiones(req, res) {
   const itemsPerPage = 10;
   const number_registers = await Peticion.getCountAll();
 
-  console.log("number_registers " + number_registers);
+  //console.log("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -60,7 +60,7 @@ async function updatePeticion(req, res) {
   const comentarios = req.body.comentarios.trim();
   const asignadaa = req.body.asignadaa.trim();
 
-  console.log("updatePeticion " + idPeticion);
+  //console.log("updatePeticion " + idPeticion);
 
   const queryString = `UPDATE peticiones SET tipo = ?, usuario = ?, estado = ?, comentarios = ?, asignadaa = ? WHERE idPeticion = ?;`;
   const values = [tipo, usuario, estado, comentarios, asignadaa, idPeticion];
@@ -69,7 +69,7 @@ async function updatePeticion(req, res) {
   if (result.success) {
     console.log("Petición actualizada con éxito");
   }
-  console.log(result.data.rows);
+  //console.log(result.data.rows);
   return result.data.rows;;
 
 }
@@ -79,7 +79,7 @@ async function deletePeticion(req, res) {
   // Obtener los parámetros del cuerpo de la solicitud
   const numero = req.body.numero.trim();
 
-  console.log("deletePeticion " + numero);
+  //console.log("deletePeticion " + numero);
 
   const queryString = `DELETE FROM peticion WHERE idPeticion = ?;`
   const values = [numero];
@@ -88,7 +88,7 @@ async function deletePeticion(req, res) {
   if (result.success) {
     console.log("Petición borrada correctamente");
   }
-  console.log(data);
+  //console.log(data);
   res.redirect('/gestor-peticiones');
   //return data;
 
@@ -99,7 +99,7 @@ async function agregaPeticion(req, res) {
 
   if (!req.body)
     return res.sendStatus(400)
-  console.log(req.body);
+  //console.log(req.body);
 
   const idPeticion = req.body.asignidPeticionadaa.trim();
   const tipo = req.body.tipo.trim();
@@ -115,7 +115,7 @@ async function agregaPeticion(req, res) {
   if (result.success) {
       console.log("Cliente insertado correctamente");
   }
-  console.log(data);
+  //console.log(data);
 
   res.redirect('/gestor-peticiones');
 }
