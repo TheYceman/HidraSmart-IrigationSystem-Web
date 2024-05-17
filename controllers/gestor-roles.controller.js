@@ -14,7 +14,7 @@ async function getTotalPagesRoles(req, res) {
   const itemsPerPage = 10;
   const number_registers = await Rol.getCountAll(req, res);
 
-  console.log("number_registers " + number_registers);
+  //console.log("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -64,7 +64,7 @@ async function updateRol(req, res) {
   const perRiego = req.body.perRiego.trim();
   const perEquipos = req.body.perEquipos.trim();
 
-  console.log("updateRol " + nombre);
+  //console.log("updateRol " + nombre);
 
   const queryString = `UPDATE grupos_usuario SET perUsu = ?,perVisor = ?, perMeteo = ?, perRed = ?, perDemandas = ?, perRiego = ?, perRiego = ? WHERE nombre = ?;`;
   const values = [perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos, nombre];
@@ -82,7 +82,7 @@ async function deleteRol(req, res) {
   // Obtener los parámetros del cuerpo de la solicitud
   const nombre = req.body.nombre.trim();
 
-  console.log("deleteRol " + nombre);
+  //console.log("deleteRol " + nombre);
 
   const queryString = `DELETE FROM grupos_usuario WHERE nombre = ?;`
   const values = [nombre];
@@ -101,7 +101,7 @@ async function agregaRol(req, res) {
 
   if (!req.body)
     return res.sendStatus(400)
-  console.log(req.body);
+  //console.log(req.body);
 
   const nombre = req.body.nombre.trim();
   const perUsu = req.body.perUsu.trim();

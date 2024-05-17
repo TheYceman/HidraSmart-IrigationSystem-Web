@@ -31,12 +31,6 @@ class Peticion {
     const values = [numero];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
-    console.log(
-      "SELECT p.idPeticion, tp.descripcion AS tipo, u1.username AS usuario, p.estado, p.comentarios, u2.username AS asignadaa FROM aplicaciones_web.peticiones p "+
-      "JOIN users u1 ON p.usuario = u1.idusers "+ 
-      "JOIN users u2 ON p.asignadaa = u2.idusers "+
-      "JOIN tipo_peticiones tp ON p.tipo = tp.idtipo idPeticion="+numero+";"
-    );
     return result.data.rows;;
   }
 
@@ -46,8 +40,6 @@ class Peticion {
     "JOIN users u1 ON p.usuario = u1.idusers "+ 
     "JOIN users u2 ON p.asignadaa = u2.idusers "+
     "JOIN tipo_peticiones tp ON p.tipo = tp.idtipo LIMIT " + perPage + " OFFSET " + offset;
-
-    console.log(queryString);
 
     const values = [];
     const database = 'aplicaciones_web';

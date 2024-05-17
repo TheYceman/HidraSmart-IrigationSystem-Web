@@ -19,7 +19,7 @@ async function getDb(ddbb) {
   try {
     const certContent = await downloadBlob();
 
-    console.log("bbb" + process.cwd());
+    console.log("bbb " + process.cwd());
 
     // Create the connection pool. The pool-specific settings are the defaults
     const pool = mysql.createPool({
@@ -47,6 +47,8 @@ async function getDb(ddbb) {
 }
 
 async function runQuery(queryString, values, database) {
+
+  //console.log("QUERYSTRING " + queryString);
   try {
       const connection = await getDb(database);
       const [rows, fields] = await connection.execute(queryString, values);

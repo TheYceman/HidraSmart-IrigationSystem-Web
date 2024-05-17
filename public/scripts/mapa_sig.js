@@ -315,7 +315,6 @@ checkboxes.forEach(function (checkbox) {
           }
           break;
         case "item2-3":
-          console.log("Entra");
           paint_pipelines();
           // Habilitar el checkbox "item2.2"
           var checkboxPipelines =
