@@ -158,6 +158,7 @@ async function getInfoMeteo(req, res) {
     today: new Date().toJSON().slice(0, 16),
     //geData: await getGeData(),
     user: req.session.username,
+    todosLosContadores: await getAll(req, res),
   });
 }
 

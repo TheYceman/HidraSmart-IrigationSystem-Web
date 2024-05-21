@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .header, .footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .status {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .status div {
+            display: flex;
+            align-items: center;
+        }
+        .status img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .button-container {
+            text-align: right;
+        }
+        .button-container button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="valve-icon.png" alt="Valve">
+            <h2>Histórico del Hidratante</h2>
+            <p>Última Actualización: 27/06/2014 12:42:19</p>
+        </div>
+        <div class="status">
+            <div><img src="check-icon.png" alt="Check"> El controlador IPex 12 asignado está operativo</div>
+            <div><img src="check-icon.png" alt="Check"> Válvula OK cuando está cerrada</div>
+            <div><img src="check-icon.png" alt="Check"> Válvula OK cuando está abierta</div>
+            <div><img src="check-icon.png" alt="Check"> Estado general de la válvula OK</div>
+            <div><img src="check-icon.png" alt="Check"> No hay alerta externa</div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Inicio riego</th>
+                        <th>Contador al inicio</th>
+                        <th>Fin riego</th>
+                        <th>Contador al final</th>
+                        <th>Duración</th>
+                        <th>Volumen</th>
+                        <th>Caudal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01/06/2014 07:00:00</td>
+                        <td>532811.95 m³</td>
+                        <td>01/06/2014 18:29:50</td>
+                        <td>533332.91 m³</td>
+                        <td>11:29:50</td>
+                        <td>520.96 m³</td>
+                        <td>12.6</td>
+                    </tr>
+                    <tr>
+                        <td>02/06/2014 07:00:00</td>
+                        <td>533332.91 m³</td>
+                        <td>02/06/2014 18:29:50</td>
+                        <td>533858.83 m³</td>
+                        <td>11:29:50</td>
+                        <td>525.62 m³</td>
+                        <td>12.7</td>
+                    </tr>
+                    <tr>
+                        <td>04/06/2014 07:00:00</td>
+                        <td>533858.83 m³</td>
+                        <td>04/06/2014 17:59:50</td>
+                        <td>534366.16 m³</td>
+                        <td>10:59:50</td>
+                        <td>479.87 m³</td>
+                        <td>12.1</td>
+                    </tr>
+                    <tr>
+                        <td>05/06/2014 07:00:00</td>
+                        <td>534366.16 m³</td>
+                        <td>05/06/2014 17:59:50</td>
+                        <td>534838.49 m³</td>
+                        <td>10:59:50</td>
+                        <td>492.69 m³</td>
+                        <td>12.4</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="button-container">
+            <button onclick="window.close()">Volver</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 
-const { insertSessionLog } = require("../controllers/session.controller");
+const { insertSessionLog } = require("./session.controller");
 
 const fetch = require('node-fetch');
 const { RecaptchaEnterpriseServiceClient } = require('@google-cloud/recaptcha-enterprise');

@@ -1,0 +1,72 @@
+<script>
+
+    // Definir una variable JavaScript para almacenar los datos de los contadores
+    window.contadores = [];
+
+    // Iterar sobre cada contador y agregar sus coordenadas a la variable
+    <% for (let contador of todosLosContadores) { %>
+
+        window.contadores.push({
+            id: '<%= contador.id %>',
+            coorY: '<%= contador.coorY %>',
+            coorX: '<%= contador.coorX %>',
+            sector: '<%= contador.sector %>',
+            ramal: '<%= contador.ramal %>',
+            titular: '<%= contador.titular %>'
+        });
+
+    <% } %>
+
+    /*
+
+        // Ahora puedes trabajar con la variable 'contadores' en JavaScript
+        // Por ejemplo, podrías recorrerla para mostrar las coordenadas en la consola
+        contadores.forEach(contador => {
+            console.log("Coordenada X:", contador.coorX);
+            console.log("Coordenada Y:", contador.coorY);
+
+            var iconUrl = "/images/mapa_sig/counter_without_watering.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(contador.coorY);
+            var coorX = parseFloat(contador.coorX);
+            var markerCounter = new google.maps.Marker({
+                position: { lat: contador.coorX, lng: contador.coorY },
+                map: myMap,
+                icon: {
+                    url: iconUrl,
+                    scaledSize: new google.maps.Size(30, 20),
+                },
+                title: contador.id,
+            });
+            // Agregar evento de clic al marker
+            markerCounter.addListener("click", function (event) {
+                show_infowindow_plots(event, contador.id);
+            });
+            // Agregar el marker al arreglo
+            makersCountersArray.push(markerCounter);
+        });
+
+*/
+
+
+</script>
+
+<div class="div-container">
+    <div id="mapContainer" style="margin:10px; padding:0px; position: relative; width:100%">
+        <div id="map" style="width:100%; height: 76vh;"></div><!--Fin mapa-->
+        <!-- Barra de herramientas -->
+        <div class="toolbar">
+            <button class="toolbar-btn" id="toggle-button">
+                <i class="fas fa-cloud-rain" id="leyenda-icon"></i><span>LLuvia</span>
+            </button>
+            <button class="toolbar-btn" id="toggle-button">
+                <i class="fas fa-thermometer-half" id="leyenda-icon"></i> <span>Temperatura</span>
+            </button>
+            <button class="toolbar-btn" id="toggle-button">
+                <i class="fas -wind" id="leyenda-icon"></i> <span>Viento</span>
+            </button>
+        </div>
+        <div id="informacion" style="display:none">
+        </div>
+    </div>
+</div>
