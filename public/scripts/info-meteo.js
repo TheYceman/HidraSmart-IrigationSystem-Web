@@ -123,7 +123,7 @@ if (viewer.scene.globe.tilesLoaded) {
 }
 */
 myMap = new google.maps.Map(document.getElementById("map"), {
-    zoom: 12,
+    zoom: 9,
     streetViewControl: false,
     center: { lat: targetLatitude, lng: targetLongitude },
     zoomControl: true, // Deshabilita el control de zoom
@@ -177,49 +177,178 @@ paint_stations();
 
 function paint_stations() {
     var cont = 0;
-    contadores.forEach(contador => {
-        if (cont < 60) {
-            console.log("Coordenada X:", contador.coorX);
-            console.log("Coordenada Y:", contador.coorY);
+    console.log(contadores);
+    estaciones = [
+        {
+            "id": "EM1-02: EL BONILLO",
+            "coorY": -2.52529,
+            "coorX": 38.95087,
+            "T": "20.4 ºC",
+            "P": "0.0 mm",
+            "V": "0.0 mmh",
+        },
+        {
+            "id": "EM1-05: MANZANARES",
+            "coorY": -3.3644,
+            "coorX": 39.00211,
+            "T": "20.4 ºC",
+            "P": "0.0 mm",
+            "V": "0.0 mmh",
+        },
+        {
+            "id": "EM1-03: OSSA DE MONTIEL",
+            "coorY": -2.72396,
+            "coorX": 38.94659,
+            "T": "20.4 ºC",
+            "P": "0.0 mm",
+            "V": "0.0 mmh",
+        },
+        {
+            "id": "EM1-020: BOLAÑOS DE CALATRAVA",
+            "coorY": -3.64649,
+            "coorX": 38.89531,
+            "T": "20.4 ºC",
+            "P": "0.0 mm",
+            "V": "0.0 mmh",
+        }, {
+            "id": "EM1-18: VALDEPEÑAS",
+            "coorY": -3.39385,
+            "coorX": 38.73695,
+            "T": "20.4 ºC",
+            "P": "0.0 mm",
+            "V": "0.0 mmh",
+        }, {
+            "id": "EM1-15: VILLARRUBIA DE LOS OJOS",
+            "coorY": -3.55863,
+            "coorX": 39.18543,
+            "T": "20.4 ºC",
+            "P": "0.0 mm",
+            "V": "0.0 mmh",
+        }
+        , {
+            "id": "EM1-14: CARRASCOSA DE HAR0",
+            "coorY": -2.62237,
+            "coorX": 39.57156,
+            "T": "20.4 ºC",
+            "P": "0.0 mm",
+            "V": "0.0 mmh",
+        }
 
-            var iconUrl = "/images/mapa_sig/weather-station-facility-icon.jpg";
+
+    ]
+    estaciones.forEach(estacion => {
+        if (cont < 60) {
+            //console.log("Coordenada X:", estacion.coorX);
+            //console.log("Coordenada Y:", estacion.coorY);
+
+            var iconUrl = "/images/mapa_sig/station.png";
             // Obtener las coordenadas
-            var coorY = parseFloat(contador.coorY);
-            var coorX = parseFloat(contador.coorX);
+            var coorY = parseFloat(estacion.coorY);
+            var coorX = parseFloat(estacion.coorX);
             var markerCounter = new google.maps.Marker({
                 position: { lat: coorX, lng: coorY },
                 map: myMap,
                 icon: {
                     url: iconUrl,
-                    scaledSize: new google.maps.Size(30, 20),
+                    scaledSize: new google.maps.Size(40, 40),
                 },
-                title: contador.id,
+                title: estacion.id,
             });
             // Agregar evento de clic al marker
             markerCounter.addListener("click", function (event) {
 
                 var content = `
-      <div class="infowindow-content">
-          <div style="width: 100%;background-color: #3c8dbc;color: #ffffff; padding-left: 4px; padding-right: 4px"><b>Finca El Serranillo</b></div><div class="row mt-2 ml-2 mb-1"><div class="col-12 mt-0 pt-0 mr-0 pr-0"><b>Datos diarios</b></div><div class="col-8 mt-0 pt-0 mr-0 pr-0"><input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control form-control-sm text-center" style="max-width: 160px" value="2024-05-07"><input type="date" id="fecha_fin" name="fecha_fin" class="form-control form-control-sm text-center" style="max-width: 160px" value="2024-05-16"></div><div class="col-4 mt-0 pt-2 ml-0 pl-2 pr-3"><button id="datos_diarios_btn" type="button" class="btn btn-primary bg-lightblue btn-sm text-lg btn-block" data-toggle="tooltip" data-placement="top" title="" onclick="consultaDatosDiarios()" data-original-title="Realizar consulta"><i class="fas fa-search" style="color: #fff"></i></button></div><div class="col-12 mt-3 pt-0 mr-0 pr-0"><b>Datos históricos</b></div><div class="col-3 mt-0 pt-1 mr-0 pr-1 text-right"><label>Año</label></div><div class="col-8 mt-0 pt-0 mr-0 pr-2"><input id="anio_historico" type="number" class="form-control form-control-sm text-center" min="1999" step="1" max="2024" value="2023"></div></div><div class="row ml-1 mb-2 mr-1"><div class="col-3"><button type="button" class="btn btn-primary bg-lightblue btn-sm text-md" data-toggle="tooltip" data-placement="top" title="" onclick="consultaDatosHistoricos(1)" data-original-title="Precipitación, ETo"><i class="fas fa-cloud-showers-heavy" style="color: #fff"></i></button></div><div class="col-3"><button type="button" class="btn btn-primary bg-lightblue btn-sm text-md" data-toggle="tooltip" data-placement="top" title="" onclick="consultaDatosHistoricos(2)" data-original-title="Termometría">&nbsp;<i class="fas fa-thermometer-three-quarters" style="color: #fff"></i>&nbsp;</button></div><div class="col-3"><button type="button" class="btn btn-primary bg-lightblue btn-sm text-md" data-toggle="tooltip" data-placement="top" title="" onclick="consultaDatosHistoricos(3)" data-original-title="Higrometría"><i class="fas fa-water" style="color: #fff"></i></button></div><div class="col-3"><button type="button" class="btn btn-primary bg-lightblue btn-sm text-md" data-toggle="tooltip" data-placement="top" title="" onclick="consultaDatosHistoricos(4)" data-original-title="Viento"><i class="fas fa-wind" style="color: #fff"></i></button></div></div>
-      </div>
-  `;
+                <div class="infowindow-content">
+                    <div class="header">
+                        <b>${estacion.id}</b>
+                    </div>
+                    <div class="section">
+                        <div class="section-title"><b>Datos diarios</b></div>
+                        <div class="input-group">
+                            <div class="input-row">
+                                <input type="date" id="fecha_inicio" name="fecha_inicio" class="input-date" value="2024-05-07">
+                            </div>
+                            <div class="input-row">
+                                <input type="date" id="fecha_fin" name="fecha_fin" class="input-date" value="2024-05-16">
+                            </div>
+                            <button id="datos_diarios_btn" type="button" class="btn-icon" onclick="consultaDatosDiarios()">
+                                <i class="fas fa-search" style="color: #fff"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="section-title"><b>Datos históricos</b></div>
+                        <div class="input-group">
+                            <label for="anio_historico" class="label-anio">Año</label>
+                            <input id="anio_historico" type="number" class="input-number" min="1999" step="1" max="2024" value="2023">
+                        </div>
+                    </div>
+                    <div class="button-row">
+                        <button type="button" class="btn-icon" onclick="consultaDatosHistoricos(1)" title="Precipitación, ETo">
+                            <i class="fas fa-cloud-showers-heavy" style="color: #fff"></i>
+                        </button>
+                        <button type="button" class="btn-icon" onclick="consultaDatosHistoricos(2)" title="Termometría">
+                            <i class="fas fa-thermometer-three-quarters" style="color: #fff"></i>
+                        </button>
+                        <button type="button" class="btn-icon" onclick="consultaDatosHistoricos(3)" title="Higrometría">
+                            <i class="fas fa-water" style="color: #fff"></i>
+                        </button>
+                        <button type="button" class="btn-icon" onclick="consultaDatosHistoricos(4)" title="Viento">
+                            <i class="fas fa-wind" style="color: #fff"></i>
+                        </button>
+                    </div>
+                </div>`;
+
+
                 show_infowindow_plots(event, content);
                 document.getElementById("informacion").style.display = "block";
-                var content = "<div class='leyenda-container'>";
-                content += "<div class='ol-viewport' style='position: relative; overflow: hidden; width: 100%; height: 100%;'>";
-                content += "<div class='ol-unselectable ol-layers' style='position: absolute; width: 100%; height: 100%; z-index: 0;'>";
-                content += "<div class='ol-popup-content'><div style='width: 100%;background-color: #3c8dbc;color: #ffffff; padding-left: 4px; padding-right: 4px'><b>Prados Redondos</b></div><div class='flex ml-2 mr-2 mt-1'>    <div class='flex-auto text-xs'>  ";
-                content += "<b>Instalación:</b> 20/12/2000 </div><div class='flex-auto text-xs'>        <b>Altitud:</b> 1109 m    </div></div><div class='flex ml-2 mr-2'>    <div class='flex-auto text-xs'>        <b>Datos:</b> 22/12/2000 - 19/05/2024    </div></div><div class='flex ml-2 mr-2'>    <div class='flex-auto text-xs'>        <b>Estado:</b> Activa";
-                content += " </div>  content += '   <div class='flex-auto text-xs'>        <b>Información:</b> Actualizada    </div></div><div class='row ml-0 mr-2 mb-2 mt-1'>    <div class='col-2 text-center'>    </div>    <div class='col-2 text-center'><span class='text-xs font-bold'>Ayer</span>    </div>    ";
-                content += "<div class='col-3 text-center'><span class='text-xs font-bold'>7 días</span>    </div>    <div class='col-3 text-center'><span class='text-xs font-bold'>Año</span>    </div>    <div class='col-2 text-center'>  ";
-                content += "  </div>    <div class='col-2 text-center'><i class='fas fa-cloud-showers-heavy'></i>    </div>    ";
-                content += " <div class='col-2 text-center border border-gray-400'><span class='text-xs'>3.7</span>    </div>    <div class='col-3 text-center text-center border border-gray-400'>/span>    </div>    <div class='col-3 text-center border border-gray-400'><span class='text-xs'>23.5</span>    </div>    <div class='col-3 text-center border border-gray-400'><span class='text-xs'>27.1</span>";
-                content += " </div>    <div class='col-2 text-center border border-gray-400'><span class='text-xs'>°C</span>    </div>    <div class='col-2 text-center'><i class='fas fa-thermometer-empty'></i>    </div>    <div class='col-2 text-center border border-gray-400'><span class='text-xs'>1.3</span>    </div> ";
-                content += "   <div class='col-3 text-center border border-gray-400'><span class='text-xs'>0.9</span>    </div>    <div class='col-3 text-center border border-gray-400'><span class='text-xs'>-8.8</span>    </div>    <div class='col-2 text-center border border-gray-400'><span class='text-xs'>°C</span>    </div>    <div class='col-2 text-center'><i class='fas fa-wind'></i>    </div>    <div class='col-2 text-center border border-gray-400'><span class='text-xs'>8.8</span>    </div>";
-                content += "    <div class='col-3 text-center border border-gray-400'><span class='text-xs'>8.8</span>    </div>    <div class='col-3 text-center border border-gray-400'><span class='text-xs'>16.8</span>    </div>    <div class='col-2 text-center border border-gray-400'><span class='text-xs'>m/s</span>    </div></div></div>";
+                content = "<div class='leyenda-container'>";
+                content += "<span id='leyendaLabel'><b>Información de la estación</b></span>";
+                content += "<div>";
+                content += "<div>";
+                content += "<div class='ol-popup-content'><div style='width: 100%;background-color: #3c8dbc;color: #ffffff; padding-left: 4px; padding: 4px; font-weight:bold'>" + estacion.id + "</div><div class='flex ml-2 mr-2 mt-1'><div class='flex-auto text-xs'>  ";
+                content += "<b>Instalación:</b> 20/12/2000 </div><div class='flex-auto text-xs'><b>Altitud:</b> 1109 m</div></div><div class='flex ml-2 mr-2'>    <div class='flex-auto text-xs'>        <b>Datos:</b> 22/12/2000 - 19/05/2024    </div></div><div class='flex ml-2 mr-2'><div class='flex-auto text-xs'><b>Estado:</b> Activa";
+                content += "</div><div class='flex-auto text-xs'><b>Información:</b> Actualizada</div></div>";
+                content += "<br/>";
+                content += "<div class='grid-container'>";
+                content += "<div class='grid-item2'></div>";
+                content += "<div class='grid-item'><span class='text-xs font-bold'>Ayer</span></div>";
+                content += "<div class='grid-item'><span class='text-xs font-bold'>7 días</span></div>";
+                content += "<div class='grid-item'><span class='text-xs font-bold'>Año</span></div>";
+                content += "<div class='grid-item2'></div>";
+
+                content += "<div class='grid-item'><i class='fas fa-cloud-showers-heavy'></i></div>";
+                content += "<div class='grid-item'><span class='text-xs'>3.7</span></div>";
+                content += "<div class='grid-item'><span class='text-xs'>23.5</span></div>";
+                content += "<div class='grid-item'><span class='text-xs'>27.1</span></div>";
+                content += "<div class='grid-item'><span class='text-xs'>°C</span></div>";
+
+                content += "<div class='grid-item'><i class='fas fa-thermometer-empty'></i></div>";
+                content += "<div class='grid-item'><span class='text-xs'>1.3</span></div>";
+                content += "<div class='grid-item'><span class='text-xs'>0.9</span></div>";
+                content += "<div class='grid-item'><span class='text-xs'>-8.8</span></div>";
+                content += "<div class='grid-item'><span class='text-xs'>°C</span></div>";
+
+                content += "<div class='grid-item'><i class='fas fa-wind'></i></div>";
+                content += "<div class='grid-item'><span class='text-xs'>8.8</span></div>";
+                content += "<div class='grid-item'><span class='text-xs'>8.8</span></div>";
+                content += "<div class='grid-item'><span class='text-xs'>16.8</span></div>";
+                content += "<div class='grid-item'><span class='text-xs'>m/s</span></div>";
                 content += "</div>";
+
+                content += "</div></div>";
+
                 document.getElementById("informacion").innerHTML = content;
-            });''
+                var content = ' <div class="wb-body" style="margin: 4px;"><div id="Datos_Historicos_winbox">';
+                content = content + '<div class="row m-4">';
+                content = content + '     <div id="hist_chart_div" class="col-lg-6 col-12 col-6"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>';
+                content = content + '         <canvas id="hist_chart" width="914" height="400" style="min-height: 400px !important; display: block; touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 914px; height: 400px;" class="chartjs-render-monitor"></canvas>';
+                content = content + '</div>';
+                content = content + '<div id="hist_table_div" class="col-lg-6 col-12 col-6"><table class="table-auto w-full text-center"><thead><tr><th class="border-2 border-primary-1 bg-primary-1 text-white">Mes</th><th class="border-2 border-primary-1 bg-primary-1 text-white" title="Fecha humedad máxima absoluta">Fecha HMA</th><th class="border-2 border-primary-1 bg-primary-1 text-white" title="Humedad máxima absoluta">HMA (%)</th><th class="border-2 border-primary-1 bg-primary-1 text-white" title="Fecha humedad mínima absoluta">Fecha hma</th><th class="border-2 border-primary-1 bg-primary-1 text-white" title="Humedad mínima absoluta">hma (%)</th><th class="border-2 border-primary-1 bg-primary-1 text-white" title="Humedad media de medias">Hmm (%)</th><th class="border-2 border-primary-1 bg-primary-1 text-white" title="Humedad media de mínimas">hmm (%)</th><th class="border-2 border-primary-1 bg-primary-1 text-white" title="Humedad media de máximas">HMM (%)</th></tr></thead><tbody><tr><td class="border-2 border-primary-1">Enero</td><td class="border-2 border-primary-1">15/01/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">01/01/2023</td><td class="border-2 border-primary-1">27.3</td><td class="border-2 border-primary-1">73.8</td><td class="border-2 border-primary-1">56.5</td><td class="border-2 border-primary-1">89.1</td></tr><tr><td class="border-2 border-primary-1">Febrero</td><td class="border-2 border-primary-1">13/02/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">04/02/2023</td><td class="border-2 border-primary-1">22.0</td><td class="border-2 border-primary-1">61.4</td><td class="border-2 border-primary-1">41.3</td><td class="border-2 border-primary-1">81.7</td></tr><tr><td class="border-2 border-primary-1">Marzo</td><td class="border-2 border-primary-1">05/03/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">29/03/2023</td><td class="border-2 border-primary-1">13.2</td><td class="border-2 border-primary-1">54.6</td><td class="border-2 border-primary-1">34.8</td><td class="border-2 border-primary-1">74.7</td></tr><tr><td class="border-2 border-primary-1">Abril</td><td class="border-2 border-primary-1">22/04/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">04/04/2023</td><td class="border-2 border-primary-1">6.1</td><td class="border-2 border-primary-1">35.5</td><td class="border-2 border-primary-1">19.7</td><td class="border-2 border-primary-1">57.4</td></tr><tr><td class="border-2 border-primary-1">Mayo</td><td class="border-2 border-primary-1">23/05/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">03/05/2023</td><td class="border-2 border-primary-1">9.6</td><td class="border-2 border-primary-1">50.5</td><td class="border-2 border-primary-1">31.0</td><td class="border-2 border-primary-1">70.0</td></tr><tr><td class="border-2 border-primary-1">Junio</td><td class="border-2 border-primary-1">02/06/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">29/06/2023</td><td class="border-2 border-primary-1">12.8</td><td class="border-2 border-primary-1">55.8</td><td class="border-2 border-primary-1">35.9</td><td class="border-2 border-primary-1">76.6</td></tr><tr><td class="border-2 border-primary-1">Julio</td><td class="border-2 border-primary-1">15/07/2023</td><td class="border-2 border-primary-1">69.4</td><td class="border-2 border-primary-1">07/07/2023</td><td class="border-2 border-primary-1">6.2</td><td class="border-2 border-primary-1">28.1</td><td class="border-2 border-primary-1">14.0</td><td class="border-2 border-primary-1">43.7</td></tr><tr><td class="border-2 border-primary-1">Agosto</td><td class="border-2 border-primary-1">03/08/2023</td><td class="border-2 border-primary-1">71.5</td><td class="border-2 border-primary-1">13/08/2023</td><td class="border-2 border-primary-1">1.6</td><td class="border-2 border-primary-1">25.6</td><td class="border-2 border-primary-1">12.6</td><td class="border-2 border-primary-1">42.9</td></tr><tr><td class="border-2 border-primary-1">Septiembre</td><td class="border-2 border-primary-1">03/09/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">01/09/2023</td><td class="border-2 border-primary-1">20.0</td><td class="border-2 border-primary-1">57.8</td><td class="border-2 border-primary-1">38.2</td><td class="border-2 border-primary-1">78.2</td></tr><tr><td class="border-2 border-primary-1">Octubre</td><td class="border-2 border-primary-1">15/10/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">07/10/2023</td><td class="border-2 border-primary-1">18.4</td><td class="border-2 border-primary-1">61.8</td><td class="border-2 border-primary-1">46.6</td><td class="border-2 border-primary-1">77.6</td></tr><tr><td class="border-2 border-primary-1">Noviembre</td><td class="border-2 border-primary-1">14/11/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">25/11/2023</td><td class="border-2 border-primary-1">24.4</td><td class="border-2 border-primary-1">77.9</td><td class="border-2 border-primary-1">60.7</td><td class="border-2 border-primary-1">91.6</td></tr><tr><td class="border-2 border-primary-1">Diciembre</td><td class="border-2 border-primary-1">01/12/2023</td><td class="border-2 border-primary-1">100.0</td><td class="border-2 border-primary-1">23/12/2023</td><td class="border-2 border-primary-1">29.9</td><td class="border-2 border-primary-1">78.7</td><td class="border-2 border-primary-1">61.6</td><td class="border-2 border-primary-1">91.8</td></tr><tr><td class="border-2 border-primary-1 bg-primary-1 text-white">AÑO 2023</td><td class="border-2 border-primary-1 bg-primary-1 text-white">15/01/2023</td><td class="border-2 border-primary-1 bg-primary-1 text-white">100.0</td><td class="border-2 border-primary-1 bg-primary-1 text-white">13/08/2023</td><td class="border-2 border-primary-1 bg-primary-1 text-white">1.6</td><td class="border-2 border-primary-1 bg-primary-1 text-white">54.5</td><td class="border-2 border-primary-1 bg-primary-1 text-white">37.1</td><td class="border-2 border-primary-1 bg-primary-1 text-white">72.3</td></tr></tbody></table></div>';
+                content = content + '</div>';
+                content = content + '</div></div>';
+                //document.getElementById("informacion").innerHTML = content;
+            }); ''
             // Agregar el marker al arreglo
 
             makersCountersArray.push(markerCounter);
@@ -230,6 +359,49 @@ function paint_stations() {
 }
 
 
+function consultaDatosHistoricos(tipo) {
+    document.getElementById('info-meteorologica').style.display = "block";
+}
+
+function closeInfo() {
+    document.getElementById('info-meteorologica').style.display = 'none';
+}
+
+/**VENTANA EMERGENTE */
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        datasets: [
+            {
+                label: 'Precipitación (mm)',
+                data: [21.7, 5.3, 13.4, 5.3, 25.6, 73.5, 0, 6.7, 49.8, 73.9, 37.2, 40.6],
+                borderColor: 'blue',
+                fill: false
+            },
+            {
+                label: 'ETo (mm)',
+                data: [32.8, 53.2, 90.0, 130.0, 139.0, 151.1, 233.1, 197.0, 112.0, 74.9, 33.9, 22.4],
+                borderColor: 'red',
+                fill: false
+            }
+        ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'mm'
+                }
+            }
+        }
+    }
+});
+
+/*FIN VENTANA*/
 function paint_counter_bbdd() {
     contadores.forEach(contador => {
         console.log("Coordenada X:", contador.coorX);
