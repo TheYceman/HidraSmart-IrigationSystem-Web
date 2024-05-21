@@ -1,6 +1,6 @@
 //const {  getRedData,  getUsuariosData,} = require("../data/placeholder_data");
 
-const { getGeData } = require("../controllers/visor-datos.controller");
+const { getGeData } = require("./estado-red.controller");
 const { getGeDataRiego } = require("../controllers/planificador-riego.controller");
 
 //const { getGeDataContador } = require("../controllers/gestor-equipos.controller");
@@ -128,7 +128,7 @@ async function getMapaSig(req, res) {
 }
 
 async function getEstadoRed(req, res) {
-  res.render("navbar/visor-datos", {
+  res.render("navbar/estado-red", {
     headImage: req.session.headImage,
     navIndex: 3,
     navGroup: 1,
@@ -140,6 +140,7 @@ async function getEstadoRed(req, res) {
     profileUserEmail: req.session.user[0].email,
     today: new Date().toJSON().slice(0, 16),
     geData: await getGeData(),
+    todosLosContadores: await getAll(req, res),
     user: req.session.username,
   });
 }

@@ -186,17 +186,17 @@ main > div {
   }
   
   #lista-elementos ul.blocked li {
-    cursor: url("/images/visor-datos/blocked-pointer.png"), auto;
+    cursor: url("/images/estado-red/blocked-pointer.png"), auto;
   }
   
   #lista-elementos li {
-    cursor: url("/images/visor-datos/add-pointer.png"), auto;
+    cursor: url("/images/estado-red/add-pointer.png"), auto;
   }
   
   #lista-elementos ul li.selected {
     background-color: var(--color-primary-300);
     padding: 0 5px;
-    cursor: url("/images/visor-datos/remove-pointer.png"), auto;
+    cursor: url("/images/estado-red/remove-pointer.png"), auto;
   }
   
   #lista-elementos ul {
