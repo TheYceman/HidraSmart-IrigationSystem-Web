@@ -292,7 +292,9 @@ async function getAgregaEquipo(req, res) {
 
 // Ruta para procesar el formulario de añadir
 async function mostrarHistorico(req, res) {
-  console.log("MOSTRAR HISTÓRICO");
+
+  console.log('MOSTRAR HISTÓRICO');
+
   res.render('historico_equipo');
 }
 
