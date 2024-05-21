@@ -292,17 +292,8 @@ async function getAgregaEquipo(req, res) {
 
 // Ruta para procesar el formulario de añadir
 async function mostrarHistorico(req, res) {
-  const { sector, tramo } = req.body;
-  const nuevoRegistro = { sector, tramo };
-
-  // Realiza una consulta a la base de datos y obtén los datos
-  connection.query('SELECT * FROM tu_tabla', (err, result) => {
-    if (err) {
-      console.error('Error al consultar la base de datos:', err);
-    } else {
-      res.render('historico', { datos: result });
-    }
-  });
+  console.log("MOSTRAR HISTÓRICO");
+  res.render('historico_equipo', { datos: result });
 }
 
 
