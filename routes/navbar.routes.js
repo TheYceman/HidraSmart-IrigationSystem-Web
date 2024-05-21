@@ -41,7 +41,7 @@ const verificarCertificado = (req, res, next) => {
     //Fin verifica el certificado
 
     // Verifica si se proporcionó un certificado de cliente y si está autorizado
-    if (req.url === '/visor-datos' && req.client.authorized) {
+    if (req.url === '/estado-red' && req.client.authorized) {
       console.log('Certificado de cliente válido.');
       next(); // Continúa con la solicitud
     } else {
