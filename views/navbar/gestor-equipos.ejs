@@ -432,19 +432,7 @@
               </script>
               <script>
                 document.getElementById('openHistorico').addEventListener('click', function () {
-               
-                  var popupWidth = 600;
-                  var popupHeight = 400;
-                  var leftPosition = (window.screen.width - popupWidth) / 2;
-                  var topPosition = (window.screen.height - popupHeight) / 2;
-
-                  var popupOptions = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no';
-                  popupOptions += ', width=' + popupWidth + ', height=' + popupHeight;
-                  popupOptions += ', top=' + topPosition + ', left=' + leftPosition;
-
-                  var popupUrl = '/gestor-equipos/historico'; // Asigna la URL utilizando EJS
-
-                  window.open(popupUrl, 'Popup', popupOptions);
+                  window.open('/historico', 'Popup', 'width=600,height=400');
                 });
                 
               </script>
