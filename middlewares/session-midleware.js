@@ -11,10 +11,13 @@ function saveSession(req) {
     // Obtener los datos de la sesión (data)
     const sessionData = req.sessionStore.sessions[sessionId];
 
-    const queryString = `INSERT INTO sessions_manual (session_id, expires, data) VALUES ('${sessionId}', '${expires}', '${sessionData}');`;
-    const values = [sessionId, expires, sessionData];
-    const database = 'aplicaciones_web';
-    runQuery(queryString, values, database);
+    if(sessionData){
+        const queryString = `INSERT INTO sessions_manual (session_id, expires, data) VALUES ('${sessionId}', '${expires}', '${sessionData}');`;
+        const values = [sessionId, expires, sessionData];
+        const database = 'aplicaciones_web';
+        runQuery(queryString, values, database);
+    
+    }
 
 }
 

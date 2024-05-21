@@ -54,7 +54,7 @@ function getSoporte(req, res) {
 }
 
 function getRespuestaContacto(req, res) {
-  console.log("No encuentra form_send!");
+  //console.log("No encuentra form_send!");
   res.render("navbar/form_send", {
     navIndex: 6,
     navGroup: 0,
@@ -158,6 +158,7 @@ async function getInfoMeteo(req, res) {
     today: new Date().toJSON().slice(0, 16),
     //geData: await getGeData(),
     user: req.session.username,
+    todosLosContadores: await getAll(req, res),
   });
 }
 
@@ -225,7 +226,7 @@ async function getGestorEquipos(req, res) {
 
 
 async function getGestorPeticiones(req, res) {
-  console.log("GetGestorPeticiones " + req.session.headImage);
+  //console.log("GetGestorPeticiones " + req.session.headImage);
   res.render("navbar/gestor-peticiones", {
     headImage: req.session.headImage,
     navIndex: 8,
@@ -247,7 +248,7 @@ async function getGestorPeticiones(req, res) {
 async function getGestorUsuarios(req, res) {
 
   const rol = req.session.user[0].rol;
-  console.log("req.session.user[0].rol " + rol);
+  //console.log("req.session.user[0].rol " + rol);
 
   if (rol == 'hidra' || rol == 'admin' || rol == 'userp') {
     res.render("navbar/gestor-usuarios", {

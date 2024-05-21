@@ -1,5 +1,5 @@
 
-const { insertSessionLog } = require("../controllers/session.controller");
+const { insertSessionLog } = require("./session.controller");
 
 const fetch = require('node-fetch');
 const { RecaptchaEnterpriseServiceClient } = require('@google-cloud/recaptcha-enterprise');
@@ -62,7 +62,7 @@ async function verifyCaptcha(username, password, token) {
 
       if (result.success) {
         const rows = result.data.rows;
-        console.log("rows.password " + result.data.rows[0].password);
+        //console.log("rows.password " + result.data.rows[0].password);
         if (compare(password, result.data.rows[0].password)) {
           return rows;
         }

@@ -19,7 +19,7 @@ async function getTotalPagesUsuarios(req, res) {
   const itemsPerPage = 10;
   const number_registers = await Usuario.getCountAll(req, res);
 
-  console.log("number_registers " + number_registers);
+  //console.log("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -57,7 +57,7 @@ async function getDataUsuario(req, res) {
 }
 
 async function updateUsuario(req, res) {
-  console.log("UpdateUsuario " + req.body);
+  //console.log("UpdateUsuario " + req.body);
 
   // Obtener los parámetros del cuerpo de la solicitud
   const username = req.body.username.trim();
@@ -68,7 +68,7 @@ async function updateUsuario(req, res) {
   const phone = req.body.phone.trim();
   //const password = req.body.password.trim();
 
-  console.log("updateUsuario " + username + " " + grupo);
+  //console.log("updateUsuario " + username + " " + grupo);
 
   const queryString = `UPDATE users SET name = ?, surname = ?, rol = ?, email = ?, phone = ? WHERE username = ?;`;
   const values = [nombre, apellido, grupo, email, phone, username];
@@ -86,7 +86,7 @@ async function deleteUsuario(req, res) {
   // Obtener los parámetros del cuerpo de la solicitud
   const username = req.body.username.trim();
 
-  console.log("deleteUsuario " + username);
+  //console.log("deleteUsuario " + username);
 
   const queryString = "DELETE FROM users WHERE username = ?;";
   const values = [username];
@@ -105,7 +105,7 @@ async function agregaUsuario(req, res) {
 
   if (!req.body)
     return res.sendStatus(400)
-  console.log(req.body);
+  //console.log(req.body);
 
   const login = req.body.username.trim();
   const nombre = req.body.name.trim();
@@ -121,7 +121,7 @@ async function agregaUsuario(req, res) {
 
   // Generar y mostrar la clave
   const claveGenerada = generarClave();
-  console.log(claveGenerada);
+  //console.log(claveGenerada);
 
   const password = await encrypt(claveGenerada);
   //const nuevoRegistro = { login, password, nombre, apellido, grupo, email, phone };

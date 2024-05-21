@@ -46,7 +46,6 @@ class Elemento {
         const database = 'aplicaciones_web';
         const results = await runQuery(queryString, values, database);
         const geContadores = results.data.rows.map((elemento) => new Elemento(elemento));
-        console.log(geContadores);
         return geContadores;
     }
 
@@ -121,7 +120,6 @@ class Elemento {
         const values = [];
         const database = 'aplicaciones_web';
         const results = await runQuery(queryString, values, database);
-        console.log(queryString);
         const geContadores = results.data.rows.map((elemento) => new Elemento(elemento));
 
         return geContadores;

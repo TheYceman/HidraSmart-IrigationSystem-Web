@@ -13,7 +13,7 @@ async function getTotalPagesClientes(req, res) {
   const itemsPerPage = 10;
   const number_registers = await Cliente.getCountAll(req, res);
 
-  console.log("number_registers " + number_registers);
+  //console.log("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -59,7 +59,7 @@ async function updateCliente(req, res) {
   const email = req.body.email.trim();
   const telefono = req.body.telefono.trim();
 
-  console.log("updateCliente " + login);
+  //console.log("updateCliente " + login);
 
   const queryString = `UPDATE Clientes SET nombre = ?, dni = ?, email = ?, telefono = ? WHERE idcliente = ?;`;
   const values = [nombre, dni, email, telefono, numero];
@@ -78,7 +78,7 @@ async function deleteCliente(req, res) {
   // Obtener los parámetros del cuerpo de la solicitud
   const numero = req.body.numero.trim();
 
-  console.log("deleteCliente " + numero);
+  //console.log("deleteCliente " + numero);
 
   const queryString = `DELETE FROM clientes WHERE idcliente = ?;`
   const values = [numero];
@@ -87,7 +87,7 @@ async function deleteCliente(req, res) {
   if (result.success) {
     console.log("Cliente borrado correctamente");
   }
-  console.log(data);
+  //console.log(data);
   res.redirect('/gestor-clientes');
   //return data;
 
@@ -98,7 +98,7 @@ async function agregaCliente(req, res) {
 
   if (!req.body)
     return res.sendStatus(400)
-  console.log(req.body);
+  //console.log(req.body);
 
   const numero = req.body.numero.trim();
   const nombre = req.body.nombre.trim();
@@ -113,7 +113,7 @@ async function agregaCliente(req, res) {
   if (result.success) {
     console.log("Cliente insertado correctamente");
   }
-  console.log(data);
+  //console.log(data);
 
   res.redirect('/gestor-clientes');
 }

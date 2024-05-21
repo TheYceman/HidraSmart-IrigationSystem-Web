@@ -48,9 +48,7 @@ class Usuario {
     const values = [login, req.session.user[0].idusers];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
-    console.log(
-      `SELECT * FROM users WHERE username="${login}";`
-    );
+
     return result.data.rows;
   }
   static async getFilteredDataGrupo(req, res, idGrupo) {
@@ -67,9 +65,7 @@ class Usuario {
     const values = [idGrupo, req.session.user[0].idusers];
     const database = 'aplicaciones_web';
     const result = await runQuery(queryString, values, database);
-    console.log(
-      `SELECT * FROM users WHERE rol="${idGrupo}";`
-    );
+
     return result.data.rows;
   }
 
@@ -87,7 +83,6 @@ class Usuario {
     }
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
-    console.log("results.data.rows " + results.data.rows);
     const usuarios = results.data.rows.map((usuario) => new Usuario(usuario));
     return usuarios;
   }
