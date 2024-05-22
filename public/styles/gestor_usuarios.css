@@ -313,19 +313,18 @@ td {
   background-color: var(--color-primary-300);
 }
 /*Clase para los botones*/
-
 .btn {
   padding: 2px 6px;
   font: inherit;
-  background-color: var(--color-primary-400);
+  background-color: #4b4b4b;
   color: var(--color-primary-contrast);
   border-radius: 3px;
   border: none;
-  margin: 10px 5px;
+  margin: 5px 2px;
 }
 
 .btn:hover {
-  background-color: var(--color-primary-300);
+  background-color: #0078a7;
 }
 
 /* Estilo para pantallas grandes (desktop) */

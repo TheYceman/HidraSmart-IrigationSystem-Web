@@ -87,15 +87,6 @@ td {
   font-size: 0.8rem;
 }
 
-#add-record-button {
-  font-size: 1.2rem;
-  border: none;
-  background-color: #27b5f1;
-  color: white;
-  cursor: pointer;
-  border: 1px solid #ddd;
-  border-radius: 50%;
-}
 
 .table-container th.actions_th,
 .table-container td.actions {
@@ -270,7 +261,7 @@ hr {
 
 .toolbar-item button {
   padding: 8px 16px;
-  background-color: #4caf50;
+  background-color: #4b4b4b;
   color: white;
   border: none;
   border-radius: 5px;
@@ -278,7 +269,7 @@ hr {
 }
 
 .toolbar-item button:hover {
-  background-color: #45a049;
+  background-color: #0078a7;
 }
 
 /* Estilo para pantallas grandes (desktop) */
@@ -315,4 +306,21 @@ hr {
     border: 1px solid var(--color-primary-400);
     border-radius: 5px;
   }
+}
+.btn {
+  padding: 2px 6px;
+  font: inherit;
+  background-color: #4b4b4b;
+  color: var(--color-primary-contrast);
+  border-radius: 3px;
+  border: none;
+  margin: 6px 3px;
+}
+
+.btn:hover {
+  background-color: #0078a7;
+}
+
+.red-btn {
+  background-color: red;
 }
