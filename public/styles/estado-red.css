@@ -384,6 +384,7 @@ td {
 #table {
   width: 100%;
   table-layout: auto;
+  background-color: white;
 }
 
 .sticky-header {
@@ -404,6 +405,7 @@ td {
   color: #fff;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+  height: 20px;
 }
 
 .table-container tbody tr:nth-child(even) {
@@ -867,4 +869,11 @@ td {
     border: 1px solid var(--color-primary-400);
     border-radius: 5px;
   }
+}
+
+/* Estilo del mensaje de no datos */
+.no-data-message {
+  text-align: center;
+  font-style: italic;
+  padding: 20px;
 }
