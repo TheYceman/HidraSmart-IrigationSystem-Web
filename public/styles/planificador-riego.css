@@ -1,3 +1,7 @@
+main {
+  max-height: 99vh;
+}
+
 main > div {
     margin: 0 auto;
     width: 90%;

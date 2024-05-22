@@ -104,6 +104,23 @@
             </select>
             </div>
             <div class="toolbar-item">
+              <label for="tipo">Tipo:</label>
+              <select id="selectTipo">
+                <option value="">Todos</option>
+                <% 
+                // Crear un conjunto para almacenar los valores únicos de sector
+                var tiposSet = new Set();
+                // Iterar sobre los contadores para añadir los valores únicos al conjunto
+                for (let contador of contadores) {
+                  tiposSet.add(contador.tipo);
+                }
+                // Iterar sobre los valores únicos del conjunto para generar las opciones
+                for (let sector of tiposSet) { %>
+                    <option value="<%= sector %>"><%= sector %></option>
+                <% } %>
+            </select>
+            </div>
+            <div class="toolbar-item">
               <label for="estado">Estado:</label>
               <select id="selectEstado">
                 <option value="">Todos</option>
@@ -125,12 +142,14 @@
               <input type="text" id="search" class="search-input" placeholder="Buscar">
             </div>
             <div class="toolbar-item">
-              <button onclick="exportToExcel()">Exportar a Excel</button>
+              <button class="toolbar-btn" onclick="exportTableToExcel('equipos','Equipos')">
+                <i class="fas fa-file-export"></i></i> <span>Excel</span>
+            </button>
             </div>
           </div>
         </div>
         <div class="table-container">
-          <table>
+          <table id="equipos">
             <thead>
               <tr>
                 <th>Selección</th>
@@ -187,9 +206,15 @@
                     <%= contador.estado %>
                   </td>
                   <td>
-                    <button class="btn" id="openHistorico">Ver histórico</button>
-                    <button class="btn" onclick="updateContador('<%= contador.id %>')">Actualizar</button>
-                    <button class="btn red-btn" onclick="borrarContador('<%= contador.id %>')">Borrar</button>
+                    <button class="btn" id="openHistorico">
+                      <i class="fa fa-history"></i> Ver histórico
+                    </button>
+                    <button class="btn" onclick="updateContador('<%= contador.id %>')">
+                      <i class="fa fa-sync"></i> Actualizar
+                    </button>
+                    <button class="btn red-btn" onclick="borrarContador('<%= contador.id %>')">
+                      <i class="fa fa-trash"></i> Borrar
+                    </button>
                   </td>
                 </tr>
                 <% } %>
@@ -252,11 +277,13 @@
             <input type="text" id="search" class="search-input" placeholder="Buscar">
           </div>
           <div class="toolbar-item">
-            <button onclick="exportToExcel()">Exportar a Excel</button>
+            <button class="toolbar-btn" onclick="exportTableToExcel('elementos','Elementos')">
+              <i class="fas fa-file-export"></i></i> <span>Excel</span>
+          </button>
           </div>
         </div>
         <div class="table-container">
-          <table>
+          <table id="elementos">
             <thead>
               <tr>
                 <th>Selección</th>
@@ -294,9 +321,15 @@
                     <%= contador.observaciones %>
                   </td>
                   <td>
-                    <button class="btn" id="openHistorico">Ver histórico</button>
-                    <button class="btn" onclick="updateContador('<%= contador.id %>')">Actualizar</button>
-                    <button class="btn red-btn" onclick="borrarContador('<%= contador.id %>')">Borrar</button>
+                    <button class="btn" id="openHistorico">
+                      <i class="fa fa-history"></i> Ver histórico
+                    </button>
+                    <button class="btn" onclick="updateContador('<%= contador.id %>')">
+                      <i class="fa fa-sync"></i> Actualizar
+                    </button>
+                    <button class="btn red-btn" onclick="borrarContador('<%= contador.id %>')">
+                      <i class="fa fa-trash"></i> Borrar
+                    </button>
                   </td>
                 </tr>
                 <% } %>
