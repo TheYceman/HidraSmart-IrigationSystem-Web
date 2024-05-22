@@ -805,7 +805,7 @@ function paintMarker(id, tipo, coorX, coorY) {
 
 
   // Opcionalmente, puedes agregar un evento para abrir la infowindow cuando se haga clic en el marcador
-  marker.addListener('click', function() {
+  marker.addListener('click', function () {
     infowindow.open(googleMap, marker);
   });
 
@@ -912,7 +912,7 @@ async function paintGraph() {
       tipo: element.dataset.tipo,
     });
     let highcharData = [];
-     for (d of data) {
+    for (d of data) {
       let valor;
       switch (element.dataset.tipo) {
         case "nivel":
@@ -934,18 +934,18 @@ async function paintGraph() {
 
       // Crea un objeto Date a partir del valor de tiempo
       const fecha = new Date(valorTiempo);
-      
+
       // Obtiene los componentes de la fecha
       const dia = fecha.getDate();
       const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, así que agregamos 1
       const año = fecha.getFullYear();
       const horas = fecha.getHours();
       const minutos = fecha.getMinutes();
-      
+
       // Formatea la fecha y hora en el formato deseado
       const fechaFormateada = `${dia}-${mes}-${año} ${horas}:${minutos}`;
 
-      tablaData.push({"elemento":element.id,"instante":fechaFormateada, "valor": valor});
+      tablaData.push({ "elemento": element.id, "instante": fechaFormateada, "valor": valor });
     }
     highcharData.sort(function (a, b) {
       return a[0] - b[0];
@@ -956,23 +956,71 @@ async function paintGraph() {
       yAxis: ["caudalimetro", "presion"].includes(element.tipo) ? 1 : 0,
     });
 
+    if (seriesData.length === 0) {
+      seriesData.push({
+        name: 'No Data',
+        data: [],
+      });
+    }
+
+    Highcharts.chart('highchart-graph', {
+      chart: {
+        type: 'line'
+      },
+      title: {
+        text: 'Datos del Sensor'
+      },
+      subtitle: {
+        text: seriesData.length === 1 && seriesData[0].data.length === 0 ? 'No hay datos en la fecha seleccionada' : ''
+      },
+      xAxis: {
+        type: 'datetime'
+      },
+      yAxis: {
+        title: {
+          text: 'Valores'
+        }
+      },
+      series: seriesData,
+      noData: {
+        style: {
+          fontWeight: 'bold',
+          fontSize: '15px',
+          color: '#303030'
+        }
+      }
+    });
 
     // Obtén la referencia a la tabla
+    // Obtén la referencia a la tabla y al cuerpo de la tabla
     const tabla = document.getElementById('tablaDatos');
+    const tbody = tabla.querySelector('tbody');
 
-    // Limpia la tabla (opcional)
-    tabla.innerHTML = ' <thead><tr><th>Elemento</th><th>Fecha</th><th>Valor</th></tr></thead>';
+    // Limpia el cuerpo de la tabla
+    tbody.innerHTML = '';
 
-    // Crea las filas de la tabla con los datos cargados
-    tablaData.forEach(function(dato) {
-      const fila = document.createElement('tr');
-      fila.innerHTML = `
-        <td>${dato.elemento}</td>
-        <td>${dato.instante}</td>
-        <td>${dato.valor}</td>
-      `;
-      tabla.appendChild(fila);
-    });
+    // Verifica si hay datos
+    if (tablaData.length === 0) {
+      // Si no hay datos, muestra un mensaje
+      const mensajeFila = document.createElement('tr');
+      const mensajeCelda = document.createElement('td');
+      mensajeCelda.setAttribute('colspan', '3'); // Ocupar todas las columnas
+      mensajeCelda.classList.add('no-data-message');
+      mensajeCelda.textContent = 'No hay datos en la fecha seleccionada';
+      mensajeFila.appendChild(mensajeCelda);
+      tbody.appendChild(mensajeFila);
+    } else {
+      // Si hay datos, crea las filas de la tabla
+      tablaData.forEach(function (dato) {
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+           <td>${dato.elemento}</td>
+           <td>${dato.instante}</td>
+           <td>${dato.valor}</td>
+         `;
+        tbody.appendChild(fila);
+      });
+    }
 
   }
 
@@ -1089,23 +1137,23 @@ function getSubsectorData(subsectorName) {
 
   let inicioDate = new Date(
     "20" +
-      inicioDateParts[2] +
-      "-" +
-      inicioDateParts[1] +
-      "-" +
-      inicioDateParts[0] +
-      "T" +
-      inicioParts[1]
+    inicioDateParts[2] +
+    "-" +
+    inicioDateParts[1] +
+    "-" +
+    inicioDateParts[0] +
+    "T" +
+    inicioParts[1]
   );
   let finDate = new Date(
     "20" +
-      finDateParts[2] +
-      "-" +
-      finDateParts[1] +
-      "-" +
-      finDateParts[0] +
-      "T" +
-      finParts[1]
+    finDateParts[2] +
+    "-" +
+    finDateParts[1] +
+    "-" +
+    finDateParts[0] +
+    "T" +
+    finParts[1]
   );
 
   var match = subsectorName.match(/_(.*?)_/);
@@ -2380,3 +2428,37 @@ function exportDataToExcel(data, filename = '') {
 
 // }
 
+var seriesData = [];
+seriesData.push({
+  name: 'No Data',
+  data: [],
+});
+
+
+Highcharts.chart('highchart-graph', {
+  chart: {
+    type: 'line'
+  },
+  title: {
+    text: 'Datos del Sensor'
+  },
+  subtitle: {
+    text: seriesData.length === 1 && seriesData[0].data.length === 0 ? 'No hay datos' : ''
+  },
+  xAxis: {
+    type: 'datetime'
+  },
+  yAxis: {
+    title: {
+      text: 'Valores'
+    }
+  },
+  series: seriesData,
+  noData: {
+    style: {
+      fontWeight: 'bold',
+      fontSize: '15px',
+      color: '#303030'
+    }
+  }
+});
