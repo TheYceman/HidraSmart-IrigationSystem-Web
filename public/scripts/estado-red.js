@@ -968,10 +968,13 @@ async function paintGraph() {
         type: 'line'
       },
       title: {
-        text: 'Datos del Sensor'
+        text: 'Datos seleccionados'
       },
       subtitle: {
         text: seriesData.length === 1 && seriesData[0].data.length === 0 ? 'No hay datos en la fecha seleccionada' : ''
+      },
+      credits: {
+        enabled: false,
       },
       xAxis: {
         type: 'datetime'
@@ -1032,7 +1035,7 @@ async function paintGraph() {
       enabled: false,
     },
     title: {
-      text: "Gráfica de valores",
+      text: "Datos seleccionados",
     },
     xAxis: {
       type: "datetime",
@@ -1043,14 +1046,14 @@ async function paintGraph() {
     yAxis: [
       {
         title: {
-          text: "Valor (0-10)",
+          text: "Valores (0-10)",
         },
         min: 0,
         max: 10,
       },
       {
         title: {
-          text: "Valor (0-1000)",
+          text: "Valores (0-1000)",
         },
         opposite: true,
         min: 0,
@@ -1290,6 +1293,7 @@ function paint_tables(dataTabs, matrizDatos) {
                 <table >
                   <thead>
                     <tr>
+                      <th>Elemento</th>
                       <th>Fecha</th>
                       <th>Valor</th>
                     </tr>
@@ -2440,10 +2444,13 @@ Highcharts.chart('highchart-graph', {
     type: 'line'
   },
   title: {
-    text: 'Datos del Sensor'
+    text: 'Datos seleccionados'
   },
   subtitle: {
     text: seriesData.length === 1 && seriesData[0].data.length === 0 ? 'No hay datos' : ''
+  },
+  credits: {
+    enabled: false,
   },
   xAxis: {
     type: 'datetime'

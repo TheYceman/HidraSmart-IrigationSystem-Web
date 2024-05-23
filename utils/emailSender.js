@@ -41,7 +41,7 @@ async function sendEmailNewUser(nombre, email, claveGenerada) {
             <style>
                 /* Aquí puedes agregar estilos CSS para personalizar tu correo */
                 body {
-                    font-family: Arial, sans-serif;
+                    font-family: "Nunito Sans", sans-serif;
                     color: #009bdb;
                 }
                 .logo {
