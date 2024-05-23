@@ -1037,3 +1037,13 @@ function exportDataToExcel(data, filename = '') {
 
 // }
 
+/**** SELECT CULTIVOS */
+$(document).ready(function() {
+  $('.legend-item').click(function() {
+    $(this).toggleClass('selected');
+  });
+});
+
+
+
+
