@@ -19,6 +19,9 @@ html {
     --height-max-space: calc(100% - 7rem);
 
     height: 100%;
+
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 1.5vh; /* Tamaño de fuente relativo al ancho de la ventana */
 }
 
 body {
@@ -282,8 +285,6 @@ body {
     text-align: left;
 }
 
-
-
 .profile_image_logo_location {
     height: 94%;
     margin-left: 4%;
@@ -294,3 +295,12 @@ body {
     transform: scale(1.05);
     filter: drop-shadow(1px 1px 3px var(--color-primary-400))
 }
+/* Estilos para el elemento input de tipo datetime-local */
+input[type="datetime-local"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Asegura que el padding y el borde se incluyan en el tamaño total del elemento */
+    width: 100%; /* Hace que el input ocupe el 100% del contenedor */
+    max-width: 300px; /* Ancho máximo para no hacerlo demasiado grande */
+  }

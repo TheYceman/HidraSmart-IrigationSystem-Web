@@ -1,7 +1,7 @@
 /****** Navbar header ******/
 #navbar {
     width: 100%;
-    height: 3rem;
+    height: 2.5rem;
     display: flex;
     flex-direction: row;
     overflow: hidden;
@@ -9,7 +9,7 @@
   
     --width-icon: 50px;
     --margin-icon: 5px;
-    --height-options-bar: 1.8rem;
+    --height-options-bar: 2rem;
   }
   
   #logo {
@@ -91,9 +91,7 @@
     overflow: hidden;
     align-items: flex-end;
   }
-
-
-  
+ 
   #icon-home {
     background-image: url("/images/navbar/inicio_white.png");
     z-index: 1;
@@ -138,7 +136,7 @@
   }
   
   #icon-gestores.right {
-    left: calc(86.5% - var(--width-icon) * 3);
+    left: calc(87% - var(--width-icon) * 3);
   }
   
   #icon-gestores.active,
@@ -228,6 +226,7 @@
     text-align: center;
     transition: top 0.2s, box-shadow 0.2s;
     background-color: var(--color-primary-400);
+    font-family: "Nunito Sans", sans-serif;
   }
   
   .menu-options a:hover,
@@ -243,4 +242,25 @@
       font-size: 45px;
     }
   }
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 600px) {
+  .menu-options li a {
+    font-size: 1vw; /* Tamaño de fuente relativo al ancho de la ventana para pantallas pequeñas */
+  }
+}
+
+/* Ajustes para pantallas medianas */
+@media (min-width: 601px) and (max-width: 1200px) {
+  .menu-options li a {
+    font-size: 1vw; /* Tamaño de fuente relativo al ancho de la ventana para pantallas medianas */
+  }
+}
+
+/* Ajustes para pantallas muy grandes */
+@media (min-width: 1201px) {
+  .menu-options li a {
+    font-size: 0.7vw; /* Tamaño de fuente relativo al ancho de la ventana para pantallas grandes */
+  }
+}
   

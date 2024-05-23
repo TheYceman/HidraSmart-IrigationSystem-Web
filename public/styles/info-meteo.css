@@ -154,7 +154,6 @@
   padding: 10px;
   max-width: 300px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
 }
 
 #leyendaLabel {
@@ -644,7 +643,6 @@
   padding: .11em 0.3em;
   font-weight: normal;
   font-size: 1.14em;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .ol-control.ol-bar .ol-control.ol-text-button div:hover {
@@ -1936,7 +1934,6 @@
 .ol-layerswitcher-popup li {
   color: #369;
   padding: 0.25em 1em;
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
   cursor: pointer;
 }
 
@@ -2232,7 +2229,6 @@
   padding: 0.5em 0.5em 0;
   margin: 0;
   overflow: hidden;
-  font-family: Tahoma, Geneva, sans-serif;
   font-size: 0.9em;
   -webkit-transition: top 0.3s;
   transition: top 0.3s;
@@ -2770,7 +2766,6 @@
   right: 0;
   text-align: center;
   height: 1.2em;
-  font-family: Verdana, Geneva, sans-serif;
   font-size: 0.8em;
 }
 
@@ -2990,7 +2985,6 @@ ul.ol-legend li div {
   text-align: center;
   width: 160%;
   overflow: hidden;
-  font-family: 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
   -webkit-transform: scaleX(.625);
   transform: scaleX(.625);
   -webkit-transform-origin: 0 0;
@@ -7075,7 +7069,6 @@ ul.ol-legend li div {
 .infowindow-content {
   width: 180px;
   /* Ajusta según sea necesario */
-  font-family: Arial, sans-serif;
   overflow-x: hidden;
 }
 
@@ -7155,9 +7148,6 @@ ul.ol-legend li div {
 }
 
 /*Ventana Emergente**/
-body {
-  font-family: Arial, sans-serif;
-}
 
 .container2 {
   width: 100%;

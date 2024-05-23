@@ -28,11 +28,19 @@ main > div {
     cursor: pointer;
   }
   
+.tab-content {
+  display: none;
+  height: 73vh; /* Altura predeterminada para pantallas medianas */
+  /*background-color: #007bff;*/
+}
+
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 1800px) {
   .tab-content {
-    display: none;
-    /*height: 100vw;
-    background-color: #007bff;*/
+    height: 70vh; /* Altura predeterminada para pantallas medianas */
   }
+}
   
   /* Estilo activo para la pestaña seleccionada */
   .tab-label.active {
@@ -45,7 +53,7 @@ main > div {
 
 
   #data-viewer {
-    gap: 15px;
+    gap: 10px;
     width: 98%;
     height: 98%;
     margin: 0 auto;
@@ -53,7 +61,7 @@ main > div {
   
   #data-viewer section {
     width: 100%;
-    height: 100%;
+    height: 90%;
     /*background-color: var(--color-primary-300);*/
     border-radius: 2px;
     box-shadow: var(--box-shadow-default);
@@ -63,7 +71,7 @@ main > div {
  /* Estilo para la lista */
 #highchart-graph {
     float: left;
-    width: 100%; /* Cambia esto según tus necesidades */
+    width:98%; /* Cambia esto según tus necesidades */
     padding: 10px;
 }
 
