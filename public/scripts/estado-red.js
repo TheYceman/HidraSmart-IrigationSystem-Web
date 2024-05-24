@@ -5,6 +5,26 @@ const fechaFin = document.getElementById("fecha-fin");
 const elementsList = document.querySelector("#lista-elementos ul");
 let selectedElements = [];
 
+document.addEventListener('DOMContentLoaded', function () {
+  const firstElement = document.querySelector('#lista-elementos ul li');
+  if (firstElement) {
+    firstElement.classList.add('selected');
+  }
+  // Crear una fecha para el 1 de enero de 2020 a las 00:00
+  const fecha2020 = new Date('2020-01-01T00:00').toISOString().slice(0, 16);
+
+  // Asignar la fecha de 2020 como valor por defecto al campo fecha-inicio
+  document.getElementById('fecha-inicio').value = fecha2020;
+
+  // Obtener la fecha actual en el formato requerido por datetime-local (YYYY-MM-DDTHH:MM)
+  const today = new Date().toISOString().slice(0, 16);
+
+  // Asignar la fecha actual como valor por defecto al campo fecha-fin
+  document.getElementById('fecha-fin').value = today;
+  paintGraph();
+
+});
+
 Highcharts.setOptions({
   chart: {
     backgroundColor: "var(--color-bg-darker)",
@@ -882,16 +902,14 @@ updateElements();
 
 // Box 3
 async function loadData(params) {
-  //alert ("loadData " + params);
+
   params.fechaInicio = dateToObject(fechaInicio.value).toISOString();
   params.fechaFin = dateToObject(fechaFin.value).toISOString();
 
-  alert(fechaInicio);
   const response = await fetch(
     "/estado-red/data?" + new URLSearchParams(params)
   );
   const data = await response.json();
-  console.log(data);
   for (d of data) {
     d.instante = new Date(d.instante).getTime();
   }
@@ -950,12 +968,12 @@ async function paintGraph() {
     highcharData.sort(function (a, b) {
       return a[0] - b[0];
     });
+    console.log("highcharData " + highcharData);
     seriesData.push({
       name: element.id,
       data: highcharData,
       yAxis: ["caudalimetro", "presion"].includes(element.tipo) ? 1 : 0,
     });
-
     if (seriesData.length === 0) {
       seriesData.push({
         name: 'No Data',
@@ -1066,7 +1084,7 @@ async function paintGraph() {
   Highcharts.chart("highchart-graph", chartOptions);
 }
 
-paintGraph();
+
 
 //Inicio Box 4
 var matrizDatos = [];
@@ -1569,8 +1587,8 @@ paint_counter_bbdd();
 
 function paint_counter_bbdd() {
   contadores.forEach(contador => {
-    console.log("Coordenada X:", contador.coorX);
-    console.log("Coordenada Y:", contador.coorY);
+    //console.log("Coordenada X:", contador.coorX);
+    //console.log("Coordenada Y:", contador.coorY);
 
     var iconUrl = "/images/mapa_sig/counter_without_watering.png";
     // Obtener las coordenadas
