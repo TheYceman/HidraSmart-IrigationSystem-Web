@@ -11,7 +11,7 @@
 
 #data-viewer section {
   /*width: 100%;*/
-  height: 100%;
+  height: 99%;
   max-height: 30vh;
   background-color: var(--color-primary-300);
   border-radius: 5px;

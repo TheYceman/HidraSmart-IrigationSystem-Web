@@ -5,6 +5,28 @@ const fechaFin = document.getElementById("fecha-fin");
 const elementsList = document.querySelector("#lista-elementos ul");
 let selectedElements = [];
 
+document.addEventListener('DOMContentLoaded', function () {
+    const selectElement = document.querySelector('#contadores'); // Selecciona el elemento <select> por su ID
+
+    if (selectElement) {
+        const firstOption = selectElement.querySelector('option'); // Selecciona el primer <option> dentro del <select>
+
+        if (firstOption) {
+            firstOption.selected = true; // Selecciona el primer <option>
+            addToSelectedList(firstOption); // Agrega el primer <option> a la lista de elementos seleccionados
+        }
+    }
+    // Obtener la fecha actual en el formato requerido por datetime-local (YYYY-MM-DDTHH:MM)
+    const today = new Date().toISOString().slice(0, 16);
+
+    // Asignar la fecha de 2020 como valor por defecto al campo fecha-inicio
+    document.getElementById('fecha-inicio').value = today;
+
+    paintGraph();
+
+});
+
+
 Highcharts.setOptions({
     chart: {
         backgroundColor: '#cfcfcf',
@@ -127,26 +149,29 @@ async function paintGraph() {
             yAxis: ["caudalimetro", "presion"].includes(element.tipo) ? 1 : 0,
         });
 
-
-        // Obtén la referencia a la tabla
-        const tabla = document.getElementById('tablaDatos');
-
-        // Limpia la tabla (opcional)
-        tabla.innerHTML = ' <thead><tr><th>Elemento</th><th>Fecha</th><th>Valor</th></tr></thead>';
-
-        // Crea las filas de la tabla con los datos cargados
-        tablaData.forEach(function (dato) {
-            const fila = document.createElement('tr');
-            fila.innerHTML = `
-          <td>${dato.elemento}</td>
-          <td>${dato.instante}</td>
-          <td>${dato.valor}</td>
-        `;
-            tabla.appendChild(fila);
-        });
-
     }
 
+    if (seriesData.length === 0) {
+        var fecha1 = new Date("2024-05-23 00:00:00").getTime();
+        var fecha2 = new Date("2024-05-24 00:00:00").getTime();
+        var fecha3 = new Date("2024-05-25 00:00:00").getTime();
+        var fecha4 = new Date("2024-05-26 00:00:00").getTime();
+
+
+        // Suponiendo que tienes los datos de esta manera
+        var datos = [
+            { "instante": fecha1, "valor": 15 },
+            { "instante": fecha2, "valor": 15 },
+            { "instante": fecha3, "valor": 15 }, // Agregar una hora al inicio
+            { "instante": fecha4, "valor": 15 }  // Agregar dos horas al inicio
+        ];
+
+        // Transforma los datos al formato que Highcharts espera
+        seriesData = datos.map(function (dato) {
+            return [dato.instante, dato.valor];
+        });
+        console.log(seriesData);
+    }
     var chartOptions = {
         chart: {
             type: "line",
@@ -166,27 +191,30 @@ async function paintGraph() {
         yAxis: [
             {
                 title: {
-                    text: "Valor (0-10)",
-                },
-                min: 0,
-                max: 10,
+                    text: "Valor",
+                }
             },
             {
                 title: {
-                    text: "Valor (0-1000)",
+                    text: "Valor",
                 },
                 opposite: true,
-                min: 0,
-                max: 1000,
             },
         ],
-        series: seriesData,
+        series: [{
+            name: 'Datos',
+            data: seriesData
+        }],
         turboThreshold: 5000,
     };
     Highcharts.chart("highchart-graph", chartOptions);
 }
 
 paintGraph();
+
+function dateToObject(date) {
+    return new Date(date + ":00Z");
+}
 
 async function paintGraphLectura() {
     //let elements = Array.from(document.getElementById("contadores").querySelectorAll("option:checked"));
