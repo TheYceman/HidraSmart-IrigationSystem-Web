@@ -1,5 +1,8 @@
-#gestor-peticiones-placeholder {
-  width: 89vw;
+main {
+  margin: 0 auto;
+  width: 90%;
+  overflow: hidden;
+  /*max-height: 70%;*/
 }
 
 main>div {
@@ -16,8 +19,6 @@ main>div {
 
 .table-container {
   height: 100%;
-  width: 85%;
-  max-height: 65vh;
   margin: auto;
   overflow-y: scroll;
   border: 2px solid var(--color-primary-400);
@@ -272,4 +273,136 @@ hr {
     border: 1px solid var(--color-primary-400);
     border-radius: 5px;
   }
+}
+
+/**GESTOR PETICIONES MODIFICADO**/
+#filter-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.filter-button {
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.filter-button.all {
+  background-color: #6c757d;
+}
+
+.filter-button.waiting-for-me {
+  background-color: #ff5733;
+}
+
+.filter-button.assigned-to-me {
+  background-color: #ffc107;
+}
+
+.filter-button.approvals {
+  background-color: #28a745;
+}
+
+.filter-button.tasks {
+  background-color: #007bff;
+}
+
+.filter-button:hover {
+  opacity: 0.8;
+}
+
+.filter-button.active {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#petitions-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-height: 68vh;
+}
+
+.petition-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 1rem;
+  margin: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+/* Media query para pantallas con un ancho máximo de 768px */
+@media (max-width: 768px) {
+  .petition-card {
+    width: 250px; /* Cambiar el ancho a 250px en pantallas más pequeñas */
+  }
+}
+
+/* Media query para pantallas con un ancho máximo de 576px */
+@media (max-width: 576px) {
+  .petition-card {
+    width: 200px; /* Cambiar el ancho a 200px en pantallas aún más pequeñas */
+  }
+}
+
+.petition-card h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.petition-card p {
+  margin: 0.5rem 0;
+}
+
+.petition-image {
+  width: 100px;
+  height: 100px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-start; /* Alinea los botones a la izquierda */
+  gap: 0.5rem; /* Espacio entre botones */
+  margin-top: 0.5rem; /* Espacio superior para separación del contenido */
+}
+
+.card-actions button {
+  padding: 0.4rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+  color: white;
+  display: flex;
+  align-items: center; /* Alinea el icono al centro verticalmente */
+  justify-content: center; /* Alinea el icono al centro horizontalmente */
+}
+
+.card-actions button i {
+  font-size: 1.2rem;
+}
+
+/* Botones de diferentes colores */
+.approve-btn {
+  background-color: #28a745; /* Verde */
+}
+
+.assign-btn {
+  background-color: #ffc107; /* Amarillo */
+}
+
+.comment-btn {
+  background-color: #17a2b8; /* Cian */
+}
+
+/* Efecto hover */
+.card-actions button:hover {
+  opacity: 0.8;
 }

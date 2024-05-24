@@ -2,7 +2,6 @@
   <link rel="stylesheet" href="/styles/navbar.css">
   <link rel="stylesheet" href="/styles/socialbar.css">
   <script src="/scripts/navbar.js" defer></script>
-
   <link rel="stylesheet" href="/styles/gestor_peticiones.css">
   <script src="/scripts/gestor-peticiones.js" defer></script>
   </head>
@@ -12,7 +11,7 @@
       <h2 class="titulo_seccion">
       </h2>
       <div class="div-container">
-        <button id="mostrarFormPeticiones" class="btn">Añadir nueva petición</button>
+        <!--<button id="mostrarFormPeticiones" class="btn">Añadir nueva petición</button>
         <form action="/gestor-peticiones/agregarPeticion" method="POST" id="peticionesForm" style="display: none;">
           <label for="tipo">tipo:</label>
           <input type="text" name="tipo" id="tipo" required>
@@ -26,46 +25,47 @@
           <input type="text" name="asignadaa" id="asignadaa" required>
           <button type="submit" class="btn">Añadir</button>
         </form>
-        <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Tipo</th>
-              <th>Usuario</th>
-              <th>Estado</th>
-              <th>Comentarios</th>
-              <th>Asignada a</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="table">
+        <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">-->
+        <div id="filter-buttons">
+          <button data-status="all" class="filter-button all">Todas (<span class="badge"><%= numeroPeticiones %></span>)</button>
+          <button data-status="waiting-for-me" class="filter-button waiting-for-me">Pendientes  (<span class="badge"><%= numeroPendientes %></span>)</button>
+          <button data-status="assigned-to-me" class="filter-button assigned-to-me">Mis tareas  (<span class="badge"><%= asignadasAMi %></span>)</button>
+          <button data-status="approvals" class="filter-button approvals">Aprobadas  (<span class="badge"><%= aprobadas %></span>)</button>
+          <button data-status="tasks" class="filter-button tasks">Tareas  (<span class="badge"><%= numeroPeticiones %></span>)</button>
+        </div>
+        <div class="table-container">
+         
+          <div id="petitions-container">
             <% for(let peticion of peticiones) { %>
-              <tr data-uid="<%= peticion.idPeticion %>">
-                <td contenteditable="true" data-field="tipo" data-id="<%=peticion.idPeticion %>">
-                  <%= peticion.tipo %>
-                </td>
-                <td contenteditable="true" data-field="usuario" data-id="<%= peticion.idPeticion %>">
-                  <%= peticion.usuario %>
-                </td>
-                <td contenteditable="true" class="editable" data-field="estado" data-id="<%= peticion.idPeticion %>">
-                  <%= peticion.estado %>
-                </td>
-                <td contenteditable="true" class="editable" data-field="comentarios" data-id="<%= peticion.idPeticion %>">
-                  <%= peticion.comentarios %>
-                </td>
-                <td contenteditable="true" class="editable" data-field="asignadaa" data-id="<%= peticion.idPeticion %>">
+              <div class="petition-card" data-priority="<%= peticion.prioridad %>" data-status="<%= peticion.estado %>">
+                <h3>
+                  <%= peticion.nombre %>
+                </h3>
+                <img src="<%= peticion.imagen %>" alt="Petition Image" class="petition-image">
+                <p><strong>ID:#</strong>
+                  <%= peticion.idPeticion %>
+                </p>
+                <p><strong>Requerida por:</strong>
+                  <%= peticion.requeridaPor %>
+                </p>
+                <p><strong>Asignada a:</strong>
                   <%= peticion.asignadaa %>
-                </td>
-                <td class="acciones">
-                  <button class="btn" onclick="actualizarPeticion('<%= peticion.idPeticion %>')">Actualizar</button>
-                  <button class="btn red-btn" onclick="borrarPeticion('<%= peticion.idPeticion %>')">Borrar</button>
-                </td>
-              </tr>
+                </p>
+                <p><strong>Prioridad:</strong>
+                  <%= peticion.prioridad %>
+                </p>
+                <p><strong>Estado:</strong>
+                  <%= peticion.estado %>
+                </p>
+                <div class="card-actions">
+                  <button class="approve-btn"><i class="fas fa-check"></i></button>
+                  <button class="assign-btn"><i class="fas fa-user-plus"></i></button>
+                  <button class="comment-btn"><i class="fas fa-comment"></i></button>
+                </div>
+              </div>
               <% } %>
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
       <script> var todos = [];</script>
       <% for(let peticion of todasLasPeticiones) { %>
@@ -74,70 +74,6 @@
           //console.log(todos);
         </script>
         <% } %>
-          <div class="div-container">
-            <!-- Botones de paginación -->
-            <!-- 
-         
-        -->
-            <div class="pagination">
-              <label for="page-selector">Página:</label>
-              <select id="page-selector" onchange="window.location.href = '/gestor-peticiones?page=' + this.value;">
-                <% for (let i=1; i <=totalPages; i++) { %>
-                  <option value="<%= i %>" <%=i===currentPage ? 'selected' : '' %>><%= i %>
-                  </option>
-                  <% } %>
-              </select>
-            </div>
-
-
-          </div>
-          <%- include('../components/common/footer.ejs') %>
     </main>
-    <script>
-      const mostrarFormularioButton = document.getElementById('mostrarFormPeticiones');
-      const miFormulario = document.getElementById('peticionesForm');
-
-      mostrarFormularioButton.addEventListener('click', () => {
-        // Cambia la visibilidad del formulario cuando se hace clic en el botón
-        if (miFormulario.style.display === 'none') {
-          miFormulario.style.display = 'block';
-        } else {
-          miFormulario.style.display = 'none';
-        }
-      });
-    </script>
-
-    <!-- Script para la búsqueda en tiempo real -->
-    <script>
-      //Solo busca en la página actual
-      document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.getElementById("search");
-
-        searchInput.addEventListener("keyup", function () {
-          const searchTerm = this.value.toLowerCase();
-
-          // Accede a la variable de Node.js (miVariable) y asígnala a una variable de JavaScript
-
-          var found = false;
-          for (var i = 0; i < todos.length; i++) {
-            //console.log("contador['id'] " + todos[i].id + " " + searchTerm);
-            if ((todos[i].login.toLowerCase()).includes(searchTerm)) {
-              found = true;
-              break;
-            }
-
-          }
-          if (found) {
-            var pagina = (i / 10) + 1;
-            console.log("Página: " + parseInt(pagina));
-            location.href = "/gestor-peticiones?page=" + parseInt(pagina);
-            //row.style.display = "";
-          } else {
-            //row.style.display = "none";
-          }
-
-        });
-      });
-    </script>
-
+    <%- include('../components/common/footer.ejs') %>
   </body>
