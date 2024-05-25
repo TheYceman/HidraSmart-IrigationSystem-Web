@@ -239,6 +239,7 @@ async function getGestorPeticiones(req, res) {
     profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
     profileUserEmail: req.session.user[0].email,
     user: req.session.username,
+    userId: req.session.user[0].idusers,
     peticiones: await getGeDataPeticionesPerPage(req, res),
     todasLasPeticiones: await getAllPeticiones(req, res),
     currentPage: parseInt(req.query.page) || 1,

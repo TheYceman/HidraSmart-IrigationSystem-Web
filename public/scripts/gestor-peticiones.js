@@ -69,91 +69,58 @@ async function borrarPeticion(numero) {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const petitionsContainer = document.getElementById('petitions-container');
-    const filterButtons = document.querySelectorAll('#filter-buttons button');
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.filter-button');
+    const petitions = document.querySelectorAll('.petition-card');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const status = this.getAttribute('data-status');
 
-    // Cargar y mostrar todas las peticiones al cargar la página
-    fetch('/api/petitions')
-        .then(response => response.json())
-        .then(petitions => {
-            displayPetitions(petitions);
-            addFilterFunctionality(petitions);
-        });
+            // Quitar la clase 'active' de todos los botones
+            buttons.forEach(btn => btn.classList.remove('active'));
 
-    function displayPetitions(petitions) {
-        petitionsContainer.innerHTML = '';
-        petitions.forEach(petition => {
-            const card = document.createElement('div');
-            card.classList.add('petition-card');
+            // Añadir la clase 'active' al botón clicado
+            this.classList.add('active');
 
-            card.innerHTML = `
-          <h3>${petition.name}</h3>
-          <p><strong>ID:#</strong> ${petition.id}</p>
-          <p><strong>Pendientes:</strong> ${petition.requester}</p>
-          <p><strong>Asignadas:</strong> ${petition.assignedTo}</p>
-          <p><strong>Prioridad alta:</strong> ${petition.priority}</p>
-          <p><strong>Estado:</strong> ${petition.status}</p>
-        `;
 
-            petitionsContainer.appendChild(card);
-        });
-    }
+            // Filtrar peticiones
+            petitions.forEach(petition => {
 
-    function addFilterFunctionality(petitions) {
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                const status = button.getAttribute('data-status');
-                const filteredPetitions = status === 'all' ? petitions : petitions.filter(petition => petition.status.toLowerCase().includes(status));
-
-                displayPetitions(filteredPetitions);
+                if (status === 'all') {
+                    // Mostrar todas las peticiones
+                    petition.style.display = 'block';
+                } else if (status === 'pending') {
+                    // Mostrar solo las peticiones pendientes
+                    if (petition.getAttribute('data-status') === 'Pendiente') {
+                        petition.style.display = 'block';
+                    } else {
+                        petition.style.display = 'none';
+                    }
+                } else if (status === 'assigned-to-me') {
+                    // Mostrar solo las peticiones asignadas a mí
+                    console.log(petition.getAttribute('data-assigned-to').trim() + " " + idUsuario);
+                    console.log('Comparing directly:', parseInt(petition.getAttribute('data-assigned-to')) === parseInt(idUsuario)); // Debe ser true
+                    if (parseInt(petition.getAttribute('data-assigned-to').trim()) === parseInt(idUsuario) && petition.getAttribute('data-status') !== 'Pendiente') {
+                        petition.style.display = 'block';
+                    } else {
+                        petition.style.display = 'none';
+                    }
+                } else if (status === 'approved') {
+                    // Mostrar solo las peticiones aprobadas (no pendientes)
+                    if (petition.getAttribute('data-status') !== 'Pendiente') {
+                        petition.style.display = 'block';
+                    } else {
+                        petition.style.display = 'none';
+                    }
+                } else if (status === 'tasks') {
+                    // Aquí puedes añadir lógica para mostrar las tareas si es necesario
+                    if (petition.getAttribute('data-status') !== 'Pendiente') {
+                        petition.style.display = 'block';
+                    } else {
+                        petition.style.display = 'none';
+                    }
+                }
             });
         });
-    }
-
-
-    const searchInput = document.getElementById("search");
-
-    searchInput.addEventListener("keyup", function () {
-        const searchTerm = this.value.toLowerCase();
-
-        // Accede a la variable de Node.js (miVariable) y asígnala a una variable de JavaScript
-
-        var found = false;
-        for (var i = 0; i < todos.length; i++) {
-            //console.log("contador['id'] " + todos[i].id + " " + searchTerm);
-            if ((todos[i].login.toLowerCase()).includes(searchTerm)) {
-                found = true;
-                break;
-            }
-
-        }
-        if (found) {
-            var pagina = (i / 10) + 1;
-            console.log("Página: " + parseInt(pagina));
-            location.href = "/gestor-peticiones?page=" + parseInt(pagina);
-            //row.style.display = "";
-        } else {
-            //row.style.display = "none";
-        }
-
     });
-
-    /*
-    const mostrarFormularioButton = document.getElementById('mostrarFormPeticiones');
-    const miFormulario = document.getElementById('peticionesForm');
-
-    mostrarFormularioButton.addEventListener('click', () => {
-        // Cambia la visibilidad del formulario cuando se hace clic en el botón
-        if (miFormulario.style.display === 'none') {
-            miFormulario.style.display = 'block';
-        } else {
-            miFormulario.style.display = 'none';
-        }
-    });
-*/
-
 });

@@ -7,6 +7,9 @@
   </head>
 
   <body>
+    <script>
+      window.idUsuario = <%=userId %>
+    </script>
     <main>
       <h2 class="titulo_seccion">
       </h2>
@@ -27,17 +30,18 @@
         </form>
         <label>Buscar registro... </label><input type="text" id="search" class="search-input" placeholder="Buscar">-->
         <div id="filter-buttons">
-          <button data-status="all" class="filter-button all">Todas (<span class="badge"><%= numeroPeticiones %></span>)</button>
-          <button data-status="waiting-for-me" class="filter-button waiting-for-me">Pendientes  (<span class="badge"><%= numeroPendientes %></span>)</button>
-          <button data-status="assigned-to-me" class="filter-button assigned-to-me">Mis tareas  (<span class="badge"><%= asignadasAMi %></span>)</button>
-          <button data-status="approvals" class="filter-button approvals">Aprobadas  (<span class="badge"><%= aprobadas %></span>)</button>
-          <button data-status="tasks" class="filter-button tasks">Tareas  (<span class="badge"><%= numeroPeticiones %></span>)</button>
+          <button data-status="all" class="filter-button all active">Todas (<span class="badge"><%= numeroPeticiones %></span>)</button>
+          <button data-status="pending" class="filter-button pending">Pendientes (<span class="badge"><%= numeroPendientes %></span>)</button>
+          <button data-status="approved" class="filter-button approved">Aprobadas (<span class="badge"><%= aprobadas %></span>)</button>
+          <button data-status="tasks" class="filter-button tasks">Tareas (<span class="badge"><%= aprobadas %></span>)</button>
+          <button data-status="assigned-to-me" class="filter-button assigned-to-me">Mis tareas (<span class="badge"><%= asignadasAMi %></span>)</button>
         </div>
         <div class="table-container">
-         
+
           <div id="petitions-container">
             <% for(let peticion of peticiones) { %>
-              <div class="petition-card" data-priority="<%= peticion.prioridad %>" data-status="<%= peticion.estado %>">
+              <div class="petition-card" data-priority="<%= peticion.prioridad %>" data-status="<%= peticion.estado %>"
+                data-assigned-to="<%= peticion.asignadaId%>">
                 <h3>
                   <%= peticion.nombre %>
                 </h3>
