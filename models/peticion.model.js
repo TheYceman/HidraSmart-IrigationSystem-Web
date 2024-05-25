@@ -7,6 +7,7 @@ class Peticion {
     this.imagen = peticion.image;
     this.requeridaPor = peticion.requester;
     this.asignadaa = peticion.assignedTo;
+    this.asignadaId = peticion.assignedId;
     this.prioridad = peticion.priority;
     this.estado = peticion.status;
     this.tipo = peticion.type;
@@ -16,7 +17,7 @@ class Peticion {
 
   static async getAll() {
 
-    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name, p.image FROM aplicaciones_web.ge_peticiones p "+
+    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name, p.image, u2.Idusers AS assignedId FROM aplicaciones_web.ge_peticiones p "+
     "JOIN users u1 ON p.requester = u1.idusers "+ 
     "JOIN users u2 ON p.assignedTo = u2.idusers "+
     "JOIN tipo_peticiones tp ON p.type = tp.idtipo;";
@@ -28,7 +29,7 @@ class Peticion {
   }
 
   static async getFilteredData(numero) {
-    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name, p.image FROM aplicaciones_web.ge_peticiones p "+
+    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name, p.image, u2.Idusers AS assignedId FROM aplicaciones_web.ge_peticiones p "+
     "JOIN users u1 ON p.requester = u1.idusers "+ 
     "JOIN users u2 ON p.assignedTo = u2.idusers "+
     "JOIN tipo_peticiones tp ON p.type = tp.idtipo WHERE idPeticion=?;";
@@ -40,7 +41,7 @@ class Peticion {
 
   static async getPerPage(perPage, offset) {
 
-    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name, p.image FROM aplicaciones_web.ge_peticiones p "+
+    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name, p.image, u2.Idusers AS assignedId FROM aplicaciones_web.ge_peticiones p "+
     "JOIN users u1 ON p.requester = u1.idusers "+ 
     "JOIN users u2 ON p.assignedTo = u2.idusers "+
     "JOIN tipo_peticiones tp ON p.type = tp.idtipo LIMIT " + perPage + " OFFSET " + offset;
@@ -74,7 +75,8 @@ class Peticion {
   }
 
   static async getCountAsignadasAMi(req,res) {
-    const queryString = "SELECT count(*) as total FROM ge_peticiones where assignedTo="+ req.session.user[0].idusers+";";
+    const queryString = "SELECT count(*) as total FROM ge_peticiones where assignedTo="+ req.session.user[0].idusers+" and status<>'Pendiente';";
+    console.log(queryString);
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
@@ -95,7 +97,7 @@ class Peticion {
  
 
   static async getAllPeticiones() {
-    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name, p.image FROM aplicaciones_web.ge_peticiones p "+
+    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name, p.image, u2.Idusers AS assignedId FROM aplicaciones_web.ge_peticiones p "+
     "JOIN users u1 ON p.requester = u1.idusers "+ 
     "JOIN users u2 ON p.assignedTo = u2.idusers "+
     "JOIN tipo_peticiones tp ON p.type = tp.idtipo;";
@@ -107,7 +109,7 @@ class Peticion {
   }
 
   static async getFilteredData(idPeticion) {
-    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name FROM aplicaciones_web.ge_peticiones p "+
+    const queryString = "SELECT p.idPeticion, tp.descripcion AS type, u1.username AS requester, p.status, p.comments, u2.username AS assignedTo, p.priority, p.name, u2.Idusers AS assignedId FROM aplicaciones_web.ge_peticiones p "+
     "JOIN users u1 ON p.requester = u1.idusers "+ 
     "JOIN users u2 ON p.assignedTo = u2.idusers "+
     "JOIN tipo_peticiones tp ON p.type = tp.idtipo WHERE idPeticion=?;";

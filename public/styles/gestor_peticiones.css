@@ -290,14 +290,14 @@ hr {
   cursor: pointer;
   border-radius: 5px;
   font-size: 1rem;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .filter-button.all {
   background-color: #6c757d;
 }
 
-.filter-button.waiting-for-me {
+.filter-button.pending {
   background-color: #ff5733;
 }
 
@@ -305,7 +305,7 @@ hr {
   background-color: #ffc107;
 }
 
-.filter-button.approvals {
+.filter-button.approved {
   background-color: #28a745;
 }
 
@@ -319,6 +319,7 @@ hr {
 
 .filter-button.active {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border: 10px solid #a4a4a4;
 }
 
 #petitions-container {
@@ -406,3 +407,4 @@ hr {
 .card-actions button:hover {
   opacity: 0.8;
 }
+
