@@ -5,14 +5,24 @@
     <script src="/scripts/gestor-cultivos.js" defer></script>
     <link rel="stylesheet" href="/styles/gestor-cultivos.css">
     </head>
+
     <body>
         <main>
-            <div class="container">
-                <h1>¡Página en Construcción!</h1>
-                <p>Estamos trabajando en esta página. Por favor, vuelve más tarde.</p>
-                <img src="/images/construction.jpg" alt="Página en Construcción">
+            <h2 class="titulo_seccion">
+            </h2>
+            <div class="tab-labels">
+                <div class="tab-label active" data-tab="cultivos" onclick="showTab('cultivos')">Cultivos
+                </div>
+                <div class="tab-label" data-tab="demandas" onclick="showTab('demandas')">Demandas</div>
+                <!-- Agrega más pestañas según sea necesario -->
+            </div>
+            <!-- Contenido de las pestañas -->
+            <div class="tab-content active" id="cultivos">
+            </div>
+            <div class="tab-content" id="demandas">
             </div>
         </main>
         <%- include('../components/common/footer.ejs') %>
     </body>
+
     </html>

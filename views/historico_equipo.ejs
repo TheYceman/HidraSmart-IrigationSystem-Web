@@ -1,16 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico</title>
     <style>
-        body {
+        html {
             font-family: "Nunito Sans", sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 20px;
+
+            --color-bg: rgb(226, 234, 238);
+            --color-bg-darker: rgb(191, 198, 201);
+            /* --color-primary-bg: rgb(225, 244, 253); */
+            --color-primary-contrast: rgb(225, 244, 253);
+            /* --color-primary-contrast: rgb(211, 229, 236); */
+            --color-primary-300: rgb(48, 186, 245);
+            --color-primary-400: rgb(0, 155, 219);
+            --color-primary-600: rgb(19, 113, 221);
+            --color-primary-800: rgb(19, 22, 221);
+
+            --color-alert-300: rgb(245, 127, 127);
+            --color-alert-500: red;
+
+            --box-shadow-default: 2px 2px 8px rgba(0, 0, 0, 0.6);
+
+            --height-max-space: calc(100% - 7rem);
+
+            height: 100%;
+
+            font-family: "Nunito Sans", sans-serif;
+            font-size: 1.5vh;
+            /* Tamaño de fuente relativo al ancho de la ventana */
         }
+
+        body {
+            margin: 0;
+            overflow-x: hidden;
+        }
+
         .container {
             background-color: #fff;
             border-radius: 10px;
@@ -19,72 +46,82 @@
             max-width: 600px;
             margin: auto;
         }
-        .header, .footer {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+
         .header img {
             width: 100px;
             margin-bottom: 10px;
         }
+
         .table-container {
             overflow-x: auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
         }
+
         th {
-            background-color: #4CAF50;
+            background-color: #009bdb;
             color: white;
         }
+
         .status {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
         }
+
         .status div {
             display: flex;
             align-items: center;
         }
+
         .status img {
             width: 20px;
             margin-right: 10px;
         }
+
         .button-container {
             text-align: right;
         }
+
         .button-container button {
-            background-color: #4CAF50;
+            background-color: #4a4a4a;
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
         }
+
         .button-container button:hover {
-            background-color: #45a049;
+            background-color: #009bdb;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <img src="valve-icon.png" alt="Valve">
+            <img src="/images/mapa_sig/valve.png" alt="Valve">
             <h2>Histórico del Hidratante</h2>
             <p>Última Actualización: 27/06/2014 12:42:19</p>
         </div>
         <div class="status">
-            <div><img src="check-icon.png" alt="Check"> El controlador IPex 12 asignado está operativo</div>
-            <div><img src="check-icon.png" alt="Check"> Válvula OK cuando está cerrada</div>
-            <div><img src="check-icon.png" alt="Check"> Válvula OK cuando está abierta</div>
-            <div><img src="check-icon.png" alt="Check"> Estado general de la válvula OK</div>
-            <div><img src="check-icon.png" alt="Check"> No hay alerta externa</div>
+            <div><img src="/images/mapa_sig/counter_watering.png" alt="Check"> El controlador IPex 12 asignado está
+                operativo</div>
+            <div><img src="/images/mapa_sig/valve_closed.png" alt="Check"> Válvula OK cuando está cerrada</div>
+            <div><img src="/images/mapa_sig/valve_open.png" alt="Check"> Válvula OK cuando está abierta</div>
+            <div><img src="/images/mapa_sig/valve.png" alt="Check"> Estado general de la válvula OK</div>
+            <div><img src="/images/mapa_sig/hidralot.png" alt="Check"> No hay alerta externa</div>
         </div>
         <div class="table-container">
             <table>
@@ -144,4 +181,5 @@
         </div>
     </div>
 </body>
+
 </html>
