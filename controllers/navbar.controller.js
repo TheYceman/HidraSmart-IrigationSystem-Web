@@ -164,20 +164,40 @@ async function getInfoMeteo(req, res) {
 }
 
 async function getDemandasCultivos(req, res) {
-  res.render("navbar/gestor-cultivos", {
-    headImage: req.session.headImage,
-    navIndex: 5,
-    navGroup: 1,
-    pageTitle: "Gestor demandas y cultivos",
-    headComunityLogo: req.session.headCommunityImage,
-    headComunityName: req.session.headCommunityName,
-    headComunityUrl: req.session.headCommunityUrl,
-    profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
-    profileUserEmail: req.session.user[0].email,
-    today: new Date().toJSON().slice(0, 16),
-    geData: await getGeData(),
-    user: req.session.username,
-  });
+
+  if (req.session.user[0].rol === 'admin') {
+    res.render("navbar/gestor-cultivos-admin", {
+      headImage: req.session.headImage,
+      navIndex: 5,
+      navGroup: 1,
+      pageTitle: "Gestor demandas y cultivos",
+      headComunityLogo: req.session.headCommunityImage,
+      headComunityName: req.session.headCommunityName,
+      headComunityUrl: req.session.headCommunityUrl,
+      profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
+      profileUserEmail: req.session.user[0].email,
+      today: new Date().toJSON().slice(0, 16),
+      geData: await getGeData(),
+      user: req.session.username,
+    });
+  }
+  else {
+    res.render("navbar/gestor-cultivos", {
+      headImage: req.session.headImage,
+      navIndex: 5,
+      navGroup: 1,
+      pageTitle: "Gestor demandas y cultivos",
+      headComunityLogo: req.session.headCommunityImage,
+      headComunityName: req.session.headCommunityName,
+      headComunityUrl: req.session.headCommunityUrl,
+      profileUserName: req.session.user[0].name + " " + req.session.user[0].surname,
+      profileUserEmail: req.session.user[0].email,
+      today: new Date().toJSON().slice(0, 16),
+      geData: await getGeData(),
+      user: req.session.username,
+    });
+  }
+
 }
 
 async function getPlanRiego(req, res) {
@@ -244,10 +264,10 @@ async function getGestorPeticiones(req, res) {
     todasLasPeticiones: await getAllPeticiones(req, res),
     currentPage: parseInt(req.query.page) || 1,
     totalPages: await getTotalPagesPeticiones(req, res),
-    numeroPeticiones:  await getCountAll(req, res),
+    numeroPeticiones: await getCountAll(req, res),
     numeroPendientes: await getCountPendientes(req, res),
     asignadasAMi: await getCountAsignadasAMi(req, res),
-    aprobadas: await getCountAprobadas (req, res),
+    aprobadas: await getCountAprobadas(req, res),
   });
 }
 
