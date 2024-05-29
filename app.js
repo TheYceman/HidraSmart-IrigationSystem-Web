@@ -17,6 +17,7 @@ const planificadorRiegoRoutes = require("./routes/planificador-riego.routes");
 const mapaSigRoutes = require("./routes/mapa-sig.routes");
 const gestorEquiposRoutes = require("./routes/gestor-equipos.routes");
 const gestorUsuariosRoutes = require("./routes/gestor-usuarios.routes");
+const gestorCultivosRoutes = require("./routes/gestor-cultivos.routes");
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
@@ -43,6 +44,7 @@ app.use("/", authRoutes);
 app.use("/", loginRoutes);
 app.use("/", navbarRoutes);
 
+app.use("/gestor-cultivos", gestorCultivosRoutes);
 app.use("/planificador-riego", planificadorRiegoRoutes);
 app.use("/estado-red", estadoRedRoutes);
 app.use("/mapa-sig", mapaSigRoutes);

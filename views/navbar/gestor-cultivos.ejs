@@ -7,6 +7,32 @@
     </head>
 
     <body>
+        <script>
+
+            // Definir una variable JavaScript para almacenar los datos de los contadores
+            window.parcelas = [];
+
+            // Iterar sobre cada contador y agregar sus coordenadas a la variable
+            <% for (let parcela of todasLasParcelas) { %>
+
+                window.parcelas.push({
+                    id: '<%= parcela.id %>',
+                    sector: '<%= parcela.sector %>',
+                    titular: '<%= parcela.titular %>',
+                    municipio: '<%= parcela.municipio %>',
+                    poligono: '<%= parcela.poligono %>',
+                    parcela: '<%= parcela.parcela %>',
+                    paraje: '<%= parcela.paraje %>',
+                    dimension: '<%= parcela.dimension %>',
+                    cultivo: '<%= parcela.cultivo %>',
+                    riego: '<%= parcela.riego %>',
+                    propietario: '<%= parcela.propietario %>',
+                    hectareas: '<%= parcela.hectareas %>'
+                });
+        
+            <% } %>
+
+        </script>
         <main>
             <h2 class="titulo_seccion">
             </h2>
@@ -18,6 +44,66 @@
             </div>
             <!-- Contenido de las pestañas -->
             <div class="tab-content active" id="cultivos">
+                <div class="container">
+                    <div class="box">
+                        <div class="table-container">
+                            <table id="parcelas">
+                                <thead>
+                                    <tr>
+                                        <th>Identificador</th>
+                                        <th>Sector</th>
+                                        <th>Titular</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table">
+                                    <% for(let parcela of parcelas) { %>
+                                        <tr data-uid="<%= parcela.id %>" class="selectable-row">
+                                            <td>
+                                                <%= parcela.id %>
+                                            </td>
+                                            <td data-field="sector" data-id="<%= parcela.id %>">
+                                                <%= parcela.sector %>
+                                            </td>
+                                            <td data-field="marca" data-id="<%= parcela.id %>">
+                                                <%= parcela.titular %>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="card-container">
+                            <div class="card" id="infoCard">
+                                <h2>Detalles de la Parcela</h2>
+                                <p id="cultivoInfo">Cultivo: N/A</p>
+                                <p id="hectareasInfo">Hectáreas: N/A</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="chart-container">
+                            <div id="historicalChart" style="width:100%; height:100%;"></div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="table-container">
+                            <table id="cultivosTable">
+                                <thead>
+                                  <tr>
+                                    <th>ID Parcela</th>
+                                    <th>Cultivo</th>
+                                    <th>Fecha y Hora</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="cultivosTableBody">
+                                  <!-- Aquí se agregarán las filas de cultivos -->
+                                </tbody>
+                              </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="tab-content" id="demandas">
             </div>

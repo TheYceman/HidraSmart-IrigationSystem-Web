@@ -77,7 +77,7 @@ async function updateUsuario(req, res) {
   if (result.success) {
     console.log("Usuario actualizado con éxito");
   }
-  return result.data.rows;;
+  return result.data.rows;
 
 }
 

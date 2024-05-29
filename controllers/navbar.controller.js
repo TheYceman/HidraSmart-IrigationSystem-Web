@@ -16,6 +16,10 @@ const { getAll } = require("../models/contador.model");
 const { getAllSensores } = require("../models/sensor.model");
 const { getGeDataClientes } = require("../controllers/gestor-equipos.controller");
 
+const { getAllParcelas } = require("../models/parcela.model");
+const { getGeDataParcelaPerPage } = require("../controllers/gestor-cultivos.controller");
+const { getTotalPagesParcela } = require("../controllers/gestor-cultivos.controller");
+
 //const { getGeDataUsuario } = require("../controllers/gestor-usuarios.controller");
 const { getGeDataUsuariosPerPage } = require("../controllers/gestor-usuarios.controller");
 const { getTotalPagesUsuarios } = require("../controllers/gestor-usuarios.controller");
@@ -179,6 +183,10 @@ async function getDemandasCultivos(req, res) {
       today: new Date().toJSON().slice(0, 16),
       geData: await getGeData(),
       user: req.session.username,
+      todasLasParcelas: await getAllParcelas(req, res),
+      currentPage: parseInt(req.query.page) || 1,
+      totalPages: await getTotalPagesParcela(req, res),
+      parcelas: await getGeDataParcelaPerPage(req, res),
     });
   }
   else {
@@ -195,6 +203,10 @@ async function getDemandasCultivos(req, res) {
       today: new Date().toJSON().slice(0, 16),
       geData: await getGeData(),
       user: req.session.username,
+      todasLasParcelas: await getAllParcelas(req, res),
+      currentPage: parseInt(req.query.page) || 1,
+      totalPages: await getTotalPagesParcela(req, res),
+      parcelas: await getGeDataParcelaPerPage(req, res),
     });
   }
 
