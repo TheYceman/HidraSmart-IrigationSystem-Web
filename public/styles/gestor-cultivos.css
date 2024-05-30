@@ -54,8 +54,8 @@ main>div {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 20px;
     width: 100%;
-    max-width: 1200px;
     margin: 20px auto;
+    height: 73vh;
 }
 
 
@@ -67,10 +67,11 @@ main>div {
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    height: 30vh;
+    height: 28vh;
     /* 30% de la altura del viewport */
     min-height: 200px;
     /* Altura mínima para evitar que se vuelva demasiado pequeña */
+
 }
 
 .box:hover {
@@ -85,7 +86,7 @@ main>div {
 
     .box {
         flex: 1 1 100%;
-        height: 25vh;
+        height: 28vh;
         min-height: 150px;
         /* Altura mínima para pantallas pequeñas */
     }
@@ -216,4 +217,455 @@ main>div {
 
 .card p {
     margin: 10px 0;
+}
+
+.btn {
+    padding: 2px 6px;
+    font: inherit;
+    background-color: #4b4b4b;
+    color: var(--color-primary-contrast);
+    border-radius: 3px;
+    border: none;
+    margin: 6px 3px;
+}
+
+.btn:hover {
+    background-color: #0078a7;
+}
+
+.red-btn {
+    background-color: #FF6961;
+}
+
+/* Contenedor principal de la tarjeta */
+.card-container {
+    display: flex;
+    justify-content: center;
+    /* Centra la tarjeta horizontalmente */
+    align-items: center;
+    /* Centra la tarjeta verticalmente */
+}
+
+/**Botón cultivo**/
+/* Contenedor del botón */
+
+/* Botón Añadir Cultivo */
+.add-btn {
+    background-color: #4a4a4a;
+    /* Verde */
+    color: white;
+    /* Texto blanco */
+    border: none;
+    /* Sin borde */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    padding: 7px 15px;
+    /* Espaciado interno */
+    font-size: 12px;
+    /* Tamaño de fuente */
+    font-weight: bold;
+    /* Negrita */
+    text-transform: uppercase;
+    /* Texto en mayúsculas */
+    cursor: pointer;
+    /* Cursor de mano */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    /* Transiciones suaves */
+}
+
+.add-btn:hover {
+    background-color: #009bdb;
+    /* Verde más oscuro al pasar el cursor */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    /* Sombra más intensa */
+}
+
+.add-btn:active {
+    background-color: #009bdb;
+    /* Verde aún más oscuro al hacer clic */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    /* Sombra más suave */
+}
+
+/**Ventana modal**/
+/* Estilos para la ventana emergente */
+.modal {
+    display: none;
+    /* Oculto por defecto */
+    position: fixed;
+    /* Fijo en la pantalla */
+    z-index: 1;
+    /* Colocarlo en el frente */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Ancho completo */
+    height: 100%;
+    /* Altura completa */
+    overflow: auto;
+    /* Desplazamiento si es necesario */
+    background-color: rgb(0, 0, 0);
+    /* Color de fondo */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Fondo negro con opacidad */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    /* Fondo blanco */
+    margin: 15% auto;
+    /* Margen automático */
+    padding: 20px;
+    /* Espaciado interno */
+    border: 1px solid #888;
+    /* Borde gris */
+    width: 80%;
+    /* Ancho */
+    max-width: 300px;
+    /* Ancho máximo */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra */
+}
+
+.close-btn {
+    color: #aaa;
+    /* Color gris */
+    float: right;
+    /* Flotar a la derecha */
+    font-size: 14px;
+    /* Tamaño de fuente */
+    font-weight: bold;
+    /* Negrita */
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    /* Cambiar color al pasar el cursor */
+    text-decoration: none;
+    /* Sin subrayado */
+    cursor: pointer;
+    /* Cursor de mano */
+}
+
+.modal-buttons {
+    display: flex;
+    /* Flexbox */
+    justify-content: space-between;
+    /* Espaciado entre botones */
+    margin-top: 20px;
+    /* Espaciado superior */
+}
+
+.modal-add-btn,
+.modal-cancel-btn {
+    background-color: #4a4a4a;
+    /* Verde */
+    color: white;
+    /* Texto blanco */
+    border: none;
+    /* Sin borde */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    padding: 10px 20px;
+    /* Espaciado interno */
+    font-size: 14px;
+    /* Tamaño de fuente */
+    cursor: pointer;
+    /* Cursor de mano */
+}
+
+/* sección 2 */
+.campo-container {
+    padding: 5px;
+    height: 100%;
+}
+
+.campo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.campo-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.column {
+    flex: 1;
+    padding: 10px;
+}
+
+/* Estilo adicional para los párrafos dentro de las columnas */
+.column p {
+    margin: 5px 0;
+    padding: 10px;
+    text-align: center;
+}
+
+
+.campo-buttons {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+}
+
+.campo-tab-button {
+    flex: 1;
+    padding: 15px 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    color: #555;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    outline: none;
+}
+
+.campo-tab-button:last-child {
+    border-right: none;
+}
+
+.campo-tab-button i {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.campo-tab-button.active {
+    background-color: #009bdb;
+    color: white;
+}
+
+.campo-tab-button.active i {
+    color: white;
+}
+
+.campo-tab-content {
+    display: none;
+}
+
+.campo-tab-content.active {
+    display: block;
+}
+
+/* Asegúrate de que la primera pestaña esté activa por defecto */
+.tab-label.active {
+    background-color: #a3a4a6;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/**Acordeon demandas**/
+.accordion {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.accordion-item {
+    border-bottom: 1px solid #ccc;
+}
+
+.accordion-title {
+    background-color: #f1f1f1;
+    cursor: pointer;
+    padding: 15px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.accordion-title:hover {
+    background-color: #e1e1e1;
+}
+
+.accordion-content {
+    display: none;
+    padding: 15px;
+    background-color: #fff;
+    height: 45vh;
+}
+
+.accordion-content table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.accordion-content th,
+.accordion-content td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+/**Demandas**/
+.flex-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: stretch;
+    /* Ajusta el contenido verticalmente */
+}
+
+.left-column {
+    width: 50%;
+    padding-right: 10px;
+    /* Agrega un espacio entre las columnas */
+    box-sizing: border-box;
+    /* Incluye el relleno en el ancho total */
+}
+
+.right-column {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 10px;
+    /* Agrega un espacio entre las columnas */
+    box-sizing: border-box;
+    /* Incluye el relleno en el ancho total */
+}
+
+/* Estilos para la tabla dentro del accordion-content */
+.accordion-content .custom-table-container {
+    height: 100%;
+    width: 100%;
+    /* Ajusta el ancho al 100% */
+    max-height: 45vh;
+    margin: auto;
+    overflow-y: auto;
+    /* Cambia a 'auto' para que aparezca la barra de desplazamiento cuando sea necesario */
+    border: 2px solid var(--color-primary-400);
+    border-radius: 5px;
+}
+
+.accordion-content .custom-table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.accordion-content .custom-table-container td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.accordion-content .custom-table-container th {
+    position: sticky;
+    top: 0;
+    background-color: var(--color-primary-400);
+    color: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    height: 20px;
+}
+
+/*Select tabla */
+.accordion-content .custom-table-container .selectable-row:hover {
+    cursor: pointer;
+    background-color: #f0f0f0;
+}
+
+.accordion-content .custom-table-container .selected {
+    background-color: #4a4a4a;
+    color: white;
+}
+
+.left-column {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.right-column {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-column2 {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-column2 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cupo-label {
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: default;
+}
+
+.label-text {
+    color: #4a4a4a;
+    font-style: italic;
+    /* Agrega estilo cursiva al texto */
+}
+
+.label-number {
+    color: #009bdb;
+    font-weight: bold;
+}
+
+.ceder-cupo-btn-container {
+    /*display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;*/
+    width: 100%;
+}
+
+.ceder-cupo-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    /* Aumenta ligeramente el padding */
+    background-color: #009bdb;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1.1em;
+    /* Aumenta ligeramente el tamaño de la fuente */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ceder-cupo-btn i {
+    margin-right: 8px;
+}
+
+.ceder-cupo-btn:hover {
+    background-color: #4a4a4a;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
