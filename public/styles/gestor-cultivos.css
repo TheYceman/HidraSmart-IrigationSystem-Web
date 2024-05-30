@@ -669,3 +669,14 @@ main>div {
     background-color: #4a4a4a;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+/**Parpadeo del texto**/
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.blinking-text {
+    animation: blink 1s infinite;
+}
