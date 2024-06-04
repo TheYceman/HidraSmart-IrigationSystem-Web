@@ -2378,6 +2378,7 @@ function toggleLeyenda() {
 }
 
 
+
 function exportTableToExcel(tableID, filename = '') {
   var downloadLink;
   var dataType = 'application/vnd.ms-excel';

@@ -964,6 +964,58 @@ function toggleLeyenda() {
   }
 }
 
+function toggleCapas() {
+  var capas = document.getElementById('capas'); // Asegúrate de que este es el ID de tu capa de capas
+  var button = document.getElementById('toggle-capas-button');
+  var icon = document.getElementById('capas-icon');
+
+  if (capas.style.display === 'none' || capas.style.display === '') {
+      icon.classList.add('fa-layer-group');
+      icon.classList.remove('fa-layer-minus');
+      button.querySelector('span').textContent = 'Capas';
+      capas.style.display = 'block'; // Muestra la capa capas
+  } else {
+      icon.classList.add('fa-layer-minus');
+      icon.classList.remove('fa-layer-group');
+      button.querySelector('span').textContent = 'Capas';
+      capas.style.display = 'none'; // Oculta la capa capas
+  }
+}
+
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tab-content");
+  for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+  }
+  document.getElementById(tabName).style.display = "block";
+}
+
+// Default open tab
+document.getElementsByClassName('tablink')[0].click();
+
+/****Leyenda */
+// Obtén el elemento del menú desplegable
+// Seleccionar todos los elementos con la clase "accordion-header"
+document.querySelectorAll('.accordion-header').forEach(header => {
+  header.addEventListener('click', () => {
+      const item = header.parentElement;
+      const content = item.querySelector('.accordion-content');
+      const icon = header.querySelector('.fa-angle-down');
+
+      if (content.style.display === 'block') {
+          content.style.display = 'none';
+          icon.style.transform = 'rotate(0deg)';
+      } else {
+          document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
+          document.querySelectorAll('.accordion-header .fa-angle-down').forEach(i => i.style.transform = 'rotate(0deg)');
+          content.style.display = 'block';
+          icon.style.transform = 'rotate(180deg)';
+      }
+  });
+});
+/* Fin leyenda */
+
 
 function exportTableToExcel(tableID, filename = '') {
   var downloadLink;
