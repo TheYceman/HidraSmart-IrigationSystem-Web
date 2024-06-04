@@ -56,14 +56,20 @@
         <div id="map" style="width:100%; height: 76vh;"></div><!--Fin mapa-->
         <!-- Barra de herramientas -->
         <div class="toolbar">
-            <button class="toolbar-btn" id="toggle-button">
-                <i class="fas fa-cloud-rain" id="leyenda-icon"></i><span>LLuvia</span>
+            <button class="toolbar-btn" id="toggle-temperature" onclick="toggleLayer('temperature', paint_temp)">
+                <i class="fas fa-thermometer-half" id="temp-icon"></i> <span>Temperatura</span>
             </button>
-            <button class="toolbar-btn" id="toggle-button">
-                <i class="fas fa-thermometer-half" id="leyenda-icon"></i> <span>Temperatura</span>
+            <button class="toolbar-btn" id="toggle-precipitation" onclick="toggleLayer('precipitation', paint_preci)">
+                <i class="fas fa-cloud-rain" id="preci-icon"></i><span>Precipitación</span>
             </button>
-            <button class="toolbar-btn" id="toggle-button">
-                <i class="fas -wind" id="leyenda-icon"></i> <span>Viento</span>
+            <button class="toolbar-btn" id="toggle-humidity" onclick="toggleLayer('humidity', paint_hume)">
+                <i class="fas fa-tint" id="humidity-icon"></i> <span>Humedad</span>
+            </button>
+            <button class="toolbar-btn" id="toggle-wind" onclick="toggleLayer('wind', paint_wind)">
+                <i class="fas fa-wind" id="wind-icon"></i> <span>Viento</span>
+            </button>
+            <button class="toolbar-btn" id="toggle-storms" onclick="toggleLayer('storms', paint_storm)">
+                <i class="fas fa-bolt" id="storms-icon"></i> <span>% Tormentas</span>
             </button>
         </div>
         <div id="informacion" style="display:none">

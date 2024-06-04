@@ -102,6 +102,11 @@
   background-color: #0078a7;
 }
 
+.toolbar-btn.selected {
+  background-color: #009bdb;
+  color: white;
+}
+
 #informacion b {
   font-weight: bold;
   /* Texto en negrita */
@@ -412,7 +417,6 @@
   margin: 10px;
   z-index: 1;
 }
-
 
 .ol-control i {
   cursor: default;
@@ -7234,4 +7238,15 @@ tfoot {
 
 .close-button:hover {
   background-color: #009bdb;
+}
+
+.custom-iw {
+  color: #009bdb;
+  font-weight: bold;
+}
+
+/**Ocultar el botón de la infowindow **/
+
+.gm-style-iw button[title="Cerrar"] {
+  display: none !important;
 }
