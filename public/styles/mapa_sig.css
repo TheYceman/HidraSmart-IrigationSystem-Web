@@ -43,6 +43,29 @@
   align-items: center;
   overflow: hidden;
 }
+#capas {
+  position: absolute;
+  /*margin-top: 6vh;
+  margin-right: 8.55vw;*/
+  top:62px;
+  right: 0px;
+  display: inline-block;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0.9); 
+  border: 0px;
+  text-transform: none;
+  appearance: none;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  padding: 1 1vw;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
 
 /*
 #toggle-button {
@@ -476,4 +499,83 @@
 .selected {
   background-color: #4a4a4a;
   color: #fff;
+}
+
+/**Ocultar el botón de la infowindow **/
+
+.gm-style-iw button[title="Cerrar"] {
+  display: none !important;
+}
+
+/**MENU**/
+.accordion {
+  width: 300px; /* Puedes ajustar el ancho aquí */
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.accordion-item {
+  border-bottom: 1px solid #ddd;
+}
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+}
+.accordion-header i {
+  margin-right: 10px;
+}
+.accordion-content {
+  display: none;
+  padding: 10px 20px;
+  background-color: #fff;
+}
+.accordion-content p {
+  margin: 0;
+}
+.sidebar {
+  height: 70%;
+  width: 50px;
+  position: fixed;
+  top: 150px;
+  left:106px;
+  background-color: #f8f9fa;
+  padding-top: 20px;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar a {
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #333;
+  display: block;
+  text-align: center;
+}
+
+.sidebar a:hover {
+  background-color: #ddd;
+}
+
+.tab-content {
+  display: none;
+  position: fixed;
+  left: 160px;
+  top: 150px;
+  height: 33%;
+  width: 200px;
+  background-color: #f1f1f1;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.visible {
+  display: block;
 }
