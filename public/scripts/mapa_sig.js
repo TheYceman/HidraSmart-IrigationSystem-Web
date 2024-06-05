@@ -244,10 +244,31 @@ function paint_counter_bbdd() {
 }
 
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+const leyenda2 = document.getElementById('leyenda2');
+
+function updateLeyenda() {
+  leyenda2.innerHTML = ''; // Limpiar la capa leyenda2
+  checkboxes.forEach(function (checkbox) {
+    if (checkbox.checked) {
+      const label = document.querySelector(`label[for="${checkbox.id}"]`);
+      if (label) {
+        const legendItem = document.createElement('div');
+        legendItem.classList.add('legend2_item');
+        legendItem.innerHTML = "<label class='checkbox_label_leyenda2'>" + label.innerHTML + "</label>"; // Añadir el contenido de la etiqueta label, incluyendo estilos
+        console.log(label.outerHTML);
+        leyenda2.appendChild(legendItem);
+      }
+    }
+  });
+}
 
 checkboxes.forEach(function (checkbox) {
   checkbox.addEventListener("change", function () {
+    updateLeyenda();
+
     if (this.checked) {
+
+
       switch (this.value) {
         case "item1-1":
           var checkboxCounter =
@@ -301,6 +322,7 @@ checkboxes.forEach(function (checkbox) {
           break;
         case "item2-2":
           paint_plots();
+          paint_cultivos();
           var checkboxPressure =
             document.getElementsByClassName("checkbox_pressure");
           for (var i = 0; i < checkboxPressure.length; i++) {
@@ -812,6 +834,86 @@ function paint_plots() {
       console.log("Error:", error);
     });
 }
+function getCultivoColor(cultivo) {
+  switch (cultivo) {
+      case "Ajos":
+          return "#ff5733";
+      case "Árboles":
+          return "#ffc300";
+      case "Melón":
+          return "#32a852";
+      case "Guisantes":
+          return "#e0a218";
+      case "Huerta":
+          return "#9f39b5";
+      case "Alfalfa":
+          return "#1f96e9";
+      case "Sandía":
+          return "#ffd700";
+      case "Veza":
+          return "#adff2f";
+      case "Olivo":
+          return "#dda0dd";
+      case "Tomate":
+          return "#800080";
+      case "Vallardo":
+          return "#4b0082";
+      case "Espárrago":
+          return "#c0c0c0";
+      case "Trigo":
+          return "#2e8b57";
+      case "Maíz":
+          return "#20b2aa";
+      case "Chalet":
+          return "#ff1493";
+      default:
+          return "#00ff7f"; // Por defecto, No definido
+  }
+}
+
+
+function paint_cultivos() {
+  var plotCoords = [];
+  fetch("json/cultivos.json")
+      .then((response) => response.json())
+      .then(function(data) {
+          var plotsArray = Array.from(data);
+          plotsArray.forEach(function(plot) {
+              if (plot.nSecuencial == 1) {
+                  if (plotCoords.length > 0) {
+                      var cultivoColor = getCultivoColor(plot.cultivo); // Obtener el color del cultivo
+
+                      var polygon = new google.maps.Polygon({
+                          paths: plotCoords,
+                          strokeColor: "#FCAE1E",
+                          strokeOpacity: 0.8,
+                          strokeWeight: 1,
+                          fillColor: cultivoColor, // Usar el color correspondiente al cultivo
+                          fillOpacity: 0.35,
+                      });
+
+                      polygon.addListener("click", function(event) {
+                          show_infowindow_plots(event, plot.ideParcela);
+                      });
+
+                      polygon.setMap(myMap);
+                      polygonsArray.push(polygon);
+                      infowindowsPlots.set(polygon, infowindow);
+                  }
+                  plotCoords = [];
+              }
+              plotCoords.push({
+                  lat: parseFloat(plot.coorX),
+                  lng: parseFloat(plot.coorY),
+              });
+          });
+      })
+      .catch((error) => {
+          console.log("Error:", error);
+      });
+}
+
+
 
 function adjust_pressure_color(pressureValor) {
   switch (true) {
@@ -970,15 +1072,15 @@ function toggleCapas() {
   var icon = document.getElementById('capas-icon');
 
   if (capas.style.display === 'none' || capas.style.display === '') {
-      icon.classList.add('fa-layer-group');
-      icon.classList.remove('fa-layer-minus');
-      button.querySelector('span').textContent = 'Capas';
-      capas.style.display = 'block'; // Muestra la capa capas
+    icon.classList.add('fa-layer-group');
+    icon.classList.remove('fa-layer-minus');
+    button.querySelector('span').textContent = 'Capas';
+    capas.style.display = 'block'; // Muestra la capa capas
   } else {
-      icon.classList.add('fa-layer-minus');
-      icon.classList.remove('fa-layer-group');
-      button.querySelector('span').textContent = 'Capas';
-      capas.style.display = 'none'; // Oculta la capa capas
+    icon.classList.add('fa-layer-minus');
+    icon.classList.remove('fa-layer-group');
+    button.querySelector('span').textContent = 'Capas';
+    capas.style.display = 'none'; // Oculta la capa capas
   }
 }
 
@@ -986,32 +1088,41 @@ function openTab(evt, tabName) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tab-content");
   for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
   document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
 }
 
 // Default open tab
-document.getElementsByClassName('tablink')[0].click();
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementsByClassName('tablink')[0].click();
+  updateLeyenda();
+});
+
 
 /****Leyenda */
 // Obtén el elemento del menú desplegable
 // Seleccionar todos los elementos con la clase "accordion-header"
 document.querySelectorAll('.accordion-header').forEach(header => {
   header.addEventListener('click', () => {
-      const item = header.parentElement;
-      const content = item.querySelector('.accordion-content');
-      const icon = header.querySelector('.fa-angle-down');
+    const item = header.parentElement;
+    const content = item.querySelector('.accordion-content');
+    const icon = header.querySelector('.fa-angle-down');
 
-      if (content.style.display === 'block') {
-          content.style.display = 'none';
-          icon.style.transform = 'rotate(0deg)';
-      } else {
-          document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
-          document.querySelectorAll('.accordion-header .fa-angle-down').forEach(i => i.style.transform = 'rotate(0deg)');
-          content.style.display = 'block';
-          icon.style.transform = 'rotate(180deg)';
-      }
+    if (content.style.display === 'block') {
+      content.style.display = 'none';
+      icon.style.transform = 'rotate(0deg)';
+    } else {
+      document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
+      document.querySelectorAll('.accordion-header .fa-angle-down').forEach(i => i.style.transform = 'rotate(0deg)');
+      content.style.display = 'block';
+      icon.style.transform = 'rotate(180deg)';
+    }
   });
 });
 /* Fin leyenda */
@@ -1090,8 +1201,8 @@ function exportDataToExcel(data, filename = '') {
 // }
 
 /**** SELECT CULTIVOS */
-$(document).ready(function() {
-  $('.legend-item').click(function() {
+$(document).ready(function () {
+  $('.legend-item').click(function () {
     $(this).toggleClass('selected');
   });
 });
