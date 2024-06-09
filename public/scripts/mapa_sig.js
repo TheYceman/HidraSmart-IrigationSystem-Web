@@ -321,9 +321,9 @@ checkboxes.forEach(function (checkbox) {
           paint_counter_bbdd();
           break;
         case "item2-2":
-          paint_plots();
+          //paint_plots();
           paint_cultivos();
-          var checkboxPressure =
+          /*var checkboxPressure =
             document.getElementsByClassName("checkbox_pressure");
           for (var i = 0; i < checkboxPressure.length; i++) {
             checkboxPressure[i].checked = true;
@@ -335,6 +335,7 @@ checkboxes.forEach(function (checkbox) {
           if (checkboxPressureList.length > 0) {
             checkboxPressureList[0].style.opacity = 1;
           }
+          */
           break;
         case "item2-3":
           paint_pipelines();
@@ -836,83 +837,113 @@ function paint_plots() {
 }
 function getCultivoColor(cultivo) {
   switch (cultivo) {
-      case "Ajos":
-          return "#ff5733";
-      case "Árboles":
-          return "#ffc300";
-      case "Melón":
-          return "#32a852";
-      case "Guisantes":
-          return "#e0a218";
-      case "Huerta":
-          return "#9f39b5";
-      case "Alfalfa":
-          return "#1f96e9";
-      case "Sandía":
-          return "#ffd700";
-      case "Veza":
-          return "#adff2f";
-      case "Olivo":
-          return "#dda0dd";
-      case "Tomate":
-          return "#800080";
-      case "Vallardo":
-          return "#4b0082";
-      case "Espárrago":
-          return "#c0c0c0";
-      case "Trigo":
-          return "#2e8b57";
-      case "Maíz":
-          return "#20b2aa";
-      case "Chalet":
-          return "#ff1493";
-      default:
-          return "#00ff7f"; // Por defecto, No definido
+    case "Ajos":
+      return "#ff5733";
+    case "Árboles":
+      return "#ffc300";
+    case "Melón":
+      return "#32a852";
+    case "Guisantes":
+      return "#e0a218";
+    case "Huerta":
+      return "#9f39b5";
+    case "Alfalfa":
+      return "#1f96e9";
+    case "Sandía":
+      return "#ffd700";
+    case "Veza":
+      return "#adff2f";
+    case "Olivo":
+      return "#dda0dd";
+    case "Tomate":
+      return "#800080";
+    case "Vallardo":
+      return "#4b0082";
+    case "Espárrago":
+      return "#c0c0c0";
+    case "Trigo":
+      return "#2e8b57";
+    case "Maíz":
+      return "#20b2aa";
+    case "Chalet":
+      return "#ff1493";
+    default:
+      return "#00ff7f"; // Por defecto, No definido
   }
 }
+$(document).ready(function () {
+  $('.legend-item2').click(function () {
+    $(this).toggleClass('selected');
+  });
+}); 
 
+var selectedCultivos = [];
+
+$(document).ready(function () {
+  $('.legend-item').click(function () {
+    $(this).toggleClass('selected');
+    var cultivo = $(this).data('value');
+    if ($(this).hasClass('selected')) {
+      if (!selectedCultivos.includes(cultivo)) {
+        selectedCultivos.push(cultivo);
+      }
+    } else {
+      selectedCultivos = selectedCultivos.filter(function (item) {
+        return item !== cultivo;
+      });
+    }
+    paint_cultivos(); // Llamar a la función de pintura cada vez que se selecciona/deselecciona un cultivo
+  });
+
+  // Inicializar la función de pintura al cargar la página
+  paint_cultivos();
+});
 
 function paint_cultivos() {
   var plotCoords = [];
   fetch("json/cultivos.json")
-      .then((response) => response.json())
-      .then(function(data) {
-          var plotsArray = Array.from(data);
-          plotsArray.forEach(function(plot) {
-              if (plot.nSecuencial == 1) {
-                  if (plotCoords.length > 0) {
-                      var cultivoColor = getCultivoColor(plot.cultivo); // Obtener el color del cultivo
-
-                      var polygon = new google.maps.Polygon({
-                          paths: plotCoords,
-                          strokeColor: "#FCAE1E",
-                          strokeOpacity: 0.8,
-                          strokeWeight: 1,
-                          fillColor: cultivoColor, // Usar el color correspondiente al cultivo
-                          fillOpacity: 0.35,
-                      });
-
-                      polygon.addListener("click", function(event) {
-                          show_infowindow_plots(event, plot.ideParcela);
-                      });
-
-                      polygon.setMap(myMap);
-                      polygonsArray.push(polygon);
-                      infowindowsPlots.set(polygon, infowindow);
-                  }
-                  plotCoords = [];
-              }
-              plotCoords.push({
-                  lat: parseFloat(plot.coorX),
-                  lng: parseFloat(plot.coorY),
-              });
-          });
-      })
-      .catch((error) => {
-          console.log("Error:", error);
+    .then((response) => response.json())
+    .then(function (data) {
+      // Limpiar los polígonos existentes antes de pintar nuevos
+      polygonsArray.forEach(function(polygon) {
+        polygon.setMap(null);
       });
-}
+      polygonsArray = [];
 
+      var plotsArray = Array.from(data);
+      plotsArray.forEach(function (plot) {
+        if (selectedCultivos.includes(plot.cultivo)) { // Filtrar por cultivos seleccionados
+          if (plot.nSecuencial == 1) {
+            if (plotCoords.length > 0) {
+              var cultivoColor = getCultivoColor(plot.cultivo);
+              var polygon = new google.maps.Polygon({
+                paths: plotCoords,
+                strokeColor: "#FCAE1E",
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: cultivoColor,
+                fillOpacity: 0.35,
+              });
+              polygon.addListener("click", function (event) {
+                show_infowindow_plots(event, plot.ideParcela);
+              });
+              polygon.setMap(myMap);
+              polygonsArray.push(polygon);
+              infowindowsPlots.set(polygon, infowindow);
+            }
+            plotCoords = [];
+          }
+          plotCoords.push({
+            lat: parseFloat(plot.coorX),
+            lng: parseFloat(plot.coorY),
+          });
+        }
+      });
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+}
 
 
 function adjust_pressure_color(pressureValor) {
@@ -1116,17 +1147,16 @@ document.querySelectorAll('.accordion-header').forEach(header => {
 
     if (content.style.display === 'block') {
       content.style.display = 'none';
-      icon.style.transform = 'rotate(0deg)';
+      //icon.style.transform = 'rotate(0deg)';
     } else {
       document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
       document.querySelectorAll('.accordion-header .fa-angle-down').forEach(i => i.style.transform = 'rotate(0deg)');
       content.style.display = 'block';
-      icon.style.transform = 'rotate(180deg)';
+      //icon.style.transform = 'rotate(180deg)';
     }
   });
 });
 /* Fin leyenda */
-
 
 function exportTableToExcel(tableID, filename = '') {
   var downloadLink;
@@ -1200,12 +1230,6 @@ function exportDataToExcel(data, filename = '') {
 
 // }
 
-/**** SELECT CULTIVOS */
-$(document).ready(function () {
-  $('.legend-item').click(function () {
-    $(this).toggleClass('selected');
-  });
-});
 
 
 
