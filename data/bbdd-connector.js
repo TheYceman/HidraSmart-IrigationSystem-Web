@@ -1,24 +1,10 @@
 const mysql = require('mysql2/promise');
-const fetch = require('node-fetch');
-
-async function downloadBlob() {
-  // console.log('process.env.BLOB_SAS_URL:', process.env.BLOB_SAS_URL);
-  const blobSasUrl = process.env.BLOB_SAS_URL
-
-  const response = await fetch(blobSasUrl);
-  const certContent = await response.text();
-  // console.log('Descargado el archivo .pem con éxito:\n', certContent);
-  return certContent;
-}
-
-downloadBlob().catch((err) => {
-  console.error('Error al descargar el archivo .pem:', err.message);
-});
 
 async function getDb(ddbb) {
   try {
-    const certContent = await downloadBlob();
 
+    const pemFile = process.env.PEM_CERTIFICATE_DDBB.replace(/\\n/g, '\n');
+  
     console.log("bbb " + process.cwd());
 
     // Create the connection pool. The pool-specific settings are the defaults
@@ -36,7 +22,7 @@ async function getDb(ddbb) {
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
       ssl: {
-        ca: certContent,
+        ca: pemFile,
       },
     });
 
