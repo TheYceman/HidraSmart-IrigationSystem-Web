@@ -298,7 +298,7 @@ hr {
 }
 
 .filter-button.pending {
-  background-color: #ff5733;
+  background-color: #ffa500; /* Color naranja */
 }
 
 .filter-button.assigned-to-me {
@@ -312,6 +312,11 @@ hr {
 .filter-button.tasks {
   background-color: #007bff;
 }
+
+.filter-button.rejected {
+  background-color: #dc3545; /* Color para rechazadas (rojo) */
+}
+
 
 .filter-button:hover {
   opacity: 0.8;

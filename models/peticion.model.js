@@ -86,7 +86,27 @@ class Peticion {
   }
 
   static async getCountAprobadas() {
-    const queryString = "SELECT count(*) as total FROM ge_peticiones where status<>'Pendiente';";
+    const queryString = "SELECT count(*) as total FROM ge_peticiones where status='Aprobada';";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geTotal = results.data.rows.map((total) => total);
+    console.log(geTotal[0].total);
+    return geTotal[0].total;
+  }
+
+  static async getCountAsignadas() {
+    const queryString = "SELECT count(*) as total FROM ge_peticiones where status='Asignada';";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geTotal = results.data.rows.map((total) => total);
+    console.log(geTotal[0].total);
+    return geTotal[0].total;
+  }
+
+  static async getCountRechazadas() {
+    const queryString = "SELECT count(*) as total FROM ge_peticiones where status='Rechazada';";
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);
