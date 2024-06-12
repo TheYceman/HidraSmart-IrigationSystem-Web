@@ -82,10 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // Añadir la clase 'active' al botón clicado
             this.classList.add('active');
 
-
             // Filtrar peticiones
             petitions.forEach(petition => {
-
                 if (status === 'all') {
                     // Mostrar todas las peticiones
                     petition.style.display = 'block';
@@ -107,14 +105,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 } else if (status === 'approved') {
                     // Mostrar solo las peticiones aprobadas (no pendientes)
-                    if (petition.getAttribute('data-status') !== 'Pendiente') {
+                    if (petition.getAttribute('data-status') === 'Aprobada') {
                         petition.style.display = 'block';
                     } else {
                         petition.style.display = 'none';
                     }
                 } else if (status === 'tasks') {
                     // Aquí puedes añadir lógica para mostrar las tareas si es necesario
-                    if (petition.getAttribute('data-status') !== 'Pendiente') {
+                    if (petition.getAttribute('data-status') === 'Asignada') {
+                        petition.style.display = 'block';
+                    } else {
+                        petition.style.display = 'none';
+                    }
+                } else if (status === 'rejected') {
+                    // Mostrar solo las peticiones rechazadas
+                    if (petition.getAttribute('data-status') === 'Rechazada') {
                         petition.style.display = 'block';
                     } else {
                         petition.style.display = 'none';

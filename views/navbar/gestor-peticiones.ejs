@@ -32,8 +32,9 @@
         <div id="filter-buttons">
           <button data-status="all" class="filter-button all active">Todas (<span class="badge"><%= numeroPeticiones %></span>)</button>
           <button data-status="pending" class="filter-button pending">Pendientes (<span class="badge"><%= numeroPendientes %></span>)</button>
-          <button data-status="approved" class="filter-button approved">Aprobadas (<span class="badge"><%= aprobadas %></span>)</button>
-          <button data-status="tasks" class="filter-button tasks">Tareas (<span class="badge"><%= aprobadas %></span>)</button>
+          <button data-status="tasks" class="filter-button tasks">Asignadas (<span class="badge"><%= numeroAsignadas %></span>)</button>
+          <button data-status="approved" class="filter-button approved">Aprobadas (<span class="badge"><%= numeroAprobadas %></span>)</button>
+          <button data-status="rejected" class="filter-button rejected">Rechazadas (<span class="badge"><%= numeroRechazadas %></span>)</button> 
           <button data-status="assigned-to-me" class="filter-button assigned-to-me">Mis tareas (<span class="badge"><%= asignadasAMi %></span>)</button>
         </div>
         <div class="table-container">

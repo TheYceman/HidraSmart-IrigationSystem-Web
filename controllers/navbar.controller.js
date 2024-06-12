@@ -32,7 +32,7 @@ const { getAllRoles } = require("../models/rol.model");
 //const { getGeDataPeticion } = require("../controllers/gestor-peticiones.controller");
 const { getGeDataPeticionesPerPage } = require("../controllers/gestor-peticiones.controller");
 const { getTotalPagesPeticiones } = require("../controllers/gestor-peticiones.controller");
-const { getAllPeticiones, getCountAll, getCountPendientes, getCountAsignadasAMi, getCountAprobadas } = require("../models/peticion.model");
+const { getAllPeticiones, getCountAll, getCountPendientes, getCountAsignadasAMi, getCountAprobadas, getCountAsignadas, getCountRechazadas } = require("../models/peticion.model");
 
 
 const { runQuery } = require("../data/bbdd-connector");
@@ -279,7 +279,9 @@ async function getGestorPeticiones(req, res) {
     numeroPeticiones: await getCountAll(req, res),
     numeroPendientes: await getCountPendientes(req, res),
     asignadasAMi: await getCountAsignadasAMi(req, res),
-    aprobadas: await getCountAprobadas(req, res),
+    numeroAprobadas: await getCountAprobadas(req, res),
+    numeroAsignadas: await getCountAsignadas(req, res),
+    numeroRechazadas: await getCountRechazadas(req, res),
   });
 }
 
