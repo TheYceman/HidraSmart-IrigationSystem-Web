@@ -1,6 +1,6 @@
 var myMap;
 
-var makersCountersArray=[];
+var makersCountersArray = [];
 var infowindow = new google.maps.InfoWindow();
 var infowindowMeteo = new google.maps.InfoWindow();
 // Coordenadas
@@ -38,6 +38,7 @@ myMap.addListener('click', function (event) {
     //alert('Coordenadas: ' + clickedLocation.lat() + ', ' + clickedLocation.lng());
 
     document.getElementById("informacion").style.display = "none";
+    infowindow.close();
 });
 /*
 // Evento para el botón de acercar
@@ -349,8 +350,29 @@ function getMarkerColor(value) {
     }
 }
 
+function getTaColor(value) {
+    if (value <= -10) {
+        return '#123e59'; // Azul oscuro
+    } else if (value <= 0) {
+        return '#13628b'; // Azul medio
+    } else if (value <= 5) {
+        return '#0096ce'; // Azul claro
+    } else if (value <= 10) {
+        return '#02b3c6'; // Turquesa
+    } else if (value <= 20) {
+        return '#66cfb7'; // Verde claro
+    } else if (value <= 30) {
+        return '#f4a239'; // Naranja
+    } else if (value <= 40) {
+        return '#f06112'; // Naranja oscuro
+    } else {
+        return '#ec350c'; // Rojo
+    }
+}
+
+
 function paint_temp() {
-    fetch("json/temperatura.geojson")
+    fetch("json/info_meteo/mpl_LOCL_68_3dias_Tempta_D+0_12h_2024061014CEST_1718021344.geojson")
         .then((response) => response.json())
         .then(function (data) {
             if (Array.isArray(data.features)) {
@@ -359,7 +381,7 @@ function paint_temp() {
                     var municipio = feature.properties.Municipio;
                     var coordenada = feature.geometry.coordinates;
                     var position = new google.maps.LatLng(coordenada[1], coordenada[0]);
-                    if (temperature !== "" ) {
+                    if (temperature !== "") {
                         var marker = new google.maps.Marker({
                             position: position,
                             map: myMap,
@@ -371,14 +393,14 @@ function paint_temp() {
                             icon: {
                                 path: google.maps.SymbolPath.CIRCLE,
                                 scale: 10,
-                                fillColor: getMarkerColor(temperature),
+                                fillColor: getTaColor(temperature),
                                 fillOpacity: 1,
                                 strokeWeight: 1
                             }
                         });
-                       
+
                         currentMarkers.push(marker);
-                    
+
                         var infowindowMeteo = new google.maps.InfoWindow({
                             content: '<div class="custom-iw">' + municipio + '</div><div>Temperatura: ' + temperature + ' ºC</div>'
                         });
@@ -407,7 +429,7 @@ function paint_temp() {
 
 function paint_preci() {
     console.log("paint_preci");
-    fetch("json/precipitacion.geojson")
+    fetch("json/info_meteo/mpl_LOCL_68_3dias_cPrecp_D+1_12h_2024061114CEST_1718021344.geojson")
         .then((response) => response.json())
         .then(function (data) {
             if (Array.isArray(data.features)) {
@@ -464,7 +486,7 @@ function paint_preci() {
 
 function paint_hume() {
 
-    fetch("json/humedad.geojson")
+    fetch("json/info_meteo/mpl_LOCL_68_3dias_humRel_D+1_12h_2024061114CEST_1718021344.geojson")
         .then((response) => response.json())
         .then(function (data) {
 
@@ -523,12 +545,13 @@ function paint_hume() {
 
 function paint_wind() {
     console.log("paint_wind");
-    fetch("json/viento.geojson")
+    fetch("json/info_meteo/mpl_LOCL_68_3dias_diVien_D+1_12h_2024061114CEST_1718021344.geojson")
         .then((response) => response.json())
         .then(function (data) {
             if (Array.isArray(data.features)) {
                 data.features.forEach(function (feature) {
                     var diVien = feature.properties.diVien;
+                    console.log(diVien);
                     var viVien = feature.properties.viVien;
                     var municipio = feature.properties.Municipio;
                     var coordenada = feature.geometry.coordinates;
@@ -544,11 +567,8 @@ function paint_wind() {
                                 fontWeight: 'bold'
                             },
                             icon: {
-                                path: google.maps.SymbolPath.CIRCLE,
-                                scale: 10,
-                                fillColor: getMarkerColor(viVien),
-                                fillOpacity: 1,
-                                strokeWeight: 1
+                                url: 'images/info-meteo/viento/' + diVien + '.png', // Ruta del icono PNG
+                                scaledSize: new google.maps.Size(50, 50) // Tamaño del icono (ajusta según necesites)
                             }
                         });
                         currentMarkers.push(marker);
@@ -581,7 +601,7 @@ function paint_wind() {
 
 function paint_storm() {
     console.log("paint_storm");
-    fetch("json/tormenta.geojson")
+    fetch("json/info_meteo/mpl_LOCL_68_3dias_probTo_D+1_1218h_2024061114CEST_2024061120CEST_1718021344.geojson")
         .then((response) => response.json())
         .then(function (data) {
             if (Array.isArray(data.features)) {
@@ -634,6 +654,254 @@ function paint_storm() {
         .catch((error) => {
             console.log("Error:", error);
         });
+}
+
+function paint_prob_nieve() {
+    fetch("json/info_meteo/mpl_LOCL_68_3dias_probNv_D+1_1218h_2024061114CEST_2024061120CEST_1718021344.geojson")
+        .then((response) => response.json())
+        .then(function (data) {
+            if (Array.isArray(data.features)) {
+                data.features.forEach(function (feature) {
+                    var temperature = feature.properties.probNv;
+                    var municipio = feature.properties.Municipio;
+                    var coordenada = feature.geometry.coordinates;
+                    var position = new google.maps.LatLng(coordenada[1], coordenada[0]);
+                    if (temperature !== "") {
+                        var marker = new google.maps.Marker({
+                            position: position,
+                            map: myMap,
+                            label: {
+                                text: String(temperature),
+                                color: '#000000',
+                                fontWeight: 'bold'
+                            },
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 10,
+                                fillColor: getMarkerColor(temperature),
+                                fillOpacity: 1,
+                                strokeWeight: 1
+                            }
+                        });
+
+                        currentMarkers.push(marker);
+
+                        var infowindowMeteo = new google.maps.InfoWindow({
+                            content: '<div class="custom-iw">' + municipio + '</div><div>Temperatura: ' + temperature + ' ºC</div>'
+                        });
+
+                        marker.addListener('mouseover', function () {
+                            infowindowMeteo.open(map, marker);
+                            google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
+                                var iwOuter = document.querySelector('.gm-style-iw');
+                                iwOuter.classList.add('custom-iw');
+                            });
+                        });
+
+                        marker.addListener('mouseout', function () {
+                            infowindowMeteo.close();
+                        });
+                    }
+                });
+            } else {
+                console.log('El array features no existe en el GeoJSON.');
+            }
+        })
+        .catch((error) => {
+            console.log("Error:", error);
+        });
+}
+
+function paint_nieve() {
+    fetch("json/info_meteo/mpl_LOCL_68_7dias_coNieve_D+1_1218h_2024061114CEST_2024061120CEST_1718021344.geojson")
+        .then((response) => response.json())
+        .then(function (data) {
+            if (Array.isArray(data.features)) {
+                data.features.forEach(function (feature) {
+                    var temperature = feature.properties.Tempta;
+                    var municipio = feature.properties.Municipio;
+                    var coordenada = feature.geometry.coordinates;
+                    var position = new google.maps.LatLng(coordenada[1], coordenada[0]);
+                    if (temperature !== "") {
+                        var marker = new google.maps.Marker({
+                            position: position,
+                            map: myMap,
+                            label: {
+                                text: String(temperature),
+                                color: '#000000',
+                                fontWeight: 'bold'
+                            },
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 10,
+                                fillColor: getMarkerColor(temperature),
+                                fillOpacity: 1,
+                                strokeWeight: 1
+                            }
+                        });
+
+                        currentMarkers.push(marker);
+
+                        var infowindowMeteo = new google.maps.InfoWindow({
+                            content: '<div class="custom-iw">' + municipio + '</div><div>Temperatura: ' + temperature + ' ºC</div>'
+                        });
+
+                        marker.addListener('mouseover', function () {
+                            infowindowMeteo.open(map, marker);
+                            google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
+                                var iwOuter = document.querySelector('.gm-style-iw');
+                                iwOuter.classList.add('custom-iw');
+                            });
+                        });
+
+                        marker.addListener('mouseout', function () {
+                            infowindowMeteo.close();
+                        });
+                    }
+                });
+            } else {
+                console.log('El array features no existe en el GeoJSON.');
+            }
+        })
+        .catch((error) => {
+            console.log("Error:", error);
+        });
+}
+
+function paint_prob_preci() {
+    fetch("json/info_meteo/mpl_LOCL_68_3dias_probPr_D+0_1218h_2024061014CEST_2024061020CEST_1718021344.geojson")
+        .then((response) => response.json())
+        .then(function (data) {
+            if (Array.isArray(data.features)) {
+                data.features.forEach(function (feature) {
+                    var prob = feature.properties.probPr;
+                    var municipio = feature.properties.Municipio;
+                    var coordenada = feature.geometry.coordinates;
+                    var position = new google.maps.LatLng(coordenada[1], coordenada[0]);
+                    if (prob !== "") {
+                        var marker = new google.maps.Marker({
+                            position: position,
+                            map: myMap,
+                            label: {
+                                text: String(prob),
+                                color: '#000000',
+                                fontWeight: 'bold'
+                            },
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 10,
+                                fillColor: getMarkerColor(prob),
+                                fillOpacity: 1,
+                                strokeWeight: 1
+                            }
+                        });
+
+                        currentMarkers.push(marker);
+
+                        var infowindowMeteo = new google.maps.InfoWindow({
+                            content: '<div class="custom-iw">' + municipio + '</div><div>' + prob + ' %</div>'
+                        });
+
+                        marker.addListener('mouseover', function () {
+                            infowindowMeteo.open(map, marker);
+                            google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
+                                var iwOuter = document.querySelector('.gm-style-iw');
+                                iwOuter.classList.add('custom-iw');
+                            });
+                        });
+
+                        marker.addListener('mouseout', function () {
+                            infowindowMeteo.close();
+                        });
+                    }
+                });
+            } else {
+                console.log('El array features no existe en el GeoJSON.');
+            }
+        })
+        .catch((error) => {
+            console.log("Error:", error);
+        });
+}
+
+function paint_cielo() {
+    fetch("json/info_meteo/mpl_LOCL_68_3dias_eCielo_D+1_12h_2024061114CEST_1718021344.geojson")
+        .then((response) => response.json())
+        .then(function (data) {
+            if (Array.isArray(data.features)) {
+                data.features.forEach(function (feature) {
+                    var cielo = feature.properties.eCielo;
+                    var municipio = feature.properties.Municipio;
+                    var coordenada = feature.geometry.coordinates;
+                    var position = new google.maps.LatLng(coordenada[1], coordenada[0]);
+                    var resultado = getCielo(cielo);
+                    // Cargar la imagen correspondiente
+                    var imagePath = 'images/info-meteo/cielo/' + resultado[0];
+
+                    // Crear el marcador personalizado
+                    var marker = new google.maps.Marker({
+                        position: position,
+                        map: myMap,
+                        icon: imagePath  // Usar la imagen como icono
+                    });
+
+                    currentMarkers.push(marker);
+
+                    // Crear la ventana de información
+                    var infowindowMeteo = new google.maps.InfoWindow({
+                        content: '<div class="custom-iw">' + municipio + '</div><div>' + resultado[1] + '</div>'
+                    });
+
+                    // Mostrar la ventana de información al hacer hover
+                    marker.addListener('mouseover', function () {
+                        infowindowMeteo.open(myMap, marker);
+                        google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
+                            var iwOuter = document.querySelector('.gm-style-iw');
+                            iwOuter.classList.add('custom-iw');
+                        });
+                    });
+
+                    // Cerrar la ventana de información al quitar el hover
+                    marker.addListener('mouseout', function () {
+                        infowindowMeteo.close();
+                    });
+                });
+            } else {
+                console.log('El array features no existe en el GeoJSON.');
+            }
+        })
+        .catch((error) => {
+            console.log("Error:", error);
+        });
+}
+
+function getCielo(cielo) {
+    switch (cielo) {
+        case "11":
+            return ["11_Cielo_despejado.png", "Cielo despejado"];
+        case "14":
+            return ["14_Nuboso.png", "Nuboso"];
+        case "12":
+            return ["12_Poco_nuboso.png", "Poco nuboso"];
+        case "13":
+            return ["13_Intervalos_nubosos.png", "Intervalos nubosos"];
+        case "15":
+            return ["15_Muy_nuboso.png", "Muy nuboso"];
+        case "16":
+            return ["16_Cubierto.png", "Cubierto"];
+        case "43":
+            return ["43_Intervalos_nubosos_con_lluvia_escasa.png", "Intervalos nubosos con lluvia escasa"];
+        case "45":
+            return ["45_Muy_nuboso_con_lluvia_escasa.png", "Muy nuboso con lluvia escasa"];
+        case "46":
+            return ["46_Cubierto_con_lluvia_escasa.png", "Cubierto con lluvia escasa"];
+        case "54":
+            return ["54_Cubierto_con_tormenta.png", "Cubierto con tormenta"];
+        case "63":
+            return ["63_Muy_nuboso_con_tormenta_y_lluvia_escasa.png", "Muy nuboso con tormenta y lluvia escasa"];
+        default:
+            return ["", "No definido"]; // Por defecto, No definido
+    }
 }
 
 

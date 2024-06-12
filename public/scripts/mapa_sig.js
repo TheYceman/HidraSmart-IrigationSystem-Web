@@ -131,11 +131,13 @@ myMap = new google.maps.Map(document.getElementById("map"), {
   mapTypeControl: true, // Habilita el control de tipo de mapa
   mapTypeControlOptions: {
     //style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR, // Estilo del control de tipo de mapa
-    position: google.maps.ControlPosition.TOP_LEFT, // Posición del control de tipo de mapa
+    position: google.maps.ControlPosition.TOP_RIGHT, // Posición del control de tipo de mapa
     mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain'], // Tipos de mapas disponibles
     // Ajustes adicionales si es necesario
   }
 });
+
+
 
 
 // Agregar un evento onclick al mapa
@@ -147,6 +149,7 @@ myMap.addListener('click', function (event) {
   //alert('Coordenadas: ' + clickedLocation.lat() + ', ' + clickedLocation.lng());
 
   document.getElementById("informacion").style.display = "none";
+  infowindow.close();
 });
 /*
 // Evento para el botón de acercar
@@ -192,7 +195,7 @@ function paint_counter_bbdd() {
     });
     // Agregar evento de clic al marker
     markerCounter.addListener("click", function (event) {
-
+      document.getElementById("informacion").style.display = "none";
       var content = `
     <div class="infowindow-content">
         <div class="infowindow-header">
@@ -221,27 +224,88 @@ function paint_counter_bbdd() {
       document.getElementById("informacion").style.display = "block";
       var content = "<div class='leyenda-container'>";
       content += "<span id='leyendaLabel'><b>Contador " + contador.id + "</b></span>";
+      content += "<div>"
       content += "<ul class='leyenda-list'>";
       content += "<li><span class='leyenda-item'>Sector:</span> S3</li>";
       content += "<li><span class='leyenda-item'>Tramo:</span> Valor 2</li>";
-      content += "<li><span class='leyenda-item'>Vol. Acum (m3):</span> Valor 3</li>";
-      content += "<li><span class='leyenda-item'>Vol. Rest (m3):</span> Valor 1</li>";
-      content += "<li><span class='leyenda-item'>Caudal (m3/h):</span> Valor 2</li>";
-      content += "<li><span class='leyenda-item'>Presión (mca):</span> Valor 3</li>";
       content += "<li><span class='leyenda-item'>Parcela:</span> Valor 1</li>";
-      content += "<li class='leyenda-section-title'>DATOS IRRINET</li>";
-      content += "<li><span class='leyenda-item'>Vol. Global (m3):</span> Valor 3</li>";
-      content += "<li><span class='leyenda-item'>Caudal (m3/h):</span> Valor 1</li>";
-      content += "<li><span class='leyenda-item'>Vol. Parc (m3):</span> Valor 2</li>";
-      content += "<li><span class='leyenda-item'>Vol. Rest (m3):</span> Valor 3</li>";
-      content += "<li><span class='leyenda-item'>Válvula:</span></li>";
       content += "</ul></div>";
+      content += "<div>"
+      content += "<div id='highchart-graph'></div>";
+      content += "</div></div>";
       document.getElementById("informacion").innerHTML = content;
+      paintGraph();
     });
     // Agregar el marker al arreglo
     makersCountersArray.push(markerCounter);
   });
 }
+
+async function paintGraph() {
+  //let elements = Array.from(document.getElementById("contadores").querySelectorAll("option:checked"));
+  let seriesData = [];
+ 
+
+  if (seriesData.length === 0) {
+      var fecha1 = new Date("2024-05-23 00:00:00").getTime();
+      var fecha2 = new Date("2024-05-24 00:00:00").getTime();
+      var fecha3 = new Date("2024-05-25 00:00:00").getTime();
+      var fecha4 = new Date("2024-05-26 00:00:00").getTime();
+
+
+      // Suponiendo que tienes los datos de esta manera
+      var datos = [
+          { "instante": fecha1, "valor": 15 },
+          { "instante": fecha2, "valor": 15 },
+          { "instante": fecha3, "valor": 15 }, // Agregar una hora al inicio
+          { "instante": fecha4, "valor": 15 }  // Agregar dos horas al inicio
+      ];
+
+      // Transforma los datos al formato que Highcharts espera
+      seriesData = datos.map(function (dato) {
+          return [dato.instante, dato.valor];
+      });
+      console.log(seriesData);
+  }
+  var chartOptions = {
+      chart: {
+          type: "line",
+      },
+      credits: {
+          enabled: false,
+      },
+      title: {
+          text: "Histórico",
+      },
+      xAxis: {
+          type: "datetime",
+          title: {
+              text: "Fecha",
+          },
+      },
+      yAxis: [
+          {
+              title: {
+                  text: "Valor",
+              }
+          },
+          {
+              title: {
+                  text: "Valor",
+              },
+              opposite: true,
+          },
+      ],
+      series: [{
+          name: 'Datos',
+          data: seriesData
+      }],
+      turboThreshold: 5000,
+  };
+  Highcharts.chart("highchart-graph", chartOptions);
+}
+
+
 
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 const leyenda2 = document.getElementById('leyenda2');
@@ -875,7 +939,7 @@ $(document).ready(function () {
   $('.legend-item2').click(function () {
     $(this).toggleClass('selected');
   });
-}); 
+});
 
 var selectedCultivos = [];
 
@@ -905,7 +969,7 @@ function paint_cultivos() {
     .then((response) => response.json())
     .then(function (data) {
       // Limpiar los polígonos existentes antes de pintar nuevos
-      polygonsArray.forEach(function(polygon) {
+      polygonsArray.forEach(function (polygon) {
         polygon.setMap(null);
       });
       polygonsArray = [];
@@ -925,7 +989,35 @@ function paint_cultivos() {
                 fillOpacity: 0.35,
               });
               polygon.addListener("click", function (event) {
-                show_infowindow_plots(event, plot.ideParcela);
+                document.getElementById("informacion").style.display = "none";
+                var content = '<div class="campo-container">' +
+                  '<div class="campo-header">' +
+                 '<h3 style="color: #009bdb; font-weight:bold">Parcela ' + plot.ideParcela + '</h3>'+
+                  '</div>' +
+                  '<div class="campo-tab-content active" id="datos">' +
+                  '   <div class="campo-content">' +
+                  '       <div class="column">' +
+                  '           <p id="hectareasInfo">Hectáreas: N/A</p>' +
+                  '          <p id="cultivoInfo">Cultivo: N/A</p>' +
+                  '      </div>' +
+                  '      <div class="column">' +
+                  '          <p>Explotación (PAC): Finca 2</p>' +
+                  '          <p>Recintos SIGPAC: 46196:0:0:31:108:3</p>' +
+                  '     </div>' +
+                  '  </div>' +
+                  '</div>' +
+                  '                          <div class="campo-tab-content" id="cultivo">Contenido de Cultivo</div>' +
+                  '<div class="campo-tab-content" id="actividades">Contenido de Actividades</div>' +
+                  '<div class="campo-buttons">' +
+                  '   <button class="campo-tab-button" data-tab="datos" onclick="showSubTab("datos")"><i class="fas fa-info-circle"></i> Datos' +
+                  '       del campo</button>' +
+                  '    <button class="campo-tab-button" data-tab="cultivo"' +
+                  '        onclick="showSubTab("cultivo)"><i class="fas fa-seedling"></i> Cultivo</button>' +
+                  '    <button class="campo-tab-button" data-tab="actividades"' +
+                  '        onclick="showSubTab(actividades)"><i class="fas fa-tasks"></i> Histórico</button>' +
+                  ' </div>' +
+                  ' </div>';
+                show_infowindow_plots(event, content);
               });
               polygon.setMap(myMap);
               polygonsArray.push(polygon);
@@ -1005,6 +1097,7 @@ function paint_pipelines() {
             });
             // Agregar evento de clic al polígono
             polyline.addListener("click", function (event) {
+              document.getElementById("informacion").style.display = "none";
               mostrar_infowindow_tuberias(event, pipeline.ideEle);
             });
             // Agregar la línea al mapa
@@ -1129,34 +1222,58 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 
+
 // Default open tab
 document.addEventListener("DOMContentLoaded", function () {
+  /*const availableInformationLabel = document.createElement('div');
+  availableInformationLabel.className = 'available_information_label';
+  const HTMLAvailableInformationLabelContent = `
+      <div class='HTML_available_information_content_container'>
+          <div class='HTML_available_information_content_container_type'>
+              <label class='HTML_available_information_content_label_type'>
+                  Información Disponible:
+              </label>
+              <span id='HTML-available-information-content-span-type' class='HTML_available_information_content_span_type'>    
+              </span>
+          </div>
+      </div>
+  `;
+  availableInformationLabel.innerHTML = HTMLAvailableInformationLabelContent;
+  myMap.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(availableInformationLabel);*/
+ // Create the sidebar element
+ var sidebar = document.getElementById('sidebar');
+
+ // Create the tab-content element
+ var tabContent = document.getElementById('tab-content');
+
+ // Add the sidebar to the map
+ myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(sidebar);
+
+ // Add the tab-content to the map
+ myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(tabContent);
+
+
   document.getElementsByClassName('tablink')[0].click();
   updateLeyenda();
-});
 
+  // Script para el acordeón
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.parentElement;
+      const content = item.querySelector('.accordion-content');
+      const icon = header.querySelector('.fa-angle-down');
 
-/****Leyenda */
-// Obtén el elemento del menú desplegable
-// Seleccionar todos los elementos con la clase "accordion-header"
-document.querySelectorAll('.accordion-header').forEach(header => {
-  header.addEventListener('click', () => {
-    const item = header.parentElement;
-    const content = item.querySelector('.accordion-content');
-    const icon = header.querySelector('.fa-angle-down');
-
-    if (content.style.display === 'block') {
-      content.style.display = 'none';
-      //icon.style.transform = 'rotate(0deg)';
-    } else {
-      document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
-      document.querySelectorAll('.accordion-header .fa-angle-down').forEach(i => i.style.transform = 'rotate(0deg)');
-      content.style.display = 'block';
-      //icon.style.transform = 'rotate(180deg)';
-    }
+      if (content.style.display === 'block') {
+        content.style.display = 'none';
+      } else {
+        document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('.accordion-header .fa-angle-down').forEach(i => i.style.transform = 'rotate(0deg)');
+        content.style.display = 'block';
+      }
+    });
   });
 });
-/* Fin leyenda */
+
 
 function exportTableToExcel(tableID, filename = '') {
   var downloadLink;

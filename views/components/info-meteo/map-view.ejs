@@ -56,22 +56,36 @@
         <div id="map" style="width:100%; height: 76vh;"></div><!--Fin mapa-->
         <!-- Barra de herramientas -->
         <div class="toolbar">
-            <button class="toolbar-btn" id="toggle-temperature" onclick="toggleLayer('temperature', paint_temp)">
-                <i class="fas fa-thermometer-half" id="temp-icon"></i> <span>Temperatura</span>
+            <button class="toolbar-btn" id="toggle-cielo" onclick="toggleLayer('cielo', paint_cielo)">
+                <i class="fas fa-globe" id="option4-icon"></i> <span>Estado cielo </span>
             </button>
-            <button class="toolbar-btn" id="toggle-precipitation" onclick="toggleLayer('precipitation', paint_preci)">
-                <i class="fas fa-cloud-rain" id="preci-icon"></i><span>Precipitación</span>
+            <button class="toolbar-btn" id="toggle-temperature" onclick="toggleLayer('temperature', paint_temp)">
+                <i class="fas fa-thermometer-half" id="temp-icon"></i> <span>Temperaturas ºC</span>
             </button>
             <button class="toolbar-btn" id="toggle-humidity" onclick="toggleLayer('humidity', paint_hume)">
-                <i class="fas fa-tint" id="humidity-icon"></i> <span>Humedad</span>
+                <i class="fas fa-tint" id="humidity-icon"></i> <span>Humedad relativa (%)</span>
             </button>
             <button class="toolbar-btn" id="toggle-wind" onclick="toggleLayer('wind', paint_wind)">
-                <i class="fas fa-wind" id="wind-icon"></i> <span>Viento</span>
+                <i class="fas fa-wind" id="wind-icon"></i> <span>Viento (Km/h)</span>
+            </button>
+            <button class="toolbar-btn" id="toggle-prob-preci" onclick="toggleLayer('prob-preci', paint_prob_preci)">
+                <i class="fas fa-cloud-showers-heavy" id="prob-preci-icon"></i> <span>Prob. de Precipitación(%)</span>
+            </button>
+            <button class="toolbar-btn" id="toggle-precipitation" onclick="toggleLayer('precipitation', paint_preci)">
+                <i class="fas fa-cloud-rain" id="preci-icon"></i><span>Precipitación(mm)</span>
             </button>
             <button class="toolbar-btn" id="toggle-storms" onclick="toggleLayer('storms', paint_storm)">
-                <i class="fas fa-bolt" id="storms-icon"></i> <span>% Tormentas</span>
+                <i class="fas fa-bolt" id="storms-icon"></i> <span>Prob. de Tormentas(%)</span>
+            </button>
+            <!-- Cinco opciones adicionales -->
+            <button class="toolbar-btn" id="toggle-prob-nieve" onclick="toggleLayer('prob-nieve', paint_prob_nieve)">
+                <i class="fas fa-snowflake" id="prob-nieve-icon"></i> <span>Prob. de Nieve(%)</span>
+            </button>
+            <button class="toolbar-btn" id="toggle-nieve" onclick="toggleLayer('nieve', paint_nieve)">
+                <i class="fas fa-snowman" id="nieve-icon"></i> <span>Nieve (mm)</span>
             </button>
         </div>
+        
         <div id="informacion" style="display:none">
         </div>
     </div>
