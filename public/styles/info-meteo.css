@@ -65,7 +65,6 @@
   font-size: 0.9rem;
 
 }
-
 .toolbar {
   position: absolute;
   top: 10px;
@@ -75,7 +74,8 @@
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 5px;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 5px;
 }
 
@@ -87,7 +87,7 @@
   border-radius: 2px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   gap: 5px;
   cursor: pointer;
   font-size: 12px;
@@ -106,6 +106,14 @@
   background-color: #009bdb;
   color: white;
 }
+
+/* Media query para dispositivos con menos de 1024px de ancho */
+@media screen and (max-width: 1024px) {
+  .toolbar {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
+
 
 #informacion b {
   font-weight: bold;
@@ -7249,4 +7257,45 @@ tfoot {
 
 .gm-style-iw button[title="Cerrar"] {
   display: none !important;
+}
+
+
+.Tempta_rango_1,.senTem_rango_1 {
+  background: #123e59;
+}
+
+.Tempta_rango_2,.senTem_rango_2 {
+  background: #13628b;
+}
+
+.Tempta_rango_3,.senTem_rango_3 {
+  background: #0096ce;
+}
+
+.Tempta_rango_4,.senTem_rango_4 {
+  background: #02b3c6;
+}
+
+.Tempta_rango_5,.senTem_rango_5 {
+  background: #66cfb7;
+}
+
+.Tempta_rango_6,.senTem_rango_6 {
+  background: #f4a239;
+}
+
+.Tempta_rango_7,.senTem_rango_7 {
+  background: #f06112;
+}
+
+.Tempta_rango_8,.senTem_rango_8 {
+  background: #ec350c;
+}
+
+.Tempta_rango_9,.senTem_rango_9 {
+  background: #c6300f;
+}
+
+.Tempta_rango_10,.senTem_rango_10 {
+  background: #951008;
 }
