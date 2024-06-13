@@ -6,7 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
   const rows = document.querySelectorAll('.selectable-row');
   const cultivoInfo = document.getElementById('cultivoInfo');
   const hectareasInfo = document.getElementById('hectareasInfo');
+  //Tab cultivos
+  const cultivoDeclarado = document.getElementById('cultivoDeclarado');
+  const hectareasDeclaradas = document.getElementById('hectareasDeclaradas');
+  const necesidadSemanal = document.getElementById('necesidadSemanal');
+  const kc = document.getElementById('kc');
   const modal = document.getElementById('modal');
+  //Fin cultivos
   const closeBtn = document.querySelector('.close-btn');
   const editButton = document.getElementById('edit-button');
 
