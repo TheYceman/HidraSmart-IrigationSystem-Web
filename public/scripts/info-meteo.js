@@ -402,15 +402,12 @@ function paint_temp() {
                         currentMarkers.push(marker);
 
                         var infowindowMeteo = new google.maps.InfoWindow({
-                            content: '<div class="custom-iw">' + municipio + '</div><div>Temperatura: ' + temperature + ' ºC</div>'
+                            content: '<div class="custom-iw">' + municipio + '</div><div>' + temperature + ' ºC</div>'
                         });
 
                         marker.addListener('mouseover', function () {
                             infowindowMeteo.open(map, marker);
-                            google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
-                                var iwOuter = document.querySelector('.gm-style-iw');
-                                iwOuter.classList.add('custom-iw');
-                            });
+                           
                         });
 
                         marker.addListener('mouseout', function () {
@@ -464,10 +461,6 @@ function paint_preci() {
 
                         marker.addListener('mouseover', function () {
                             infowindowMeteo.open(map, marker);
-                            google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
-                                var iwOuter = document.querySelector('.gm-style-iw');
-                                iwOuter.classList.add('custom-iw');
-                            });
                         });
 
                         marker.addListener('mouseout', function () {
@@ -579,10 +572,10 @@ function paint_wind() {
 
                         marker.addListener('mouseover', function () {
                             infowindowMeteo.open(map, marker);
-                            google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
+                            /*google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
                                 var iwOuter = document.querySelector('.gm-style-iw');
                                 iwOuter.classList.add('custom-iw');
-                            });
+                            });*/
                         });
 
                         marker.addListener('mouseout', function () {
@@ -636,10 +629,10 @@ function paint_storm() {
 
                         marker.addListener('mouseover', function () {
                             infowindowMeteo.open(map, marker);
-                            google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
+                           /* google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
                                 var iwOuter = document.querySelector('.gm-style-iw');
                                 iwOuter.classList.add('custom-iw');
-                            });
+                            });*/
                         });
 
                         marker.addListener('mouseout', function () {
@@ -804,10 +797,10 @@ function paint_prob_preci() {
 
                         marker.addListener('mouseover', function () {
                             infowindowMeteo.open(map, marker);
-                            google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
+                            /*google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
                                 var iwOuter = document.querySelector('.gm-style-iw');
                                 iwOuter.classList.add('custom-iw');
-                            });
+                            });*/
                         });
 
                         marker.addListener('mouseout', function () {
@@ -855,10 +848,10 @@ function paint_cielo() {
                     // Mostrar la ventana de información al hacer hover
                     marker.addListener('mouseover', function () {
                         infowindowMeteo.open(myMap, marker);
-                        google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
+                        /*google.maps.event.addListenerOnce(infowindowMeteo, 'domready', function () {
                             var iwOuter = document.querySelector('.gm-style-iw');
                             iwOuter.classList.add('custom-iw');
-                        });
+                        });*/
                     });
 
                     // Cerrar la ventana de información al quitar el hover
@@ -878,27 +871,107 @@ function paint_cielo() {
 function getCielo(cielo) {
     switch (cielo) {
         case "11":
-            return ["11_Cielo_despejado.png", "Cielo despejado"];
-        case "14":
-            return ["14_Nuboso.png", "Nuboso"];
+            return ["11_Despejado.png", "Cielo despejado"];
+        case "11n":
+            return ["11n_Despejado_noche.png", "Cielo despejado"];
         case "12":
             return ["12_Poco_nuboso.png", "Poco nuboso"];
+        case "12n":
+            return ["12n_Poco_nuboso_noche.png", "Poco nuboso"];
         case "13":
             return ["13_Intervalos_nubosos.png", "Intervalos nubosos"];
+        case "13n":
+            return ["13n_Intervalos_nubosos_noche.png", "Intervalos nubosos"];
+        case "14":
+            return ["14_Nuboso.png", "Nuboso"];
+        case "14n":
+            return ["14_Nuboso.png", "Nuboso"];
         case "15":
             return ["15_Muy_nuboso.png", "Muy nuboso"];
         case "16":
             return ["16_Cubierto.png", "Cubierto"];
+        case "17":
+            return ["17_Nubes_altas.png", "Nubes altas"];
+        case "17n":
+            return ["17n_Nubes_altas_noche.png", "Nubes altas"];
+        case "23":
+            return ["23_Intervalos_nubosos_con_lluvia.png", "Intervalos nubosos con lluvia"];
+        case "23n":
+            return ["23n_Intervalos_nubosos_con_lluvia_noche.png", "Intervalos nubosos con lluvia"];
+        case "24":
+            return ["24_Nuboso_con_lluvia.png", "Nuboso con lluvia"];
+        case "24n":
+            return ["24n_Nuboso_con_lluvia_noche.png", "Nuboso con lluvia"];
+        case "25":
+            return ["25_Muy_nuboso_con_lluvia.png", "Muy nuboso con lluvia"];
+        case "26":
+            return ["26_Cubierto_con_lluvia.png", "Cubierto con lluvia"];
+        case "33":
+            return ["33_Intervalos_nubosos_con_nieve.png", "Intervalos nubosos con nieve"];
+        case "33n":
+            return ["33n_Intervalos_nubosos_con_nieve_noche.png", "Intervalos nubosos con nieve"];
+        case "34":
+            return ["34_Nuboso_con_nieve.png", "Nuboso con nieve"];
+        case "34n":
+            return ["34n_Nuboso_con_nieve_noche.png", "Nuboso con nieve"];
+        case "35":
+            return ["35_Muy_nuboso_con_nieve.png", "Muy nuboso con nieve"];
+        case "36":
+            return ["36_Cubierto_con_nieve.png", "Cubierto con nieve"];
         case "43":
             return ["43_Intervalos_nubosos_con_lluvia_escasa.png", "Intervalos nubosos con lluvia escasa"];
+        case "43n":
+            return ["43_Intervalos_nubosos_con_lluvia_escasa.png", "Intervalos nubosos con lluvia escasa"];
+        case "44":
+            return ["44_Nuboso_con_lluvia_escasa.png", "Nuboso con lluvia escasa"];
+        case "44n":
+            return ["44n_Nuboso_con_lluvia_escasa_noche.png", "Nuboso con lluvia escasa"];
         case "45":
             return ["45_Muy_nuboso_con_lluvia_escasa.png", "Muy nuboso con lluvia escasa"];
         case "46":
             return ["46_Cubierto_con_lluvia_escasa.png", "Cubierto con lluvia escasa"];
+        case "51":
+            return ["51_Intervalos_nubosos_con_tormenta.png", "Intervalos nubosos con tormenta"];
+        case "51n":
+            return ["51n_Intervalos_nubosos_con_tormenta_noche.png", "Intervalos nubosos con tormenta"];
+        case "52":
+            return ["52_Nuboso_con_tormenta.png", "Nuboso con tormenta"];
+        case "52n":
+            return ["52n_Nuboso_con_tormenta_noche.png", "Nuboso con tormenta"];
+        case "53":
+            return ["53_Muy_nuboso_con_tormenta.png", "Muy nuboso con tormenta"];
         case "54":
             return ["54_Cubierto_con_tormenta.png", "Cubierto con tormenta"];
+        case "61":
+            return ["61_Intervalos_nubosos_con_tormenta_y_lluvia_escasa.png", "Intervalos nubosos con tormenta y lluvia_escasa"];
+        case "61n":
+            return ["61n_Intervalos_nubosos_con_tormenta_y_lluvia_escasa_noche.png", "Intervalos nubosos con tormenta y lluvia_escasa"];
+        case "62":
+            return ["62_Nuboso_con_tormenta_y_lluvia_escasa.png", "Nuboso con tormenta y lluvia escasa"];
+        case "62n":
+            return ["62n_Nuboso_con_tormenta_y_lluvia_escasa_noche.png", "Nuboso con tormenta y lluvia escasa"];
         case "63":
-            return ["63_Muy_nuboso_con_tormenta_y_lluvia_escasa.png", "Muy nuboso con tormenta y lluvia escasa"];
+            return ["63_Muy_nuboso_con_tormenta_y_lluvia_escasa.png", "Muy nuboso con tormena y lluvia escasa"];
+        case "64":
+            return ["64_Cubierto_con_tormenta_y_lluvia_escasa.png", "Cubierto con tormenta y lluvia escasa"];
+        case "71":
+            return ["71_Intervalos_nubosos_con_nieve_escasa.png", "Intervalos nubosos con nieve escasa"];
+        case "71n":
+            return ["71n_Intervalos_nubosos_con_nieve_escasa_noche.png", "Intervalos nubosos con nieve escasa"];
+        case "72":
+            return ["72_Nuboso_con_nieve_escasa.png", "Nuboso con nieve escasa"];
+        case "72n":
+            return ["72n_Nuboso_con_nieve_escasa_noche.png", "Nuboso con nieve escasa"];
+        case "73":
+            return ["73_Muy_nuboso_con_nieve_escasa.png", "Muy nuboso con nieve escasa"];
+        case "74":
+            return ["74_Cubierto_con_nieve_escasa.png", "Cubierto con nieve escasa"];
+        case "81":
+            return ["81_Niebla.png", "Niebla"];
+        case "82":
+            return ["82_Bruma.png", "Bruma"];
+        case "83":
+            return ["83_Calima.png", "Calima"];
         default:
             return ["", "No definido"]; // Por defecto, No definido
     }
