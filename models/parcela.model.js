@@ -14,6 +14,7 @@ class Parcela {
     this.riego = parcela.tipoRiego;
     this.propietario = parcela.propietario;
     this.hectareas = parcela.hectareas;
+    this.hectareasDec = parcela.hectareasDec;
    
   }
 

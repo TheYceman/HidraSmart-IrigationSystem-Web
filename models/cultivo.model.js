@@ -5,10 +5,11 @@ class Cultivo {
         this.idParcela = cultivo.idParcela;
         this.cultivo = cultivo.cultivo;
         this.fechaHora = cultivo.fechayhora;
+        this.ha = cultivo.ha;
     }
 
     static async getAllCultivos(res, req) {
-        const queryString = "SELECT * FROM dat_cultivos;";
+        const queryString = "SELECT id, idParcela, cultivo, ha, DATE_FORMAT(CONVERT_TZ(fechayhora, '+00:00', @@session.time_zone), '%d-%m-%y %H:%i') AS fechayhora FROM dat_cultivos ORDER BY fechayhora DESC;";
         const values = [];
         const database = 'aplicaciones_web';
         const results = await runQuery(queryString, values, database);
@@ -17,7 +18,7 @@ class Cultivo {
     }
 
     static async getCultivosByParcela(res, req, idParcela) {
-        const queryString = "SELECT * FROM dat_cultivos WHERE idParcela = ?;";
+        const queryString = "SELECT  id, idParcela, cultivo, ha, DATE_FORMAT(CONVERT_TZ(fechayhora, '+00:00', @@session.time_zone), '%d-%m-%y %H:%i') AS fechayhora FROM dat_cultivos WHERE idParcela = ? ORDER BY fechayhora DESC;";
         const values = [idParcela];
         const database = 'aplicaciones_web';
         const results = await runQuery(queryString, values, database);
@@ -26,7 +27,7 @@ class Cultivo {
     }
 
     static async getCultivosByMonth(res, req, month) {
-        const queryString = "SELECT * FROM dat_cultivos WHERE MONTH(fechayhora) = ?;";
+        const queryString = "SELECT  id, idParcela, cultivo, ha, DATE_FORMAT(CONVERT_TZ(fechayhora, '+00:00', @@session.time_zone), '%d-%m-%y %H:%i') AS fechayhora FROM dat_cultivos WHERE MONTH(fechayhora) = ? ORDER BY fechayhora DESC;";
         const values = [month];
         const database = 'aplicaciones_web';
         const results = await runQuery(queryString, values, database);
@@ -35,7 +36,7 @@ class Cultivo {
     }
 
     static async insertCultivo(res, req, idParcela, cultivo, fechaHora) {
-        const queryString = "INSERT INTO dat_cultivos (idParcela, cultivo, fechayhora) VALUES (?, ?, ?);";
+        const queryString = "INSERT INTO dat_cultivos (idParcela, cultivo, fechayhora, ha) VALUES (?, ?, ?, ?);";
         const values = [idParcela, cultivo, fechaHora];
         const database = 'aplicaciones_web';
         await runQuery(queryString, values, database);
@@ -67,7 +68,7 @@ class Cultivo {
     }
 
     static async getFilteredData(res, req, idParcela) {
-        const queryString =  `SELECT * FROM dat_cultivos WHERE idParcela=?;`;
+        const queryString =  `SELECT  id, idParcela, cultivo, ha, DATE_FORMAT(CONVERT_TZ(fechayhora, '+00:00', @@session.time_zone), '%d-%m-%y %H:%i') AS fechayhora FROM dat_cultivos WHERE idParcela=? ORDER BY fechayhora DESC;`;
         const values = [idParcela];
         const database = 'aplicaciones_web';
         const results = await runQuery(queryString, values, database);
@@ -88,7 +89,7 @@ class Cultivo {
       
   static async getPerPage(res, req, perPage, offset) {
 
-    const queryString = "SELECT * FROM dat_cultivos LIMIT " + perPage + " OFFSET " + offset;
+    const queryString = "SELECT  id, idParcela, cultivo, ha, DATE_FORMAT(CONVERT_TZ(fechayhora, '+00:00', @@session.time_zone), '%d-%m-%y %H:%i') AS fechayhora FROM dat_cultivos LIMIT " + perPage + " OFFSET " + offset + "ORDER BY fechayhora DESC;";
     const values = [];
     const database = 'aplicaciones_web';
     const results = await runQuery(queryString, values, database);

@@ -197,6 +197,11 @@ main>div {
     cursor: pointer;
     background-color: #f0f0f0;
 }
+/*Select tabla */
+.selectable-row2:hover {
+    cursor: pointer;
+    background-color: #f0f0f0;
+}
 
 .selected {
     background-color: #4a4a4a;
@@ -511,6 +516,14 @@ main>div {
     text-align: left;
 }
 
+.accordion-content.active {
+    display: block;
+}
+
+.accordion-title.active i {
+    transform: rotate(180deg);
+}
+
 /**Demandas**/
 .flex-content {
     display: flex;
@@ -574,7 +587,7 @@ main>div {
 }
 
 /*Select tabla */
-.accordion-content .custom-table-container .selectable-row:hover {
+.accordion-content .custom-table-container .selectable-row:hover .selectable-row2:hover {
     cursor: pointer;
     background-color: #f0f0f0;
 }
@@ -585,7 +598,7 @@ main>div {
 }
 
 .left-column {
-    width: 60%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -593,7 +606,7 @@ main>div {
 }
 
 .right-column {
-    width: 40%;
+    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -635,6 +648,14 @@ main>div {
     font-weight: bold;
 }
 
+.label-number-restante {
+    color: #009bdb;
+    font-weight: bold;
+}
+
+.label-number-restante.red {
+    color: red;
+}
 .ceder-cupo-btn-container {
     /*display: flex;
     justify-content: center;
@@ -672,9 +693,17 @@ main>div {
 
 /**Parpadeo del texto**/
 @keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 .blinking-text {

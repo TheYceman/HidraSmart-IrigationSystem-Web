@@ -25,6 +25,7 @@
                     hectareas: '<%= parcela.hectareas %>'
                 });
             <% } %>
+        
         </script>
         <main>
             <h2 class="titulo_seccion"></h2>
@@ -41,7 +42,10 @@
                                     <tr>
                                         <th>Identificador</th>
                                         <th>Sector</th>
-                                        <th>Titular</th>
+                                        <th>Polígono</th>
+                                        <th>Parcela</th>
+                                        <th>Paraje</th>
+                                        <th>Hectáreas</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table">
@@ -54,7 +58,16 @@
                                                 <%= parcela.sector %>
                                             </td>
                                             <td data-field="marca" data-id="<%= parcela.id %>">
-                                                <%= parcela.titular %>
+                                                <%= parcela.poligono %>
+                                            </td>
+                                            <td>
+                                                <%= parcela.parcela %>
+                                            </td>
+                                            <td data-field="sector" data-id="<%= parcela.id %>">
+                                                <%= parcela.paraje %>
+                                            </td>
+                                            <td data-field="marca" data-id="<%= parcela.id %>">
+                                                <%= parcela.hectareas %>
                                             </td>
                                         </tr>
                                         <% } %>
@@ -117,6 +130,7 @@
                                         <th>ID Parcela</th>
                                         <th>Cultivo</th>
                                         <th>Fecha y Hora</th>
+                                        <th>Ha. declaradas</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -130,8 +144,8 @@
             </div>
             <div class="tab-content" id="demandas">
                 <div class="accordion">
-                    <div class="accordion-item">
-                        <div class="accordion-title">Balsa 1 <i class="fas fa-chevron-down"></i></div>
+                    <div class="accordion-item active">
+                        <div class="accordion-title active">Balsa 1 <i class="fas fa-chevron-down"></i></div>
                         <div class="accordion-content active">
                             <div class="flex-content">
                                 <div class="left-column">
@@ -141,16 +155,16 @@
                                             <thead>
                                                 <tr class="sticky-header">
                                                     <th>Parcela</th>
-                                                    <th>Titular</th>
-                                                    <th>Hectáreas</th>
+                                                    <th>Cultivo</th>
+                                                    <th>Ha. declaradas</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <!-- Aquí se llenarán dinámicamente los datos -->
                                                 <% for(let parcela of parcelas) { %>
-                                                    <tr data-uid="<%= parcela.id %>" class="selectable-row">
+                                                    <tr data-uid="<%= parcela.id %>" class="selectable-row2">
                                                         <td><%= parcela.id %></td>
-                                                        <td data-field="sector" data-id="<%= parcela.id %>"><%= parcela.titular %></td>
+                                                        <td data-field="sector" data-id="<%= parcela.id %>"><%= parcela.cultivo %></td>
                                                         <td data-field="marca" data-id="<%= parcela.id %>"><%= parcela.hectareas %></td>
                                                     </tr>
                                                 <% } %>
@@ -164,23 +178,23 @@
                                             <!-- Etiquetas de cupo -->
                                             <div class="cupo-label"><i class="fas fa-tint"></i>  
                                                 <span class="label-text">Cupo Asignado: </span>
-                                                <span class="label-number">500</span>
+                                                <span class="label-number">2000</span>
                                             </div>
                                             <div class="cupo-label"><i class="fas fa-tint-slash"></i> 
                                                 <span class="label-text">Cupo Gastado: </span>
-                                                <span class="label-number">200</span>
+                                                <span class="label-number">800</span>
                                             </div>
                                             <div class="cupo-label"><i class="fas fa-hand-holding-water"></i> 
                                                 <span class="label-text">Cupo Cedido: </span>
-                                                <span class="label-number">100</span>
+                                                <span class="label-number">200</span>
                                             </div>
                                             <div class="cupo-label"><i class="fas fa-hand-holding"></i> 
                                                 <span class="label-text">Cupo Recibido: </span>
-                                                <span class="label-number">50</span>
+                                                <span class="label-number">0</span>
                                             </div>
                                             <div class="cupo-label"><i class="fas fa-water"></i> 
                                                 <span class="label-text">Cupo Disponible: </span>
-                                                <span class="label-number">150</span>
+                                                <span class="label-number-restante">1000</span>
                                             </div>
                                         </div>
                                         <div class="right-column2">
@@ -192,6 +206,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div id="highchart" style="height: 200px;"></div>
                                 </div>
                             </div>
                         </div>
