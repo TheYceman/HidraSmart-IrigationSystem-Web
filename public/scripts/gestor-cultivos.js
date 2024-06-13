@@ -1,9 +1,22 @@
+
+function getChartData(ideParcela) {
+  // Filtro de datos para la parcela seleccionada
+  // Puedes ajustar la lógica de selección según tus necesidades
+  const selectedParcel = ideParcela; // Selecciona la primera parcela como ejemplo
+  const data = [{
+    name: selectedParcel.cultivo,
+    y: parseFloat(selectedParcel.hectareas)
+  }];
+
+  return data;
+}
 document.addEventListener('DOMContentLoaded', function () {
   const tabs = document.querySelectorAll('.tab-content');
   const tabLabels = document.querySelectorAll('.tab-label');
   const subTabButtons = document.querySelectorAll('.campo-tab-button');
   const subTabContents = document.querySelectorAll('.campo-tab-content');
   const rows = document.querySelectorAll('.selectable-row');
+  const rows2 = document.querySelectorAll('.selectable-row2');
   const cultivoInfo = document.getElementById('cultivoInfo');
   const hectareasInfo = document.getElementById('hectareasInfo');
   //Tab cultivos
@@ -120,10 +133,14 @@ document.addEventListener('DOMContentLoaded', function () {
       selectedParcelaId = id;
       cultivoInfo.textContent = `Cultivo: ${parcela.cultivo}`;
       hectareasInfo.innerHTML = `Hectáreas: ${parcela.hectareas}`;
+      cultivoDeclarado.textContent = `Cultivo: ${parcela.cultivo}`;//Modificar para hacerlo de cultivos
+      hectareasDeclaradas.innerHTML = `Hectáreas: ${parcela.hectareas}`;//Modificar para hacerlo de cultivos
     } else {
       selectedParcelaId = null;
       cultivoInfo.textContent = 'Cultivo: N/A';
       hectareasInfo.innerHTML = 'Hectáreas: N/A';
+      cultivoDeclarado.textContent = 'Cultivo: N/A';
+      hectareasDeclaradas.innerHTML = 'Hectáreas: N/A';
     }
   }
 
@@ -135,15 +152,61 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchCultivos(row);
   }
 
+  function selectRow2(row) {
+    rows2.forEach(r => r.classList.remove('selected'));
+    row.classList.add('selected');
+    const id = row.getAttribute('data-uid');
+    const parcela = window.parcelas.find(p => p.id === id);
+    const data = getChartData(parcela);
+
+    Highcharts.chart('highchart', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Hectáreas por Cultivo'
+      },
+      xAxis: {
+        type: 'category',
+        title: {
+          text: 'Cultivo'
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Hectáreas'
+        }
+      },
+      series: [{
+        name: 'Hectáreas',
+        data: data,
+        dataLabels: {
+          enabled: true,
+          format: '{point.y:.2f} ha'
+        }
+      }]
+    });
+
+  }
   // Seleccionar la primera fila por defecto
   if (rows.length > 0) {
     selectRow(rows[0]);
+  }
+  if (rows2.length > 0) {
+    selectRow2(rows[0]);
   }
 
   // Añadir evento de clic a las filas
   rows.forEach(row => {
     row.addEventListener('click', function () {
       selectRow(row);
+    });
+  });
+
+  // Añadir evento de clic a las filas
+  rows2.forEach(row => {
+    row.addEventListener('click', function () {
+      selectRow2(row);
     });
   });
 
@@ -166,6 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <td>${cultivo.idParcela}</td>
         <td>${cultivo.cultivo}</td>
         <td>${cultivo.fechayhora}</td>
+        <td>${cultivo.ha}</td>
         <td class="acciones">
           <button class="btn" onclick="updateCultivo('${cultivo.idParcela}')">
             <i class="fas fa-edit"></i>
@@ -181,73 +245,74 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Función para reconstruir el gráfico con los nuevos datos
   function rebuildChart(cultivos) {
-    const fechas = cultivos.map(cultivo => cultivo.fechayhora);
+
+    const fechas = cultivos.map(cultivo => new Date(cultivo.fechayhora).toLocaleDateString('es-ES'));
     const tipos = cultivos.map(cultivo => cultivo.cultivo);
+    const has = cultivos.map(cultivo => cultivo.ha);
 
     historicalChart.update({
       xAxis: {
         categories: fechas
       },
       series: [{
-        name: 'Tipo de Cultivo',
-        data: tipos.map((type, index) => ({ y: index + 1, name: type })),
+        name: 'Hectáreas',
+        data: cultivos.map(cultivo => ({
+          y: cultivo.ha,
+          name: cultivo.cultivo
+        })),
         dataLabels: {
           enabled: true,
           formatter: function () {
-            return this.point.name;
+            return `${this.point.name}: ${this.y} ha`;
           }
         }
       }]
     });
   }
 
-  const historicalData = [
-    { month: 'Enero', type: 'Pimiento' },
-    { month: 'Febrero', type: 'SIN RIEGO' },
-    { month: 'Marzo', type: 'Almendros' },
-    { month: 'Abril', type: 'Vid' },
-    { month: 'Mayo', type: 'Cebolla' },
-    { month: 'Junio', type: 'Pimiento' },
-    { month: 'Julio', type: 'Ajos' },
-    { month: 'Agosto', type: 'Arboles' },
-    { month: 'Septiembre', type: 'Melón' },
-    { month: 'Octubre', type: 'Guisantes' },
-    { month: 'Noviembre', type: 'Huerta' },
-    { month: 'Diciembre', type: 'Pimiento' }
+  const cultivosData = [
+    { fechayhora: '2024-01-15T09:00:00.000Z', cultivo: 'Pimiento', ha: 5 },
+    { fechayhora: '2024-02-20T09:00:00.000Z', cultivo: 'SIN RIEGO', ha: 0 },
+    { fechayhora: '2024-03-10T09:00:00.000Z', cultivo: 'Almendros', ha: 8 },
+    { fechayhora: '2024-04-05T09:00:00.000Z', cultivo: 'Vid', ha: 6 },
+    { fechayhora: '2024-05-25T09:00:00.000Z', cultivo: 'Cebolla', ha: 10 },
+    { fechayhora: '2024-06-15T09:00:00.000Z', cultivo: 'Pimiento', ha: 7 },
+    { fechayhora: '2024-07-30T09:00:00.000Z', cultivo: 'Ajos', ha: 4 },
+    { fechayhora: '2024-08-20T09:00:00.000Z', cultivo: 'Arboles', ha: 3 },
+    { fechayhora: '2024-09-10T09:00:00.000Z', cultivo: 'Melón', ha: 12 },
+    { fechayhora: '2024-10-05T09:00:00.000Z', cultivo: 'Guisantes', ha: 9 },
+    { fechayhora: '2024-11-15T09:00:00.000Z', cultivo: 'Huerta', ha: 5 },
+    { fechayhora: '2024-12-10T09:00:00.000Z', cultivo: 'Pimiento', ha: 7 }
   ];
-
-  const months = historicalData.map(data => data.month);
-  const types = historicalData.map(data => data.type);
 
   const historicalChart = Highcharts.chart('historicalChart', {
     chart: {
       type: 'bar'
     },
     title: {
-      text: 'Histórico de Tipos de Cultivos en 2024'
+      text: 'Histórico de Tipos de Cultivos y Hectáreas en 2024'
     },
     xAxis: {
-      categories: months,
+      categories: [],
       title: {
-        text: 'Meses'
+        text: 'Fechas'
       }
     },
     yAxis: {
       title: {
-        text: 'Tipos de Cultivo'
-      },
-      visible: false
+        text: 'Hectáreas'
+      }
     },
     legend: {
       enabled: false
     },
     series: [{
-      name: 'Tipo de Cultivo',
-      data: types.map((type, index) => ({ y: index + 1, name: type })),
+      name: 'Hectáreas',
+      data: [],
       dataLabels: {
         enabled: true,
         formatter: function () {
-          return this.point.name;
+          return `${this.point.name}: ${this.y} ha`;
         }
       }
     }],
@@ -267,32 +332,66 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.querySelectorAll('.accordion-title').forEach(item => {
   item.addEventListener('click', () => {
-      const content = item.nextElementSibling;
-      const allAccordionContents = document.querySelectorAll('.accordion-content');
-      const allAccordionTitles = document.querySelectorAll('.accordion-title');
-      
-      // Cerrar todos los elementos del acordeón
-      allAccordionContents.forEach(content => {
-          content.style.display = 'none';
-      });
-      
-      // Eliminar la clase 'active' de todos los títulos
-      allAccordionTitles.forEach(title => {
-          title.querySelector('i').classList.remove('fa-chevron-up');
-          title.querySelector('i').classList.add('fa-chevron-down');
-      });
-      
-      // Abrir o cerrar el contenido del acordeón según su estado actual
-      if (content.style.display === 'block') {
-          content.style.display = 'none';
-          item.querySelector('i').classList.remove('fa-chevron-up');
-          item.querySelector('i').classList.add('fa-chevron-down');
-      } else {
-          content.style.display = 'block';
-          item.querySelector('i').classList.remove('fa-chevron-down');
-          item.querySelector('i').classList.add('fa-chevron-up');
-      }
+    const content = item.nextElementSibling;
+    const allAccordionContents = document.querySelectorAll('.accordion-content');
+    const allAccordionTitles = document.querySelectorAll('.accordion-title');
+
+    // Cerrar todos los elementos del acordeón
+    allAccordionContents.forEach(content => {
+      content.style.display = 'none';
+    });
+
+    // Eliminar la clase 'active' de todos los títulos
+    allAccordionTitles.forEach(title => {
+      title.querySelector('i').classList.remove('fa-chevron-up');
+      title.querySelector('i').classList.add('fa-chevron-down');
+    });
+
+    // Abrir o cerrar el contenido del acordeón según su estado actual
+    if (content.style.display === 'block') {
+      content.style.display = 'none';
+      item.querySelector('i').classList.remove('fa-chevron-up');
+      item.querySelector('i').classList.add('fa-chevron-down');
+    } else {
+      content.style.display = 'block';
+      item.querySelector('i').classList.remove('fa-chevron-down');
+      item.querySelector('i').classList.add('fa-chevron-up');
+    }
   });
+
+  const accordionItems = document.querySelectorAll('.accordion-item');
+
+  accordionItems.forEach(item => {
+    const title = item.querySelector('.accordion-title');
+
+    title.addEventListener('click', () => {
+      const content = item.querySelector('.accordion-content');
+
+      // Cierra todos los items del acordeón
+      accordionItems.forEach(i => {
+        i.querySelector('.accordion-content').classList.remove('active');
+        i.querySelector('.accordion-title').classList.remove('active');
+      });
+
+      // Abre el tab actual
+      content.classList.add('active');
+      title.classList.add('active');
+    });
+  });
+
+  // Despliega el primer tab por defecto
+  accordionItems[0].querySelector('.accordion-title').classList.add('active');
+  accordionItems[0].querySelector('.accordion-content').classList.add('active');
+
+//color label cupo
+const labelNumbers = document.querySelectorAll('.label-number-restante');
+
+labelNumbers.forEach(function (label) {
+    const value = parseInt(label.textContent, 10);
+    if (value < 1001) {
+        label.classList.add('red');
+    }
+});
 });
 
 
