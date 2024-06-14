@@ -294,7 +294,7 @@ main>div {
     /* Sombra más suave */
 }
 
-/**Ventana modal**/
+/* Ventana modal */
 /* Estilos para la ventana emergente */
 .modal {
     display: none;
@@ -369,7 +369,7 @@ main>div {
 .modal-add-btn,
 .modal-cancel-btn {
     background-color: #4a4a4a;
-    /* Verde */
+    /* Fondo oscuro */
     color: white;
     /* Texto blanco */
     border: none;
@@ -383,6 +383,45 @@ main>div {
     cursor: pointer;
     /* Cursor de mano */
 }
+
+/* Estilos para la capa en paralelo */
+.modal-row {
+    display: flex;
+    /* Flexbox */
+    justify-content: space-between;
+    /* Espaciado entre elementos */
+    align-items: center;
+    /* Alinear elementos al centro */
+    gap: 10px;
+    /* Espacio entre elementos */
+}
+
+.modal-item {
+    flex: 1;
+    /* Aumentar el tamaño del elemento para llenar el espacio */
+}
+
+.modal-item label {
+    display: block;
+    /* Mostrar el label como bloque */
+    margin-bottom: 5px;
+    /* Espacio debajo del label */
+}
+
+.modal-item input,
+.modal-item select {
+    width: 100%;
+    /* Ancho completo */
+    padding: 8px;
+    /* Relleno interno */
+    border: 1px solid #ccc;
+    /* Borde gris claro */
+    border-radius: 5px;
+    /* Bordes redondeados */
+    box-sizing: border-box;
+    /* Incluir el borde en el tamaño total */
+}
+
 
 /* sección 2 */
 .campo-container {

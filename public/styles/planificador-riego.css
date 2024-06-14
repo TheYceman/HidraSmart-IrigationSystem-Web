@@ -125,7 +125,7 @@ main > div {
   #selectores {
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 20%;
   }
   
   #selectores > div ~ div {
@@ -141,7 +141,7 @@ main > div {
   #selectores2 {
     display: flex;
     flex-direction: column;
-    width: 70%;
+    width: 79%;
   }
   
   #selectores2 > div ~ div {
@@ -158,7 +158,7 @@ main > div {
   #selectores22 {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 48%;
   }
   
   #selectores22 > div ~ div {

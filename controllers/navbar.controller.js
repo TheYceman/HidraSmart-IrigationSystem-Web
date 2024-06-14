@@ -213,6 +213,43 @@ async function getDemandasCultivos(req, res) {
 }
 
 async function getPlanRiego(req, res) {
+  //Datos para maniobras
+  const data = [
+    {
+      identificador: 'L021',
+      caudal: 44.0,
+      estadoVal: 'Cerrado',
+      accion1: 'Abrir',
+      instanteAccion1: '14/06/2024 00:00',
+      estadoAccion1: 'Completada',
+      accion2: 'Cerrar',
+      instanteAccion2: '14/06/2024 01:00',
+      estadoAccion2: 'Completada'
+    },
+    {
+      identificador: 'L012',
+      caudal: 110.0,
+      estadoVal: 'Cerrado',
+      accion1: 'Abrir',
+      instanteAccion1: '14/06/2024 07:55',
+      estadoAccion1: 'Completada',
+      accion2: 'Cerrar',
+      instanteAccion2: '14/06/2024 13:55',
+      estadoAccion2: 'Pendiente'
+    },
+    {
+      identificador: 'L018',
+      caudal: 130.0,
+      estadoVal: 'Cerrado',
+      accion1: 'Abrir',
+      instanteAccion1: '14/06/2024 07:58',
+      estadoAccion1: 'Completada',
+      accion2: 'Cerrar',
+      instanteAccion2: '14/06/2024 19:58',
+      estadoAccion2: 'Pendiente'
+    }
+  ];
+
   res.render("navbar/planificador-riego", {
     headImage: req.session.headImage,
     navIndex: 6,
@@ -226,6 +263,7 @@ async function getPlanRiego(req, res) {
     today: new Date().toJSON().slice(0, 16),
     getGeDataRiego: await getGeDataRiego(),
     user: req.session.username,
+    data: data
   });
 }
 async function getGestorEquipos(req, res) {

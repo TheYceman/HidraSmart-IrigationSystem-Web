@@ -23,13 +23,15 @@
                     <div class="div-container">
                         <section id="filtros">
                             <article id="selectores">
-                                <div>
-                                    <label for="fecha-inicio">Día</label>
-                                    <input type="datetime-local" id="fecha-inicio" max="<%= today %>" />
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    <label for="fecha-inicio" style="width:20%;">Día</label>
+                                    <input type="datetime-local" id="fecha-inicio" max="<%= today %>"
+                                        style="width: 80%;" />
                                 </div>
+
                                 <div>
                                     <label for="sector-dropdown">Sector</label>
-                                    <select id="sector-dropdown" onchange="updateElements()">
+                                    <select id="sector-dropdown" onchange="updateElements()" style="width: 100px;">
                                         <option selected value="0">Todos</option>
                                         <option value="S1">Sector 1</option>
                                         <option value="S2">Sector 2</option>
@@ -41,7 +43,8 @@
                                 </div>
                                 <div>
                                     <label for="sector-dropdown">Contador</label>
-                                    <select style="font-size: 12px;" onchange="addToSelectedList(this)" id="contadores">
+                                    <select style="font-size: 12px;width: 100px;" onchange="addToSelectedList(this)"
+                                        id="contadores">
                                         <% for (element of getGeDataRiego) { %>
                                             <option id="<%= element.id %>" data-sector="<%= element.sector %>"
                                                 data-tipo="<%= element.tipo %>" data-coorX="<%- element.coorX %>"
@@ -51,10 +54,12 @@
                                             <% } %>
                                     </select>
                                 </div>
-                                <div class="button-container" style="display: flex; flex-direction: row; width: 99%;">
-                                    <label style="width: 33%;"> Pres. Consig. (mca)</label>
-                                    <input type="number" id="cantidad" name="cantidad" value="20" style="width:100px; ">
-                                    <button class="btn" style="width: 33%;">
+                                <div class="button-container" style="display: flex; flex-direction: row; width: 100%;">
+                                    <label style="width: 70%;"> Pres. Consig. (mca)</label>
+                                    <input type="number" id="cantidad" name="cantidad" value="20" style="width: 93px;">
+                                </div>
+                                <div class="button-container">
+                                    <button class="btn" style="width: 50%;">
                                         <i class="fas fa-play"></i> Previsión
                                     </button>
                                 </div>
@@ -74,6 +79,7 @@
                                                 <tr>
                                                     <th>Fecha Inicio</th>
                                                     <th>Hora Inicio</th>
+                                                    <th>Fecha Fin</th>
                                                     <th>Hora Fin</th>
                                                     <th>Caudal</th>
                                                     <th>Vol.Acum</th>
@@ -87,12 +93,13 @@
                                                 <tr>
                                                     <td>23-05-2024</td>
                                                     <td>00:00</td>
+                                                    <td>23-05-2024</td>
                                                     <td>01:00</td>
                                                     <td>15</td>
                                                     <td>0</td>
                                                     <td>15</td>
                                                     <td>-15</td>
-                                                    <td> 
+                                                    <td>
                                                         <button class="btn red-btn"><i class="fa fa-trash"></i> Eliminar
                                                         </button>
                                                     </td>
@@ -100,12 +107,13 @@
                                                 <tr>
                                                     <td>24-05-2024</td>
                                                     <td>00:00</td>
+                                                    <td>24-05-2024</td>
                                                     <td>01:00</td>
                                                     <td>15</td>
                                                     <td>15</td>
                                                     <td>15</td>
                                                     <td>-30</td>
-                                                    <td> 
+                                                    <td>
                                                         <button class="btn red-btn"><i class="fa fa-trash"></i> Eliminar
                                                         </button>
                                                     </td>
@@ -113,12 +121,13 @@
                                                 <tr>
                                                     <td>25-05-2024</td>
                                                     <td>00:00</td>
-                                                    <td>01:00</td>
+                                                    <td>26-05-2024</td>
+                                                    <td>00:00</td>
                                                     <td>15</td>
                                                     <td>30</td>
                                                     <td>15</td>
                                                     <td>-45</td>
-                                                    <td> 
+                                                    <td>
                                                         <button class="btn red-btn"><i class="fa fa-trash"></i> Eliminar
                                                         </button>
                                                     </td>
@@ -126,12 +135,13 @@
                                                 <tr>
                                                     <td>26-05-2024</td>
                                                     <td>00:00</td>
-                                                    <td>01:00</td>
+                                                    <td>27-05-2024</td>
+                                                    <td>02:00</td>
                                                     <td>15</td>
                                                     <td>45</td>
                                                     <td>15</td>
                                                     <td>-60</td>
-                                                    <td> 
+                                                    <td>
                                                         <button class="btn red-btn"><i class="fa fa-trash"></i> Eliminar
                                                         </button>
                                                     </td>
@@ -178,8 +188,8 @@
                         <section id="filtros">
                             <article id="selectores">
                                 <div>
-                                    <label for="fecha-inicio">Seleccione día</label>
-                                    <input type="datetime-local" id="fecha-inicio" max="<%= today %>" />
+                                    <label for="fecha-inicio-lectura">Seleccione día</label>
+                                    <input type="datetime-local" id="fecha-inicio-lectura" max="<%= today %>" />
                                 </div>
                                 <div>
                                     <label for="sector-dropdown">Sector</label>
@@ -287,19 +297,19 @@
 
                     <div class="toolbar">
                         <div class="toolbar-item">
-                            <label for="fecha-inicio">Inicio</label>
-                            <input type="datetime-local" id="fecha-inicio-man" max="<%= today %>" />
+                            <label for="fecha-inicio-control">Inicio</label>
+                            <input type="datetime-local" id="fecha-inicio-control" max="<%= today %>" />
                         </div>
                         <div class="toolbar-item">
-                            <label for="fecha-fin">Fin</label>
-                            <input type="datetime-local" id="fecha-fin-man" max="<%= today %>" />
+                            <label for="fecha-fin-control">Fin</label>
+                            <input type="datetime-local" id="fecha-fin-control" max="<%= today %>" />
                         </div>
                         <div class="toolbar-item">
                             <label for="sector-dropdown">Sector</label>
                             <select id="sector-dropdown" onchange="updateElements()">
                                 <option selected value="0">Todos</option>
                                 <option value="S1">Sector 1</option>
-                                <option value="S2">Sector 2</option>
+                                <option value="S2" selected>Sector 2</option>
                                 <option value="S3">Sector 3</option>
                                 <option value="S4">Sector 4</option>
                                 <option value="S5">Sector 5</option>
@@ -320,18 +330,49 @@
                                 <tr>
                                     <th>Identificador</th>
                                     <th>Caudal N.</th>
-                                    <th>Estado </th>
+                                    <th>Estado Val.</th>
                                     <th>Acción 1</th>
-                                    <th>Instante Ac1</th>
+                                    <th>Instante Acción 1</th>
                                     <th>Estado Ac1.</th>
                                     <th>Acción 2</th>
-                                    <th>Instante Ac2</th>
+                                    <th>Instante Acción 2</th>
                                     <th>Estado Ac2.</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="table">
-
+                            <tbody>
+                                <% data.forEach(item=> { %>
+                                    <tr>
+                                        <td><a href="#"><img src="/images/up-arrow.png" alt="up arrow" />
+                                                <%= item.identificador %>
+                                            </a></td>
+                                        <td>
+                                            <%= item.caudal %>
+                                        </td>
+                                        <td class="estado-val">
+                                            <%= item.estadoVal %>
+                                        </td>
+                                        <td>
+                                            <%= item.accion1 %>
+                                        </td>
+                                        <td>
+                                            <%= item.instanteAccion1 %>
+                                        </td>
+                                        <td class="estado-accion">
+                                            <%= item.estadoAccion1 %>
+                                        </td>
+                                        <td>
+                                            <%= item.accion2 %>
+                                        </td>
+                                        <td>
+                                            <%= item.instanteAccion2 %>
+                                        </td>
+                                        <td class="estado-accion">
+                                            <%= item.estadoAccion2 %>
+                                        </td>
+                                        <td><button>Acciones</button></td>
+                                    </tr>
+                                    <% }) %>
                             </tbody>
                         </table>
                     </div>

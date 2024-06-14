@@ -1,9 +1,14 @@
 const sector = document.getElementById("sector-dropdown");
 const tipoElemento = document.getElementById("tipo-dropdown");
 const fechaInicio = document.getElementById("fecha-inicio");
+const fechaInicioLectura = document.getElementById("fecha-inicio-lectura");
+const fechaInicioControl = document.getElementById("fecha-inicio-control");
+const fechaFinControl = document.getElementById("fecha-fin-control");
 const fechaFin = document.getElementById("fecha-fin");
 const elementsList = document.querySelector("#lista-elementos ul");
 let selectedElements = [];
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const selectElement = document.querySelector('#contadores'); // Selecciona el elemento <select> por su ID
@@ -19,13 +24,22 @@ document.addEventListener('DOMContentLoaded', function () {
     // Obtener la fecha actual en el formato requerido por datetime-local (YYYY-MM-DDTHH:MM)
     const today = new Date().toISOString().slice(0, 16);
 
+    // Convertir la fecha a una cadena en formato ISO y tomar los primeros 16 caracteres (YYYY-MM-DDTHH:MM)
+    // Obtener la fecha actual y sumarle un día
+    const today2 = new Date();
+    today2.setDate(today2.getDate() + 1);
+    const tomorrow = today2.toISOString().slice(0, 16);
+
+
     // Asignar la fecha de 2020 como valor por defecto al campo fecha-inicio
-    document.getElementById('fecha-inicio').value = today;
+    fechaInicio.value = today;
+    fechaInicioLectura.value = today;
+    fechaInicioControl.value = today;
+    fechaFinControl.value = tomorrow;
 
     paintGraph();
 
 });
-
 
 Highcharts.setOptions({
     chart: {
@@ -455,5 +469,9 @@ function addToSelectedListLectura() {
 
         paintGraphLectura();
     }
+}
+
+function updateElements() {
+
 }
 

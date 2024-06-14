@@ -302,5 +302,5 @@ input[type="datetime-local"] {
     border-radius: 4px;
     box-sizing: border-box; /* Asegura que el padding y el borde se incluyan en el tamaño total del elemento */
     width: 100%; /* Hace que el input ocupe el 100% del contenedor */
-    max-width: 300px; /* Ancho máximo para no hacerlo demasiado grande */
+    max-width: 200px; /* Ancho máximo para no hacerlo demasiado grande */
   }
