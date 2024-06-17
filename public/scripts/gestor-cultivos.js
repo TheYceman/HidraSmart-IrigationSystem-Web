@@ -1,15 +1,7 @@
 
-function getChartData(ideParcela) {
-  // Filtro de datos para la parcela seleccionada
-  // Puedes ajustar la lógica de selección según tus necesidades
-  const selectedParcel = ideParcela; // Selecciona la primera parcela como ejemplo
-  const data = [{
-    name: selectedParcel.cultivo,
-    y: parseFloat(selectedParcel.hectareas)
-  }];
 
-  return data;
-}
+
+
 document.addEventListener('DOMContentLoaded', function () {
   const tabs = document.querySelectorAll('.tab-content');
   const tabLabels = document.querySelectorAll('.tab-label');
@@ -152,50 +144,10 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchCultivos(row);
   }
 
-  function selectRow2(row) {
-    rows2.forEach(r => r.classList.remove('selected'));
-    row.classList.add('selected');
-    const id = row.getAttribute('data-uid');
-    const parcela = window.parcelas.find(p => p.id === id);
-    const data = getChartData(parcela);
-
-    Highcharts.chart('highchart', {
-      chart: {
-        type: 'column'
-      },
-      title: {
-        text: 'Hectáreas por Cultivo'
-      },
-      xAxis: {
-        type: 'category',
-        title: {
-          text: 'Cultivo'
-        }
-      },
-      yAxis: {
-        title: {
-          text: 'Hectáreas'
-        }
-      },
-      series: [{
-        name: 'Hectáreas',
-        data: data,
-        dataLabels: {
-          enabled: true,
-          format: '{point.y:.2f} ha'
-        }
-      }]
-    });
-
-  }
-  // Seleccionar la primera fila por defecto
+ // Seleccionar la primera fila por defecto
   if (rows.length > 0) {
     selectRow(rows[0]);
   }
-  if (rows2.length > 0) {
-    selectRow2(rows[0]);
-  }
-
   // Añadir evento de clic a las filas
   rows.forEach(row => {
     row.addEventListener('click', function () {
@@ -203,12 +155,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Añadir evento de clic a las filas
-  rows2.forEach(row => {
-    row.addEventListener('click', function () {
-      selectRow2(row);
-    });
-  });
 
   // Función para obtener cultivos de la parcela seleccionada
   async function fetchCultivos(row) {
@@ -383,15 +329,69 @@ document.querySelectorAll('.accordion-title').forEach(item => {
   accordionItems[0].querySelector('.accordion-title').classList.add('active');
   accordionItems[0].querySelector('.accordion-content').classList.add('active');
 
-//color label cupo
-const labelNumbers = document.querySelectorAll('.label-number-restante');
+  //color label cupo
+  const labelNumbers = document.querySelectorAll('.label-number-restante');
 
-labelNumbers.forEach(function (label) {
+  labelNumbers.forEach(function (label) {
     const value = parseInt(label.textContent, 10);
     if (value < 1001) {
-        label.classList.add('red');
+      label.classList.add('red');
     }
-});
+  });
+
+  function getChartData() {
+
+    // Asegúrate de que window.parcelas esté definido y sea un arreglo
+    if (!window.parcelas || !Array.isArray(window.parcelas)) {
+      return [];
+    }
+
+    // Filtra las parcelas por el propietario
+    const propietarioId = window.propietarioId; // Aquí se asume que propietarioId se pasó correctamente
+    const parcelasFiltradas = window.parcelas.filter(parcel => parcel.propietario === propietarioId);
+
+    // Mapea las parcelas filtradas para crear el conjunto de datos
+    const data = parcelasFiltradas.map(parcel => ({
+      name: parcel.cultivo,
+      y: parseFloat(parcel.hectareas)
+    }));
+
+    return data;
+  }
+
+  const data = getChartData();
+
+  Highcharts.chart('highchart', {
+    chart: {
+      type: 'column'
+    },
+    title: {
+      text: 'Hectáreas por Cultivo'
+    },
+    xAxis: {
+      type: 'category',
+      title: {
+        text: 'Cultivo'
+      }
+    },
+    yAxis: {
+      title: {
+        text: 'Hectáreas'
+      }
+    },
+    series: [{
+      name: 'Hectáreas',
+      data: data,
+      dataLabels: {
+        enabled: true,
+        format: '{point.y:.2f} ha'
+      }
+    }],
+    credits: {
+      enabled: false
+    }
+  });
+
 });
 
 
