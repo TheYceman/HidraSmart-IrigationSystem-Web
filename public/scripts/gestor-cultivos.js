@@ -1,7 +1,3 @@
-
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
   const tabs = document.querySelectorAll('.tab-content');
   const tabLabels = document.querySelectorAll('.tab-label');
@@ -144,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchCultivos(row);
   }
 
- // Seleccionar la primera fila por defecto
+  // Seleccionar la primera fila por defecto
   if (rows.length > 0) {
     selectRow(rows[0]);
   }
@@ -346,9 +342,15 @@ document.querySelectorAll('.accordion-title').forEach(item => {
       return [];
     }
 
+    if (!window.propietarioId) {
+      return [];
+    }
+
     // Filtra las parcelas por el propietario
     const propietarioId = window.propietarioId; // Aquí se asume que propietarioId se pasó correctamente
-    const parcelasFiltradas = window.parcelas.filter(parcel => parcel.propietario === propietarioId);
+    const parcelasFiltradas = window.parcelas.filter(parcel => parseInt(parcel.propietario) === parseInt(propietarioId));
+    console.log(window.parcelas[0].propietario);
+    console.log(propietarioId);
 
     // Mapea las parcelas filtradas para crear el conjunto de datos
     const data = parcelasFiltradas.map(parcel => ({

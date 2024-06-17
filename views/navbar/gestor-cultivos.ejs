@@ -8,7 +8,7 @@
 
     <body>
         <script>
-            var propietarioId = '<%= user %>';
+            window.propietarioId = <%= userId %>;
             window.parcelas = [];
             <% for (let parcela of todasLasParcelas) { %>
                 window.parcelas.push({
@@ -26,10 +26,8 @@
                     hectareas: '<%= parcela.hectareas %>'
                 });
             <% } %>
-
-           
-
-        </script>
+       
+       </script>
         <main>
             <h2 class="titulo_seccion"></h2>
             <div class="tab-labels">
