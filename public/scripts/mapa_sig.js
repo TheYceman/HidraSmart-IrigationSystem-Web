@@ -10,6 +10,7 @@ var makersCountersMasterArray = [];
 var markerValveOpenArray = [];
 
 var polygonsArray = [];
+var polygonsCultivosArray = [];
 var polylinesArray = [];
 
 var checkboxCounters = document.getElementById("item1-1");
@@ -203,19 +204,17 @@ function paint_counter_bbdd() {
         </div>
         <div class="infowindow-body">
             <ul>
-                <li><strong>Sector:</strong> S3</li>
-                <li><strong>Tramo:</strong> Valor 2</li>
-                <li><strong>Vol. Acum (m3):</strong> Valor 3</li>
-                <li><strong>Vol. Rest (m3):</strong> Valor 1</li>
-                <li><strong>Caudal (m3/h):</strong> Valor 2</li>
-                <li><strong>Presión (mca):</strong> Valor 3</li>
-                <li><strong>Parcela:</strong> Valor 1</li>
-                <li class="infowindow-section-title">DATOS IRRINET</li>
-                <li><strong>Vol. Global (m3):</strong> Valor 3</li>
-                <li><strong>Caudal (m3/h):</strong> Valor 1</li>
-                <li><strong>Vol. Parc (m3):</strong> Valor 2</li>
-                <li><strong>Vol. Rest (m3):</strong> Valor 3</li>
-                <li><strong>Válvula:</strong></li>
+                <li><strong>Sector:</strong> `+ contador.sector + `</li>
+                <li><strong>Tramo:</strong> `+ contador.tramo + `</li>
+                <li><strong>Ramal:</strong> `+ contador.ramal + `</li>
+                <li><strong>Titular:</strong> `+ contador.titular + `</li>
+                <li><strong>Vol. Acum (m3):</strong> `+ contador.acumulado + `</li>
+                <li><strong>Instante:</strong> `+ contador.instante + `</li>
+                <li><strong>Bateria:</strong> `+ contador.bateria + `</li>
+                <li><strong>Radio:</strong> `+ contador.radio + `</li>
+                <li><strong>Marca:</strong> `+ contador.marca + `</li>
+                <li><strong>Dimensión:</strong> `+ contador.dimension + `</li>
+                <li><strong>Vol. Global (m3):</strong> `+ contador.volAsignado + `</li
             </ul>
         </div>
     </div>
@@ -226,9 +225,8 @@ function paint_counter_bbdd() {
       content += "<span id='leyendaLabel'><b>Contador " + contador.id + "</b></span>";
       content += "<div>"
       content += "<ul class='leyenda-list'>";
-      content += "<li><span class='leyenda-item'>Sector:</span> S3</li>";
-      content += "<li><span class='leyenda-item'>Tramo:</span> Valor 2</li>";
-      content += "<li><span class='leyenda-item'>Parcela:</span> Valor 1</li>";
+      content += "<li><span class='leyenda-item'>Sector:</span>" + contador.sector + "</li>";
+      content += "<li><span class='leyenda-item'>Tramo:</span> " + contador.tramo + "</li>";
       content += "</ul></div>";
       content += "<div>"
       content += "<div id='highchart-graph'></div>";
@@ -240,91 +238,128 @@ function paint_counter_bbdd() {
     makersCountersArray.push(markerCounter);
   });
 }
-
 async function paintGraph() {
   //let elements = Array.from(document.getElementById("contadores").querySelectorAll("option:checked"));
   let seriesData = [];
- 
+
 
   if (seriesData.length === 0) {
-      var fecha1 = new Date("2024-05-23 00:00:00").getTime();
-      var fecha2 = new Date("2024-05-24 00:00:00").getTime();
-      var fecha3 = new Date("2024-05-25 00:00:00").getTime();
-      var fecha4 = new Date("2024-05-26 00:00:00").getTime();
+    var fecha1 = new Date("2024-05-23 00:00:00").getTime();
+    var fecha2 = new Date("2024-05-24 00:00:00").getTime();
+    var fecha3 = new Date("2024-05-25 00:00:00").getTime();
+    var fecha4 = new Date("2024-05-26 00:00:00").getTime();
 
 
-      // Suponiendo que tienes los datos de esta manera
-      var datos = [
-          { "instante": fecha1, "valor": 15 },
-          { "instante": fecha2, "valor": 15 },
-          { "instante": fecha3, "valor": 15 }, // Agregar una hora al inicio
-          { "instante": fecha4, "valor": 15 }  // Agregar dos horas al inicio
-      ];
+    // Suponiendo que tienes los datos de esta manera
+    var datos = [
+      { "instante": fecha1, "valor": 15 },
+      { "instante": fecha2, "valor": 15 },
+      { "instante": fecha3, "valor": 15 }, // Agregar una hora al inicio
+      { "instante": fecha4, "valor": 15 }  // Agregar dos horas al inicio
+    ];
 
-      // Transforma los datos al formato que Highcharts espera
-      seriesData = datos.map(function (dato) {
-          return [dato.instante, dato.valor];
-      });
-      console.log(seriesData);
+    // Transforma los datos al formato que Highcharts espera
+    seriesData = datos.map(function (dato) {
+      return [dato.instante, dato.valor];
+    });
+    console.log(seriesData);
   }
   var chartOptions = {
-      chart: {
-          type: "line",
-      },
-      credits: {
-          enabled: false,
-      },
+    chart: {
+      type: "line",
+    },
+    credits: {
+      enabled: false,
+    },
+    title: {
+      text: "Histórico",
+    },
+    xAxis: {
+      type: "datetime",
       title: {
-          text: "Histórico",
+        text: "Fecha",
       },
-      xAxis: {
-          type: "datetime",
-          title: {
-              text: "Fecha",
-          },
+    },
+    yAxis: [
+      {
+        title: {
+          text: "Valor",
+        }
       },
-      yAxis: [
-          {
-              title: {
-                  text: "Valor",
-              }
-          },
-          {
-              title: {
-                  text: "Valor",
-              },
-              opposite: true,
-          },
-      ],
-      series: [{
-          name: 'Datos',
-          data: seriesData
-      }],
-      turboThreshold: 5000,
+      {
+        title: {
+          text: "Valor",
+        },
+        opposite: true,
+      },
+    ],
+    series: [{
+      name: 'Datos',
+      data: seriesData
+    }],
+    turboThreshold: 5000,
   };
   Highcharts.chart("highchart-graph", chartOptions);
 }
-
-
 
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 const leyenda2 = document.getElementById('leyenda2');
 
 function updateLeyenda() {
+  // Asegúrate de que leyenda2 es el id correcto
   leyenda2.innerHTML = ''; // Limpiar la capa leyenda2
+
+  // Función auxiliar para crear y añadir un item a la leyenda
+  function addLegendItem(content, category) {
+    const legendItem = document.createElement('div');
+    legendItem.classList.add('legend2_item');
+    legendItem.innerHTML = `<label class='checkbox_label_leyenda2'>${content}</label>`;
+    category.appendChild(legendItem);
+  }
+
+  // Crear contenedores para cada categoría
+  const categories = {};
+
+  // Iterar sobre los checkboxes y agregar los elementos seleccionados a la leyenda
   checkboxes.forEach(function (checkbox) {
     if (checkbox.checked) {
       const label = document.querySelector(`label[for="${checkbox.id}"]`);
       if (label) {
-        const legendItem = document.createElement('div');
-        legendItem.classList.add('legend2_item');
-        legendItem.innerHTML = "<label class='checkbox_label_leyenda2'>" + label.innerHTML + "</label>"; // Añadir el contenido de la etiqueta label, incluyendo estilos
-        console.log(label.outerHTML);
-        leyenda2.appendChild(legendItem);
+        const categoryName = label.textContent.trim(); // Usar el texto del label como nombre de la categoría
+        if (!categories[categoryName]) {
+          const categoryDiv = document.createElement('div');
+          categoryDiv.classList.add('legend_category');
+          categoryDiv.innerHTML = `<h4>${categoryName}</h4>`;
+          leyenda2.appendChild(categoryDiv);
+          categories[categoryName] = categoryDiv;
+        }
+        
+        // Agregar el propio checkbox a la leyenda
+        addLegendItem(label.innerHTML, categories[categoryName]);
+        
+        // Agregar los sub-checkboxes si los hay
+        const subCheckboxes = document.querySelectorAll(`input[type="checkbox"][id^="${checkbox.id}-"]`);
+        subCheckboxes.forEach(function (subCheckbox) {
+          if (subCheckbox.checked) {
+            const subLabel = document.querySelector(`label[for="${subCheckbox.id}"]`);
+            if (subLabel) {
+              addLegendItem(subLabel.innerHTML, categories[categoryName]);
+            }
+          }
+        });
+        
+        // Agregar los legend-items para cultivos
+        if (checkbox.id === 'item2-2' && checkbox.checked) { // Suponiendo que el id del checkbox de cultivos es 'item2-2'
+          const legendItems = document.querySelectorAll('.legend-item');
+          legendItems.forEach(function (legendItem) {
+            addLegendItem(legendItem.outerHTML, categories[categoryName]);
+          });
+        }
       }
     }
   });
 }
+
 
 checkboxes.forEach(function (checkbox) {
   checkbox.addEventListener("change", function () {
@@ -332,9 +367,8 @@ checkboxes.forEach(function (checkbox) {
 
     if (this.checked) {
 
-
       switch (this.value) {
-        case "item1-1":
+        case "item1-1": //Contadores
           var checkboxCounter =
             document.getElementsByClassName("checkbox_counter");
           for (var i = 0; i < checkboxCounter.length; i++) {
@@ -349,23 +383,11 @@ checkboxes.forEach(function (checkbox) {
           }
           paint_counter_bbdd();
           break;
-        case "item1-1-1":
-          paint_counter_bbdd();
-          break;
-        case "item1-1-2":
-          paint_counter_bbdd();
-          break;
-        case "item1-1-3":
-          paint_counter_bbdd();
-          break;
-        case "item1-1-4":
-          paint_counter_bbdd();
-          break;
-        case "item1-2":
-          paint_counter_bbdd();
+        case "item1-2": //Estaciones de bombeo
+          paint_counter();
           break;
         case "item2-1":
-          paint_counter_bbdd();
+          paint_counter();
           var checkboxValve = document.getElementsByClassName("checkbox_valve");
           for (var i = 0; i < checkboxValve.length; i++) {
             checkboxValve[i].checked = true;
@@ -378,28 +400,16 @@ checkboxes.forEach(function (checkbox) {
             checkboxValveList[0].style.opacity = 1;
           }
           break;
-        case "item2-1-1":
-          paint_counter_bbdd();
-          break;
-        case "item2-1-2":
-          paint_counter_bbdd();
-          break;
         case "item2-2":
-          //paint_plots();
+          // Seleccionar todos los cultivos
+          $('.legend-item').each(function () {
+            $(this).addClass('selected');
+            var cultivo = $(this).data('value');
+            if (!selectedCultivos.includes(cultivo)) {
+              selectedCultivos.push(cultivo);
+            }
+          });
           paint_cultivos();
-          /*var checkboxPressure =
-            document.getElementsByClassName("checkbox_pressure");
-          for (var i = 0; i < checkboxPressure.length; i++) {
-            checkboxPressure[i].checked = true;
-            checkboxPressure[i].disabled = false;
-          }
-          var checkboxPressureList = document.getElementsByClassName(
-            "checkbox_pressure_list"
-          );
-          if (checkboxPressureList.length > 0) {
-            checkboxPressureList[0].style.opacity = 1;
-          }
-          */
           break;
         case "item2-3":
           paint_pipelines();
@@ -435,12 +445,6 @@ checkboxes.forEach(function (checkbox) {
           }
           delete_counter();
           break;
-        case "item1-1-1":
-          delete_counter();
-          break;
-        case "item1-1-4":
-          delete_counter();
-          break;
         case "item1-2":
           delete_counter();
           break;
@@ -458,26 +462,13 @@ checkboxes.forEach(function (checkbox) {
           }
           delete_counter();
           break;
-        case "item2-1-1":
-          delete_counter();
-          break;
-        case "item2-1-2":
-          delete_counter();
-          break;
         case "item2-2":
-          var checkboxPressure =
-            document.getElementsByClassName("checkbox_pressure");
-          for (var i = 0; i < checkboxPressure.length; i++) {
-            checkboxPressure[i].checked = false;
-            checkboxPressure[i].disabled = true;
-          }
-          var checkboxPressureList = document.getElementsByClassName(
-            "checkbox_pressure_list"
-          );
-          if (checkboxPressureList.length > 0) {
-            checkboxPressureList[0].style.opacity = 0.5;
-          }
-          delete_plots();
+          // Deseleccionar todos los cultivos
+          $('.legend-item').each(function () {
+            $(this).removeClass('selected');
+          });
+          selectedCultivos = [];
+          delete_cultivos();
           break;
         case "item2-3":
           delete_pipelines();
@@ -632,6 +623,7 @@ function paint_counter() {
     });
 }
 
+
 function paint_counter_bbdd1() {
 
   fetch("/mapa-sig/getContadoresMapa")
@@ -783,7 +775,7 @@ function delete_counter() {
 }
 
 function paint_valve() {
-  fetch("/json/mapa_sig.json")
+  fetch("/json/node.json")
     .then((response) => response.json())
     .then(function (data) {
       var countersArray = Array.from(data);
@@ -845,54 +837,6 @@ function paint_valve() {
             //infowindowscounters.set(markerCounter, infowindow);
           }
         }
-      });
-    })
-    .catch((error) => {
-      console.log("Error:", error);
-    });
-}
-
-function paint_plots() {
-  var plotCoords = [];
-  fetch("json/parcelas.json")
-    .then((response) => response.json())
-    .then(function (data) {
-      var plotsArray = Array.from(data);
-      plotsArray.forEach(function (plot) {
-        if (plot.nSecuencial == 1) {
-          if (plotCoords.length > 0) {
-            // Declaración y asignación de la variable pressureValor
-            var pressureValor = 16;
-            // Llamada a la función adjust_pressure_color pasando pressureValor como argumento
-            var pressureColor = adjust_pressure_color(pressureValor);
-            // Crear el área poligonal para la parcela
-            var polygon = new google.maps.Polygon({
-              paths: plotCoords,
-              strokeColor: "#FCAE1E", // Color del borde del área
-              strokeOpacity: 0.8, // Opacidad del borde del área
-              strokeWeight: 1, // Grosor del borde del área
-              fillColor: pressureColor, // Color de relleno del área
-              fillOpacity: 0.35, // Opacidad del relleno del área
-            });
-            // Agregar evento de clic al polígono
-            polygon.addListener("click", function (event) {
-              show_infowindow_plots(event, plot.ideParcela);
-            });
-
-            // Agregar el área poligonal al mapa
-            polygon.setMap(myMap);
-            // Agregar el polígono al arreglo
-            polygonsArray.push(polygon);
-            // Guardar el infowindow asociado al polígono de parcela
-            infowindowsPlots.set(polygon, infowindow);
-          }
-          plotCoords = []; // Array para almacenar las coordenadas de los puntos de la parcela
-        }
-        // Obtener las coordenadas de los puntos de la parcela y agregarlas al array plotCoords
-        plotCoords.push({
-          lat: parseFloat(plot.coorX),
-          lng: parseFloat(plot.coorY),
-        });
       });
     })
     .catch((error) => {
@@ -969,10 +913,10 @@ function paint_cultivos() {
     .then((response) => response.json())
     .then(function (data) {
       // Limpiar los polígonos existentes antes de pintar nuevos
-      polygonsArray.forEach(function (polygon) {
+      polygonsCultivosArray.forEach(function (polygon) {
         polygon.setMap(null);
       });
-      polygonsArray = [];
+      polygonsCultivosArray = [];
 
       var plotsArray = Array.from(data);
       plotsArray.forEach(function (plot) {
@@ -992,7 +936,7 @@ function paint_cultivos() {
                 document.getElementById("informacion").style.display = "none";
                 var content = '<div class="campo-container">' +
                   '<div class="campo-header">' +
-                 '<h3 style="color: #009bdb; font-weight:bold">Parcela ' + plot.ideParcela + '</h3>'+
+                  '<h3 style="color: #009bdb; font-weight:bold">Parcela ' + plot.ideParcela + '</h3>' +
                   '</div>' +
                   '<div class="campo-tab-content active" id="datos">' +
                   '   <div class="campo-content">' +
@@ -1020,7 +964,7 @@ function paint_cultivos() {
                 show_infowindow_plots(event, content);
               });
               polygon.setMap(myMap);
-              polygonsArray.push(polygon);
+              polygonsCultivosArray.push(polygon);
               infowindowsPlots.set(polygon, infowindow);
             }
             plotCoords = [];
@@ -1036,7 +980,6 @@ function paint_cultivos() {
       console.log("Error:", error);
     });
 }
-
 
 function adjust_pressure_color(pressureValor) {
   switch (true) {
@@ -1059,7 +1002,8 @@ function show_infowindow_plots(event, content) {
   infowindow.open(myMap);
 }
 
-function delete_plots() {
+
+function delete_cultivos() {
   // Eliminar los polígonos de parcelas del mapa y sus correspondientes infowindows
   polygonsArray.forEach(function (polygon) {
     if (polygon instanceof google.maps.Polygon) {
@@ -1240,17 +1184,17 @@ document.addEventListener("DOMContentLoaded", function () {
   `;
   availableInformationLabel.innerHTML = HTMLAvailableInformationLabelContent;
   myMap.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(availableInformationLabel);*/
- // Create the sidebar element
- var sidebar = document.getElementById('sidebar');
+  // Create the sidebar element
+  var sidebar = document.getElementById('sidebar');
 
- // Create the tab-content element
- var tabContent = document.getElementById('tab-content');
+  // Create the tab-content element
+  var tabContent = document.getElementById('tab-content');
 
- // Add the sidebar to the map
- myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(sidebar);
+  // Add the sidebar to the map
+  myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(sidebar);
 
- // Add the tab-content to the map
- myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(tabContent);
+  // Add the tab-content to the map
+  myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(tabContent);
 
 
   document.getElementsByClassName('tablink')[0].click();
