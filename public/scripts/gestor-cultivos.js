@@ -368,7 +368,7 @@ document.querySelectorAll('.accordion-title').forEach(item => {
       type: 'column'
     },
     title: {
-      text: 'Hectáreas por Cultivo'
+      text: 'Hectáreas por cultivo de todas las parcelas'
     },
     xAxis: {
       type: 'category',
