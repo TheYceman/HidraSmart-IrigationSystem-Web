@@ -322,38 +322,40 @@ function updateLeyenda() {
 
   // Iterar sobre los checkboxes y agregar los elementos seleccionados a la leyenda
   checkboxes.forEach(function (checkbox) {
-    if (checkbox.checked) {
-      const label = document.querySelector(`label[for="${checkbox.id}"]`);
-      if (label) {
-        const categoryName = label.textContent.trim(); // Usar el texto del label como nombre de la categoría
-        if (!categories[categoryName]) {
-          const categoryDiv = document.createElement('div');
-          categoryDiv.classList.add('legend_category');
-          categoryDiv.innerHTML = `<h4>${categoryName}</h4>`;
-          leyenda2.appendChild(categoryDiv);
-          categories[categoryName] = categoryDiv;
-        }
-        
-        // Agregar el propio checkbox a la leyenda
-        addLegendItem(label.innerHTML, categories[categoryName]);
-        
-        // Agregar los sub-checkboxes si los hay
-        const subCheckboxes = document.querySelectorAll(`input[type="checkbox"][id^="${checkbox.id}-"]`);
-        subCheckboxes.forEach(function (subCheckbox) {
-          if (subCheckbox.checked) {
-            const subLabel = document.querySelector(`label[for="${subCheckbox.id}"]`);
-            if (subLabel) {
-              addLegendItem(subLabel.innerHTML, categories[categoryName]);
-            }
+    if (checkbox.id === "item1-1" || checkbox.id === "item1-2" || checkbox.id === "item2-2" || checkbox.id === "item2-1" || checkbox.id === "item2-3") {
+      if (checkbox.checked) {
+        const label = document.querySelector(`label[for="${checkbox.id}"]`);
+        if (label) {
+          const categoryName = label.textContent.trim(); // Usar el texto del label como nombre de la categoría
+          if (!categories[categoryName]) {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('legend_category');
+            categoryDiv.innerHTML = `<h4>${categoryName}</h4>`;
+            leyenda2.appendChild(categoryDiv);
+            categories[categoryName] = categoryDiv;
           }
-        });
-        
-        // Agregar los legend-items para cultivos
-        if (checkbox.id === 'item2-2' && checkbox.checked) { // Suponiendo que el id del checkbox de cultivos es 'item2-2'
-          const legendItems = document.querySelectorAll('.legend-item');
-          legendItems.forEach(function (legendItem) {
-            addLegendItem(legendItem.outerHTML, categories[categoryName]);
+
+          // Agregar el propio checkbox a la leyenda
+          addLegendItem(label.innerHTML, categories[categoryName]);
+
+          // Agregar los sub-checkboxes si los hay
+          const subCheckboxes = document.querySelectorAll(`input[type="checkbox"][id^="${checkbox.id}-"]`);
+          subCheckboxes.forEach(function (subCheckbox) {
+            if (subCheckbox.checked) {
+              const subLabel = document.querySelector(`label[for="${subCheckbox.id}"]`);
+              if (subLabel) {
+                addLegendItem(subLabel.innerHTML, categories[categoryName]);
+              }
+            }
           });
+
+          // Agregar los legend-items para cultivos
+          if (checkbox.id === 'item2-2' && checkbox.checked) { // Suponiendo que el id del checkbox de cultivos es 'item2-2'
+            const legendItems = document.querySelectorAll('.legend-item');
+            legendItems.forEach(function (legendItem) {
+              addLegendItem(legendItem.outerHTML, categories[categoryName]);
+            });
+          }
         }
       }
     }
@@ -622,7 +624,6 @@ function paint_counter() {
       console.log("Error:", error);
     });
 }
-
 
 function paint_counter_bbdd1() {
 

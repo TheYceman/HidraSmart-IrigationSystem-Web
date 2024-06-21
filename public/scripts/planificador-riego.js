@@ -21,6 +21,19 @@ document.addEventListener('DOMContentLoaded', function () {
             addToSelectedList(firstOption); // Agrega el primer <option> a la lista de elementos seleccionados
         }
     }
+
+    //Añade la primera opción a la lista de contadores seleccionados de lectura
+    const selectElementLectura = document.querySelector('#contadoresLectura'); // Selecciona el elemento <select> por su ID
+
+    if (selectElementLectura) {
+        const firstOption = selectElement.querySelector('option'); // Selecciona el primer <option> dentro del <select>
+
+        if (firstOption) {
+            firstOption.selected = true; // Selecciona el primer <option>
+            addToSelectedListLectura(firstOption); // Agrega el primer <option> a la lista de elementos seleccionados
+        }
+    }
+
     // Obtener la fecha actual en el formato requerido por datetime-local (YYYY-MM-DDTHH:MM)
     const today = new Date().toISOString().slice(0, 16);
 
@@ -231,83 +244,23 @@ function dateToObject(date) {
 }
 
 async function paintGraphLectura() {
-    //let elements = Array.from(document.getElementById("contadores").querySelectorAll("option:checked"));
-    var elementsList = document.getElementById("selected-elements");
-    var selectedOptions = elementsList.querySelectorAll(".selected-element");
-    var elements = Array.from(selectedOptions).map(option => option.textContent);
+
     let seriesData = [];
-    let tablaData = [];
-    for (element of elements) {
-        let data = await loadData({
-            idSensor: element.id,
-            tipo: "caudalimetro",
-            //tipo: element.dataset.tipo,
+
+    if (seriesData.length === 0) {
+        var fecha1 = new Date("2024-06-21 00:00:00").getTime();
+
+        // Suponiendo que tienes los datos de esta manera
+        var datos = [
+            { "instante": fecha1, "valor": 1 },
+        ];
+
+        // Transforma los datos al formato que Highcharts espera
+        seriesData = datos.map(function (dato) {
+            return [dato.instante, dato.valor];
         });
-        let highcharData = [];
-        for (d of data) {
-            let valor;
-            switch (element.dataset.tipo) {
-                case "nivel":
-                    valor = d.altura;
-                    break;
-                case "presion":
-                    valor = d.presion;
-                    break;
-                case "caudalimetro":
-                    valor = d.caudal;
-                    break;
-                case "valvula":
-                    valor = d.estado;
-                    break;
-            }
-            highcharData.push([d.instante, valor]);
-
-            const valorTiempo = d.instante // Tu valor de tiempo en milisegundos
-
-            // Crea un objeto Date a partir del valor de tiempo
-            const fecha = new Date(valorTiempo);
-
-            // Obtiene los componentes de la fecha
-            const dia = fecha.getDate();
-            const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, así que agregamos 1
-            const año = fecha.getFullYear();
-            const horas = fecha.getHours();
-            const minutos = fecha.getMinutes();
-
-            // Formatea la fecha y hora en el formato deseado
-            const fechaFormateada = `${dia}-${mes}-${año} ${horas}:${minutos}`;
-
-            tablaData.push({ "elemento": element.id, "instante": fechaFormateada, "valor": valor });
-        }
-        highcharData.sort(function (a, b) {
-            return a[0] - b[0];
-        });
-        seriesData.push({
-            name: element.id,
-            data: highcharData,
-            yAxis: ["caudalimetro", "presion"].includes(element.tipo) ? 1 : 0,
-        });
-
-
-        // Obtén la referencia a la tabla
-        const tabla = document.getElementById('tablaDatos');
-
-        // Limpia la tabla (opcional)
-        tabla.innerHTML = ' <thead><tr><th>Elemento</th><th>Fecha</th><th>Valor</th></tr></thead>';
-
-        // Crea las filas de la tabla con los datos cargados
-        tablaData.forEach(function (dato) {
-            const fila = document.createElement('tr');
-            fila.innerHTML = `
-          <td>${dato.elemento}</td>
-          <td>${dato.instante}</td>
-          <td>${dato.valor}</td>
-        `;
-            tabla.appendChild(fila);
-        });
-
+        console.log(seriesData);
     }
-
     var chartOptions = {
         chart: {
             type: "line",
@@ -327,26 +280,18 @@ async function paintGraphLectura() {
         yAxis: [
             {
                 title: {
-                    text: "Valor (0-10)",
-                },
-                min: 0,
-                max: 10,
-            },
-            {
-                title: {
-                    text: "Valor (0-1000)",
-                },
-                opposite: true,
-                min: 0,
-                max: 1000,
-            },
+                    text: "Número peticiones",
+                }
+            }
         ],
-        series: seriesData,
+        series: [{
+            name: 'Datos',
+            data: seriesData
+        }],
         turboThreshold: 5000,
     };
     Highcharts.chart("highchart-graph-lectura", chartOptions);
 }
-
 paintGraphLectura();
 
 
