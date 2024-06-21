@@ -1,5 +1,3 @@
-
-
 var myMap;
 
 var counterArray = [];
@@ -137,9 +135,6 @@ myMap = new google.maps.Map(document.getElementById("map"), {
     // Ajustes adicionales si es necesario
   }
 });
-
-
-
 
 // Agregar un evento onclick al mapa
 myMap.addListener('click', function (event) {
@@ -361,7 +356,6 @@ function updateLeyenda() {
     }
   });
 }
-
 
 checkboxes.forEach(function (checkbox) {
   checkbox.addEventListener("change", function () {
@@ -1003,7 +997,6 @@ function show_infowindow_plots(event, content) {
   infowindow.open(myMap);
 }
 
-
 function delete_cultivos() {
   // Eliminar los polígonos de parcelas del mapa y sus correspondientes infowindows
   polygonsArray.forEach(function (polygon) {
@@ -1166,7 +1159,6 @@ function openTab(evt, tabName) {
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
 }
-
 
 // Default open tab
 document.addEventListener("DOMContentLoaded", function () {

@@ -6,6 +6,86 @@ const elementsList = document.querySelector("#lista-elementos ul");
 let selectedElements = [];
 
 document.addEventListener('DOMContentLoaded', function () {
+  // Create the sidebar element
+  var sidebar = document.getElementById('sidebar');
+
+  // Create the tab-content element
+  var tabContent = document.getElementById('tab-content');
+
+  // Add the sidebar to the map
+  myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(sidebar);
+
+  // Add the tab-content to the map
+  myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(tabContent);
+
+
+  document.getElementsByClassName('tablink')[0].click();
+
+  // Script para el acordeón
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.parentElement;
+      const content = item.querySelector('.accordion-content');
+      const icon = header.querySelector('.fa-angle-down');
+
+      if (content.style.display === 'block') {
+        content.style.display = 'none';
+      } else {
+        document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('.accordion-header .fa-angle-down').forEach(i => i.style.transform = 'rotate(0deg)');
+        content.style.display = 'block';
+      }
+    });
+  });
+  document.querySelectorAll('.accordion-title').forEach(item => {
+    item.addEventListener('click', () => {
+      const content = item.nextElementSibling;
+      const allAccordionContents = document.querySelectorAll('.accordion-content');
+      const allAccordionTitles = document.querySelectorAll('.accordion-title');
+
+      // Cerrar todos los elementos del acordeón
+      allAccordionContents.forEach(content => {
+        content.style.display = 'none';
+      });
+
+      // Eliminar la clase 'active' de todos los títulos
+      allAccordionTitles.forEach(title => {
+        title.querySelector('i').classList.remove('fa-chevron-up');
+        title.querySelector('i').classList.add('fa-chevron-down');
+      });
+
+      // Abrir o cerrar el contenido del acordeón según su estado actual
+      if (content.style.display === 'block') {
+        content.style.display = 'none';
+        item.querySelector('i').classList.remove('fa-chevron-up');
+        item.querySelector('i').classList.add('fa-chevron-down');
+      } else {
+        content.style.display = 'block';
+        item.querySelector('i').classList.remove('fa-chevron-down');
+        item.querySelector('i').classList.add('fa-chevron-up');
+      }
+    });
+
+    const accordionItems = document.querySelectorAll('.accordion-item');
+
+    accordionItems.forEach(item => {
+      const title = item.querySelector('.accordion-title');
+
+      title.addEventListener('click', () => {
+        const content = item.querySelector('.accordion-content');
+
+        // Cierra todos los items del acordeón
+        accordionItems.forEach(i => {
+          i.querySelector('.accordion-content').classList.remove('active');
+          i.querySelector('.accordion-title').classList.remove('active');
+        });
+
+        // Abre el tab actual
+        content.classList.add('active');
+        title.classList.add('active');
+      });
+    });
+  });
   const firstElement = document.querySelector('#lista-elementos ul li');
   if (firstElement) {
     firstElement.classList.add('selected');
@@ -22,6 +102,131 @@ document.addEventListener('DOMContentLoaded', function () {
   // Asignar la fecha actual como valor por defecto al campo fecha-fin
   document.getElementById('fecha-fin').value = today;
   paintGraph();
+  updateLeyenda();
+  document.querySelectorAll('.accordion-title').forEach(item => {
+    item.addEventListener('click', () => {
+      const content = item.nextElementSibling;
+      const allAccordionContents = document.querySelectorAll('.accordion-content');
+      const allAccordionTitles = document.querySelectorAll('.accordion-title');
+
+      // Cerrar todos los elementos del acordeón
+      allAccordionContents.forEach(content => {
+        content.style.display = 'none';
+      });
+
+      // Eliminar la clase 'active' de todos los títulos
+      allAccordionTitles.forEach(title => {
+        title.querySelector('i').classList.remove('fa-chevron-up');
+        title.querySelector('i').classList.add('fa-chevron-down');
+      });
+
+      // Abrir o cerrar el contenido del acordeón según su estado actual
+      if (content.style.display === 'block') {
+        content.style.display = 'none';
+        item.querySelector('i').classList.remove('fa-chevron-up');
+        item.querySelector('i').classList.add('fa-chevron-down');
+      } else {
+        content.style.display = 'block';
+        item.querySelector('i').classList.remove('fa-chevron-down');
+        item.querySelector('i').classList.add('fa-chevron-up');
+      }
+    });
+
+    const accordionItems = document.querySelectorAll('.accordion-item');
+
+    accordionItems.forEach(item => {
+      const title = item.querySelector('.accordion-title');
+
+      title.addEventListener('click', () => {
+        const content = item.querySelector('.accordion-content');
+
+        // Cierra todos los items del acordeón
+        accordionItems.forEach(i => {
+          i.querySelector('.accordion-content').classList.remove('active');
+          i.querySelector('.accordion-title').classList.remove('active');
+        });
+
+        // Abre el tab actual
+        content.classList.add('active');
+        title.classList.add('active');
+      });
+    });
+
+    // Despliega el primer tab por defecto
+    accordionItems[0].querySelector('.accordion-title').classList.add('active');
+    accordionItems[0].querySelector('.accordion-content').classList.add('active');
+
+    //color label cupo
+    const labelNumbers = document.querySelectorAll('.label-number-restante');
+
+    labelNumbers.forEach(function (label) {
+      const value = parseInt(label.textContent, 10);
+      if (value < 1001) {
+        label.classList.add('red');
+      }
+    });
+
+    function getChartData() {
+
+      // Asegúrate de que window.parcelas esté definido y sea un arreglo
+      if (!window.parcelas || !Array.isArray(window.parcelas)) {
+        return [];
+      }
+
+      if (!window.propietarioId) {
+        return [];
+      }
+
+      // Filtra las parcelas por el propietario
+      const propietarioId = window.propietarioId; // Aquí se asume que propietarioId se pasó correctamente
+      const parcelasFiltradas = window.parcelas.filter(parcel => parseInt(parcel.propietario) === parseInt(propietarioId));
+      console.log(window.parcelas[0].propietario);
+      console.log(propietarioId);
+
+      // Mapea las parcelas filtradas para crear el conjunto de datos
+      const data = parcelasFiltradas.map(parcel => ({
+        name: parcel.cultivo,
+        y: parseFloat(parcel.hectareas)
+      }));
+
+      return data;
+    }
+
+    const data = getChartData();
+
+    Highcharts.chart('highchart', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Hectáreas por cultivo de todas las parcelas'
+      },
+      xAxis: {
+        type: 'category',
+        title: {
+          text: 'Cultivo'
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Hectáreas'
+        }
+      },
+      series: [{
+        name: 'Hectáreas',
+        data: data,
+        dataLabels: {
+          enabled: true,
+          format: '{point.y:.2f} ha'
+        }
+      }],
+      credits: {
+        enabled: false
+      }
+    });
+
+  });
+
 
 });
 
@@ -1544,12 +1749,11 @@ myMap = new google.maps.Map(document.getElementById("map"), {
   mapTypeControl: true, // Habilita el control de tipo de mapa
   mapTypeControlOptions: {
     //style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR, // Estilo del control de tipo de mapa
-    position: google.maps.ControlPosition.TOP_LEFT, // Posición del control de tipo de mapa
+    position: google.maps.ControlPosition.TOP_RIGHT, // Posición del control de tipo de mapa
     mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain'], // Tipos de mapas disponibles
     // Ajustes adicionales si es necesario
   }
 });
-
 
 // Agregar un evento onclick al mapa
 myMap.addListener('click', function (event) {
@@ -1656,10 +1860,71 @@ function paint_counter_bbdd() {
   });
 }
 
+
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+const leyenda2 = document.getElementById('leyenda2');
+
+function updateLeyenda() {
+  // Asegúrate de que leyenda2 es el id correcto
+  leyenda2.innerHTML = ''; // Limpiar la capa leyenda2
+
+  // Función auxiliar para crear y añadir un item a la leyenda
+  function addLegendItem(content, category) {
+    const legendItem = document.createElement('div');
+    legendItem.classList.add('legend2_item');
+    legendItem.innerHTML = `<label class='checkbox_label_leyenda2'>${content}</label>`;
+    category.appendChild(legendItem);
+  }
+
+  // Crear contenedores para cada categoría
+  const categories = {};
+
+  // Iterar sobre los checkboxes y agregar los elementos seleccionados a la leyenda
+  checkboxes.forEach(function (checkbox) {
+    if (checkbox.id === "item1-1" || checkbox.id === "item1-2" || checkbox.id === "item2-2" || checkbox.id === "item2-1" || checkbox.id === "item2-3") {
+      if (checkbox.checked) {
+        const label = document.querySelector(`label[for="${checkbox.id}"]`);
+        if (label) {
+          const categoryName = label.textContent.trim(); // Usar el texto del label como nombre de la categoría
+          if (!categories[categoryName]) {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('legend_category');
+            categoryDiv.innerHTML = `<h4>${categoryName}</h4>`;
+            leyenda2.appendChild(categoryDiv);
+            categories[categoryName] = categoryDiv;
+          }
+
+          // Agregar el propio checkbox a la leyenda
+          addLegendItem(label.innerHTML, categories[categoryName]);
+
+          // Agregar los sub-checkboxes si los hay
+          const subCheckboxes = document.querySelectorAll(`input[type="checkbox"][id^="${checkbox.id}-"]`);
+          subCheckboxes.forEach(function (subCheckbox) {
+            if (subCheckbox.checked) {
+              const subLabel = document.querySelector(`label[for="${subCheckbox.id}"]`);
+              if (subLabel) {
+                addLegendItem(subLabel.innerHTML, categories[categoryName]);
+              }
+            }
+          });
+
+          // Agregar los legend-items para cultivos
+          if (checkbox.id === 'item2-2' && checkbox.checked) { // Suponiendo que el id del checkbox de cultivos es 'item2-2'
+            const legendItems = document.querySelectorAll('.legend-item');
+            legendItems.forEach(function (legendItem) {
+              addLegendItem(legendItem.outerHTML, categories[categoryName]);
+            });
+          }
+        }
+      }
+    }
+  });
+}
+
 
 checkboxes.forEach(function (checkbox) {
   checkbox.addEventListener("change", function () {
+    updateLeyenda();
     if (this.checked) {
       switch (this.value) {
         case "item1-1":
@@ -2377,8 +2642,6 @@ function toggleLeyenda() {
   }
 }
 
-
-
 function exportTableToExcel(tableID, filename = '') {
   var downloadLink;
   var dataType = 'application/vnd.ms-excel';
@@ -2488,3 +2751,33 @@ Highcharts.chart('highchart-graph', {
     }
   }
 });
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tab-content-leyenda");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+function toggleCapas() {
+  var capas = document.getElementById('capas'); // Asegúrate de que este es el ID de tu capa de capas
+  var button = document.getElementById('toggle-capas-button');
+  var icon = document.getElementById('capas-icon');
+
+  if (capas.style.display === 'none' || capas.style.display === '') {
+    icon.classList.add('fa-layer-group');
+    icon.classList.remove('fa-layer-minus');
+    button.querySelector('span').textContent = 'Capas';
+    capas.style.display = 'block'; // Muestra la capa capas
+  } else {
+    icon.classList.add('fa-layer-minus');
+    icon.classList.remove('fa-layer-group');
+    button.querySelector('span').textContent = 'Capas';
+    capas.style.display = 'none'; // Oculta la capa capas
+  }
+}
