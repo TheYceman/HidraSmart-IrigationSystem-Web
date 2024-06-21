@@ -499,7 +499,6 @@
   background-color: #0ff00f;
 }
 
-
 /* Estilo para mover el control de pantalla completa */
 .gm-fullscreen-control {
   top: auto !important;
@@ -508,8 +507,6 @@
   margin: 10px;
   z-index: 1;
 }
-
-
 
 /**Leyenda cultivos**/
 .legend {

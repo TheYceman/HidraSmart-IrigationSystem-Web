@@ -294,18 +294,31 @@
                     </div>
                     <div class="modal-item">
                         <label for="ha-declaradas">Ha. declaradas</label>
-                        <input type="text" id="ha-declaradas" pattern="[0-9]*" title="Por favor, ingrese solo números"
-                            value="0" />
+                        <input type="text" id="ha-declaradas" pattern="[0-9]*" title="Por favor, ingrese solo números" value="0" />
                     </div>
                 </div>
+                <div id="kc-meses-container">
+                    <table id="kc-meses-table">
+                        <thead>
+                            <tr>
+                                <th>kc</th>
+                                <th>Meses</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Las filas dinámicas se agregarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
                 <div class="modal-buttons">
-                    <button class="modal-add-btn">Agregar</button>
+                    <button class="modal-add-btn" onclick="addKcMesesRow()">Agregar kc/meses</button>
+                </div>
+                <div class="modal-buttons">
                     <button class="modal-cancel-btn">Cancelar</button>
                 </div>
             </div>
         </div>
-
-
         <%- include('../components/common/footer.ejs') %>
     </body>
 

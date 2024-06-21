@@ -396,4 +396,47 @@ document.querySelectorAll('.accordion-title').forEach(item => {
 
 });
 
+function addKcMesesRow() {
+  const tableBody = document.querySelector('#kc-meses-table tbody');
+
+  // Crear una nueva fila
+  const newRow = document.createElement('tr');
+
+  // Crear la celda kc
+  const kcCell = document.createElement('td');
+  const kcInput = document.createElement('input');
+  kcInput.type = 'text';
+  kcInput.name = 'kc';
+  kcInput.placeholder = 'Ingrese kc';
+  kcCell.appendChild(kcInput);
+
+  // Crear la celda meses
+  const mesesCell = document.createElement('td');
+  const mesesInput = document.createElement('input');
+  mesesInput.type = 'text';
+  mesesInput.name = 'meses';
+  mesesInput.placeholder = 'Ingrese meses';
+  mesesCell.appendChild(mesesInput);
+
+  // Crear la celda de acciones con el botón eliminar
+  const actionsCell = document.createElement('td');
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'Eliminar';
+  deleteButton.onclick = function () {
+    tableBody.removeChild(newRow);
+  };
+  actionsCell.appendChild(deleteButton);
+
+  // Añadir las celdas a la nueva fila
+  newRow.appendChild(kcCell);
+  newRow.appendChild(mesesCell);
+  newRow.appendChild(actionsCell);
+
+  // Añadir la nueva fila al cuerpo de la tabla
+  tableBody.appendChild(newRow);
+}
+
+
+
+
 
