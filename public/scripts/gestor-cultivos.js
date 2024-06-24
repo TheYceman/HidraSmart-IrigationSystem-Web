@@ -185,10 +185,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  function convertToFullYear(dateStr) {
+    const [day, month, year] = dateStr.split(' ')[0].split('-');
+    const fullYear = (parseInt(year) < 50 ? '20' : '19') + year; // Asume que si el año es menor que 50, es 2000+, de lo contrario es 1900+
+    return `${fullYear}-${month}-${day}`;
+  }
   // Función para reconstruir el gráfico con los nuevos datos
   function rebuildChart(cultivos) {
 
-    const fechas = cultivos.map(cultivo => new Date(cultivo.fechayhora).toLocaleDateString('es-ES'));
+    const fechas = cultivos.map(cultivo => {
+      const fullDate = convertToFullYear(cultivo.fechayhora);
+      return new Date(fullDate).toLocaleDateString('es-ES');
+    });
+
     const tipos = cultivos.map(cultivo => cultivo.cultivo);
     const has = cultivos.map(cultivo => cultivo.ha);
 
