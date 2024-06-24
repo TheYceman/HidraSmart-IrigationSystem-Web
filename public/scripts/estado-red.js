@@ -1817,19 +1817,19 @@ function paint_counter_bbdd() {
         </div>
         <div class="infowindow-body">
             <ul>
-                <li><strong>Sector:</strong> S3</li>
-                <li><strong>Tramo:</strong> Valor 2</li>
-                <li><strong>Vol. Acum (m3):</strong> Valor 3</li>
-                <li><strong>Vol. Rest (m3):</strong> Valor 1</li>
-                <li><strong>Caudal (m3/h):</strong> Valor 2</li>
-                <li><strong>Presión (mca):</strong> Valor 3</li>
-                <li><strong>Parcela:</strong> Valor 1</li>
+                <li><strong>Sector:</strong> `+ contador.sector + `</li>
+                <li><strong>Tramo:</strong> `+ contador.tramo + ` </li>
+                <li><strong>Vol. Acum (m3):</strong> 0</li>
+                <li><strong>Vol. Rest (m3):</strong> 0</li>
+                <li><strong>Caudal (m3/h):</strong> 0</li>
+                <li><strong>Presión (mca):</strong> 0</li>
+                <li><strong>Parcela:</strong> -</li>
                 <li class="infowindow-section-title">DATOS IRRINET</li>
-                <li><strong>Vol. Global (m3):</strong> Valor 3</li>
-                <li><strong>Caudal (m3/h):</strong> Valor 1</li>
-                <li><strong>Vol. Parc (m3):</strong> Valor 2</li>
-                <li><strong>Vol. Rest (m3):</strong> Valor 3</li>
-                <li><strong>Válvula:</strong></li>
+                <li><strong>Vol. Global (m3):</strong> 0</li>
+                <li><strong>Caudal (m3/h):</strong> 0</li>
+                <li><strong>Vol. Parc (m3):</strong> 0</li>
+                <li><strong>Vol. Rest (m3):</strong> 0</li>
+                <li><strong>Válvula:-</strong></li>
             </ul>
         </div>
     </div>
@@ -1839,19 +1839,19 @@ function paint_counter_bbdd() {
       var content = "<div class='leyenda-container'>";
       content += "<span id='leyendaLabel'><b>Contador " + contador.id + "</b></span>";
       content += "<ul class='leyenda-list'>";
-      content += "<li><span class='leyenda-item'>Sector:</span> S3</li>";
-      content += "<li><span class='leyenda-item'>Tramo:</span> Valor 2</li>";
-      content += "<li><span class='leyenda-item'>Vol. Acum (m3):</span> Valor 3</li>";
-      content += "<li><span class='leyenda-item'>Vol. Rest (m3):</span> Valor 1</li>";
-      content += "<li><span class='leyenda-item'>Caudal (m3/h):</span> Valor 2</li>";
-      content += "<li><span class='leyenda-item'>Presión (mca):</span> Valor 3</li>";
-      content += "<li><span class='leyenda-item'>Parcela:</span> Valor 1</li>";
+      content += "<li><span class='leyenda-item'>Sector:</span>"+ contador.sector + "</li>";
+      content += "<li><span class='leyenda-item'>Tramo:</span> "+ contador.tramo + "</li>";
+      content += "<li><span class='leyenda-item'>Vol. Acum (m3):</span> 0</li>";
+      content += "<li><span class='leyenda-item'>Vol. Rest (m3):</span> 0</li>";
+      content += "<li><span class='leyenda-item'>Caudal (m3/h):</span> 0</li>";
+      content += "<li><span class='leyenda-item'>Presión (mca):</span> 0</li>";
+      content += "<li><span class='leyenda-item'>Parcela:</span> -</li>";
       content += "<li class='leyenda-section-title'>DATOS IRRINET</li>";
-      content += "<li><span class='leyenda-item'>Vol. Global (m3):</span> Valor 3</li>";
-      content += "<li><span class='leyenda-item'>Caudal (m3/h):</span> Valor 1</li>";
-      content += "<li><span class='leyenda-item'>Vol. Parc (m3):</span> Valor 2</li>";
-      content += "<li><span class='leyenda-item'>Vol. Rest (m3):</span> Valor 3</li>";
-      content += "<li><span class='leyenda-item'>Válvula:</span></li>";
+      content += "<li><span class='leyenda-item'>Vol. Global (m3):</span> 0</li>";
+      content += "<li><span class='leyenda-item'>Caudal (m3/h):</span> 0</li>";
+      content += "<li><span class='leyenda-item'>Vol. Parc (m3):</span> 0</li>";
+      content += "<li><span class='leyenda-item'>Vol. Rest (m3):</span> 0</li>";
+      content += "<li><span class='leyenda-item'>Válvula:</span>-</li>";
       content += "</ul></div>";
       document.getElementById("informacion").innerHTML = content;
     });

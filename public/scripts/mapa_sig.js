@@ -936,8 +936,8 @@ function paint_cultivos() {
                   '<div class="campo-tab-content active" id="datos">' +
                   '   <div class="campo-content">' +
                   '       <div class="column">' +
-                  '           <p id="hectareasInfo">Hectáreas: N/A</p>' +
-                  '          <p id="cultivoInfo">Cultivo: N/A</p>' +
+                  '           <p id="hectareasInfo">Hectáreas: 1</p>' +
+                  '          <p id="cultivoInfo">Cultivo: '+plot.cultivo+'</p>' +
                   '      </div>' +
                   '      <div class="column">' +
                   '          <p>Explotación (PAC): Finca 2</p>' +
