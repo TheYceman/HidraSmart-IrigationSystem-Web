@@ -19,6 +19,55 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let selectedParcelaId = null;
 
+  
+
+  function addKcMesesRow() {
+    const tableBody = document.querySelector('#kc-meses-table tbody');
+    console.log(tableBody);
+  
+    // Crear una nueva fila
+    const newRow = document.createElement('tr');
+  
+    // Crear la celda kc
+    const kcCell = document.createElement('td');
+    const kcInput = document.createElement('input');
+    kcInput.type = 'text';
+    kcInput.name = 'kc';
+    kcInput.placeholder = 'Ingrese kc';
+    kcCell.appendChild(kcInput);
+  
+    // Crear la celda meses
+    const mesesCell = document.createElement('td');
+    const mesesInput = document.createElement('input');
+    mesesInput.type = 'text';
+    mesesInput.name = 'meses';
+    mesesInput.placeholder = 'Ingrese meses';
+    mesesCell.appendChild(mesesInput);
+  
+    // Crear la celda de acciones con el botón eliminar
+    const actionsCell = document.createElement('td');
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Eliminar';
+    deleteButton.onclick = function () {
+      tableBody.removeChild(newRow);
+    };
+    actionsCell.appendChild(deleteButton);
+  
+    // Añadir las celdas a la nueva fila
+    newRow.appendChild(kcCell);
+    newRow.appendChild(mesesCell);
+    newRow.appendChild(actionsCell);
+  
+    // Añadir la nueva fila al cuerpo de la tabla
+    tableBody.appendChild(newRow);
+  }
+
+  const addButton = document.getElementById('add-kc-meses-btn');
+
+  addButton.addEventListener('click', function () {
+    addKcMesesRow();
+  });
+
   // Función para mostrar la pestaña seleccionada
   function showTab(tabId) {
     tabs.forEach(tab => tab.classList.remove('active'));
@@ -185,10 +234,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  function convertToFullYear(dateStr) {
+    const [day, month, year] = dateStr.split(' ')[0].split('-');
+    const fullYear = (parseInt(year) < 50 ? '20' : '19') + year; // Asume que si el año es menor que 50, es 2000+, de lo contrario es 1900+
+    return `${fullYear}-${month}-${day}`;
+  }
   // Función para reconstruir el gráfico con los nuevos datos
   function rebuildChart(cultivos) {
 
-    const fechas = cultivos.map(cultivo => new Date(cultivo.fechayhora).toLocaleDateString('es-ES'));
+    const fechas = cultivos.map(cultivo => {
+      const fullDate = convertToFullYear(cultivo.fechayhora);
+      return new Date(fullDate).toLocaleDateString('es-ES');
+    });
+
     const tipos = cultivos.map(cultivo => cultivo.cultivo);
     const has = cultivos.map(cultivo => cultivo.ha);
 
@@ -394,6 +452,13 @@ document.querySelectorAll('.accordion-title').forEach(item => {
     }
   });
 
+ 
+
 });
+
+
+
+
+
 
 

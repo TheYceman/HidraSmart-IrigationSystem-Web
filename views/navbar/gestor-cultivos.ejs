@@ -271,41 +271,55 @@
         </main>
         <div id="modal" class="modal">
             <div class="modal-content">
-                <span class="close-btn">&times;</span>
-                <h2>Añadir Cultivo</h2>
-                <div class="modal-row">
-                    <div class="modal-item">
-                        <label for="cultivoSelect">Cultivo</label>
-                        <select id="cultivoSelect">
-                            <option value="" disabled selected>Seleccione un cultivo</option>
-                            <option value="Pimiento">Pimiento</option>
-                            <option value="Almendros">Almendros</option>
-                            <option value="Vid">Vid</option>
-                            <option value="Cebolla">Cebolla</option>
-                            <option value="Cebada">Cebada</option>
-                            <option value="Ajos">Ajos</option>
-                            <option value="Arboles">Árboles</option>
-                            <option value="Melon">Melón</option>
-                            <option value="Guisantes">Guisantes</option>
-                            <option value="Huerta">Huerta</option>
-                            <option value="Alfalfa">Alfalfa</option>
-                            <option value="Sandia">Sandía</option>
-                        </select>
-                    </div>
-                    <div class="modal-item">
-                        <label for="ha-declaradas">Ha. declaradas</label>
-                        <input type="text" id="ha-declaradas" pattern="[0-9]*" title="Por favor, ingrese solo números"
-                            value="0" />
-                    </div>
+              <span class="close-btn">&times;</span>
+              <h2>Añadir Cultivo</h2>
+              <div class="modal-row">
+                <div class="modal-item">
+                  <label for="cultivoSelect">Cultivo</label>
+                  <select id="cultivoSelect">
+                    <option value="" disabled selected>Seleccione un cultivo</option>
+                    <option value="Pimiento">Pimiento</option>
+                    <option value="Almendros">Almendros</option>
+                    <option value="Vid">Vid</option>
+                    <option value="Cebolla">Cebolla</option>
+                    <option value="Cebada">Cebada</option>
+                    <option value="Ajos">Ajos</option>
+                    <option value="Arboles">Árboles</option>
+                    <option value="Melon">Melón</option>
+                    <option value="Guisantes">Guisantes</option>
+                    <option value="Huerta">Huerta</option>
+                    <option value="Alfalfa">Alfalfa</option>
+                    <option value="Sandia">Sandía</option>
+                  </select>
                 </div>
-                <div class="modal-buttons">
-                    <button class="modal-add-btn">Agregar</button>
-                    <button class="modal-cancel-btn">Cancelar</button>
+                <div class="modal-item">
+                  <label for="ha-declaradas">Ha. declaradas</label>
+                  <input type="text" id="ha-declaradas" pattern="[0-9]*" title="Por favor, ingrese solo números" value="0" />
                 </div>
+              </div>
+              <div id="kc-meses-container">
+                <table id="kc-meses-table">
+                  <thead>
+                    <tr>
+                      <th>kc</th>
+                      <th>Meses</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Las filas dinámicas se agregarán aquí -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="modal-buttons">
+                <button class="modal-add-btn" id="add-kc-meses-btn">Agregar kc/meses</button>
+              </div>
+              <div class="modal-buttons">
+                <button class="modal-save-btn">Guardar</button>
+                <button class="modal-cancel-btn">Cancelar</button>
+              </div>
             </div>
-        </div>
-
-
+          </div>
         <%- include('../components/common/footer.ejs') %>
     </body>
 

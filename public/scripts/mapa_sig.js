@@ -1,5 +1,3 @@
-
-
 var myMap;
 
 var counterArray = [];
@@ -137,9 +135,6 @@ myMap = new google.maps.Map(document.getElementById("map"), {
     // Ajustes adicionales si es necesario
   }
 });
-
-
-
 
 // Agregar un evento onclick al mapa
 myMap.addListener('click', function (event) {
@@ -322,44 +317,45 @@ function updateLeyenda() {
 
   // Iterar sobre los checkboxes y agregar los elementos seleccionados a la leyenda
   checkboxes.forEach(function (checkbox) {
-    if (checkbox.checked) {
-      const label = document.querySelector(`label[for="${checkbox.id}"]`);
-      if (label) {
-        const categoryName = label.textContent.trim(); // Usar el texto del label como nombre de la categoría
-        if (!categories[categoryName]) {
-          const categoryDiv = document.createElement('div');
-          categoryDiv.classList.add('legend_category');
-          categoryDiv.innerHTML = `<h4>${categoryName}</h4>`;
-          leyenda2.appendChild(categoryDiv);
-          categories[categoryName] = categoryDiv;
-        }
-        
-        // Agregar el propio checkbox a la leyenda
-        addLegendItem(label.innerHTML, categories[categoryName]);
-        
-        // Agregar los sub-checkboxes si los hay
-        const subCheckboxes = document.querySelectorAll(`input[type="checkbox"][id^="${checkbox.id}-"]`);
-        subCheckboxes.forEach(function (subCheckbox) {
-          if (subCheckbox.checked) {
-            const subLabel = document.querySelector(`label[for="${subCheckbox.id}"]`);
-            if (subLabel) {
-              addLegendItem(subLabel.innerHTML, categories[categoryName]);
-            }
+    if (checkbox.id === "item1-1" || checkbox.id === "item1-2" || checkbox.id === "item2-2" || checkbox.id === "item2-1" || checkbox.id === "item2-3") {
+      if (checkbox.checked) {
+        const label = document.querySelector(`label[for="${checkbox.id}"]`);
+        if (label) {
+          const categoryName = label.textContent.trim(); // Usar el texto del label como nombre de la categoría
+          if (!categories[categoryName]) {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('legend_category');
+            categoryDiv.innerHTML = `<h4>${categoryName}</h4>`;
+            leyenda2.appendChild(categoryDiv);
+            categories[categoryName] = categoryDiv;
           }
-        });
-        
-        // Agregar los legend-items para cultivos
-        if (checkbox.id === 'item2-2' && checkbox.checked) { // Suponiendo que el id del checkbox de cultivos es 'item2-2'
-          const legendItems = document.querySelectorAll('.legend-item');
-          legendItems.forEach(function (legendItem) {
-            addLegendItem(legendItem.outerHTML, categories[categoryName]);
+
+          // Agregar el propio checkbox a la leyenda
+          addLegendItem(label.innerHTML, categories[categoryName]);
+
+          // Agregar los sub-checkboxes si los hay
+          const subCheckboxes = document.querySelectorAll(`input[type="checkbox"][id^="${checkbox.id}-"]`);
+          subCheckboxes.forEach(function (subCheckbox) {
+            if (subCheckbox.checked) {
+              const subLabel = document.querySelector(`label[for="${subCheckbox.id}"]`);
+              if (subLabel) {
+                addLegendItem(subLabel.innerHTML, categories[categoryName]);
+              }
+            }
           });
+
+          // Agregar los legend-items para cultivos
+          if (checkbox.id === 'item2-2' && checkbox.checked) { // Suponiendo que el id del checkbox de cultivos es 'item2-2'
+            const legendItems = document.querySelectorAll('.legend-item');
+            legendItems.forEach(function (legendItem) {
+              addLegendItem(legendItem.outerHTML, categories[categoryName]);
+            });
+          }
         }
       }
     }
   });
 }
-
 
 checkboxes.forEach(function (checkbox) {
   checkbox.addEventListener("change", function () {
@@ -622,7 +618,6 @@ function paint_counter() {
       console.log("Error:", error);
     });
 }
-
 
 function paint_counter_bbdd1() {
 
@@ -941,8 +936,8 @@ function paint_cultivos() {
                   '<div class="campo-tab-content active" id="datos">' +
                   '   <div class="campo-content">' +
                   '       <div class="column">' +
-                  '           <p id="hectareasInfo">Hectáreas: N/A</p>' +
-                  '          <p id="cultivoInfo">Cultivo: N/A</p>' +
+                  '           <p id="hectareasInfo">Hectáreas: 1</p>' +
+                  '          <p id="cultivoInfo">Cultivo: '+plot.cultivo+'</p>' +
                   '      </div>' +
                   '      <div class="column">' +
                   '          <p>Explotación (PAC): Finca 2</p>' +
@@ -1001,7 +996,6 @@ function show_infowindow_plots(event, content) {
   infowindow.setPosition(event.latLng);
   infowindow.open(myMap);
 }
-
 
 function delete_cultivos() {
   // Eliminar los polígonos de parcelas del mapa y sus correspondientes infowindows
@@ -1165,7 +1159,6 @@ function openTab(evt, tabName) {
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
 }
-
 
 // Default open tab
 document.addEventListener("DOMContentLoaded", function () {

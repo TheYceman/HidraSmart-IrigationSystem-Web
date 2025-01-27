@@ -499,7 +499,6 @@
   background-color: #0ff00f;
 }
 
-
 /* Estilo para mover el control de pantalla completa */
 .gm-fullscreen-control {
   top: auto !important;
@@ -508,8 +507,6 @@
   margin: 10px;
   z-index: 1;
 }
-
-
 
 /**Leyenda cultivos**/
 .legend {
@@ -698,17 +695,27 @@
   padding: 10px;
   background-color: #f8f9fa;
 }
+#Leyenda h4 {
+  flex-shrink: 0;
+  margin: 0;
+  padding-top: 0px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  background-color: #f8f9fa;
+}
+
 
 #leyenda2 {
   flex-grow: 1;
   overflow-y: auto;
   padding: 10px;
-  height: 83%;
+  height: 87%;
 }
 
 .legend2_item {
   padding: 5px;
-  margin: 5px 0;
+  margin: 0px 0;
   background-color: #f9f9f9;
 }
 

@@ -384,6 +384,28 @@ main>div {
     /* Cursor de mano */
 }
 
+   /* Estilos para los botones */
+   .modal-cancel-btn {
+    background-color: #009bdb; /* Fondo oscuro */
+    color: white; /* Texto blanco */
+    border: none; /* Sin borde */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    font-size: 14px; /* Tamaño de fuente */
+    cursor: pointer; /* Cursor de mano */
+    margin-right: 10px; /* Margen derecho para separar botones */
+  }
+
+  .modal-save-btn {
+    background-color: #009bdb; /* Fondo azul */
+    color: white; /* Texto blanco */
+    border: none; /* Sin borde */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    font-size: 14px; /* Tamaño de fuente */
+    cursor: pointer; /* Cursor de mano */
+  }
+
 /* Estilos para la capa en paralelo */
 .modal-row {
     display: flex;
@@ -752,3 +774,28 @@ main>div {
 .blinking-text {
     animation: blink 1s infinite;
 }
+
+#kc-meses-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#kc-meses-table th,
+#kc-meses-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+#kc-meses-table th {
+    background-color: #f2f2f2;
+}
+
+#kc-meses-table input {
+    width: 100%;
+    padding: 6px;
+    box-sizing: border-box;
+}
+
+
