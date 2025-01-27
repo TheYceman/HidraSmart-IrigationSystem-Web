@@ -1,26 +1,32 @@
 // emailSender.js
 const nodemailer = require('nodemailer');
 
+const userGmail = process.env.USER_GMAIL;
+const passAppGmail = process.env.PASS_APP_GMAIL;
+
 // Configuración del transporter
-let transporter = nodemailer.createTransport({
-    service: 'hotmail',
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    secure: true,
+    host: 'smtp.gmail.com',
+    port: 465,
     auth: {
-        user: 'hidrasmarthydraulicinnovation@hotmail.com',
-        pass: 'Hidr4l4b'
-    }
+        user:  process.env.USER_GMAIL,
+        pass: process.env.PASS_APP_GMAIL,
+    },
 });
+
 
 // Función para enviar el correo electrónico
 async function sendEmail(token, contactname, contactemail, contactmessage) {
     try {
         let mailOptions = {
-            from: 'hidrasmarthydraulicinnovation@hotmail.com',
+            from: process.env.USER_GMAIL,
             to: contactemail,
-            bcc: 'carlos.merino@hidralab.com, hidrasmarthydraulicinnovation@hotmail.com, emilio.ruiz@hidralab.com',
+            bcc: 'carlos.merino@hidralab.com, hidrasmarthydraulicinnovation@hotmail.com, emilio.ruiz@hidralab.com, alejandro.quintana@hidralab.com',
             subject: 'Consulta Irrigation System',
             text: `Nombre: `+contactname+`\nEmail: `+contactemail+`\nMensaje: `+contactmessage
         };
-
         let info = await transporter.sendMail(mailOptions);
         //console.log('Correo electrónico enviado:', info.response);
         return true;
@@ -64,7 +70,7 @@ async function sendEmailNewUser(nombre, email, claveGenerada) {
   
     try {
       let mailOptions = {
-        from: 'hidrasmarthydraulicinnovation@hotmail.com',
+        from: process.env.USER_GMAIL,
         to: email,
         //bcc: 'emilio.ruiz@hidralab.com',
         subject: asunto,

@@ -1,3 +1,4 @@
+if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 const express = require("express");
 const http = require('http');
 const configureSocket = require("./middlewares/socket");
@@ -19,7 +20,6 @@ const gestorEquiposRoutes = require("./routes/gestor-equipos.routes");
 const gestorUsuariosRoutes = require("./routes/gestor-usuarios.routes");
 const gestorCultivosRoutes = require("./routes/gestor-cultivos.routes");
 
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 const app = express();
 
