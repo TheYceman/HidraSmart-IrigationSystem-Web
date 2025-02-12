@@ -1,0 +1,28 @@
+
+.container_app_store{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+    .title_download_zone{
+        color: var(--color-primary-400);
+        font-weight: 700;
+        border-bottom: 2px solid var(--color-primary-400);
+        margin-bottom: 5%;
+    }
+    .download_zone{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+        .img_qr{
+            height: 110px;
+        }
+        .bottom_container_app_store{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+            .img_app_store{
+                width: 150px;
+            }
