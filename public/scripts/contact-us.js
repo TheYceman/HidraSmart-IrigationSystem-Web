@@ -98,3 +98,8 @@ async function contactUs() {
         }
     });
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const sectionTitle = document.getElementById("section-title");
+    sectionTitle.innerHTML = "Soporte técnico y contacto";
+});
