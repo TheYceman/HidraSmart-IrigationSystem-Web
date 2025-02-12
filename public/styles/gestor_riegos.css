@@ -5,6 +5,6 @@
 main > div {
   margin: 0 auto;
   width: 90%;
-  overflow: scroll;
+  overflow: hidden;
   max-height: 70%;
 }

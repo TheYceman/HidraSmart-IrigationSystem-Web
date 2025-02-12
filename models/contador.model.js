@@ -27,28 +27,40 @@ class Contador {
   }
 
   /*static async getPerPage(startIndex, endIndex) {
-   const data = await runQuery("SELECT * FROM ge_contadores LIMIT " + startIndex + ", " + endIndex + ";");
-   const geContadores = data.map((contador) => new Contador(contador));
+   const results = await runQuery("SELECT * FROM ge_contadores LIMIT " + startIndex + ", " + endIndex + ";");
+   const geContadores = results.data.rows.map((contador) => new Contador(contador));
    return geContadores;
  }*/
 
 
-  static async getPerPage(perPage, offset) {
-    const data = await runQuery("SELECT * FROM ge_contadores LIMIT " + perPage + " OFFSET " + offset + ";");
-    const geContadores = data.map((contador) => new Contador(contador));
+  static async getPerPage(res, req, perPage, offset) {
+
+    const queryString = "SELECT * FROM ge_contadores LIMIT " + perPage + " OFFSET " + offset;
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geContadores = results.data.rows.map((contador) => new Contador(contador));
     return geContadores;
   }
 
-  static async getCountAll() {
-    const data = await runQuery("SELECT count(*) as total FROM ge_contadores;");
-    const geTotal = data.map((total) => total);
+  static async getCountAll(res, req) {
+
+    const queryString = "SELECT count(*) as total FROM ge_contadores;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geTotal = results.data.rows.map((total) => total);
     console.log(geTotal[0].total);
     return geTotal[0].total;
   }
 
-  static async getAll() {
-    const data = await runQuery("SELECT * FROM ge_contadores WHERE coorX<>'' AND coorY<>'';");
-    const geContadores = data.map((contador) => new Contador(contador));
+  static async getAll(res, req) {
+
+    const queryString = "SELECT * FROM ge_contadores WHERE coorX<>'' AND coorY<>'';";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geContadores = results.data.rows.map((contador) => new Contador(contador));
     //console.log(geContadores);
     //var result = [];
     //for(let contador of geContadores) {
@@ -58,9 +70,13 @@ class Contador {
     return geContadores;
   }
 
-  static async getTelemedida() {
-    const data = await runQuery("SELECT ge_contadores.*, dat_contadores.acumulado, dat_contadores.instante, dat_contadores.bateria, dat_contadores.RSSI FROM dat_contadores, ge_contadores WHERE dat_contadores.ideEle=ge_contadores.ideEle ORDER BY instante DESC;");
-    const geContadores = data.map((contador) => new Contador(contador));
+  static async getTelemedida(res, req) {
+   
+    const queryString = "SELECT ge_contadores.*, dat_contadores.acumulado, dat_contadores.instante, dat_contadores.bateria, dat_contadores.RSSI FROM dat_contadores, ge_contadores WHERE dat_contadores.ideEle=ge_contadores.ideEle ORDER BY instante DESC;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geContadores = results.data.rows.map((contador) => new Contador(contador));
     //console.log(geContadores);
     //var result = [];
     //for(let contador of geContadores) {
@@ -70,9 +86,13 @@ class Contador {
     return geContadores;
   }
 
-  static async getSinTelemedida() {
-    const data = await runQuery("SELECT ge_contadores.*, dat_contadores.acumulado, dat_contadores.instante FROM dat_contadores, ge_contadores WHERE dat_contadores.ideEle=ge_contadores.ideEle ORDER BY instante DESC LIMIT 1;");
-    const geContadores = data.map((contador) => new Contador(contador));
+  static async getSinTelemedida(res, req) {
+   
+    const queryString = "SELECT ge_contadores.*, dat_contadores.acumulado, dat_contadores.instante FROM dat_contadores, ge_contadores WHERE dat_contadores.ideEle=ge_contadores.ideEle ORDER BY instante DESC LIMIT 1;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geContadores = results.data.rows.map((contador) => new Contador(contador));
     //console.log(geContadores);
     //var result = [];
     //for(let contador of geContadores) {
@@ -82,11 +102,12 @@ class Contador {
     return geContadores;
   }
 
-  static async getFilteredData(sector) {
-    const data = await runQuery(
-      `SELECT * FROM ge_contadores WHERE ideSector=${sector}";`
-    );
-    return data;
+  static async getFilteredData(res, req, sector) {
+    const queryString =  `SELECT * FROM ge_contadores WHERE ideSector=?;`;
+    const values = [sector];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    return results.data.rows;
   }
 }
 

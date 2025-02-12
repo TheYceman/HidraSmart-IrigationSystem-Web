@@ -1,21 +1,19 @@
-const mysql = require("mysql2/promise");
-const fs = require('fs');
-
-const certPath = './config/certificados/DigiCertGlobalRootCA.crt.pem';
+const mysql = require('mysql2/promise');
 
 async function getDb(ddbb) {
-
-  console.log("bbb" + process.cwd());
-
   try {
+
+    const pemFile = process.env.PEM_CERTIFICATE_DDBB.replace(/\\n/g, '\n');
+  
+    console.log("bbb " + process.cwd());
 
     // Create the connection pool. The pool-specific settings are the defaults
     const pool = mysql.createPool({
-      host: "hidralab-server.mysql.database.azure.com",
-      user: "telemedida_alcazar",
-      password: "Hidra2023Alcazar",
-      port: 3306,
-      database: ddbb, //"aplicaciones_web"
+      host: process.env.AZURE_MYSQL_HOST,
+      user: process.env.AZURE_MYSQL_USER,
+      password: process.env.AZURE_MYSQL_PASSWORD,
+      port: process.env.AZURE_MYSQL_PORT,
+      database: ddbb, //"aplicaciones_web" //Hay que meterla como argumento
       waitForConnections: true,
       connectionLimit: 10,
       maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
@@ -24,8 +22,8 @@ async function getDb(ddbb) {
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
       ssl: {
-        ca: fs.readFileSync(certPath),
-      }
+        ca: pemFile,
+      },
     });
 
     return pool;
@@ -34,18 +32,26 @@ async function getDb(ddbb) {
   }
 }
 
-async function runQuery(query) {
+async function runQuery(queryString, values, database) {
+
+  //console.log("QUERYSTRING " + queryString);
   try {
-    const ddbb = "aplicaciones_web";
-    const conn = await getDb(ddbb);
-    const [rows, fields] = await conn.query(query);
-    await conn.end();
-    return rows;
+      const connection = await getDb(database);
+      const [rows, fields] = await connection.execute(queryString, values);
+      await connection.end();
+      
+      return {
+          success: true,
+          data: {
+              rows,
+              fields
+          }
+      };
   } catch (error) {
-    console.error("Error al ejecutar la consulta:", error);
-    throw error;
+      console.error('Error al ejecutar la consulta:', error);
+      throw error;
   }
 }
 
 
-module.exports = { getDb, runQuery };
+module.exports = { runQuery };

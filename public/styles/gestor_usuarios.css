@@ -1,23 +1,23 @@
-#gestor-equipos-placeholder {
-  width: 89vw;
+main {
+  max-height: 90vh;
 }
 
 main > div {
   margin: 0 auto;
   width: 90%;
-  overflow: scroll;
-  max-height: 70%;
+  overflow: hidden;
+  max-height: 75vh;
 }
   
 .div-container {
-  width: 85%;
+  width: 99%;
   margin:auto;
+  max-height: 90%;
 }
 
 .table-container {
-  height: 100%;
-  width: 85%;
-  max-height: 65vh;
+  max-height: 80%;
+  width: 99%;
   margin: auto;
   overflow-y: scroll;
   border: 2px solid var(--color-primary-400);
@@ -184,12 +184,14 @@ td {
 
 .tab-labels {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size: 16px; /* Tamaño del texto pequeño */
+  font-weight: 900;
 }
 
 .tab-label {
   flex: 1;
-  padding: 10px;
+  padding: 3px;
   text-align: center;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
@@ -199,13 +201,164 @@ td {
 .tab-content {
   display: none;
   height: 100vw;
+  /*background-color: #007bff;*/
 }
 
 /* Estilo activo para la pestaña seleccionada */
 .tab-label.active {
-  background-color: #ddd;
+  background-color: #a3a4a6;
 }
 
 .tab-content.active {
   display: block;
+}
+
+
+/* Estilos para el select */
+.select-mod {
+  /*appearance: none;*/ /* Elimina el estilo nativo del sistema operativo */
+  /*-webkit-appearance: none;*/ /* Para navegadores basados en WebKit como Chrome y Safari */
+  /*-moz-appearance: none;*/ /* Para navegadores basados en Gecko como Firefox */
+  padding: 4px 6px; /* Añade relleno alrededor del texto */
+  border: 1px solid #ccc; /* Añade un borde */
+  border-radius: 2px; /* Añade esquinas redondeadas */
+  background-color: #fff; /* Fondo blanco */
+  font-size: 0.8vp; /* Tamaño de fuente */
+  color: #333; /* Color del texto */
+}
+
+/* Estilos para la flecha desplegable */
+.select-mod::after {
+  content: '\25BC'; /* Flecha hacia abajo */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Evita que la flecha sea seleccionable */
+}
+/*Estilos para el formulario*/
+
+/* Estilos específicos para el formulario con el identificador "usuariosForm" */
+#usuariosForm.custom-form .form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+#usuariosForm.custom-form .form-group {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+#usuariosForm.custom-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#usuariosForm.custom-form input,
+#usuariosForm.custom-form select {
+  width: calc(50% - 5px);
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#usuariosForm.custom-form button {
+  padding: 10px 20px;
+  background-color: var(--color-primary-400);;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#usuariosForm.custom-form button:hover {
+  background-color: var(--color-primary-300);
+}
+
+/* Estilos específicos para el formulario con el identificador "rolesForm" y la clase "custom-form" */
+/* Estilos específicos para el formulario con el identificador "rolesForm" y la clase "custom-form" */
+#rolesForm.custom-form .form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+#rolesForm.custom-form .form-group {
+  flex-basis: calc(50% - 10px); /* Ancho del 50% del contenedor menos el espacio entre los campos */
+}
+
+#rolesForm.custom-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#rolesForm.custom-form input,
+#rolesForm.custom-form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#rolesForm.custom-form button {
+  padding: 10px 20px;
+  background-color: var(--color-primary-400);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#rolesForm.custom-form button:hover {
+  background-color: var(--color-primary-300);
+}
+/*Clase para los botones*/
+.btn {
+  padding: 2px 6px;
+  font: inherit;
+  background-color: #4b4b4b;
+  color: var(--color-primary-contrast);
+  border-radius: 3px;
+  border: none;
+  margin: 5px 2px;
+}
+
+.btn:hover {
+  background-color: #0078a7;
+}
+
+/* Estilo para pantallas grandes (desktop) */
+@media (min-width: 1024px) {
+  .table-container {
+    max-height: 80%;
+    width: 99%;
+    margin: auto;
+    overflow-y: scroll;
+    border: 2px solid var(--color-primary-400);
+    border-radius: 5px;
+  }
+}
+
+/* Estilo para pantallas medianas (tablets) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .table-container {
+    max-height: 70%;
+    width: 95%;
+    margin: auto;
+    overflow-y: scroll;
+    border: 2px solid var(--color-primary-400);
+    border-radius: 5px;
+  }
+}
+
+/* Estilo para pantallas pequeñas (móviles) */
+@media (max-width: 767px) {
+  .table-container {
+    max-height: 60%;
+    width: 90%;
+    margin: auto;
+    overflow-y: scroll;
+    border: 1px solid var(--color-primary-400);
+    border-radius: 5px;
+  }
 }

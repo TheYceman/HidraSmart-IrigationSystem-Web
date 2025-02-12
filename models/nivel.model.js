@@ -16,20 +16,26 @@ class Nivel {
   }
 
   static async getAll() {
-    const data = await runQuery("SELECT * FROM ge_niveles;");
-    const geNiveles = data.map((nivel) => new Nivel(nivel));
+
+    const queryString = "SELECT * FROM ge_niveles;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geNiveles = results.data.rows.map((nivel) => new Nivel(nivel));
     return geNiveles;
   }
 
   static async getFilteredData(sector, fechaInicio, fechaFin) {
-    const data = await runQuery(
-      `SELECT * FROM dat_nivel WHERE ideSector=${sector} instante > "${fechaInicio
+
+    const queryString = `SELECT * FROM dat_nivel WHERE ideSector=${sector} instante > "${fechaInicio
+      .slice(0, 19)
+      .replace("T", " ")}" AND instante < "${fechaFin
         .slice(0, 19)
-        .replace("T", " ")}" AND instante < "${fechaFin
-        .slice(0, 19)
-        .replace("T", " ")}";`
-    );
-    return data;
+        .replace("T", " ")}";`;
+    const values = [];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
+    return result.data.rows;;
   }
 }
 

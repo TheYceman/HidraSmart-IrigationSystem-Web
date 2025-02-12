@@ -1,0 +1,412 @@
+<script>
+
+    // Definir una variable JavaScript para almacenar los datos de los contadores
+    window.contadores = [];
+
+    // Iterar sobre cada contador y agregar sus coordenadas a la variable
+    <% for (let contador of todosLosContadores) { %>
+
+        window.contadores.push({
+            id: '<%= contador.id %>',
+            coorY: '<%= contador.coorY %>',
+            coorX: '<%= contador.coorX %>',
+            sector: '<%= contador.sector %>',
+            ramal: '<%= contador.ramal %>',
+            titular: '<%= contador.titular %>'
+        });
+
+    <% } %>
+
+    /*
+
+        // Ahora puedes trabajar con la variable 'contadores' en JavaScript
+        // Por ejemplo, podrías recorrerla para mostrar las coordenadas en la consola
+        contadores.forEach(contador => {
+            console.log("Coordenada X:", contador.coorX);
+            console.log("Coordenada Y:", contador.coorY);
+
+            var iconUrl = "/images/mapa_sig/counter_without_watering.png";
+            // Obtener las coordenadas
+            var coorY = parseFloat(contador.coorY);
+            var coorX = parseFloat(contador.coorX);
+            var markerCounter = new google.maps.Marker({
+                position: { lat: contador.coorX, lng: contador.coorY },
+                map: myMap,
+                icon: {
+                    url: iconUrl,
+                    scaledSize: new google.maps.Size(30, 20),
+                },
+                title: contador.id,
+            });
+            // Agregar evento de clic al marker
+            markerCounter.addListener("click", function (event) {
+                show_infowindow_plots(event, contador.id);
+            });
+            // Agregar el marker al arreglo
+            makersCountersArray.push(markerCounter);
+        });
+
+*/
+
+
+</script>
+
+<div class="div-container">
+    <div id="mapContainer" style="padding:0px; position: relative; width:100%">
+        <div id="map" style="width:100%; height: 73vh;"></div><!--Fin mapa-->
+        <!-- Barra de herramientas -->
+
+        <div id="informacion" style="display:none">
+        </div>
+        <div class="sidebar">
+            <a href="javascript:void(0)" class="tablink" onclick="openTab(event, 'Leyenda')">
+                <i class="fas fa-map-marked-alt"></i> Leyenda
+            </a>
+            <a href="javascript:void(0)" class="tablink" onclick="openTab(event, 'Capas')">
+                <i class="fas fa-layer-group"></i> Capas
+            </a>
+            <a href="javascript:void(0)" class="tablink" onclick="openTab(event, 'Exportar')">
+                <i class="fas fa-file-export"></i> Exportar
+            </a>
+        </div>
+        <div id="Leyenda" class="tab-content-leyenda">
+            <h4 style="color:#009bdb; font-weight: bold;">&nbsp;&nbsp;Leyenda</h4>
+            <!-- Contenido de la leyenda aquí -->
+            <div id="leyenda2">
+                <!-- Ejemplo de contenido de la leyenda -->
+                <p>Contenido de la leyenda...</p>
+            </div>
+        </div>
+        <div id="Capas" class="tab-content-leyenda">
+            <h4 style="color:#009bdb; font-weight: bold;">&nbsp;&nbsp;Capas</h4>
+            <!-- Contenido de las capas aquí -->
+            <div id="capas2">
+                <!-- Ejemplo de contenido de las capas -->
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div>
+                                <input class="checkbox_custom" type="checkbox" id="item1-1" value="item1-1" checked>
+                                <label for="item1-1" class="checkbox_label checkbox_label_counter">
+                                    <img class="checkbox_icon_counter" src="/images/icons/counter_logo.png">
+                                    Contador
+                                </label>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="checkbox_counter_list checkbox_sublist" style="opacity: 1;">
+                                <div class="checkbox_counter_line checkbox_line">
+                                    <input class="checkbox_counter checkbox_custom" type="checkbox" id="item1-1-1"
+                                        value="item1-1-1" checked>
+                                    <label for="item1-1-1" class="checkbox_label checkbox_label_counter">
+                                        <img class="checkbox_icon_counter"
+                                            src="/images/icons/counter_without_watering.png">
+                                        Consumo
+                                    </label>
+                                </div>
+                                <div class="checkbox_counter_line checkbox_line">
+                                    <input class="checkbox_counter checkbox_custom" type="checkbox" id="item1-1-2"
+                                        value="item1-1-2" checked>
+                                    <label for="item1-1-2" class="checkbox_label checkbox_label_counter">
+                                        <img class="checkbox_icon_counter" src="/images/icons/counter_anomalous.png">
+                                        Presión
+                                    </label>
+                                </div>
+                                <div class="checkbox_counter_line checkbox_line">
+                                    <input class="checkbox_counter checkbox_custom" type="checkbox" id="item1-1-3"
+                                        value="item1-1-3" checked>
+                                    <label for="item1-1-3" class="checkbox_label checkbox_label_counter">
+                                        <img class="checkbox_icon_counter" src="/images/icons/counter_watering.png">
+                                        Energía
+                                    </label>
+                                </div>
+                                <div class="checkbox_counter_line checkbox_line">
+                                    <input class="checkbox_counter checkbox_custom" type="checkbox" id="item1-1-4"
+                                        value="item1-1-4" checked>
+                                    <label for="item1-1-4" class="checkbox_label checkbox_label_counter">
+                                        <img class="checkbox_icon_counter" src="/images/icons/counter_master.png">
+                                        Agua
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div>
+                                <input class="checkbox_custom" type="checkbox" id="item2-1" value="item2-1">
+                                <label for="item2-1" class="checkbox_label">
+                                    <img class="checkbox_icon_valve" src="/images/icons/icon_valve.png">
+                                    Válvulas de apertura
+                                </label>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="checkbox_valve_list checkbox_sublist">
+                                <div class="checkbox_valve_line checkbox_line">
+                                    <input class="checkbox_valve checkbox_custom" type="checkbox" id="item2-1-1"
+                                        value="item2-1-1" disabled>
+                                    <label for="item2-1-1" class="checkbox_label">
+                                        <img class="checkbox_icon_valve" src="/images/icons/icon_valve_open.png">
+                                        Abierta
+                                    </label>
+                                </div>
+                                <div class="checkbox_valve_line checkbox_line">
+                                    <input class="checkbox_valve checkbox_custom" type="checkbox" id="item1.2"
+                                        value="item1.2" disabled>
+                                    <label for="item1.2" class="checkbox_label">
+                                        <img class="checkbox_icon_valve" src="/images/icons/icon_valve_closed.png">
+                                        Cerrada
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <div class="checkbox_counter_line checkbox_line">
+                            <div>
+                                <input class="checkbox_custom" type="checkbox" id="item2-2" value="item2-2">
+                                <label for="item2-2" class="checkbox_label">
+                                    <span class="checkbox_icon_plot"></span>
+                                    Parcelas
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="checkbox_pressure_list checkbox_sublist">
+                            <a class="pressure_label" id="pressure-label">Color según presión contador</a>
+                            <div class="checkbox_pressure_line checkbox_line">
+                                <input class="checkbox_pressure checkbox_custom" type="checkbox" id="item2-2-1"
+                                    value="item2-2-1" disabled>
+                                <label for="item2-2-1" class="checkbox_label">
+                                    <span class="checkbox_icon_pressure checkbox_icon_label_item2_2_1"></span>
+                                    &lt15 m.c.a.
+                                </label>
+                            </div>
+                            <div class="checkbox_pressure_line checkbox_line">
+                                <input class="checkbox_pressure checkbox_custom" type="checkbox" id="item2-2-2"
+                                    value="item2-2-2" disabled>
+                                <label for="item2-2-2" class="checkbox_label">
+                                    <span class="checkbox_icon_pressure checkbox_icon_label_item2_2_2"></span>
+                                    15-20 m.c.a.
+                                </label>
+                            </div>
+                            <div class="checkbox_pressure_line checkbox_line">
+                                <input class="checkbox_pressure checkbox_custom" type="checkbox" id="item2-2-3"
+                                    value="item2-2-3" disabled>
+                                <label for="item2-2-3" class="checkbox_label">
+                                    <span class="checkbox_icon_pressure checkbox_icon_label_item2_2_3"></span>
+                                    20-25 m.c.a.
+                                </label>
+                            </div>
+                            <div class="checkbox_presion_line checkbox_line">
+                                <input class="checkbox_pressure checkbox_custom" type="checkbox" id="item2-2-4"
+                                    value="item2-2-4" disabled>
+                                <label for="item2-2-4" class="checkbox_label">
+                                    <span class="checkbox_icon_pressure checkbox_icon_label_item2_2_4"></span>
+                                    20-30 m.c.a.
+                                </label>
+                            </div>
+                            <div class="checkbox_pressure_line checkbox_line">
+                                <input class="checkbox_pressure checkbox_custom" type="checkbox" id="item2-2-5"
+                                    value="item2-2-5" disabled>
+                                <label for="item2-2-5" class="checkbox_label">
+                                    <span class="checkbox_icon_pressure checkbox_icon_label_item2_2_5"></span>
+                                    &gt30 m.c.a.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div> <input class="checkbox_custom" type="checkbox" id="item2-3" value="item2-3">
+                        <label for="item2-3" class="checkbox_label">Tuberías</label>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="checkbox_pipelines_list checkbox_sublist">
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-1"
+                                value="item2-3-1" disabled>
+                            <label for="item2-3-1" class="checkbox_label">Velocidad agua</label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-2"
+                                value="item2-3-2" disabled>
+                            <label for="item2-3-2" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_2"></span>
+                                Cortada
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-3"
+                                value="item2-3-3" disabled>
+                            <label for="item2-3-3" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_3"></span>
+                                0 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-4"
+                                value="item2-3-4" disabled>
+                            <label for="item2-3-4" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_4"></span>
+                                0-0.5 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-5"
+                                value="item2-3-5" disabled>
+                            <label for="item2-3-5" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_5"></span>
+                                0.5-1.5 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-6"
+                                value="item2-3-6" disabled>
+                            <label for="item2-3-6" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_6"></span>
+                                1.5-2.5 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-7"
+                                value="item2-3-7" disabled>
+                            <label for="item2-3-7" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_7"></span>
+                                &gt2.5 m/s
+                            </label>
+                        </div>
+                    </div>
+                    <div class="checkbox_pipelines_list checkbox_sublist">
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-1"
+                                value="item2-4" disabled>
+                            <label for="item2-4" class="checkbox_label">Caudal del agua</label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-2"
+                                value="item2-4-1" disabled>
+                            <label for="item2-4-1" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_2"></span>
+                                Cortada
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-3"
+                                value="item2-4-2" disabled>
+                            <label for="item2-4-2" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_3"></span>
+                                0 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-4"
+                                value="item2-4-3" disabled>
+                            <label for="item2-4-3" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_4"></span>
+                                0-0.5 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-5"
+                                value="item2-4-4" disabled>
+                            <label for="item2-4-4" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_5"></span>
+                                0.5-1.5 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-6"
+                                value="item2-4-5" disabled>
+                            <label for="item2-4-5" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_6"></span>
+                                1.5-2.5 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-7"
+                                value="item2-4-6" disabled>
+                            <label for="item2-4-6" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_7"></span>
+                                &gt2.5 m/s
+                            </label>
+                        </div>
+                    </div>
+                    <div class="checkbox_pipelines_list checkbox_sublist">
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-1"
+                                value="item2-5" disabled>
+                            <label for="item2-5" class="checkbox_label">Dirección del agua</label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-2"
+                                value="item2-5-1" disabled>
+                            <label for="item2-5-1" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_2"></span>
+                                Cortada
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-3"
+                                value="item2-5-2" disabled>
+                            <label for="item2-5-2" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_3"></span>
+                                0 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-4"
+                                value="item2-5-3" disabled>
+                            <label for="item2-5-3" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_4"></span>
+                                0-0.5 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-5"
+                                value="item2-5-4" disabled>
+                            <label for="item2-5-4" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_5"></span>
+                                0.5-1.5 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-6"
+                                value="item2-5-5" disabled>
+                            <label for="item2-5-5" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_6"></span>
+                                1.5-2.5 m/s
+                            </label>
+                        </div>
+                        <div class="checkbox_pipelines_line checkbox_line">
+                            <input class="checkbox_pipelines checkbox_custom" type="checkbox" id="item2-3-7"
+                                value="item2-5-6" disabled>
+                            <label for="item2-5-6" class="checkbox_label">
+                                <span class="checkbox_icon_pipelines checkbox_icon_label_item2_3_7"></span>
+                                &gt2.5 m/s
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="Exportar" class="tab-content-leyenda">
+            <h4 style="color:#009bdb; font-weight: bold;">&nbsp;&nbsp;Exportar</h4>
+            <div class="toolbar">
+                <button class="toolbar-btn" onclick="exportDataToExcel(contadores, 'Datos_seleccionados')">
+                    <i class="fa fa-file-excel"></i> <span>Excel</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

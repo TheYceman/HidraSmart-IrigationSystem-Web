@@ -10,45 +10,58 @@ class Cliente {
   }
 
   static async getAll() {
-    const data = await runQuery("SELECT * FROM clientes;");
-    const cliente = data.map((cliente) => new Cliente(cliente));
+
+    const queryString = "SELECT * FROM clientes;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const cliente = results.data.rows.map((cliente) => new Cliente(cliente));
     return cliente;
   }
 
   static async getFilteredData(numero) {
-    const data = await runQuery(
-      `SELECT * FROM clientes WHERE idcliente="${numero}";`
-    );
-    console.log(
-      `SELECT * FROM clientes WHERE idcliente="${numero}";`
-    );
-    return data;
+    const queryString = `SELECT * FROM clientes WHERE idcliente=?;`;
+    const values = [numero];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
+    return result.data.rows;;
   }
 
   static async getPerPage(perPage, offset) {
-    const data = await runQuery("SELECT * FROM clientes LIMIT " + perPage + " OFFSET " + offset + ";");
-    const clientes = data.map((idcliente) => new Cliente(idcliente));
+
+    const queryString = "SELECT * FROM clientes LIMIT " + perPage + " OFFSET " + offset;
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const clientes = results.data.rows.map((idcliente) => new Cliente(idcliente));
     return clientes;
   }
 
   static async getCountAll() {
-    const data = await runQuery("SELECT count(*) as total FROM clientes;");
-    const geTotal = data.map((total) => total);
+    const queryString = "SELECT count(*) as total FROM clientes;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geTotal = results.data.rows.map((total) => total);
     console.log(geTotal[0].total);
     return geTotal[0].total;
   }
 
   static async getAllClientes() {
-    const data = await runQuery("SELECT * FROM clientes;");
-    const clientes = data.map((idcliente) => new Cliente(idcliente));
+    const queryString = "SELECT * FROM clientes;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const clientes = results.data.rows.map((idcliente) => new Cliente(idcliente));
     return clientes;
   }
 
   static async getFilteredData(idcliente) {
-    const data = await runQuery(
-      `SELECT * FROM clientes WHERE idcliente=${idcliente}";`
-    );
-    return data;
+    const queryString = `SELECT * FROM clientes WHERE idcliente=?;`;
+    const values = [idcliente];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
+    return result.data.rows;;
   }
 }
 

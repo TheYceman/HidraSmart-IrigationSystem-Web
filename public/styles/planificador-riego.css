@@ -1,0 +1,504 @@
+main {
+  max-height: 99vh;
+}
+
+main > div {
+    margin: 0 auto;
+    width: 90%;
+    overflow: hidden;
+  }
+/* Estilos para las pestañas */
+.tab {
+    display: none;
+  }
+  
+  .tab-labels {
+    display: flex;
+    margin-bottom: 10px;
+    font-size: 16px; /* Tamaño del texto pequeño */
+    font-weight: 900;
+  }
+  
+  .tab-label {
+    flex: 1;
+    padding: 3px;
+    text-align: center;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+.tab-content {
+  display: none;
+  height: 73vh; /* Altura predeterminada para pantallas medianas */
+  /*background-color: #007bff;*/
+}
+
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 1800px) {
+  .tab-content {
+    height: 70vh; /* Altura predeterminada para pantallas medianas */
+  }
+}
+  
+  /* Estilo activo para la pestaña seleccionada */
+  .tab-label.active {
+    background-color: #a3a4a6;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+
+
+  #data-viewer {
+    gap: 10px;
+    width: 98%;
+    height: 98%;
+    margin: 0 auto;
+  }
+  
+  #data-viewer section {
+    width: 100%;
+    height: 90%;
+    /*background-color: var(--color-primary-300);*/
+    border-radius: 2px;
+    box-shadow: var(--box-shadow-default);
+    padding: 5px;
+  }
+  
+ /* Estilo para la lista */
+#highchart-graph {
+    float: left;
+    width:98%; /* Cambia esto según tus necesidades */
+    padding: 10px;
+}
+
+#highchart-graph h3 {
+    margin-top: 0;
+}
+
+#selected-elements {
+    list-style: none;
+    padding: 0;
+}
+
+.selected-element {
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+    padding: 5px;
+    position: relative;
+}
+
+.selected-element .delete-element {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+/* Clearfix para evitar que el float se extienda fuera del contenedor */
+
+#containerChart {
+  display: grid;
+  grid-template-columns: 10% auto;
+  gap: 10px; /* Espacio entre las dos partes */
+}
+
+.container-left {
+  width: 100%; 
+  height: 100%;/* Para asegurarse de que ocupe todo el ancho de su celda */
+}
+
+.container-right {
+  width: 100%; /* Para asegurarse de que ocupe todo el ancho de su celda */
+}
+  
+  #filtros {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  #selectores {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+  }
+  
+  #selectores > div ~ div {
+    margin-top: 10px;
+  }
+  
+  #selectores > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  #selectores2 {
+    display: flex;
+    flex-direction: column;
+    width: 79%;
+  }
+  
+  #selectores2 > div ~ div {
+    margin-top: 10px;
+  }
+  
+  #selectores2 > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+   
+  #selectores22 {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+  }
+  
+  #selectores22 > div ~ div {
+    margin-top: 10px;
+  }
+  
+  #selectores22 > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+    
+  #selectores3 {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+  }
+  
+  #selectores3 > div ~ div {
+    margin-top: 10px;
+  }
+  
+  #selectores3 > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+ 
+  #lista-elementos {
+    /*height: 100%;*/
+    width: 15%;
+    background-color: white;
+    border-radius: 5px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-left: 10px;
+  }
+  
+  #lista-elementos ul.blocked li {
+    cursor: url("/images/estado-red/blocked-pointer.png"), auto;
+  }
+  
+  #lista-elementos li {
+    cursor: url("/images/estado-red/add-pointer.png"), auto;
+  }
+  
+  #lista-elementos ul li.selected {
+    background-color: var(--color-primary-300);
+    padding: 0 5px;
+    cursor: url("/images/estado-red/remove-pointer.png"), auto;
+  }
+  
+  #lista-elementos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .div-container {
+    width:100%;
+    margin:auto;
+  }
+
+  .contenedor {
+    display: flex;
+    flex-direction: column; /* Las filas se apilan verticalmente */
+    max-height: 300px; /* Altura de la capa */
+}
+
+.fila {
+    flex: 1; /* Cada fila ocupará el espacio disponible */
+    display: flex;
+    justify-content: center; /* Centra los elementos horizontalmente */
+    align-items:start; /* Centra los elementos verticalmente */
+    margin-bottom: 20px; /* Espacio entre las filas */
+    padding: 10px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.button-container button {
+  padding: 10px 20px;
+  background-color: #4b4b4b;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.button-container button i {
+  margin-right: 5px;
+}
+
+.button-container button:hover {
+  background-color: #a3a4a6;
+}
+
+table {
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px; /* Tamaño del texto pequeño */
+  table-layout: fixed; /* Ajusta la tabla para que las columnas tengan el mismo ancho */
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  word-wrap: break-word; /* Permite que el texto largo se ajuste a la celda */
+}
+
+th {
+  background-color: #f9f9f9;
+  font-weight: normal; /* Hace que el texto del encabezado sea fino */
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Color de fondo alternativo para las filas pares */
+}
+
+
+ /* Estilos para el artículo y la lista */
+ article#lista-elementos {
+  font-size: 14px; /* Tamaño del texto pequeño */
+  margin-top: 20px;
+}
+
+article#lista-elementos ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+article#lista-elementos li {
+  margin-bottom: 5px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+article#lista-elementos li:hover {
+  background-color: #e0e0e0;
+}
+
+.label-container {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/***Toolbar**/
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+.toolbar-item {
+  margin-right: 10px;
+}
+
+.toolbar-item label {
+  margin-right: 5px;
+}
+
+.toolbar-item input[type="text"],
+.toolbar-item select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.toolbar-item button {
+  padding: 8px 16px;
+  background-color: #4b4b4b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.toolbar-item button:hover {
+  background-color: #0078a7;
+}
+
+.table-container {
+  height: 100%;
+  width: 99%;
+  max-height: 65vh;
+  margin: auto;
+  overflow-y: scroll;
+  /*border: 2px solid var(--color-primary-400);
+  border-radius: 0px;*/
+}
+
+.table-container::-webkit-scrollbar {
+  width: 0.5vw;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 0.5vw;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+#table {
+  width: 100%;
+  table-layout: auto;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #f5f5f5;
+}
+
+.table-container table {
+  width: 100%;
+  height: 100%;
+}
+
+.table-container th {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-primary-400);
+  color: #fff;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.table-container tbody tr:nth-child(even) {
+  background-color: #e4e4e4;
+}
+
+.table-container tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+td.acciones {
+  width: 10rem;
+  text-align: center;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  word-break: break-word;
+  font-size: 0.8rem;
+}
+
+#add-record-button {
+  font-size: 1.2rem;
+  border: none;
+  background-color: #27b5f1;
+  color: white;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+}
+
+.table-container th.actions_th,
+.table-container td.actions {
+  width: 5.5vw;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.actions button {
+  padding: 5px;
+  border: none;
+  background-color: var(--color-primary-500);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  border-radius: 0.2vw;
+}
+
+.actions button:active {
+  transform: scale(0.9);
+}
+
+/**Lista**/
+.selected-elements-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 92%; /* Altura predefinida */
+  overflow-y: auto; /* Mostrar barra de desplazamiento vertical cuando sea necesario */
+  overflow-x:hidden;
+}
+
+.selected-elements-container h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+#selected-elements {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 100%; /* Ajustar la altura máxima a la altura del contenedor */
+}
+
+#selected-elements:empty::before {
+  content: "No hay contadores seleccionados";
+  color: #777;
+  font: 1em;
+}
+
+#selected-elements-lectura {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 100%; /* Ajustar la altura máxima a la altura del contenedor */
+}
+
+#selected-elements-lectura:empty::before {
+  content: "No hay contadores seleccionados";
+  color: #777;
+  font: 1em;
+}
+
+

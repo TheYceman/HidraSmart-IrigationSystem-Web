@@ -10,71 +10,93 @@ class Sensor {
     this.coorY = geSensor.coorY;
   }
 
-  static async getPerPage(perPage, offset) {
-    const data = await runQuery("SELECT * FROM ge_sensores LIMIT " + perPage + " OFFSET " + offset + ";");
-    const geSensores = data.map((sensor) => new Sensor(sensor));
+  static async getPerPage(req, res, perPage, offset) {
+
+    const queryString = "SELECT * FROM ge_sensores LIMIT " + perPage + " OFFSET " + offset;
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geSensores = results.data.rows.map((sensor) => new Sensor(sensor));
     return geSensores;
   }
   static async getCountAll() {
-    const data = await runQuery("SELECT count(*) as total FROM ge_sensores;");
-    const geTotal = data.map((total) => total);
+
+    const queryString = "SELECT count(*) as total FROM ge_sensores;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geTotal = results.data.rows.map((total) => total);
     console.log(geTotal[0].total);
     return geTotal[0].total;
   }
 
-  static async getAllSensores() {
-    const data = await runQuery("SELECT * FROM ge_sensores;");
-    const geSensor = data.map((geSensor) => new Sensor(geSensor));
+  static async getAllSensores(req, res) {
+
+    const queryString = "SELECT * FROM ge_sensores;";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geSensor = results.data.rows.map((geSensor) => new Sensor(geSensor));
     return geSensor;
   }
   static async getCaudalimetros() {
-    const data = await runQuery(
-      "SELECT * FROM ge_sensores WHERE tipo='caudalimetro';"
-    );
-    const geSensor = data.map((geSensor) => new Sensor(geSensor));
+
+    const queryString = "SELECT * FROM ge_sensores WHERE tipo='caudalimetro';";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geSensor = results.data.rows.map((geSensor) => new Sensor(geSensor));
     return geSensor;
   }
 
-  static async getValvulas() {
-    const data = await runQuery(
-      "SELECT * FROM ge_sensores WHERE tipo='valvula';"
-    );
-    const geSensor = data.map((geSensor) => new Sensor(geSensor));
-    return geSensor;
-  }
-  
-  static async getPresiones() {
-    const data = await runQuery(
-      "SELECT * FROM ge_sensores WHERE tipo='presion';"
-    );
-    const geSensor = data.map((geSensor) => new Sensor(geSensor));
+  static async getValvulas(res, req) {
+
+    const queryString = "SELECT * FROM ge_sensores WHERE tipo='valvula';";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geSensor = results.data.rows.map((geSensor) => new Sensor(geSensor));
     return geSensor;
   }
 
-  static async getNiveles() {
-    const data = await runQuery(
-      "SELECT * FROM ge_sensores WHERE tipo='nivel';"
-    );
-    const geSensor = data.map((geSensor) => new Sensor(geSensor));
+  static async getPresiones(res, req) {
+
+    const queryString = "SELECT * FROM ge_sensores WHERE tipo='presion';";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geSensor = results.data.rows.map((geSensor) => new Sensor(geSensor));
     return geSensor;
   }
 
-  static async getFilteredData(tipo, idSensor, fechaInicio, fechaFin) {
-    const data = await runQuery(
-      `SELECT * FROM dat_${tipo} WHERE ideSensor="${idSensor}" AND instante > "${fechaInicio
+  static async getNiveles(res, req) {
+
+    const queryString = "SELECT * FROM ge_sensores WHERE tipo='nivel';";
+    const values = [];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geSensor = results.data.rows.map((geSensor) => new Sensor(geSensor));
+    return geSensor;
+  }
+
+  static async getFilteredData(req, res, tipo, idSensor, fechaInicio, fechaFin) {
+
+    const queryString = `SELECT * FROM dat_${tipo} WHERE ideSensor="${idSensor}" AND instante > "${fechaInicio
+      .slice(0, 19)
+      .replace("T", " ")}" AND instante < "${fechaFin
         .slice(0, 19)
-        .replace("T", " ")}" AND instante < "${fechaFin
-        .slice(0, 19)
-        .replace("T", " ")}";`
-    );
+        .replace("T", " ")}";`;
+    const values = [];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
     console.log(
       `SELECT * FROM dat_${tipo} WHERE ideSensor="${idSensor}" AND instante > "${fechaInicio
         .slice(0, 19)
         .replace("T", " ")}" AND instante < "${fechaFin
-        .slice(0, 19)
-        .replace("T", " ")}";`
+          .slice(0, 19)
+          .replace("T", " ")}";`
     );
-    return data;
+    return result.data.rows;;
   }
 }
 

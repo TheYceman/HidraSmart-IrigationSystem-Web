@@ -2,8 +2,13 @@ const Usuario = require("../models/usuario.model");
 
 const { runQuery } = require("../data/bbdd-connector");
 
+const emailSender = require('../utils/emailSender');
+
+const crypto = require('crypto');
+const { encrypt } = require("../helpers/handleBcrypt");
+
 async function getGeDataUsuario(req, res) {
-  const geData = [...(await Usuario.getAll())];
+  const geData = [...(await Usuario.getAll(req, res))];
   return geData;
 }
 
@@ -12,9 +17,9 @@ async function getTotalPagesUsuarios(req, res) {
 
   pages = 1;
   const itemsPerPage = 10;
-  const number_registers = await Usuario.getCountAll();
+  const number_registers = await Usuario.getCountAll(req, res);
 
-  console.log("number_registers " + number_registers);
+  //console.log("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -23,13 +28,12 @@ async function getTotalPagesUsuarios(req, res) {
   return pages;
 }
 
-
 async function getGeDataUsuariosPerPage(req, res) {
 
   const page = parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 10; // Cantidad de elementos por página
   const offset = (page - 1) * itemsPerPage;
-  const geData = [...(await Usuario.getPerPage(itemsPerPage, offset))];
+  const geData = [...(await Usuario.getPerPage(req, res, itemsPerPage, offset))];
 
   /*const page =  parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 20; // Registros por página
@@ -46,40 +50,51 @@ async function getGeDataUsuariosPerPage(req, res) {
 async function getDataUsuario(req, res) {
   const params = req.query;
   let result = await Usuario.getFilteredData(
-    params.ideSector
+    req, res, params.ideSector
   );
   res.json(result);
   // pasar a json el resultado de la linea anterior y añadir a la response
 }
 
 async function updateUsuario(req, res) {
+  //console.log("UpdateUsuario " + req.body);
 
   // Obtener los parámetros del cuerpo de la solicitud
-  const login = req.body.login.trim();
-  const nombre = req.body.nombre.trim();
-  const apellido = req.body.apellido.trim();
+  const username = req.body.username.trim();
+  const nombre = req.body.name.trim();
+  const apellido = req.body.surname.trim();
   const grupo = req.body.grupo.trim();
   const email = req.body.email.trim();
   const phone = req.body.phone.trim();
   //const password = req.body.password.trim();
 
-  console.log("updateUsuario " + login);
+  //console.log("updateUsuario " + username + " " + grupo);
 
-  const data = await runQuery(`UPDATE users SET name = '${nombre}',surname = '${apellido}',rol = '${grupo}',email = '${email}',phone = '${phone}' WHERE username = '${login}';`);
-  console.log(data);
-  return data;
+  const queryString = `UPDATE users SET name = ?, surname = ?, rol = ?, email = ?, phone = ? WHERE username = ?;`;
+  const values = [nombre, apellido, grupo, email, phone, username];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Usuario actualizado con éxito");
+  }
+  return result.data.rows;
 
 }
 
 async function deleteUsuario(req, res) {
 
   // Obtener los parámetros del cuerpo de la solicitud
-  const login = req.body.login.trim();
+  const username = req.body.username.trim();
 
-  console.log("deleteUsuario " + login);
+  //console.log("deleteUsuario " + username);
 
-  const data = await runQuery(`DELETE FROM users WHERE username = '${login}';`);
-  console.log(data);
+  const queryString = "DELETE FROM users WHERE username = ?;";
+  const values = [username];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Usuario borrado con éxito");
+  }
   res.redirect('/gestor-usuarios');
   //return data;
 
@@ -90,22 +105,68 @@ async function agregaUsuario(req, res) {
 
   if (!req.body)
     return res.sendStatus(400)
-  console.log(req.body);
+  //console.log(req.body);
 
-  const login = req.body.login.trim();
-  const nombre = req.body.nombre.trim();
-  const apellido = req.body.apellido.trim();
+  const login = req.body.username.trim();
+  const nombre = req.body.name.trim();
+  const apellido = req.body.surname.trim();
   const grupo = req.body.grupo.trim();
   const email = req.body.email.trim();
   const phone = req.body.phone.trim();
 
-  const password = "Pruebas2023";
+  let propietario=0;
+  if (req.session.user[0].idusers) {
+    propietario=req.session.user[0].idusers;
+  }
+
+  // Generar y mostrar la clave
+  const claveGenerada = generarClave();
+  //console.log(claveGenerada);
+
+  const password = await encrypt(claveGenerada);
   //const nuevoRegistro = { login, password, nombre, apellido, grupo, email, phone };
 
-  const data = await runQuery(`INSERT INTO users (username, password, name, surname, rol, email, phone) VALUES ('${login}', '${password}', '${nombre}', '${apellido}', '${grupo}', '${email}', '${phone}');`);
-  console.log(data);
+  const queryString = "INSERT INTO users (username, password, name, surname, rol, email, phone, owner) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+  const values = [login, password, nombre, apellido, grupo, email, phone, propietario];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Usuario insertado con éxito");
 
-  res.redirect('/gestor-usuarios');
+    const emailSent = await emailSender.sendEmailNewUser(nombre, email, claveGenerada);
+    if (emailSent) {
+      console.log('Correo electrónico enviado con éxito');
+    } else {
+      console.log('Error al enviar el correo electrónico');
+      alert('Error al enviar el correo electrónico'); // Muestra un mensaje emergente al usuario
+    }
+    res.redirect('/gestor-usuarios');
+  } else {
+    console.log('Error al insertar el usuario en la base de datos');
+    alert('Error al insertar el usuario en la base de datos'); // Muestra un mensaje emergente al usuario
+  }
+  
+}
+
+
+function generarClave() {
+  // Longitud de la clave
+  const longitud = 8;
+
+  // Caracteres válidos para la clave (letras y números)
+  const caracteresValidos = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  let clave = '';
+
+  for (let i = 0; i < longitud; i++) {
+    // Generar un índice aleatorio dentro del rango de caracteres válidos
+    const indice = crypto.randomInt(0, caracteresValidos.length);
+
+    // Agregar el carácter correspondiente al índice aleatorio a la clave
+    clave += caracteresValidos.charAt(indice);
+  }
+
+  return clave;
 }
 
 

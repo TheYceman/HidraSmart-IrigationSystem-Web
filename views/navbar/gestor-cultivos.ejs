@@ -1,0 +1,326 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/socialbar.css">
+    <script src="/scripts/navbar.js" defer></script>
+    <script src="/scripts/gestor-cultivos.js" defer></script>
+    <link rel="stylesheet" href="/styles/gestor-cultivos.css">
+    </head>
+
+    <body>
+        <script>
+            window.propietarioId = <%= userId %>;
+            window.parcelas = [];
+            <% for (let parcela of todasLasParcelas) { %>
+                window.parcelas.push({
+                    id: '<%= parcela.id %>',
+                    sector: '<%= parcela.sector %>',
+                    titular: '<%= parcela.titular %>',
+                    municipio: '<%= parcela.municipio %>',
+                    poligono: '<%= parcela.poligono %>',
+                    parcela: '<%= parcela.parcela %>',
+                    paraje: '<%= parcela.paraje %>',
+                    dimension: '<%= parcela.dimension %>',
+                    cultivo: '<%= parcela.cultivo %>',
+                    riego: '<%= parcela.riego %>',
+                    propietario: '<%= parcela.propietario %>',
+                    hectareas: '<%= parcela.hectareas %>'
+                });
+            <% } %>
+       
+       </script>
+        <main>
+            <h2 class="titulo_seccion"></h2>
+            <div class="tab-labels">
+                <div class="tab-label active" data-tab="cultivos" onclick="showTab('cultivos')">Cultivos</div>
+                <div class="tab-label" data-tab="demandas" onclick="showTab('demandas')">Cupos</div>
+            </div>
+            <div class="tab-content active" id="cultivos">
+                <div class="container">
+                    <div class="box">
+                        <div class="table-container">
+                            <table id="parcelas">
+                                <thead>
+                                    <tr>
+                                        <th>Identificador</th>
+                                        <th>Sector</th>
+                                        <th>Polígono</th>
+                                        <th>Parcela</th>
+                                        <th>Paraje</th>
+                                        <th>Hectáreas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table">
+                                    <% for(let parcela of parcelas) { %>
+                                        <tr data-uid="<%= parcela.id %>" class="selectable-row">
+                                            <td>
+                                                <%= parcela.id %>
+                                            </td>
+                                            <td data-field="sector" data-id="<%= parcela.id %>">
+                                                <%= parcela.sector %>
+                                            </td>
+                                            <td data-field="marca" data-id="<%= parcela.id %>">
+                                                <%= parcela.poligono %>
+                                            </td>
+                                            <td>
+                                                <%= parcela.parcela %>
+                                            </td>
+                                            <td data-field="sector" data-id="<%= parcela.id %>">
+                                                <%= parcela.paraje %>
+                                            </td>
+                                            <td data-field="marca" data-id="<%= parcela.id %>">
+                                                <%= parcela.hectareas %>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="campo-container">
+                            <div class="campo-header">
+                                <h3>Parcela</h3>
+                                <button id="edit-button">✏️</button>
+                                <button id="delete-button">🗑️</button>
+                            </div>
+                            <div class="campo-tab-content active" id="datos">
+                                <div class="campo-content">
+                                    <div class="column">
+                                        <p id="hectareasInfo">Hectáreas: N/A</p>
+                                        <p id="cultivoInfo">Cultivo: N/A</p>
+                                    </div>
+                                    <div class="column">
+                                        <p>Explotación (PAC): Finca 2</p>
+                                        <p>Recintos SIGPAC: 46196:0:0:31:108:3</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="campo-tab-content" id="cultivo">
+                                <div class="campo-content">
+                                    <div class="column">
+                                        <p id="cultivoDeclarado">Cultivo declarado: N/A</p>
+                                        <p id="hectareasDeclaradas">Ha. declaradas: N/A</p>
+                                    </div>
+                                    <div class="column">
+                                        <p id="necesidadSemanal">Necesidad semanal de riego (L/m2/dia): N/A</p>
+                                        <p id="kc"> Kc: N/A </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="campo-tab-content" id="actividades">Contenido de Actividades</div>
+                            <div class="campo-buttons">
+                                <button class="campo-tab-button" data-tab="datos" onclick="showSubTab('datos')"><i
+                                        class="fas fa-info-circle"></i> Datos
+                                    del campo</button>
+                                <button class="campo-tab-button" data-tab="cultivo" onclick="showSubTab('cultivo')"><i
+                                        class="fas fa-seedling"></i> Cultivo</button>
+                                <button class="campo-tab-button" data-tab="actividades"
+                                    onclick="showSubTab('actividades')"><i class="fas fa-tasks"></i>
+                                    Actividades</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="chart-container">
+                            <div id="historicalChart" style="width:100%; height:100%;"></div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="table-container">
+                            <table id="cultivosTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID Parcela</th>
+                                        <th>Cultivo</th>
+                                        <th>Fecha y Hora</th>
+                                        <th>Ha. declaradas</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cultivosTableBody">
+                                    <!-- Aquí se agregarán las filas de cultivos -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="demandas">
+                <div class="accordion">
+                    <div class="accordion-item active">
+                        <div class="accordion-title active">Balsa 1 <i class="fas fa-chevron-down"></i></div>
+                        <div class="accordion-content active">
+                            <div class="flex-content">
+                                <div class="left-column">
+                                    <!-- Tabla -->
+                                    <div class="custom-table-container"> <!-- Nueva clase para la tabla -->
+                                        <table id="table">
+                                            <thead>
+                                                <tr class="sticky-header">
+                                                    <th>Parcela</th>
+                                                    <th>Cultivo</th>
+                                                    <th>Ha. declaradas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Aquí se llenarán dinámicamente los datos -->
+                                                <% for(let parcela of parcelas) { %>
+                                                    <tr data-uid="<%= parcela.id %>" class="selectable-row2">
+                                                        <td>
+                                                            <%= parcela.id %>
+                                                        </td>
+                                                        <td data-field="sector" data-id="<%= parcela.id %>">
+                                                            <%= parcela.cultivo %>
+                                                        </td>
+                                                        <td data-field="marca" data-id="<%= parcela.id %>">
+                                                            <%= parcela.hectareas %>
+                                                        </td>
+                                                    </tr>
+                                                    <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="right-column">
+                                    <div class="flex-content">
+                                        <div class="left-column2">
+                                            <!-- Etiquetas de cupo -->
+                                            <div class="cupo-label"><i class="fas fa-tint"></i>
+                                                <span class="label-text">Cupo Asignado: </span>
+                                                <span class="label-number">2000</span>
+                                            </div>
+                                            <div class="cupo-label"><i class="fas fa-tint-slash"></i>
+                                                <span class="label-text">Cupo Gastado: </span>
+                                                <span class="label-number">800</span>
+                                            </div>
+                                            <div class="cupo-label"><i class="fas fa-hand-holding-water"></i>
+                                                <span class="label-text">Cupo Cedido: </span>
+                                                <span class="label-number">200</span>
+                                            </div>
+                                            <div class="cupo-label"><i class="fas fa-hand-holding"></i>
+                                                <span class="label-text">Cupo Recibido: </span>
+                                                <span class="label-number">0</span>
+                                            </div>
+                                            <div class="cupo-label"><i class="fas fa-water"></i>
+                                                <span class="label-text">Cupo Disponible: </span>
+                                                <span class="label-number-restante">1000</span>
+                                            </div>
+                                            <!-- Botón de ceder cupo -->
+                                            <div class="ceder-cupo-btn-container">
+                                                <button class="campo-tab-button active">
+                                                    <i class="fas fa-exchange-alt"></i>Ceder Cupo
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="right-column2">
+                                            <div id="highchart" style="height: 45vh;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Repite este bloque para Balsa 2 a Balsa 5 -->
+                    <div class="accordion-item">
+                        <div class="accordion-title">Balsa 2 <i class="fas fa-chevron-down"></i></div>
+                        <div class="accordion-content">
+                            <div class="flex-content">
+                                <div class="left-column">
+                                    <!-- Tabla -->
+                                    <div class="table-container">
+                                        <table id="table">
+                                            <thead>
+                                                <tr class="sticky-header">
+                                                    <th>Parcela</th>
+                                                    <th>Titular</th>
+                                                    <th>Hectáreas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Aquí se llenarán dinámicamente los datos -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="right-column">
+                                    <div class="flex-content">
+                                        <div>
+                                            <!-- Etiquetas de cupo -->
+                                            <div class="cupo-label">Cupo Asignado</div>
+                                            <div class="cupo-label">Cupo Gastado</div>
+                                            <div class="cupo-label">Cupo Cedido</div>
+                                            <div class="cupo-label">Cupo Recibido</div>
+                                            <div class="cupo-label">Cupo Disponible</div>
+                                        </div>
+                                        <div>
+                                            <!-- Botón de ceder cupo -->
+                                            <div class="ceder-cupo-btn-container">
+                                                <button class="ceder-cupo-btn"><i class="fas fa-exchange-alt"></i>Ceder
+                                                    Cupo</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Añade los bloques para Balsa 3, Balsa 4 y Balsa 5 aquí -->
+                </div>
+            </div>
+        </main>
+        <div id="modal" class="modal">
+            <div class="modal-content">
+              <span class="close-btn">&times;</span>
+              <h2>Añadir Cultivo</h2>
+              <div class="modal-row">
+                <div class="modal-item">
+                  <label for="cultivoSelect">Cultivo</label>
+                  <select id="cultivoSelect">
+                    <option value="" disabled selected>Seleccione un cultivo</option>
+                    <option value="Pimiento">Pimiento</option>
+                    <option value="Almendros">Almendros</option>
+                    <option value="Vid">Vid</option>
+                    <option value="Cebolla">Cebolla</option>
+                    <option value="Cebada">Cebada</option>
+                    <option value="Ajos">Ajos</option>
+                    <option value="Arboles">Árboles</option>
+                    <option value="Melon">Melón</option>
+                    <option value="Guisantes">Guisantes</option>
+                    <option value="Huerta">Huerta</option>
+                    <option value="Alfalfa">Alfalfa</option>
+                    <option value="Sandia">Sandía</option>
+                  </select>
+                </div>
+                <div class="modal-item">
+                  <label for="ha-declaradas">Ha. declaradas</label>
+                  <input type="text" id="ha-declaradas" pattern="[0-9]*" title="Por favor, ingrese solo números" value="0" />
+                </div>
+              </div>
+              <div id="kc-meses-container">
+                <table id="kc-meses-table">
+                  <thead>
+                    <tr>
+                      <th>kc</th>
+                      <th>Meses</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Las filas dinámicas se agregarán aquí -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="modal-buttons">
+                <button class="modal-add-btn" id="add-kc-meses-btn">Agregar kc/meses</button>
+              </div>
+              <div class="modal-buttons">
+                <button class="modal-save-btn">Guardar</button>
+                <button class="modal-cancel-btn">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        <%- include('../components/common/footer.ejs') %>
+    </body>
+
+    </html>

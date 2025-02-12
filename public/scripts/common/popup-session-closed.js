@@ -6,7 +6,7 @@ function popupSessionClosed(){
             <style>
                 .container {
                     height: 20vh;
-                    font-family: "Montserrat", sans-serif;
+                    font-family: "Nunito Sans", sans-serif;
                     -webkit-animation: 15s 0.875s cubic-bezier(0.9, 0, 0.1, 1) forwards background_color;
                             animation: 15s 0.875s cubic-bezier(0.9, 0, 0.1, 1) forwards background_color;
                 }

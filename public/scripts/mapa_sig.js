@@ -1,5 +1,3 @@
-
-
 var myMap;
 
 var counterArray = [];
@@ -10,6 +8,7 @@ var makersCountersMasterArray = [];
 var markerValveOpenArray = [];
 
 var polygonsArray = [];
+var polygonsCultivosArray = [];
 var polylinesArray = [];
 
 var checkboxCounters = document.getElementById("item1-1");
@@ -126,7 +125,15 @@ myMap = new google.maps.Map(document.getElementById("map"), {
   zoom: 12,
   streetViewControl: false,
   center: { lat: targetLatitude, lng: targetLongitude },
+  zoomControl: true, // Deshabilita el control de zoom
   mapTypeId: "satellite",
+  mapTypeControl: true, // Habilita el control de tipo de mapa
+  mapTypeControlOptions: {
+    //style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR, // Estilo del control de tipo de mapa
+    position: google.maps.ControlPosition.TOP_RIGHT, // Posición del control de tipo de mapa
+    mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain'], // Tipos de mapas disponibles
+    // Ajustes adicionales si es necesario
+  }
 });
 
 // Agregar un evento onclick al mapa
@@ -135,11 +142,12 @@ myMap.addListener('click', function (event) {
   var clickedLocation = event.latLng;
 
   // Hacer algo con las coordenadas, como mostrarlas en un cuadro de diálogo
-  alert('Coordenadas: ' + clickedLocation.lat() + ', ' + clickedLocation.lng());
+  //alert('Coordenadas: ' + clickedLocation.lat() + ', ' + clickedLocation.lng());
 
   document.getElementById("informacion").style.display = "none";
+  infowindow.close();
 });
-
+/*
 // Evento para el botón de acercar
 document.getElementById('zoomInBtn').addEventListener('click', function () {
   myMap.setZoom(myMap.getZoom() + 1);
@@ -159,6 +167,9 @@ document.getElementById('toggleSatelliteBtn').addEventListener('click', function
     myMap.setMapTypeId('satellite');
   }
 });
+*/
+
+paint_counter_bbdd();
 
 function paint_counter_bbdd() {
   contadores.forEach(contador => {
@@ -180,24 +191,180 @@ function paint_counter_bbdd() {
     });
     // Agregar evento de clic al marker
     markerCounter.addListener("click", function (event) {
-      show_infowindow_plots(event, contador.id);
+      document.getElementById("informacion").style.display = "none";
+      var content = `
+    <div class="infowindow-content">
+        <div class="infowindow-header">
+            <h2>Contador `+ contador.id + `</h2>
+        </div>
+        <div class="infowindow-body">
+            <ul>
+                <li><strong>Sector:</strong> `+ contador.sector + `</li>
+                <li><strong>Tramo:</strong> `+ contador.tramo + `</li>
+                <li><strong>Ramal:</strong> `+ contador.ramal + `</li>
+                <li><strong>Titular:</strong> `+ contador.titular + `</li>
+                <li><strong>Vol. Acum (m3):</strong> `+ contador.acumulado + `</li>
+                <li><strong>Instante:</strong> `+ contador.instante + `</li>
+                <li><strong>Bateria:</strong> `+ contador.bateria + `</li>
+                <li><strong>Radio:</strong> `+ contador.radio + `</li>
+                <li><strong>Marca:</strong> `+ contador.marca + `</li>
+                <li><strong>Dimensión:</strong> `+ contador.dimension + `</li>
+                <li><strong>Vol. Global (m3):</strong> `+ contador.volAsignado + `</li
+            </ul>
+        </div>
+    </div>
+`;
+      show_infowindow_plots(event, content);
       document.getElementById("informacion").style.display = "block";
-      var content = "<a id='leyendaLabel'><b> Contador " + contador.id + "</b></a><p>Este es el contenido de la ventana modal:<ul><li>Atributo 1: Valor 1</li><li>Atributo 2: Valor 2</li><li>Atributo 3: Valor 3</li>" +
-        "</ul>También puedes agregar enlaces, imágenes, formularios, etc.</p>";
+      var content = "<div class='leyenda-container'>";
+      content += "<span id='leyendaLabel'><b>Contador " + contador.id + "</b></span>";
+      content += "<div>"
+      content += "<ul class='leyenda-list'>";
+      content += "<li><span class='leyenda-item'>Sector:</span>" + contador.sector + "</li>";
+      content += "<li><span class='leyenda-item'>Tramo:</span> " + contador.tramo + "</li>";
+      content += "</ul></div>";
+      content += "<div>"
+      content += "<div id='highchart-graph'></div>";
+      content += "</div></div>";
       document.getElementById("informacion").innerHTML = content;
+      paintGraph();
     });
     // Agregar el marker al arreglo
     makersCountersArray.push(markerCounter);
   });
 }
+async function paintGraph() {
+  //let elements = Array.from(document.getElementById("contadores").querySelectorAll("option:checked"));
+  let seriesData = [];
+
+
+  if (seriesData.length === 0) {
+    var fecha1 = new Date("2024-05-23 00:00:00").getTime();
+    var fecha2 = new Date("2024-05-24 00:00:00").getTime();
+    var fecha3 = new Date("2024-05-25 00:00:00").getTime();
+    var fecha4 = new Date("2024-05-26 00:00:00").getTime();
+
+
+    // Suponiendo que tienes los datos de esta manera
+    var datos = [
+      { "instante": fecha1, "valor": 15 },
+      { "instante": fecha2, "valor": 15 },
+      { "instante": fecha3, "valor": 15 }, // Agregar una hora al inicio
+      { "instante": fecha4, "valor": 15 }  // Agregar dos horas al inicio
+    ];
+
+    // Transforma los datos al formato que Highcharts espera
+    seriesData = datos.map(function (dato) {
+      return [dato.instante, dato.valor];
+    });
+    console.log(seriesData);
+  }
+  var chartOptions = {
+    chart: {
+      type: "line",
+    },
+    credits: {
+      enabled: false,
+    },
+    title: {
+      text: "Histórico",
+    },
+    xAxis: {
+      type: "datetime",
+      title: {
+        text: "Fecha",
+      },
+    },
+    yAxis: [
+      {
+        title: {
+          text: "Valor",
+        }
+      },
+      {
+        title: {
+          text: "Valor",
+        },
+        opposite: true,
+      },
+    ],
+    series: [{
+      name: 'Datos',
+      data: seriesData
+    }],
+    turboThreshold: 5000,
+  };
+  Highcharts.chart("highchart-graph", chartOptions);
+}
 
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+const leyenda2 = document.getElementById('leyenda2');
+
+function updateLeyenda() {
+  // Asegúrate de que leyenda2 es el id correcto
+  leyenda2.innerHTML = ''; // Limpiar la capa leyenda2
+
+  // Función auxiliar para crear y añadir un item a la leyenda
+  function addLegendItem(content, category) {
+    const legendItem = document.createElement('div');
+    legendItem.classList.add('legend2_item');
+    legendItem.innerHTML = `<label class='checkbox_label_leyenda2'>${content}</label>`;
+    category.appendChild(legendItem);
+  }
+
+  // Crear contenedores para cada categoría
+  const categories = {};
+
+  // Iterar sobre los checkboxes y agregar los elementos seleccionados a la leyenda
+  checkboxes.forEach(function (checkbox) {
+    if (checkbox.id === "item1-1" || checkbox.id === "item1-2" || checkbox.id === "item2-2" || checkbox.id === "item2-1" || checkbox.id === "item2-3") {
+      if (checkbox.checked) {
+        const label = document.querySelector(`label[for="${checkbox.id}"]`);
+        if (label) {
+          const categoryName = label.textContent.trim(); // Usar el texto del label como nombre de la categoría
+          if (!categories[categoryName]) {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('legend_category');
+            categoryDiv.innerHTML = `<h4>${categoryName}</h4>`;
+            leyenda2.appendChild(categoryDiv);
+            categories[categoryName] = categoryDiv;
+          }
+
+          // Agregar el propio checkbox a la leyenda
+          addLegendItem(label.innerHTML, categories[categoryName]);
+
+          // Agregar los sub-checkboxes si los hay
+          const subCheckboxes = document.querySelectorAll(`input[type="checkbox"][id^="${checkbox.id}-"]`);
+          subCheckboxes.forEach(function (subCheckbox) {
+            if (subCheckbox.checked) {
+              const subLabel = document.querySelector(`label[for="${subCheckbox.id}"]`);
+              if (subLabel) {
+                addLegendItem(subLabel.innerHTML, categories[categoryName]);
+              }
+            }
+          });
+
+          // Agregar los legend-items para cultivos
+          if (checkbox.id === 'item2-2' && checkbox.checked) { // Suponiendo que el id del checkbox de cultivos es 'item2-2'
+            const legendItems = document.querySelectorAll('.legend-item');
+            legendItems.forEach(function (legendItem) {
+              addLegendItem(legendItem.outerHTML, categories[categoryName]);
+            });
+          }
+        }
+      }
+    }
+  });
+}
 
 checkboxes.forEach(function (checkbox) {
   checkbox.addEventListener("change", function () {
+    updateLeyenda();
+
     if (this.checked) {
+
       switch (this.value) {
-        case "item1-1":
+        case "item1-1": //Contadores
           var checkboxCounter =
             document.getElementsByClassName("checkbox_counter");
           for (var i = 0; i < checkboxCounter.length; i++) {
@@ -212,23 +379,11 @@ checkboxes.forEach(function (checkbox) {
           }
           paint_counter_bbdd();
           break;
-        case "item1-1-1":
-          paint_counter_bbdd();
-          break;
-        case "item1-1-2":
-          paint_counter_bbdd();
-          break;
-        case "item1-1-3":
-          paint_counter_bbdd();
-          break;
-        case "item1-1-4":
-          paint_counter_bbdd();
-          break;
-        case "item1-2":
-          paint_counter_bbdd();
+        case "item1-2": //Estaciones de bombeo
+          paint_counter();
           break;
         case "item2-1":
-          paint_counter_bbdd();
+          paint_counter();
           var checkboxValve = document.getElementsByClassName("checkbox_valve");
           for (var i = 0; i < checkboxValve.length; i++) {
             checkboxValve[i].checked = true;
@@ -241,29 +396,18 @@ checkboxes.forEach(function (checkbox) {
             checkboxValveList[0].style.opacity = 1;
           }
           break;
-        case "item2-1-1":
-          paint_counter_bbdd();
-          break;
-        case "item2-1-2":
-          paint_counter_bbdd();
-          break;
         case "item2-2":
-          paint_plots();
-          var checkboxPressure =
-            document.getElementsByClassName("checkbox_pressure");
-          for (var i = 0; i < checkboxPressure.length; i++) {
-            checkboxPressure[i].checked = true;
-            checkboxPressure[i].disabled = false;
-          }
-          var checkboxPressureList = document.getElementsByClassName(
-            "checkbox_pressure_list"
-          );
-          if (checkboxPressureList.length > 0) {
-            checkboxPressureList[0].style.opacity = 1;
-          }
+          // Seleccionar todos los cultivos
+          $('.legend-item').each(function () {
+            $(this).addClass('selected');
+            var cultivo = $(this).data('value');
+            if (!selectedCultivos.includes(cultivo)) {
+              selectedCultivos.push(cultivo);
+            }
+          });
+          paint_cultivos();
           break;
         case "item2-3":
-          console.log("Entra");
           paint_pipelines();
           // Habilitar el checkbox "item2.2"
           var checkboxPipelines =
@@ -297,12 +441,6 @@ checkboxes.forEach(function (checkbox) {
           }
           delete_counter();
           break;
-        case "item1-1-1":
-          delete_counter();
-          break;
-        case "item1-1-4":
-          delete_counter();
-          break;
         case "item1-2":
           delete_counter();
           break;
@@ -320,26 +458,13 @@ checkboxes.forEach(function (checkbox) {
           }
           delete_counter();
           break;
-        case "item2-1-1":
-          delete_counter();
-          break;
-        case "item2-1-2":
-          delete_counter();
-          break;
         case "item2-2":
-          var checkboxPressure =
-            document.getElementsByClassName("checkbox_pressure");
-          for (var i = 0; i < checkboxPressure.length; i++) {
-            checkboxPressure[i].checked = false;
-            checkboxPressure[i].disabled = true;
-          }
-          var checkboxPressureList = document.getElementsByClassName(
-            "checkbox_pressure_list"
-          );
-          if (checkboxPressureList.length > 0) {
-            checkboxPressureList[0].style.opacity = 0.5;
-          }
-          delete_plots();
+          // Deseleccionar todos los cultivos
+          $('.legend-item').each(function () {
+            $(this).removeClass('selected');
+          });
+          selectedCultivos = [];
+          delete_cultivos();
           break;
         case "item2-3":
           delete_pipelines();
@@ -645,7 +770,7 @@ function delete_counter() {
 }
 
 function paint_valve() {
-  fetch("/json/mapa_sig.json")
+  fetch("/json/node.json")
     .then((response) => response.json())
     .then(function (data) {
       var countersArray = Array.from(data);
@@ -713,48 +838,137 @@ function paint_valve() {
       console.log("Error:", error);
     });
 }
+function getCultivoColor(cultivo) {
+  switch (cultivo) {
+    case "Ajos":
+      return "#ff5733";
+    case "Árboles":
+      return "#ffc300";
+    case "Melón":
+      return "#32a852";
+    case "Guisantes":
+      return "#e0a218";
+    case "Huerta":
+      return "#9f39b5";
+    case "Alfalfa":
+      return "#1f96e9";
+    case "Sandía":
+      return "#ffd700";
+    case "Veza":
+      return "#adff2f";
+    case "Olivo":
+      return "#dda0dd";
+    case "Tomate":
+      return "#800080";
+    case "Vallardo":
+      return "#4b0082";
+    case "Espárrago":
+      return "#c0c0c0";
+    case "Trigo":
+      return "#2e8b57";
+    case "Maíz":
+      return "#20b2aa";
+    case "Chalet":
+      return "#ff1493";
+    default:
+      return "#00ff7f"; // Por defecto, No definido
+  }
+}
+$(document).ready(function () {
+  $('.legend-item2').click(function () {
+    $(this).toggleClass('selected');
+  });
+});
 
-function paint_plots() {
+var selectedCultivos = [];
+
+$(document).ready(function () {
+  $('.legend-item').click(function () {
+    $(this).toggleClass('selected');
+    var cultivo = $(this).data('value');
+    if ($(this).hasClass('selected')) {
+      if (!selectedCultivos.includes(cultivo)) {
+        selectedCultivos.push(cultivo);
+      }
+    } else {
+      selectedCultivos = selectedCultivos.filter(function (item) {
+        return item !== cultivo;
+      });
+    }
+    paint_cultivos(); // Llamar a la función de pintura cada vez que se selecciona/deselecciona un cultivo
+  });
+
+  // Inicializar la función de pintura al cargar la página
+  paint_cultivos();
+});
+
+function paint_cultivos() {
   var plotCoords = [];
-  fetch("json/parcelas.json")
+  fetch("json/cultivos.json")
     .then((response) => response.json())
     .then(function (data) {
+      // Limpiar los polígonos existentes antes de pintar nuevos
+      polygonsCultivosArray.forEach(function (polygon) {
+        polygon.setMap(null);
+      });
+      polygonsCultivosArray = [];
+
       var plotsArray = Array.from(data);
       plotsArray.forEach(function (plot) {
-        if (plot.nSecuencial == 1) {
-          if (plotCoords.length > 0) {
-            // Declaración y asignación de la variable pressureValor
-            var pressureValor = 16;
-            // Llamada a la función adjust_pressure_color pasando pressureValor como argumento
-            var pressureColor = adjust_pressure_color(pressureValor);
-            // Crear el área poligonal para la parcela
-            var polygon = new google.maps.Polygon({
-              paths: plotCoords,
-              strokeColor: "#FCAE1E", // Color del borde del área
-              strokeOpacity: 0.8, // Opacidad del borde del área
-              strokeWeight: 1, // Grosor del borde del área
-              fillColor: pressureColor, // Color de relleno del área
-              fillOpacity: 0.35, // Opacidad del relleno del área
-            });
-            // Agregar evento de clic al polígono
-            polygon.addListener("click", function (event) {
-              show_infowindow_plots(event, plot.ideParcela);
-            });
-
-            // Agregar el área poligonal al mapa
-            polygon.setMap(myMap);
-            // Agregar el polígono al arreglo
-            polygonsArray.push(polygon);
-            // Guardar el infowindow asociado al polígono de parcela
-            infowindowsPlots.set(polygon, infowindow);
+        if (selectedCultivos.includes(plot.cultivo)) { // Filtrar por cultivos seleccionados
+          if (plot.nSecuencial == 1) {
+            if (plotCoords.length > 0) {
+              var cultivoColor = getCultivoColor(plot.cultivo);
+              var polygon = new google.maps.Polygon({
+                paths: plotCoords,
+                strokeColor: "#FCAE1E",
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: cultivoColor,
+                fillOpacity: 0.35,
+              });
+              polygon.addListener("click", function (event) {
+                document.getElementById("informacion").style.display = "none";
+                var content = '<div class="campo-container">' +
+                  '<div class="campo-header">' +
+                  '<h3 style="color: #009bdb; font-weight:bold">Parcela ' + plot.ideParcela + '</h3>' +
+                  '</div>' +
+                  '<div class="campo-tab-content active" id="datos">' +
+                  '   <div class="campo-content">' +
+                  '       <div class="column">' +
+                  '           <p id="hectareasInfo">Hectáreas: 1</p>' +
+                  '          <p id="cultivoInfo">Cultivo: '+plot.cultivo+'</p>' +
+                  '      </div>' +
+                  '      <div class="column">' +
+                  '          <p>Explotación (PAC): Finca 2</p>' +
+                  '          <p>Recintos SIGPAC: 46196:0:0:31:108:3</p>' +
+                  '     </div>' +
+                  '  </div>' +
+                  '</div>' +
+                  '                          <div class="campo-tab-content" id="cultivo">Contenido de Cultivo</div>' +
+                  '<div class="campo-tab-content" id="actividades">Contenido de Actividades</div>' +
+                  '<div class="campo-buttons">' +
+                  '   <button class="campo-tab-button" data-tab="datos" onclick="showSubTab("datos")"><i class="fas fa-info-circle"></i> Datos' +
+                  '       del campo</button>' +
+                  '    <button class="campo-tab-button" data-tab="cultivo"' +
+                  '        onclick="showSubTab("cultivo)"><i class="fas fa-seedling"></i> Cultivo</button>' +
+                  '    <button class="campo-tab-button" data-tab="actividades"' +
+                  '        onclick="showSubTab(actividades)"><i class="fas fa-tasks"></i> Histórico</button>' +
+                  ' </div>' +
+                  ' </div>';
+                show_infowindow_plots(event, content);
+              });
+              polygon.setMap(myMap);
+              polygonsCultivosArray.push(polygon);
+              infowindowsPlots.set(polygon, infowindow);
+            }
+            plotCoords = [];
           }
-          plotCoords = []; // Array para almacenar las coordenadas de los puntos de la parcela
+          plotCoords.push({
+            lat: parseFloat(plot.coorX),
+            lng: parseFloat(plot.coorY),
+          });
         }
-        // Obtener las coordenadas de los puntos de la parcela y agregarlas al array plotCoords
-        plotCoords.push({
-          lat: parseFloat(plot.coorX),
-          lng: parseFloat(plot.coorY),
-        });
       });
     })
     .catch((error) => {
@@ -783,7 +997,7 @@ function show_infowindow_plots(event, content) {
   infowindow.open(myMap);
 }
 
-function delete_plots() {
+function delete_cultivos() {
   // Eliminar los polígonos de parcelas del mapa y sus correspondientes infowindows
   polygonsArray.forEach(function (polygon) {
     if (polygon instanceof google.maps.Polygon) {
@@ -821,6 +1035,7 @@ function paint_pipelines() {
             });
             // Agregar evento de clic al polígono
             polyline.addListener("click", function (event) {
+              document.getElementById("informacion").style.display = "none";
               mostrar_infowindow_tuberias(event, pipeline.ideEle);
             });
             // Agregar la línea al mapa
@@ -894,8 +1109,182 @@ function add_arrowhead(polyline) {
     ],
   });
 }
+
+function toggleLeyenda() {
+  var leyenda = document.getElementById('leyenda'); // Asegúrate de que este es el ID de tu capa de leyenda
+  var button = document.getElementById('toggle-button');
+  var icon = document.getElementById('leyenda-icon');
+
+  if (leyenda.style.display === 'none' || leyenda.style.display === '') {
+    icon.classList.add('fa-eye-slash');
+    icon.classList.remove('fa-eye');
+    button.querySelector('span').textContent = 'Leyenda';
+    leyenda.style.display = 'block'; // Muestra la capa leyenda
+  } else {
+    icon.classList.add('fa-eye');
+    icon.classList.remove('fa-eye-slash');
+    button.querySelector('span').textContent = 'Leyenda';
+    leyenda.style.display = 'none'; // Oculta la capa leyenda
+  }
+}
+
+function toggleCapas() {
+  var capas = document.getElementById('capas'); // Asegúrate de que este es el ID de tu capa de capas
+  var button = document.getElementById('toggle-capas-button');
+  var icon = document.getElementById('capas-icon');
+
+  if (capas.style.display === 'none' || capas.style.display === '') {
+    icon.classList.add('fa-layer-group');
+    icon.classList.remove('fa-layer-minus');
+    button.querySelector('span').textContent = 'Capas';
+    capas.style.display = 'block'; // Muestra la capa capas
+  } else {
+    icon.classList.add('fa-layer-minus');
+    icon.classList.remove('fa-layer-group');
+    button.querySelector('span').textContent = 'Capas';
+    capas.style.display = 'none'; // Oculta la capa capas
+  }
+}
+
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tab-content");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// Default open tab
+document.addEventListener("DOMContentLoaded", function () {
+  /*const availableInformationLabel = document.createElement('div');
+  availableInformationLabel.className = 'available_information_label';
+  const HTMLAvailableInformationLabelContent = `
+      <div class='HTML_available_information_content_container'>
+          <div class='HTML_available_information_content_container_type'>
+              <label class='HTML_available_information_content_label_type'>
+                  Información Disponible:
+              </label>
+              <span id='HTML-available-information-content-span-type' class='HTML_available_information_content_span_type'>    
+              </span>
+          </div>
+      </div>
+  `;
+  availableInformationLabel.innerHTML = HTMLAvailableInformationLabelContent;
+  myMap.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(availableInformationLabel);*/
+  // Create the sidebar element
+  var sidebar = document.getElementById('sidebar');
+
+  // Create the tab-content element
+  var tabContent = document.getElementById('tab-content');
+
+  // Add the sidebar to the map
+  myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(sidebar);
+
+  // Add the tab-content to the map
+  myMap.controls[google.maps.ControlPosition.LEFT_TOP].push(tabContent);
+
+
+  document.getElementsByClassName('tablink')[0].click();
+  updateLeyenda();
+
+  // Script para el acordeón
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.parentElement;
+      const content = item.querySelector('.accordion-content');
+      const icon = header.querySelector('.fa-angle-down');
+
+      if (content.style.display === 'block') {
+        content.style.display = 'none';
+      } else {
+        document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('.accordion-header .fa-angle-down').forEach(i => i.style.transform = 'rotate(0deg)');
+        content.style.display = 'block';
+      }
+    });
+  });
+});
+
+
+function exportTableToExcel(tableID, filename = '') {
+  var downloadLink;
+  var dataType = 'application/vnd.ms-excel';
+  var tableSelect = document.getElementById(tableID);
+  var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+  // Specify file name
+  filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+  // Create download link element
+  downloadLink = document.createElement("a");
+
+  document.body.appendChild(downloadLink);
+
+  if (navigator.msSaveOrOpenBlob) {
+    var blob = new Blob(['ufeff', tableHTML], {
+      type: dataType
+    });
+    navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    // Create a link to the file
+    downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+    // Setting the file name
+    downloadLink.download = filename;
+
+    //triggering the function
+    downloadLink.click();
+  }
+}
+
+function exportDataToExcel(data, filename = '') {
+  const header = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Sheet 1</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>';
+  const footer = '</body></html>';
+  let table = '<table>';
+
+  // Add table headers
+  const headers = Object.keys(data[0]);
+  table += '<tr>';
+  headers.forEach(header => {
+    table += `<th>${header}</th>`;
+  });
+  table += '</tr>';
+
+  // Add table rows
+  data.forEach(row => {
+    table += '<tr>';
+    headers.forEach(header => {
+      table += `<td>${row[header]}</td>`;
+    });
+    table += '</tr>';
+  });
+
+  table += '</table>';
+  const blob = new Blob([header + table + footer], {
+    type: 'application/vnd.ms-excel'
+  });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${filename}.xls`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 //Cómo realizo una animación donde al carga la página se vea el globo terráqueo y haga un zoom progresivo hasta situarse en las coordenadas lat: 39.144025, lng: -3.094583 sobre mi mapade google, para el inicio de la animación otra biblioteca distintaa la de google?
 // function hide_arrowhead {
 
 // }
+
+
+
+
 

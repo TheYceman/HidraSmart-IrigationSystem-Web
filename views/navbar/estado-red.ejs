@@ -1,0 +1,102 @@
+<%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/socialbar.css">
+    <script src="/scripts/utils.js" defer></script>
+    <script src="/scripts/navbar.js" defer></script>
+     <link rel="stylesheet" href="/styles/estado-red.css">
+    <script src="/scripts/estado-red.js" defer></script>
+    </head>
+    <body>
+        <main>
+            <h2 class="titulo_seccion">
+            </h2>
+            <div class="tab-labels">
+                <div class="tab-label active" data-tab="medidas" onclick="showTab('medidas')">Medidas
+                </div>
+                <div class="tab-label" data-tab="estado" onclick="showTab('estado')">Estado Hidráulico</div>
+                <!-- Agrega más pestañas según sea necesario -->
+            </div>
+            <!-- Contenido de las pestañas -->
+            <div class="tab-content active" id="medidas">
+                <div id="data-viewer">
+                    <section id="mapa_red">
+                    </section>
+                    <section id="filtros">
+                        <article id="selectores">
+                            <div>
+                                <label for="sector-dropdown">Sectores</label>
+                                <select id="sector-dropdown" onchange="updateElements()">
+                                    <option selected value="0">Todos</option>
+                                    <option value="S1">Sector 1</option>
+                                    <option value="S2">Sector 2</option>
+                                    <option value="S3">Sector 3</option>
+                                    <option value="S4">Sector 4</option>
+                                    <option value="S5">Sector 5</option>
+                                    <option value="S6">Sector 6</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="tipo-dropdown">Tipo</label>
+                                <select id="tipo-dropdown" onchange="updateElements()">
+                                    <option selected value="todos">Todos</option>
+                                    <option value="caudalimetro">Caudalímetro</option>
+                                    <option value="nivel">Sensor de nivel</option>
+                                    <option value="presion">Sensor de presión</option>
+                                    <option value="valvula">Válvula</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="fecha-inicio">Inicio</label>
+                                <input type="datetime-local" id="fecha-inicio" max="<%= today %>"
+                                    onchange="updateTime(this)" />
+                            </div>
+                            <div>
+                                <label for="fecha-fin">Fin</label>
+                                <input type="datetime-local" id="fecha-fin" max="<%= today %>"
+                                    onchange="updateTime(this)" />
+                            </div>
+                            <div class="button-container">
+                                <button class="btn" onclick="paintGraph()"><i class="fas fa-paint-brush"></i> Cargar datos</button>
+                                <button class="btn" onclick="exportTableToExcel('tablaDatos','Datos consultados')"><i class="fas fa-file-excel"></i> Exportar a Excel</button>
+                            </div>
+                        </article>
+                        <article id="lista-elementos">
+                            <ul>
+                                <% for (element of geData) { %>
+                                    <li id="<%= element.id %>" data-id="<%- element.id %>" data-sector="<%= element.sector %>"
+                                        data-tipo="<%= element.tipo %>" data-coorX="<%- element.coorX %>"
+                                        data-coorY="<%- element.coorY %>" onclick="selectElement(this)">
+                                        <%= element.id %>
+                                    </li>
+                                    <% } %>
+                            </ul>
+                        </article>
+
+                    </section>
+                    <section id="highchart-graph"></section>
+                    <section id="tablas">
+                        <div class="table-container">
+                            <table id="tablaDatos">
+                                <thead>
+                                    <tr>
+                                        <th>Elemento</th>
+                                        <th>Fecha</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Aquí se generarán dinámicamente las filas de la tabla -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="tab-content" id="estado">
+                <%- include('../components/estado-red/map-view.ejs', { todosLosContadores: todosLosContadores }) %>
+            </div>
+        </main>
+        <%- include('../components/common/footer.ejs') %>
+    </body>
+
+    </html>

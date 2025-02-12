@@ -10,59 +10,137 @@ class Usuario {
     this.rol = usuario.rol; //rol - grupo
     this.email = usuario.email; //email - email
     this.phone = usuario.phone; //phone - phone
-    this.changecode = usuario.changecode; //email - email
-    this.bbdd = usuario.bbdd; //phone - phone
+    this.changecode = usuario.changecode; //changecode - emchangecode
+    this.bbdd = usuario.bbdd; //bbdd - bbdd
+    this.owner = usuario.owner; //owner - owner
   }
 
-  static async getAll() {
-    const data = await runQuery("SELECT * FROM users;");
-    const usuario = data.map((usuario) => new Usuario(usuario));
+  static async getAll(req, res) {
+    let queryString = "";
+    if (req.session.user[0].rol == 'userp') {
+      queryString = "SELECT * FROM users WHERE username<>'HidraSmart' AND owner =?;";
+    }
+    else {
+      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+        queryString = "SELECT * FROM users WHERE username<>'HidraSmart';";
+      }
+    }
+    const values = [req.session.user[0].idusers];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const usuario = results.data.rows.map((usuario) => new Usuario(usuario));
     return usuario;
+
   }
 
-  static async getFilteredData(login) {
-    const data = await runQuery(
-      `SELECT * FROM users WHERE username="${login}";`
-    );
-    console.log(
-      `SELECT * FROM users WHERE username="${login}";`
-    );
-    return data;
+  static async getFilteredData(req, res, login) {
+
+    let queryString = "";
+    if (req.session.user[0].rol == 'userp') {
+      queryString = "SELECT * FROM users WHERE username=? AND username<>'HidraSmart' AND owner =?;";
+    }
+    else {
+      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+        queryString = "SELECT * FROM users WHERE username=? AND username<>'HidraSmart';";
+      }
+    }
+
+    const values = [login, req.session.user[0].idusers];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
+
+    return result.data.rows;
   }
-  static async getFilteredDataGrupo(idGrupo) {
-    const data = await runQuery(
-      `SELECT * FROM users WHERE rol="${idGrupo}";`
-    );
-    console.log(
-      `SELECT * FROM users WHERE rol="${idGrupo}";`
-    );
-    return data;
+  static async getFilteredDataGrupo(req, res, idGrupo) {
+
+    let queryString = "";
+    if (req.session.user[0].rol == 'userp') {
+      queryString = "SELECT * FROM users WHERE rol=? AND username<>'HidraSmart' AND owner =?;";
+    }
+    else {
+      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+        queryString = "SELECT * FROM users WHERE rol=? AND username<>'HidraSmart';";
+      }
+    }
+    const values = [idGrupo, req.session.user[0].idusers];
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
+
+    return result.data.rows;
   }
 
-  static async getPerPage(perPage, offset) {
-    const data = await runQuery("SELECT * FROM users LIMIT " + perPage + " OFFSET " + offset + ";");
-    const usuarios = data.map((usuario) => new Usuario(usuario));
+  static async getPerPage(req, res, perPage, offset) {
+
+    let queryString = "";
+    const values = [];
+    if (req.session.user[0].rol == 'userp') {
+      queryString = "SELECT * FROM users WHERE username<>'HidraSmart' AND owner=" + req.session.user[0].idusers + " LIMIT " + perPage + " OFFSET " + offset;
+    }
+    else {
+      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+        queryString = "SELECT * FROM users WHERE username<>'HidraSmart' LIMIT " + perPage + " OFFSET " + offset;
+      }
+    }
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const usuarios = results.data.rows.map((usuario) => new Usuario(usuario));
     return usuarios;
   }
 
-  static async getCountAll() {
-    const data = await runQuery("SELECT count(*) as total FROM users;");
-    const geTotal = data.map((total) => total);
+  static async getCountAll(req, res) {
+
+    let queryString = "";
+    let values = [];
+    if (req.session.user[0].rol == 'userp') {
+      queryString = "SELECT count(*) as total FROM users WHERE username<>'HidraSmart' AND owner =?;";
+      values = [req.session.user[0].idusers];
+    }
+    else {
+      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+        queryString = "SELECT count(*) as total FROM users WHERE username<>'HidraSmart'";
+        values = [];
+      }
+    }
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const geTotal = results.data.rows.map((total) => total);
     console.log(geTotal[0].total);
     return geTotal[0].total;
   }
 
-  static async getAllUsuarios() {
-    const data = await runQuery("SELECT * FROM users;");
-    const usuarios = data.map((usuario) => new Usuario(usuario));
+  static async getAllUsuarios(req, res) {
+
+    let queryString = "";
+    if (req.session.user[0].rol == 'userp') {
+      queryString = "SELECT * FROM users WHERE username<>'HidraSmart' AND owner =?;";
+    }
+    else {
+      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+        queryString = "SELECT * FROM users WHERE username<>'HidraSmart';";
+      }
+    }
+    const values = [req.session.user[0].idusers];
+    const database = 'aplicaciones_web';
+    const results = await runQuery(queryString, values, database);
+    const usuarios = results.data.rows.map((usuario) => new Usuario(usuario));
     return usuarios;
   }
 
-  static async getFilteredData(login) {
-    const data = await runQuery(
-      `SELECT * FROM users WHERE login=${login}";`
-    );
-    return data;
+  static async getFilteredData(req, res, login) {
+    let queryString = "";
+    if (req.session.user[0].rol == 'userp') {
+      queryString = `SELECT * FROM users WHERE login="${login}" AND username<>'HidraSmart' AND owner =?;`
+    }
+    else {
+      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+        queryString = `SELECT * FROM users WHERE login="${login}" AND username<>'HidraSmart';`
+      }
+    }
+    const values = [login, req.session.user[0].idusers];
+
+    const database = 'aplicaciones_web';
+    const result = await runQuery(queryString, values, database);
+    return result.data.rows;;
   }
 }
 

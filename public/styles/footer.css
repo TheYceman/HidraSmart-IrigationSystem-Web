@@ -1,118 +1,37 @@
 
-  html {
-    font-family: "Nunito Sans", sans-serif;
-  
-    --color-bg: rgb(226, 234, 238);
-    --color-bg-darker: rgb(191, 198, 201);
-    /* --color-primary-bg: rgb(225, 244, 253); */
-    --color-primary-contrast: rgb(225, 244, 253);
-    /* --color-primary-contrast: rgb(211, 229, 236); */
-    --color-primary-300: rgb(48, 186, 245);
-    --color-primary-400: rgb(0, 155, 219);
-    --color-primary-600: rgb(19, 113, 221);
-    --color-primary-800: rgb(19, 22, 221);
-  
-    --color-alert-300: rgb(245, 127, 127);
-    --color-alert-500: red;
-  
-    --box-shadow-default: 2px 2px 8px rgba(0, 0, 0, 0.6);
-  
-    --height-max-space: calc(100% - 7rem);
-  
-    height: 100%;
-  }
-
 /* Estilos para el footer */
-.footer {
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   background-color: var(--color-primary-400);
   color: #fff;
-  padding: 24px 0;
-  font-size: 14px;
+  text-align: center;
+  padding: 1px;
+  font-size: 1.35vh;
+  height: 3.3vh;
+  
 }
 
-.container-footer {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 1800px) {
+  footer {
+    font-size: 1.65vh;
+    height: 4vh;
+  }
 }
 
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.footer-content p{
-  margin: 0;
-}
-
-.footer-left, .footer-right {
-  flex: 1;
-  padding: 0 10px;
-}
-
-.footer h4 {
-  font-size: 18px;
-  margin-top: 0;
-  margin-bottom: 2px;
-}
-
-ul {
+footer nav ul {
   list-style: none;
   padding: 0;
-  margin: 0;
 }
 
-ul li {
-  margin-bottom: 0;
+footer nav ul li {
+  display: inline;
+  margin-right: 20px; /* Espacio entre opciones */
 }
 
-a {
+footer nav ul li a {
   color: #fff;
   text-decoration: none;
 }
-
-a:hover {
-  text-decoration: underline;
-}
-
-hr {
-  border-color: #cfcfcf;
-}
-
-.copyright {
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 0;
-}
-.containerHead {
-  display: flex; /* Establece el contenedor como flex */
-  flex-direction: row; /* Dirección de los elementos: fila (horizontal) */
-}
-.containerHead2 {
-  display: flex; /* Establece el contenedor como flex */
-  flex-direction: row; /* Dirección de los elementos: fila (horizontal) */
-  /*background-color: red;*/
-  width: 200px;
-  display: inline;
-  margin-top: 1px;
-  color: var(--color-bg);
-}
-.btn_access {
-  padding: 1px 3px;
-  font: inherit;
-  padding: 5px;
-  font-size: 0.80rem;
-  background-color: var(--color-bg);
-  color: var( --color-bg-darker);
-  /*border-radius: 7px;*/
-  border: none;
-  margin: 8px 4px;
-  width: 110px;
-}
-
-.btn_access:hover {
-  background-color: var(--color-primary-300);
-}
-
-

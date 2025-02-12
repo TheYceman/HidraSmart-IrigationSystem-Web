@@ -1,7 +1,7 @@
 /****** Navbar header ******/
 #navbar {
     width: 100%;
-    height: 3rem;
+    height: 2.5rem;
     display: flex;
     flex-direction: row;
     overflow: hidden;
@@ -9,7 +9,7 @@
   
     --width-icon: 50px;
     --margin-icon: 5px;
-    --height-options-bar: 1.8rem;
+    --height-options-bar: 2rem;
   }
   
   #logo {
@@ -84,38 +84,39 @@
   /********** Navbar icons - Id **********/
   #icons {
     position: absolute;
-    width: 77%;
+    width: 85%;
     height: 35px;
     display: flex;
     flex-direction: row;
     overflow: hidden;
     align-items: flex-end;
   }
-
-
-  
+ 
   #icon-home {
     background-image: url("/images/navbar/inicio_white.png");
     z-index: 1;
+    height:35px;
   }
   
   #icon-home.active,
   #icon-home::before {
     background-image: url("/images/navbar/inicio_blue.png");
+    margin-left: 1.05%;
   }
   
   #icon-herramientas {
     position: relative;
     z-index: 2;
     background-image: url("/images/navbar/herramientas_white.png");
+    height:35px;
   }
   
   #icon-herramientas.left {
-    left: 0;
+    left: 1px;
   }
   
   #icon-herramientas.right {
-    left: calc(87.5% - var(--width-icon) * 3 );
+    left: calc(85.5% - var(--width-icon) * 3 );
   }
   
   #icon-herramientas.active,
@@ -124,17 +125,18 @@
   }
   
   #icon-gestores {
+    height: 35px;
     position: relative;
     z-index: 3;
     background-image: url("/images/navbar/gestores_white.png");
   }
   
   #icon-gestores.left {
-    left: 0;
+    left: 1px;
   }
   
   #icon-gestores.right {
-    left: calc(87.5% - var(--width-icon) * 3);
+    left: calc(87% - var(--width-icon) * 3);
   }
   
   #icon-gestores.active,
@@ -184,14 +186,14 @@
   
   /****** Navbar Options - Class ******/
   .menu-options {
-    padding: 0;
+    padding: 1px;
     margin: 0;
     display: flex;
     flex-direction: row;
     list-style: none;
     position: relative;
     justify-content: space-around;
-    min-width: 100%;
+    min-width: 99%;
   }
   
   .menu-options li {
@@ -204,13 +206,13 @@
   
   .menu-options li a {
     padding: 5px;
-    /* margin: 5px; */
-    font-size: 0.6vw;
-    /* height: 2rem; */
-    width: 100%;
-    min-width: 5vw;
+    /*margin: 12px; */
+    font-size: 0.8vw;
+    height: 2rem;
+    width: 90%;
+    /*min-width: 5vw;*/
     display: flex;
-    position: relative;
+    /*position: relative;*/
     top: 6px;
     text-decoration: none;
     text-transform: uppercase;
@@ -224,6 +226,7 @@
     text-align: center;
     transition: top 0.2s, box-shadow 0.2s;
     background-color: var(--color-primary-400);
+    font-family: "Nunito Sans", sans-serif;
   }
   
   .menu-options a:hover,
@@ -239,4 +242,25 @@
       font-size: 45px;
     }
   }
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 600px) {
+  .menu-options li a {
+    font-size: 1vw; /* Tamaño de fuente relativo al ancho de la ventana para pantallas pequeñas */
+  }
+}
+
+/* Ajustes para pantallas medianas */
+@media (min-width: 601px) and (max-width: 1200px) {
+  .menu-options li a {
+    font-size: 1vw; /* Tamaño de fuente relativo al ancho de la ventana para pantallas medianas */
+  }
+}
+
+/* Ajustes para pantallas muy grandes */
+@media (min-width: 1201px) {
+  .menu-options li a {
+    font-size: 0.7vw; /* Tamaño de fuente relativo al ancho de la ventana para pantallas grandes */
+  }
+}
   

@@ -3,7 +3,7 @@ const Rol = require("../models/rol.model");
 const { runQuery } = require("../data/bbdd-connector");
 
 async function getGeDataRol(req, res) {
-  const geData = [...(await Rol.getAll())];
+  const geData = [...(await Rol.getAll(req, res))];
   return geData;
 }
 
@@ -12,9 +12,9 @@ async function getTotalPagesRoles(req, res) {
 
   pages = 1;
   const itemsPerPage = 10;
-  const number_registers = await Rol.getCountAll();
+  const number_registers = await Rol.getCountAll(req, res);
 
-  console.log("number_registers " + number_registers);
+  //console.log("number_registers " + number_registers);
 
   if (number_registers > 0) {
     pages = number_registers / itemsPerPage;
@@ -29,7 +29,7 @@ async function getGeDataRolesPerPage(req, res) {
   const page = parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 10; // Cantidad de elementos por página
   const offset = (page - 1) * itemsPerPage;
-  const geData = [...(await Rol.getPerPage(itemsPerPage, offset))];
+  const geData = [...(await Rol.getPerPage(req, res, itemsPerPage, offset))];
 
   /*const page =  parseInt(req.query.page) || 1; // Página actual
   const itemsPerPage = 20; // Registros por página
@@ -46,7 +46,7 @@ async function getGeDataRolesPerPage(req, res) {
 async function getDataRol(req, res) {
   const params = req.query;
   let result = await Rol.getFilteredData(
-    params.ideSector
+    req, res, params.ideSector
   );
   res.json(result);
   // pasar a json el resultado de la linea anterior y añadir a la response
@@ -62,12 +62,18 @@ async function updateRol(req, res) {
   const perRed = req.body.perRed.trim();
   const perDemandas = req.body.perDemandas.trim();
   const perRiego = req.body.perRiego.trim();
+  const perEquipos = req.body.perEquipos.trim();
 
-  console.log("updateRol " + login);
+  //console.log("updateRol " + nombre);
 
-  const data = await runQuery(`UPDATE grupos_usuario SET perUsu = '${perUsu}',perVisor = '${perVisor}',perMeteo = '${perMeteo}',perRed = '${perRed}',perDemandas = '${perDemandas}',perRiego = '${perRiego}' WHERE nombre = '${nombre}';`);
-  console.log(data);
-  return data;
+  const queryString = `UPDATE grupos_usuario SET perUsu = ?,perVisor = ?, perMeteo = ?, perRed = ?, perDemandas = ?, perRiego = ?, perRiego = ? WHERE nombre = ?;`;
+  const values = [perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos, nombre];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Rol actualizado con éxito");
+  }
+  return result.data.rows;;
 
 }
 
@@ -76,10 +82,15 @@ async function deleteRol(req, res) {
   // Obtener los parámetros del cuerpo de la solicitud
   const nombre = req.body.nombre.trim();
 
-  console.log("deleteRol " + nombre);
+  //console.log("deleteRol " + nombre);
 
-  const data = await runQuery(`DELETE FROM grupos_usuario WHERE nombre = '${nombre}';`);
-  console.log(data);
+  const queryString = `DELETE FROM grupos_usuario WHERE nombre = ?;`
+  const values = [nombre];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+  if (result.success) {
+    console.log("Rol borrado con éxito");
+  }
   res.redirect('/gestor-usuarios');
   //return data;
 
@@ -90,7 +101,7 @@ async function agregaRol(req, res) {
 
   if (!req.body)
     return res.sendStatus(400)
-  console.log(req.body);
+  //console.log(req.body);
 
   const nombre = req.body.nombre.trim();
   const perUsu = req.body.perUsu.trim();
@@ -99,12 +110,22 @@ async function agregaRol(req, res) {
   const perRed = req.body.perRed.trim();
   const perDemandas = req.body.perDemandas.trim();
   const perRiego = req.body.perRiego.trim();
+  const perEquipos = req.body.perEquipos.trim();
+  let propietario=0;
+  if (req.session.user[0].idusers) {
+    propietario=req.session.user[0].idusers;
+  }
 
-  const data = await runQuery(`INSERT INTO grupos_usuario (nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego) VALUES ('${nombre}', '${perUsu}', '${perVisor}', '${perMeteo}', '${perRed}', '${perDemandas}', '${perRiego}');`);
-  console.log(data);
+  const queryString = `INSERT INTO grupos_usuario (nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos, propietario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  const values = [nombre, perUsu, perVisor, perMeteo, perRed, perDemandas, perRiego, perEquipos, propietario];
+  const database = 'aplicaciones_web';
+  const result = await runQuery(queryString, values, database);
+
+  if (result.success) {
+    console.log("Rol insertado con éxito");
+  }
 
   res.redirect('/gestor-usuarios');
 }
-
 
 module.exports = { getGeDataRol, getDataRol, getGeDataRolesPerPage, updateRol, deleteRol, agregaRol, getTotalPagesRoles };

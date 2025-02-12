@@ -1,52 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" defer></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3/animate.min.css">
     <script src="/scripts/common/sweet-alert-config.js"></script>
     <link rel="stylesheet" href="/styles/common/sweet-alert-config.css">
 
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/scripts/utils/socketEvents.js"></script>
+
+    <script src="/scripts/common/common-functions.js"></script>
+    <script src="/scripts/common/contol-time-session.js"></script>
     <script src="/scripts/common/popup-session-closed.js"></script>
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxEYV_9I3yALB6JE1kanVt4qdvDURH3zg"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
     <link rel="stylesheet" href="/styles/head.css">
     <script src="/scripts/head.js" defer></script>
     <!-- <link rel="stylesheet" href="/styles/head-login.css"> -->
 
     <link rel="icon" href="<%= faviconPath %>" type="image/x-icon" />
-    
+
     <link rel="stylesheet" href="/styles/footer.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Inicio cabecera -->
-    <div class="head_web" id="head-web"style="background: none;">
+    <div class="head_web" id="head-web" style="background: none;">
         <div class="container_head" id="container-head">
-            <a class="container_head_image_logo" href="https://hidrasmart-mainselector.azurewebsites.net/" target="_blank">
-                <img class="head_image_logo" src="https://dev.azure.com/Hidralab/HidraSmart-Common_File/_apis/git/repositories/HidraSmart-Common_File/items?path=%2Fimages%2Flogo_water_texture.png">
+            <a class="container_head_image_logo" href="https://hidrasmart-mainselector.azurewebsites.net/"
+                target="_blank">
+                <img class="head_image_logo"
+                    src="https://dev.azure.com/Hidralab/HidraSmart-Common_File/_apis/git/repositories/HidraSmart-Common_File/items?path=%2Fimages%2Flogo_water_texture.png">
             </a>
             <div class="head_image_services_container">
-                <a class="head_image_services_subcontainer" href="/panel-aplicaciones">
-                    <img class="head_image_services" src = "<%= headImage %>">
+                <a class="head_image_services_subcontainer" href="/panel_aplicaciones">
+                    <img class="head_image_services" src="<%= headImage %>">
                 </a>
                 <%- include('./navbar.ejs') %>
             </div>
             <div class="head_image_logo_location_container">
                 <div class="head_button_container">
                     <a id="button-log-out">
-                        <img class="head_image_button_logout" title="Mi Perfil" src = "/images/head/icon/icon_profile.png">
+                        <img class="head_image_button_logout" title="Mi Perfil"
+                            src="/images/head/icon/icon_profile.png">
                     </a>
+                </div>
+                <div class="head_button_container">
+                    <a id="button-sinac" target="_blank" href="https://www.saihguadiana.com/Z12/E1-01/DATOS">
+                        <span class="head_text_button_sinac">SAIH</span>
+                    </a>
+
                 </div>
             </div>
         </div>
@@ -63,7 +91,7 @@
         </div>
         <div id="profile-body" class="profile_body">
             <a id="profile-body-left" class="profile_body_left" target="_blank" href="<%= headComunityUrl %>">
-                <img id="profile-image-logo-location" class="profile_image_logo_location" src = "<%= headComunityLogo %>">
+                <img id="profile-image-logo-location" class="profile_image_logo_location" src="<%= headComunityLogo %>">
             </a>
             <div id="profile-body-right" class="profile_body_right">
                 <div id="profile-body-right-name" class="profile_body_right_name">
@@ -75,6 +103,8 @@
             </div>
         </div>
     </div>
-<!-- Fin cabecera -->
+    <!-- Fin cabecera -->
 
-    <title><%= pageTitle %></title>
+    <title>
+        <%= pageTitle %>
+    </title>

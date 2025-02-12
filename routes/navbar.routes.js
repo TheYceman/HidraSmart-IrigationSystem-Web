@@ -41,7 +41,7 @@ const verificarCertificado = (req, res, next) => {
     //Fin verifica el certificado
 
     // Verifica si se proporcionó un certificado de cliente y si está autorizado
-    if (req.url === '/visor-datos' && req.client.authorized) {
+    if (req.url === '/estado-red' && req.client.authorized) {
       console.log('Certificado de cliente válido.');
       next(); // Continúa con la solicitud
     } else {
@@ -51,7 +51,7 @@ const verificarCertificado = (req, res, next) => {
   };
 
 router.get('/panel_aplicaciones', Auth.requireLogin, function (req, res, html) {
-    console.log(req.session);
+    //console.log(req.session);
     navbarController.getDashboard(req, res);
 });
 
@@ -62,9 +62,24 @@ router.get('/mapa-sig', Auth.requireLogin, function (req, res, html) {
     navbarController.getMapaSig(req, res);
 });
 
-router.get('/visor-datos', Auth.requireLogin, function (req, res, html) {
+router.get('/estado-red', Auth.requireLogin, function (req, res, html) {
     console.log(req.session);
-    navbarController.getVisorDatos(req, res);
+    navbarController.getEstadoRed(req, res);
+});
+
+router.get('/info-meteo', Auth.requireLogin, function (req, res, html) {
+    console.log(req.session);
+    navbarController.getInfoMeteo(req, res);
+});
+
+router.get('/gestor-cultivos', Auth.requireLogin, function (req, res, html) {
+    console.log(req.session);
+    navbarController.getDemandasCultivos(req, res);
+});
+
+router.get('/planificador-riego', Auth.requireLogin, function (req, res, html) {
+    console.log(req.session);
+    navbarController.getPlanRiego(req, res);
 });
 
 /********** Menú Gestores - Grupo 2 **********/
@@ -74,9 +89,9 @@ router.get('/gestor-equipos', Auth.requireLogin, function (req, res, html) {
     navbarController.getGestorEquipos(req, res);
 });
 
-router.get('/gestor-clientes', Auth.requireLogin, function (req, res, html) {
+router.get('/gestor-peticiones', Auth.requireLogin, function (req, res, html) {
     console.log(req.session);
-    navbarController.getGestorClientes(req, res);
+    navbarController.getGestorPeticiones(req, res);
 });
 
 router.get('/gestor-usuarios', Auth.requireLogin, function (req, res, html) {

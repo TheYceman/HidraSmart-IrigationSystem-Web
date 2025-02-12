@@ -1,5 +1,7 @@
 <%- include('../components/common/head.ejs', { pageTitle: pageTitle }) %>
     <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/socialbar.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
     <script src="/scripts/navbar.js" defer></script>
 
     <!-- <link rel="stylesheet" href="/styles/panel_aplicaciones.css"> -->
@@ -9,54 +11,59 @@
     <script src="/scripts/application-panel/application-panel.js" defer></script>
 
     </head>
-
     <body>
         <main>
-          <h2 class="titulo_seccion">
+            <h2 class="titulo_seccion">
             </h2>
             <div  class="container_application_panel">
                 <div id="drag-container">
                     <div id="spin-container">
                         <!-- Add your images (or video) here -->
-                        <a class="carousel_card" href="">
-                            <img
-                            src="/images/tramitacion-procedimientos/registro_general_white.png"
-                            alt=""
-                            />
-                        </a>
-                        <a class="carousel_card" href="/visor-datos">
-                            <img
-                            src="/images/tramitacion-procedimientos/gestion_propietarios_white.png"
-                            alt=""
-                            />
-                        </a>
-                        <a class="carousel_card" href="/visor-datos">
-                            <img
-                            src="/images/tramitacion-procedimientos/registro_general_white.png"
-                            alt=""
-                            />
-                        </a>
                         <a class="carousel_card" href="/mapa-sig">
                             <img
-                            src="/images/tramitacion-procedimientos/gestion_regantes_white.png"
+                            src="/images/panel_aplicaciones/visor.jpeg"
                             alt=""
                             />
+                            <div class="text-overlay">Visor</div>
                         </a>
-                        <a class="carousel_card" href="/visor-datos">
+                        <a class="carousel_card" href="/estado-red">
                             <img
-                            src="/images/tramitacion-procedimientos/authorization_works_white.png"
+                            src="/images/panel_aplicaciones/estado_red.png"
                             alt=""
                             />
+                            <div class="text-overlay">Estado de la red</div>
                         </a>
-                        <a class="carousel_card" href="/visor-datos">
+                        <a class="carousel_card" href="/info-meteo">
                             <img
-                            src="/images/tramitacion-procedimientos/gestion_propietarios_white.png"
+                            src="/images/panel_aplicaciones/informacion_meteorologica.jpeg"
                             alt=""
                             />
+                            <div class="text-overlay">Información meteorológica</div>
+                        </a>
+                        <a class="carousel_card" href="/gestor-cultivos">
+                            <img
+                            src="/images/panel_aplicaciones/gestor_demandas.jpg"
+                            alt=""
+                            />
+                            <div class="text-overlay">Gestor cupos y cultivos</div>
+                        </a>
+                        <a class="carousel_card" href="/planificador-riego">
+                            <img
+                            src="/images/panel_aplicaciones/planificador_riego.jpeg"
+                            alt=""
+                            />
+                            <div class="text-overlay">Planificador de riego</div>
+                        </a>
+                        <a class="carousel_card" href="/gestor-equipos">
+                            <img
+                            src="/images/panel_aplicaciones/gestor_equipos.png"
+                            alt=""
+                            />
+                            <div class="text-overlay">Gestor de equipos</div>
                         </a>
                         <!-- Text at center of ground -->
                         <div class="img_centro">
-                            <a href="simulador">
+                            <a href="https://hidrasmart-mainselector.azurewebsites.net/" target="_blank">
                                 <img
                                 src="/images/SelectorAplicaciones/h-hidralab.png"
                                 alt=""
@@ -88,7 +95,7 @@
                 <div class="card card_owner_management float_card" id="card-owner-management">
                     <div class="card_body_container">
                         <p class="title_float_card">
-                           Información meteorológica<br>
+                            Información meteorológica<br>
                             <img class="card_image"
                                 src="/images/tramitacion-procedimientos/gestion_propietarios_white.png">
                         </p>
@@ -168,7 +175,7 @@
                             <div class="sub_card sub_card_owner_management float_sub_card"
                                 id="sub_card-owner_management">
                                 <p class="title_float_card" onclick="window.location.href = '/visor-datos';">
-                                Acceder
+                                    Acceder
                                 </p>
                             </div>
                         </div>
@@ -177,6 +184,7 @@
             </div> -->
             <%- include('../components/common/footer.ejs') %>
         </main>
+
     </body>
 
     </html>

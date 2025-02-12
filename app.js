@@ -1,24 +1,27 @@
+if (process.env.NODE_ENV !== 'production') require('dotenv').config();
+const express = require("express");
+const http = require('http');
+const configureSocket = require("./middlewares/socket");
+const saveSession = require("./middlewares/session-midleware");
 const path = require("path");
 
-const express = require("express");
-
 const createSession = require("./config/session");
+
 const authMiddleware = require("./middlewares/check-auth");
 
 const initRoutes = require("./routes/init.routes");
 const loginRoutes = require("./routes/login.routes");
-
 const navbarRoutes = require("./routes/navbar.routes");
 const authRoutes = require("./routes/auth.routes");
-const visorDatosRoutes = require("./routes/visor-datos.routes");
+const estadoRedRoutes = require("./routes/estado-red.routes");
+const planificadorRiegoRoutes = require("./routes/planificador-riego.routes");
 const mapaSigRoutes = require("./routes/mapa-sig.routes");
+const gestorEquiposRoutes = require("./routes/gestor-equipos.routes");
+const gestorUsuariosRoutes = require("./routes/gestor-usuarios.routes");
+const gestorCultivosRoutes = require("./routes/gestor-cultivos.routes");
 
-const dotenv = require('dotenv').config();
 
 const app = express();
-
-const http = require('http');
-//const session = require('express-session');
 
 const faviconPath = 'https://cdn.jsdelivr.net/gh/HidralabIyD/HidraSmart-CommonFiles@latest/icon/hidrasmart-Isotipo-positivo.ico'; // Ruta del icono de favicon
 
@@ -31,7 +34,9 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(createSession());
+const sessionMiddleware = createSession();
+app.use(sessionMiddleware);
+
 app.use(authMiddleware);
 
 app.use("/", initRoutes);
@@ -39,8 +44,12 @@ app.use("/", authRoutes);
 app.use("/", loginRoutes);
 app.use("/", navbarRoutes);
 
-app.use("/visor-datos", visorDatosRoutes);
+app.use("/gestor-cultivos", gestorCultivosRoutes);
+app.use("/planificador-riego", planificadorRiegoRoutes);
+app.use("/estado-red", estadoRedRoutes);
 app.use("/mapa-sig", mapaSigRoutes);
+app.use("/gestor-equipos", gestorEquiposRoutes);
+app.use("/gestor-usuarios", gestorUsuariosRoutes);
 
 var Auth = require('./controllers/auth.service');
 app.use(function (error, req, res, next) {
@@ -58,10 +67,20 @@ app.use(function (error, req, res, next) {
   next();
 });
 
-console.log(process.env.PORT);
+const server = http.createServer(app);
+const io = configureSocket(server);
 
-app.listen(process.env.PORT || 3002);
+// Middleware para Socket.IO
+io.use((socket, next) => {
+  sessionMiddleware(socket.request, socket.request.res || {}, next);
+  saveSession(socket.request);
+});
 
+const PORT = process.env.PORT || 3002;
+
+server.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
+});
 
 
 
