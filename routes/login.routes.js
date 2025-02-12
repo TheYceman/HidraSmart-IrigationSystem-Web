@@ -6,6 +6,10 @@ const router = express.Router();
 
 /************* Soporte del Login *************/
 
+router.get('/landing-page', (req, res) => {
+    res.render('landing-page');
+});
+
 router.get("/contact-us", loginController.getContactUsLogin);
 
 router.get("/change-password", loginController.getChangePasswordLogin);
