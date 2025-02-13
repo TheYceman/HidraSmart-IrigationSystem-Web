@@ -87,16 +87,29 @@ async function contactUs() {
             );
             if (contactUsResult.ok) {
                 const response = await contactUsResult.json();
-                //alert(response.message);
-                window.location.href ='/';
+                const message = 'Formulario enviado con éxito.';
+                const image = `/images/icon_check.png`;
+                showMessage(image, message);
+                clearFormContactUs();
+                // window.location.href ='/';
             }else{
                 const errorResponse = await contactUsResult.json();
                 const errorMessage = errorResponse.message;
+                const message = 'Se ha producido un error<br> al enviar el formulario.';
+                const image = `/images/login/login_error.png`;
+                showMessage(image, message);
                 console.log(errorMessage);
                 // failedLogin(errorMessage);
             }
         }
     });
+}
+
+function clearFormContactUs(){
+    document.getElementById('input-name').value = '';
+    document.getElementById('input-email').value = '';
+    document.getElementById('input-message').value = '';
+    document.getElementById('privacy-check').checked = false;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
