@@ -128,10 +128,10 @@ async function getLogin(req, res) {
                                         <div id="download-zone" class="download_zone">
                                             <img class="img_qr" src="/images/icons/qr-irrigation-system.svg" alt="Descripción de la imagen">
                                             <div class="bottom_container_app_store">
-                                                <a id="url-google-play"" class="url_app_store"" href="/">
+                                                <a id="url-google-play"" class="url_app_store"" href="https://play.google.com/store/apps/details?id=com.hidralab.hidrasmart_irrigation_system&hl=es_419">
                                                     <img class="img_app_store" src="/images/icons/Button-Google-Play.png">
                                                 </a>
-                                                <a id="url-app-store"" class="url_app_store"" href="/">
+                                                <a id="url-app-store"" class="url_app_store"" href="https://apps.apple.com/es/app/irrigation-system/id6742543776">
                                                     <img class="img_app_store" src="/images/icons/Button-App-Store.png">
                                                 </a>
                                             </div>

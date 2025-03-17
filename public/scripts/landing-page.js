@@ -13,8 +13,8 @@ function getDeviceOS() {
   }
 
   // URLs de las tiendas
-  const androidUrl = '/'; // Reemplazar con tu URL de Google Play
-  const iosUrl = '/'; // Reemplazar con tu URL de App Store
+  const androidUrl = 'https://play.google.com/store/apps/details?id=com.hidralab.hidrasmart_irrigation_system&hl=es_419'; // Reemplazar con tu URL de Google Play
+  const iosUrl = 'https://apps.apple.com/es/app/irrigation-system/id6742543776'; // Reemplazar con tu URL de App Store
   const unknownUrl = '/'; // Página 'Centro de Descargas' para dispositivos desconocidos
 
   function redirectToStore() {

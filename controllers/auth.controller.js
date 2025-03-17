@@ -1,5 +1,6 @@
 
 const { insertSessionLog } = require("./session.controller");
+const { hashatePassword } = require("../config/hashate-password");
 
 const fetch = require('node-fetch');
 const { RecaptchaEnterpriseServiceClient } = require('@google-cloud/recaptcha-enterprise');
@@ -55,15 +56,17 @@ async function verifyCaptcha(username, password, token) {
     });
     const queryString = `SELECT * FROM users WHERE username=?;`;
     const values = [username];
-    const database = 'aplicaciones_web';
+    const database = 'hidrasmart_is';
 
     try {
       const result = await runQuery(queryString, values, database);
-
+      console.log('result:');
+      console.log(result.data.rows[0]);
+      console.log('password:');
+      console.log(hashatePassword(password));
       if (result.success) {
         const rows = result.data.rows;
-        //console.log("rows.password " + result.data.rows[0].password);
-        if (compare(password, result.data.rows[0].password)) {
+        if (hashatePassword(password) === result.data.rows[0].password) {
           return rows;
         }
 
