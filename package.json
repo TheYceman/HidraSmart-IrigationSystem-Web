@@ -5,14 +5,19 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "dev_carlos_old": "nodemon app.js",
     "dev_carlos": "nodemon app.js",
-    "dev_marian": "nodemon app.js"
+    "dev_marian": "node app.js",
+    "dev": "vite --config frontend/vite.config.js",
+    "frontend": "vite --config frontend/vite.config.js",
+    "build": "vite build --config frontend/vite.config.js"
   },
   "keywords": [],
   "author": "Hidralab",
   "license": "ISC",
   "dependencies": {
     "@google-cloud/recaptcha-enterprise": "^5.5.0",
+    "@vitejs/plugin-react": "^4.5.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -27,7 +32,12 @@
     "mysql2": "^3.9.2",
     "node-fetch": "^2.7.0",
     "nodemailer": "^6.10.0",
-    "socket.io": "^4.7.5"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.1",
+    "sequelize": "^6.37.7",
+    "socket.io": "^4.7.5",
+    "vite": "^6.3.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

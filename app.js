@@ -1,86 +1,73 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
+if (process.env.NODE_ENV !== "production") require("dotenv").config();
+
 const express = require("express");
-const http = require('http');
+const http = require("http");
+const path = require("path");
+const fs = require("fs");
+const cors = require("cors");
+
 const configureSocket = require("./middlewares/socket");
 const saveSession = require("./middlewares/session-midleware");
-const path = require("path");
-
 const createSession = require("./config/session");
-
 const authMiddleware = require("./middlewares/check-auth");
 
+// Rutas
 const initRoutes = require("./routes/init.routes");
-const loginRoutes = require("./routes/login.routes");
-const navbarRoutes = require("./routes/navbar.routes");
 const authRoutes = require("./routes/auth.routes");
-const estadoRedRoutes = require("./routes/estado-red.routes");
-const planificadorRiegoRoutes = require("./routes/planificador-riego.routes");
-const mapaSigRoutes = require("./routes/mapa-sig.routes");
-const gestorEquiposRoutes = require("./routes/gestor-equipos.routes");
-const gestorUsuariosRoutes = require("./routes/gestor-usuarios.routes");
-const gestorCultivosRoutes = require("./routes/gestor-cultivos.routes");
-
-
+const applicationPanelRoutes = require("./routes/application-panel.routes");
 const app = express();
 
-const faviconPath = 'https://cdn.jsdelivr.net/gh/HidralabIyD/HidraSmart-CommonFiles@latest/icon/hidrasmart-Isotipo-positivo.ico'; // Ruta del icono de favicon
-
-app.locals.faviconPath = faviconPath;
-
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-
+// 1. Middleware global
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// 2. Sesiones
 const sessionMiddleware = createSession();
 app.use(sessionMiddleware);
 
-app.use(authMiddleware);
-
-app.use("/", initRoutes);
-app.use("/", authRoutes);
-app.use("/", loginRoutes);
-app.use("/", navbarRoutes);
-
-app.use("/gestor-cultivos", gestorCultivosRoutes);
-app.use("/planificador-riego", planificadorRiegoRoutes);
-app.use("/estado-red", estadoRedRoutes);
-app.use("/mapa-sig", mapaSigRoutes);
-app.use("/gestor-equipos", gestorEquiposRoutes);
-app.use("/gestor-usuarios", gestorUsuariosRoutes);
-
-var Auth = require('./controllers/auth.service');
-app.use(function (error, req, res, next) {
-  if (req.session) {
-    console.log("req.session" + req.session);
-    req.session.init = "init";
-  }
-  else {
-    Auth.requireLogin
-  }
-
-  res
-    .status(500)
-    .render("errors/500", { error: error, navIndex: -1, navGroup: -1 });
-  next();
-});
-
+// 3. Socket.io con acceso a la sesión
 const server = http.createServer(app);
 const io = configureSocket(server);
-
-// Middleware para Socket.IO
 io.use((socket, next) => {
   sessionMiddleware(socket.request, socket.request.res || {}, next);
   saveSession(socket.request);
 });
 
-const PORT = process.env.PORT || 3002;
+// ✅ Esta ruta es pública, asegúrate que initRoutes tenga `router.get("/")`
+app.use("/api", initRoutes);
+app.use("/api", authRoutes);
 
-server.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+// 5. Middleware de autenticación para rutas privadas
+app.use(authMiddleware);
+
+app.use("/api", applicationPanelRoutes);
+
+// 6. Archivos estáticos del frontend
+const frontendDistPath = path.join(__dirname, "frontend", "public", "dist");
+
+if (!fs.existsSync(path.join(frontendDistPath, "index.html"))) {
+  console.warn("⚠️  frontend/dist/index.html no encontrado. ¿Ejecutaste npm run build en frontend?");
+}
+app.use(express.static(frontendDistPath));
+
+// 7. SPA fallback
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendDistPath, "index.html"));
 });
 
+// 8. Manejo de errores
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: err.message || "Error interno" });
+});
 
-
+// 9. Inicio del servidor
+const PORT = process.env.PORT || 3002;
+server.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+});

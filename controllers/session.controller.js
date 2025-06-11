@@ -1,43 +1,56 @@
 
-const { runQuery } = require("../data/bbdd-connector");
+const SessionLog = require('../models/session-logs.model');
 const { obtenerHoraActualEspania } = require("../utils/get-current-time-in-spain");
 
 // Función para obtener un registro de sesión existente por su session_id
 async function getSession(session_id) {
-    const queryString = `SELECT * FROM session_logs WHERE session_id = ? LIMIT 1;`;
-    const database = 'aplicaciones_web';
-    const [rows, fields] = await runQuery(queryString, [session_id], database);
-    return rows.length > 0 ? rows[0] : null;
+    try {
+        const session = await SessionLog.findOne({
+            where: { session_id },
+        });
+
+        return session ? session.get({ plain: true }) : null;
+    } catch (error) {
+        console.error('Error al obtener la sesión:', error);
+        throw new Error('Error al obtener la sesión.');
+    }
 }
+
 // Función para actualizar un registro de sesión existente
 async function updateSessionLog(session_id, end_time) {
-    var actual_time = obtenerHoraActualEspania();
-    const queryString = 'UPDATE session_logs SET end_time = ? WHERE session_id = ?';
-    const database = 'aplicaciones_web';
-    if(end_time === 'null'){
-        end_time = actual_time;
+    // const actual_time = obtenerHoraActualEspania();
+
+    try {
+        const result = await SessionLog.update(
+            { end_time: end_time },
+            { where: { session_id: session_id } }
+        );
+
+        if (result[0] === 0) {
+            console.error(`No se encontró el registro con session_id ${session_id}`);
+        }
+    } catch (error) {
+        console.error('Error al actualizar el registro de sesión:', error);
+        throw error;
     }
-    await runQuery(queryString, [end_time, session_id], database);
 }
 
 // Función para insertar un nuevo registro de sesión
-async function insertSessionLog(session_id, user_id, application) {
-    var actual_time = obtenerHoraActualEspania();
+async function insertSessionLog(session_id, user_id) {
+    const actual_time = obtenerHoraActualEspania();
     const end_time = '1999-01-01 00:00';
-    const queryString = `INSERT INTO session_logs (session_id, idusers, start_time, end_time, aplicacion) VALUES (?, ?, ?, ?, ?);`;
-    const database = 'aplicaciones_web';
+    const device = "web_react";
     try {
-        const result = await runQuery(queryString, [session_id, user_id, actual_time, end_time, application], database);
-        if (result.success) {
-            const rows = result.data.rows;
-            return rows;
-        } else {
-            console.error('Error al ejecutar la consulta:', result.message);
-            // Maneja el caso de error según sea necesario
-        }
+        await SessionLog.create({
+            session_id: session_id,
+            idusers: user_id,
+            start_time: actual_time,
+            end_time: end_time,
+            device: device,
+            environment: process.env.NODE_ENV
+        });
     } catch (error) {
-        console.error('Error al ejecutar la consulta:', error);
-        // Maneja el error lanzado por la función runQuery
+        console.error('Error al insertar el registro de sesión:', error);
         throw error;
     }
 }
