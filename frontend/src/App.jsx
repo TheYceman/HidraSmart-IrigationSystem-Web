@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import RedirectPage from './pages/RedirectPage';
 import Login from './pages/Login';
 import ContactUs from './pages/ContactUs';
+import GestorConsumos from './pages/GestorConsumos';
 
 import PanelAplicaciones from './pages/PanelAplicaciones';
 
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/panel-aplicaciones" element={<PanelAplicaciones />} />
+        <Route path="/panel-aplicaciones/gestor-consumos" element={<GestorConsumos />} />
         <Route path="*" element={<RedirectPage />} />
       </Routes>
     </Router>

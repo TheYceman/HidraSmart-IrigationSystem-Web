@@ -1,0 +1,71 @@
+.contenedor_principal {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 10px;
+}
+
+.columna_izquierda {
+    display: grid;
+    grid-template-rows: 10% 80% 10%;
+    height: 100%;
+}
+
+.cabecera_izquierda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cabecera_izquierda .filtros_select {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    gap: 10px;
+}
+
+.cabecera_izquierda .filtros_duracion {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    gap: 10px;
+}
+
+.tabla_contenedor {
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.tabla_contenedor table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla_contenedor th,
+.tabla_contenedor td {
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center;
+}
+
+.botones_izquierda {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.botones_izquierda button {
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.columna_derecha {
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
