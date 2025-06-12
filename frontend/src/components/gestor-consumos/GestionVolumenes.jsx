@@ -1,15 +1,14 @@
 import React from "react";
+import "../../../public/styles/gestor-consumos/gestor-volumenes.css";
 
 function GestionVolumenes() {
     return (
-        <div>
-            <h3>Gestión de Volúmenes</h3>
-            <p>Aquí se mostrará la gestión de los volúmenes de agua utilizados por los cultivos y las parcelas.</p>
-            <ul>
-                <li>Volumen total consumido: 10.000 m³</li>
-                <li>Volumen restante: 3.000 m³</li>
-                <li>Volumen planificado: 12.000 m³</li>
-            </ul>
+        <div className="warning">
+            <h1> 
+                Esta ágina está en producción 
+                <i class="fas fa-exclamation-triangle"></i>
+            </h1>
+            <h2>Vuelve mas tarde</h2>
         </div>
     );
 }

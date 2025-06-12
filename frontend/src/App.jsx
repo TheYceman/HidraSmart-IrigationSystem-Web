@@ -1,11 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Páginas
 import RedirectPage from './pages/RedirectPage';
 import Login from './pages/Login';
 import ContactUs from './pages/ContactUs';
+import PanelAplicaciones from './pages/PanelAplicaciones';
 import GestorConsumos from './pages/GestorConsumos';
 
-import PanelAplicaciones from './pages/PanelAplicaciones';
-
+// Estilos GLOBALES
+import '../public/styles/common/custom-scrollbar.css';
 
 function App() {
   return (

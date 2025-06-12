@@ -23,8 +23,8 @@ function GestorConsumos() {
         <div className="gestor_consumos">
             <div className="tabs">
                 <div className={tab === "planificador" ? "tab active_tab" : "tab"} onClick={() => setTab("planificador")}>Planificador de Riego</div>
-                <div className={tab === "volumenes" ? "tab active_tab" : "tab"} onClick={() => setTab("volumenes")}>Gestión de Volúmenes</div>
                 <div className={tab === "lecturas" ? "tab active_tab" : "tab"} onClick={() => setTab("lecturas")}>Gestión de Lecturas</div>
+                <div className={tab === "volumenes" ? "tab active_tab" : "tab"} onClick={() => setTab("volumenes")}>Gestión de Volúmenes</div>
                 <div className={tab === "cultivos" ? "tab active_tab" : "tab"} onClick={() => setTab("cultivos")}>Declaración de Cultivos</div>
             </div>
 

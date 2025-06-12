@@ -1,7 +1,8 @@
 .contenedor_principal {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 60% 40%;
     gap: 10px;
+    height: 60vh;
 }
 
 .columna_izquierda {
@@ -14,6 +15,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 13px;
+}
+
+.cabecera_izquierda button, .cabecera_izquierda select{
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
 .cabecera_izquierda .filtros_select {
@@ -23,6 +30,15 @@
     gap: 10px;
 }
 
+.cabecera_izquierda .filtros_select div{
+    margin-right: 5px;
+}
+
+.cabecera_izquierda .filtros_select select{
+   border-radius: 5px;
+   margin-left: 5px;
+}
+
 .cabecera_izquierda .filtros_duracion {
     display: flex;
     align-items: center;
@@ -30,10 +46,35 @@
     gap: 10px;
 }
 
+.cabecera_izquierda .filtros_duracion button {
+    background-color: transparent;
+    border: 2px solid #a1a1a1;
+    color: #a1a1a1;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.cabecera_izquierda .filtros_duracion button:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.cabecera_izquierda .filtros_duracion button:nth-child(2) {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.cabecera_izquierda .filtros_duracion .active_duracion {
+    background-color: rgb(194, 237, 255);
+    border-color: var(--color-primary-400);
+    color: var(--color-primary-400);
+}
+
 .tabla_contenedor {
-    padding: 10px;
     overflow-y: auto;
     max-height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .tabla_contenedor table {
@@ -41,9 +82,31 @@
     border-collapse: collapse;
 }
 
+.tabla_contenedor table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla_contenedor table tbody{
+    font-size: 12px;
+}
+
+.tabla_contenedor table tbody tr:nth-child(odd) {
+    background-color: #f1f1f1;
+}
+
+/* Opcional: color de fondo al pasar el ratón */
+.tabla_contenedor table tbody tr:hover {
+    background-color: #e6f7ff;
+}
+
+.tabla_contenedor th{
+    background-color: var(--color-primary-400);
+    color: white;
+}
+
 .tabla_contenedor th,
 .tabla_contenedor td {
-    border: 1px solid #ccc;
     padding: 5px;
     text-align: center;
 }
@@ -56,13 +119,28 @@
 }
 
 .botones_izquierda button {
-    border: 2px solid #ccc;
+    border: 2px solid var(--color-primary-400);
+    background-color: transparent;
+    color: var(--color-primary-400);
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.botones_izquierda button:hover {
+    background-color: var(--color-primary-400);
+    color: white;
+}
+
+.botones_izquierda button:active {
+    transform: scale(0.95);
+}
+
+/* Parte derecha */
 .columna_derecha {
     border: 1px solid #ccc;
     display: flex;
