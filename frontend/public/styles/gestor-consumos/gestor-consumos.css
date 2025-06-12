@@ -1,0 +1,28 @@
+.tabs {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.tab {
+    flex: 1;
+    border: 2px solid var(--color-primary-400);
+    color: var(--color-primary-400);
+    border-radius: 5px;
+    padding: 10px 0;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab:hover,
+.tab.active_tab {
+    background-color: var(--color-primary-400);
+    color: white;
+}
+
+.gestor_consumos_espacio {
+    padding: 20px;
+    height: auto;
+}

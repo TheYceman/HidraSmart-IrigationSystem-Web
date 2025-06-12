@@ -1,11 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Páginas
 import RedirectPage from './pages/RedirectPage';
 import Login from './pages/Login';
 import ContactUs from './pages/ContactUs';
-import VentanaVacia from './pages/EjemploVacia';
 
 import PanelAplicaciones from './pages/PanelAplicaciones';
+import GestorConsumos from './pages/GestorConsumos';
+import VentanaVacia from './pages/EjemploVacia';
 
+// Estilos GLOBALES
+import '../public/styles/common/custom-scrollbar.css';
 
 function App() {
   return (
@@ -15,7 +20,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/panel-aplicaciones" element={<PanelAplicaciones />} />
-        <Route path="/ventana-ejemplo" element={<VentanaVacia />} />
         <Route path="*" element={<RedirectPage />} />
       </Routes>
     </Router>

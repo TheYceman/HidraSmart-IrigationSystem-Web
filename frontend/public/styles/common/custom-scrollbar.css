@@ -1,0 +1,18 @@
+/* Estilos scroll personalizado */
+.custom_scrollbar {
+    overflow-y: scroll;
+}
+
+.custom_scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom_scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 0;
+}
+
+.custom_scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-primary-400);
+    border-radius: 5px;
+}
