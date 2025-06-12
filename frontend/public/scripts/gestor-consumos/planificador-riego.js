@@ -1,3 +1,16 @@
+// === CONFIGURACIÓN DE COORDENADAS ===
+
+const LOCATIONS = {
+    ARGAMASILLA_ALBA: { lat: 39.133056, lng: -3.093611, zoom: 14 },
+    DEFAULT: { lat: 38.266667, lng: -0.7, zoom: 14 }
+};
+
+// Cambia aquí la ubicación activa:
+const ACTIVE_LOCATION = LOCATIONS.ARGAMASILLA_ALBA;
+
+
+
+
 function loadGoogleMapsScript(apiKey) {
     return new Promise((resolve, reject) => {
         if (window.google && window.google.maps) {
@@ -31,10 +44,6 @@ function initializeRiegoMap() {
         return;
     }
 
-    const defaultLatitude = 38.266667;
-    const defaultLongitude = -0.7;
-    const defaultZoom = 14;
-
     loadGoogleMapsScript(apiKey).then(() => {
         const mapElement = document.getElementById("mapa-riego");
         if (!mapElement) {
@@ -42,16 +51,15 @@ function initializeRiegoMap() {
             return;
         }
 
-        // ⚠️ OJO: usamos todavía google.maps.Marker (clásico)
         const map = new google.maps.Map(mapElement, {
-            center: { lat: defaultLatitude, lng: defaultLongitude },
-            zoom: defaultZoom,
+            center: { lat: ACTIVE_LOCATION.lat, lng: ACTIVE_LOCATION.lng },
+            zoom: ACTIVE_LOCATION.zoom,
             streetViewControl: false,
             mapTypeId: "terrain",
         });
 
         new google.maps.Marker({
-            position: { lat: defaultLatitude, lng: defaultLongitude },
+            position: { lat: ACTIVE_LOCATION.lat, lng: ACTIVE_LOCATION.lng },
             map: map,
             title: "Centro de prueba",
         });
