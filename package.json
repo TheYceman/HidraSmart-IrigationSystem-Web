@@ -4,10 +4,8 @@
   "description": "Proyecto para desarrollar el sistema dedicado a las comunidades de regantes",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev_carlos_old": "nodemon app.js",
-    "dev_carlos": "nodemon app.js",
-    "dev_marian": "node app.js",
+    "start": "nodemon app.js",
+    "start-all": "concurrently \"npm run start\" \"cd frontend && npm run frontend\"",
     "dev": "vite --config frontend/vite.config.js",
     "frontend": "vite --config frontend/vite.config.js",
     "build": "vite build --config frontend/vite.config.js"
@@ -40,6 +38,7 @@
     "vite": "^6.3.5"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "nodemon": "^3.1.0"
   }
 }

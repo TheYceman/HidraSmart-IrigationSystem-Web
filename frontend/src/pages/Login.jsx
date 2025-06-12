@@ -1,3 +1,4 @@
+// frontend/src/pages/Login.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +10,7 @@ function Login() {
     fetch("/api/loginResources", {
       credentials: "include",
     })
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(setData)
       .catch(console.error);
   }, []);
@@ -46,7 +47,8 @@ function Login() {
         }
       }
       window.onLoginSuccess = () => {
-        navigate("/panel-aplicaciones"); // o la ruta de tu dashboard
+        // Pasa un estado indicando que es un login exitoso
+        navigate("/panel-aplicaciones", { state: { justLoggedIn: true } });
       };
     };
 
@@ -58,18 +60,15 @@ function Login() {
         if (script) document.body.removeChild(script);
       });
     };
-  }, [data]);
+  }, [data, navigate]);
 
   if (!data) return <div>Cargando...</div>;
 
   return (
     <>
-      {/* Contenido del header */}
       <header id="header-login">
         <div dangerouslySetInnerHTML={{ __html: data.headLoginHTML }} />
       </header>
-
-      {/* Contenido principal del login */}
       <main>
         <div dangerouslySetInnerHTML={{ __html: data.bodyLoginHTML }} />
       </main>

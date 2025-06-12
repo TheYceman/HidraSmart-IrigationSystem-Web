@@ -1,29 +1,52 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import ConfigurationPopup from "../components/config";
 
 function PanelAplicaciones() {
   const [data, setData] = useState(null);
+  const [showConfigPopup, setShowConfigPopup] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    // Verifica si el usuario acaba de iniciar sesión
+    if (location.state?.justLoggedIn) {
+      setShowConfigPopup(true);
+      // Limpia el estado de navegación
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+
     fetch("/api/applicationPanelResources", {
-      credentials: "include", // 👈 importante para sesiones
+      credentials: "include",
     })
       .then((res) => {
         if (!res.ok) throw new Error("Acceso no autorizado");
-        window.onLoginSuccess = () => {
-            navigate("/panel-aplicaciones"); // o la ruta de tu dashboard
-        };
         return res.json();
       })
       .then(setData)
       .catch((err) => {
         console.error("Error cargando el panel:", err.message);
-        window.onLoginSuccess = () => {
-            navigate("/panel-aplicaciones"); // o la ruta de tu dashboard
-        };
         setData({ error: "No autorizado o error de red" });
       });
-  }, []);
+  }, [navigate, location]);
+
+  // Manejar clics en el botón de configuración usando delegación de eventos
+  useEffect(() => {
+    const handleConfigClick = (event) => {
+      if (event.target.closest("#config-button")) {
+        setShowConfigPopup((prev) => !prev);
+        console.log("Botón de configuración pulsado");
+      }
+    };
+
+    // Añadir listener al documento
+    document.addEventListener("click", handleConfigClick);
+
+    // Limpieza del listener
+    return () => {
+      document.removeEventListener("click", handleConfigClick);
+    };
+  }, []); // Dependencia vacía para que el listener se añada solo una vez
 
   if (!data) return <div>Cargando panel...</div>;
 
@@ -39,6 +62,7 @@ function PanelAplicaciones() {
       <main>
         <div dangerouslySetInnerHTML={{ __html: data.bodyApplicationPanelHTML }} />
       </main>
+      {showConfigPopup && <ConfigurationPopup />}
     </>
   );
 }

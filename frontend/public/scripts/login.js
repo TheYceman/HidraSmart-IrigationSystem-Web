@@ -209,4 +209,3 @@ async function login(event) {
     });
   }
 }
-
