@@ -1,15 +1,14 @@
 import React from "react";
+import "../../../public/styles/gestor-consumos/declaracion-cultivos.css";
 
 function DeclaracionCultivos() {
     return (
-        <div>
-            <h3>Declaración de Cultivos</h3>
-            <p>Aquí podrás declarar y actualizar los cultivos asignados a cada parcela.</p>
-            <ul>
-                <li>Parcela 1 - Maíz</li>
-                <li>Parcela 2 - Trigo</li>
-                <li>Parcela 3 - Tomate</li>
-            </ul>
+        <div className="warning">
+            <h1> 
+                Esta página está en producción 
+                <i class="fas fa-exclamation-triangle"></i>
+            </h1>
+            <h2>Vuelve mas tarde</h2>
         </div>
     );
 }

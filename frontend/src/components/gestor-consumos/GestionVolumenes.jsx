@@ -5,7 +5,7 @@ function GestionVolumenes() {
     return (
         <div className="warning">
             <h1> 
-                Esta ágina está en producción 
+                Esta página está en producción 
                 <i class="fas fa-exclamation-triangle"></i>
             </h1>
             <h2>Vuelve mas tarde</h2>
