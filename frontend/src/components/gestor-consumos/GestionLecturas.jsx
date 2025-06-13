@@ -91,7 +91,12 @@ function GestionLecturas() {
                 </div>
             </div>
 
-            <div className={styles.grafica}>grafica</div>
+            <div className={styles.grafica_contenedor}>
+                <div id="grafica-lecturas" className={styles.grafica}>
+
+                </div>
+            </div>
+
             <div className={styles.mapa}>
                 <div id="mapa-lecturas" className={styles.mapa_lecturas}></div>
                 <GoogleApiKeyProvider />

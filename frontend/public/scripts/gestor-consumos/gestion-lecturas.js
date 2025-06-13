@@ -1,5 +1,3 @@
-
-
 function loadGoogleMapsScript(apiKey) {
     return new Promise((resolve, reject) => {
         if (window.google && window.google.maps) {
@@ -69,3 +67,53 @@ function initializeRiegoMap() {
 }
 
 initializeRiegoMap();
+
+// Fin creación de mapa
+
+// Creación de gráfica
+function loadHighchartsScript() {
+    return new Promise((resolve, reject) => {
+        if (window.Highcharts) {
+            resolve();
+            return;
+        }
+
+        const existingScript = document.querySelector('script[src*="code.highcharts.com/highcharts.js"]');
+        if (existingScript) {
+            existingScript.addEventListener("load", () => resolve());
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://code.highcharts.com/highcharts.js";
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+            resolve();
+        };
+        script.onerror = (err) => reject(err);
+        document.head.appendChild(script);
+    });
+}
+
+// Función de inicialización de la gráfica
+function initializeRiegoChart() {
+    const chartElement = document.getElementById("grafica-lecturas");
+    if (!chartElement) {
+        console.error("No se encontró el contenedor de la gráfica");
+        return;
+    }
+
+    Highcharts.chart('grafica-lecturas', {
+        chart: { type: 'line' },
+        title: { text: 'Lecturas de prueba' },
+        xAxis: { categories: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] },
+        yAxis: { title: { text: 'Consumo (m³)' } },
+        series: [
+            { name: 'Sensor 1', data: [10, 15, 12, 18, 20, 16, 19] },
+            { name: 'Sensor 2', data: [8, 11, 9, 14, 17, 13, 15] }
+        ]
+    });
+}
+
+initializeRiegoChart();

@@ -123,8 +123,12 @@
 }
 
 /* Div 3 */
-.grafica {
+.grafica_contenedor {
     box-sizing: border-box;
+}
+.grafica_contenedor .grafica{
+    width: 100%;
+    height: 100%;
 }
 
 /* Div 4 */
