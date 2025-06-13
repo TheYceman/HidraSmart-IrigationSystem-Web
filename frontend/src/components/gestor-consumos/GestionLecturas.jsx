@@ -1,7 +1,16 @@
-import React from "react";
+import { useEffect } from "react";
 import styles from "../../../public/styles/gestor-consumos/gestion-lecturas.module.css";
 
+//Obtener API Key para el mapa
+import GoogleApiKeyProvider from "../api-keys/GoogleApiKeyProvider";
+
 function GestionLecturas() {
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "/scripts/gestor-consumos/gestion-lecturas.js";
+        document.body.appendChild(script);
+    }, []);
+
     return (
         <div className={styles.contenedor_principal}>
             <div className={`${styles.peticiones_lectura} ${styles.filtros_tabla}`}>
@@ -28,23 +37,25 @@ function GestionLecturas() {
                     </div>
                     <button><i className="fas fa-folder-open"></i>Exportar a Excel</button>
                 </div>
-                <div className={styles.custom_scrollbar}>
+                <div className="custom_scrollbar">
                     <table>
                         <thead>
                             <tr>
-                                <th>Col 1</th>
-                                <th>Col 2</th>
-                                <th>Col 3</th>
-                                <th>Col 4</th>
+                                <th>Fecha Inicio</th>
+                                <th>Hora</th>
+                                <th>Volumen (m3)</th>
+                                <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Dato 1</td>
-                                <td>Dato 2</td>
-                                <td>Dato 3</td>
-                                <td>Dato 4</td>
-                            </tr>
+                            {Array.from({ length: 14 }).map((_, i) => (
+                                <tr key={i}>
+                                    <td>Dato 1</td>
+                                    <td>Dato 2</td>
+                                    <td>Dato 3</td>
+                                    <td>Dato 4</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -60,10 +71,10 @@ function GestionLecturas() {
                     <table>
                         <thead>
                             <tr>
-                                <th>Col 1</th>
-                                <th>Col 2</th>
-                                <th>Col 3</th>
-                                <th>Col 4</th>
+                                <th>Contador</th>
+                                <th>Fecha Petición</th>
+                                <th>Usuario</th>
+                                <th>Accion</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,7 +92,10 @@ function GestionLecturas() {
             </div>
 
             <div className={styles.grafica}>grafica</div>
-            <div className={styles.mapa}>mapa</div>
+            <div className={styles.mapa}>
+                <div id="mapa-lecturas" className={styles.mapa_lecturas}></div>
+                <GoogleApiKeyProvider />
+            </div>
         </div>
     );
 }
