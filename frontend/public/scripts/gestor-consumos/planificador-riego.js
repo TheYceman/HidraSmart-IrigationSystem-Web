@@ -1,14 +1,3 @@
-// === CONFIGURACIÓN DE COORDENADAS ===
-
-const LOCATIONS = {
-    ARGAMASILLA_ALBA: { lat: 39.133056, lng: -3.093611, zoom: 14 },
-    DEFAULT: { lat: 38.266667, lng: -0.7, zoom: 14 }
-};
-
-// Cambia aquí la ubicación activa:
-const ACTIVE_LOCATION = LOCATIONS.ARGAMASILLA_ALBA;
-
-
 
 
 function loadGoogleMapsScript(apiKey) {
@@ -37,6 +26,16 @@ function loadGoogleMapsScript(apiKey) {
 }
 
 function initializeRiegoMap() {
+    // === CONFIGURACIÓN DE COORDENADAS ===
+
+    const LOCATIONS = {
+        ARGAMASILLA_ALBA: { lat: 39.133056, lng: -3.093611, zoom: 14 },
+        DEFAULT: { lat: 38.266667, lng: -0.7, zoom: 14 }
+    };
+
+    // Cambia aquí la ubicación activa:
+    const ACTIVE_LOCATION = LOCATIONS.ARGAMASILLA_ALBA;
+
     const apiKey = window.VITE_GOOGLE_MAPS_API_KEY;
 
     if (!apiKey) {

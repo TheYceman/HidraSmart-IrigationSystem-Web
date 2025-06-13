@@ -1,0 +1,126 @@
+.contenedor_principal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    height: 80vh;
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.contenedor_principal>div {
+    border: 1px solid #ccc;
+}
+
+/* Estilos botones globales */
+.contenedor_principal button {
+    border-radius: 5px;
+    border: 2px solid var(--color-primary-400);
+    background-color: transparent;
+    color: var(--color-primary-400);
+    width: fit-content;
+    font-weight: bold;
+    padding: 5px 10px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.contenedor_principal button:hover {
+    background-color: var(--color-primary-400);
+    color: white;
+}
+.contenedor_principal button:active {
+    transform: scale(0.95);
+}
+.contenedor_principal button:disabled {
+    border-radius: 5px;
+    border-color: #a1a1a1;
+    color: #a1a1a1;
+}
+
+/* Fin estilos botones */
+
+/* Estilos div con columna filtros y columna tabla */
+.filtros_tabla {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    overflow: hidden; 
+}
+
+/* Columna filtros */
+.filtros_tabla .filtros {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5px;
+}
+
+.filtros_tabla .filtros label {
+    font-size: 12px;
+    font-weight: bold;
+}
+.filtros_tabla .filtros select, .filtros_tabla .filtros input {
+    border: 2px solid #a1a1a1;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.filtros_tabla .filtros select:focus, .filtros_tabla .filtros input:focus {
+    border-color: var(--color-primary-400);
+    outline: var(--color-primary-400);
+}
+
+.filtros_tabla .filtros div {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Columna tabla */
+.filtros_tabla table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid var(--color-primary-400);
+    border-radius: 5px;
+    table-layout: fixed; 
+}
+
+.filtros_tabla table th,
+.filtros_tabla table td {
+    padding: 8px;
+    text-align: center;
+}
+
+.filtros_tabla table th{
+    background-color: var(--color-primary-400);
+    color: white;
+}
+
+
+
+
+.peticiones_lectura {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.lecturas {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.grafica {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.mapa {
+    padding: 10px;
+    box-sizing: border-box;
+}
