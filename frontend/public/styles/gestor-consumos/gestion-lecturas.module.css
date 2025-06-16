@@ -1,7 +1,6 @@
 .contenedor_principal {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 2.5fr 1fr;
     width: 100%;
     height: 80vh;
     gap: 10px;
@@ -10,10 +9,22 @@
 }
 
 .contenedor_principal>div {
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
 }
+
+.contenedor_principal>div:hover {
+    border: 2px solid var(--color-primary-400);
+    box-shadow: 0px 0px 10px 0px rgba(52,162,231,0.3);
+}
+
+.contenedor_principal i:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    color: var(--color-primary-400);
+}
+
 
 /* Estilos botones globales */
 .contenedor_principal button {
@@ -51,7 +62,7 @@
 /* Estilos div con columna filtros y columna tabla */
 .filtros_tabla {
     display: grid;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 17.5% auto;
     overflow: hidden;
 }
 
@@ -62,6 +73,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 5px;
+    border-right: 1px solid #a1a1a1;
 }
 
 .filtros_tabla .filtros label {
@@ -90,36 +102,44 @@
 }
 
 /* Columna tabla */
-.filtros_tabla table {
+.contenedor_principal table {
     width: 100%;
     border-collapse: collapse;
-    border: 2px solid var(--color-primary-400);
     border-radius: 5px;
     table-layout: fixed;
 }
 
-.filtros_tabla table th,
-.filtros_tabla table td {
+.contenedor_principal table th,
+.contenedor_principal table td {
     padding: 8px;
     text-align: center;
 }
 
-.filtros_tabla table th {
+.contenedor_principal table th {
     background-color: var(--color-primary-400);
     color: white;
 }
-
-
+.contenedor_principal table button {
+    margin: 0 auto;
+}
 
 /* Div 1 */
 .peticiones_lectura {
-    /* padding: 10px; */
     box-sizing: border-box;
+    position: relative;
 }
 
 /* Div 2 */
 .lecturas {
+    position: relative;
     box-sizing: border-box;
+    display: flex;
+    height: 100%;
+}
+
+.lecturas table th:last-child,
+.lecturas table td:last-child {
+    width: 50px;
 }
 
 /* Div 3 */

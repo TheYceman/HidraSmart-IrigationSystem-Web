@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "../../../public/styles/gestor-consumos/gestion-lecturas.module.css";
 
 //Obtener API Key para el mapa
@@ -9,7 +9,12 @@ function GestionLecturas() {
 
     const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
 
-    // Este es el método que quieres:
+    const fileInputRef = useRef(null);
+
+    const handleFileButtonClick = () => {
+        fileInputRef.current.click();
+    };
+
     function openImageLectura() {
         setIsImagePopupOpen(true);
     }
@@ -54,6 +59,12 @@ function GestionLecturas() {
                             <tr>
                                 <th>Fecha Hora</th>
                                 <th>Nombre</th>
+                                <th>Pedidor</th>
+                                <th>Asignado</th>
+                                <th>Prioridad</th>
+                                <th>Estado</th>
+                                <th>Tipo</th>
+                                <th>Comentarios</th>
                                 <th>Acción</th>
                             </tr>
                         </thead>
@@ -62,6 +73,12 @@ function GestionLecturas() {
                                 <tr key={i}>
                                     <td>Dato 1</td>
                                     <td>Dato 2</td>
+                                    <td>Dato 3</td>
+                                    <td>Dato 4</td>
+                                    <td>Dato 5</td>
+                                    <td>Dato 6</td>
+                                    <td>Dato 7</td>
+                                    <td>Dato 8</td>
                                     <td><i className="fas fa-edit"></i></td>
                                 </tr>
                             ))}
@@ -85,19 +102,38 @@ function GestionLecturas() {
                                 <th>Fecha Lectura</th>
                                 <th>Usuario</th>
                                 <th>Volumen (m3)</th>
-                                <th>Accion</th>
                                 <th>Imagen</th>
+                                <th>Accion</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.from({ length: 14 }).map((_, i) => (
+                            <tr>
+                                <td><input type="text" name="" id="" /></td>
+                                <td><input type="datetime-local" name="" id="" /></td>
+                                <td><input type="text" name="" id="" /></td>
+                                <td><input type="text" name="" id="" /></td>
+                                <td>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                    />
+                                    <button onClick={handleFileButtonClick}>Seleccionar archivo</button>
+                                </td>
+                                <td><i className="fas fa-plus"></i></td>
+                            </tr>
+                            {Array.from({ length: 15 }).map((_, i) => (
                                 <tr key={i}>
                                     <td>Dato 1</td>
                                     <td>Dato 2</td>
                                     <td>Dato 3</td>
                                     <td>Dato 4</td>
+                                    <td>
+                                        <span onClick={openImageLectura}>
+                                            <i className="fas fa-image"></i>Ver imagen
+                                        </span>
+                                    </td>
                                     <td><i className="fas fa-edit"></i></td>
-                                    <td><i onClick={openImageLectura} className="fas fa-image"></i></td>
                                 </tr>
                             ))}
                         </tbody>
@@ -118,13 +154,9 @@ function GestionLecturas() {
                 height="400px"
                 footer={<button onClick={() => setIsImagePopupOpen(false)}>Cerrar</button>}
             >
-                <table>
-                    <tr>
-                        <td>
-                            <img src="/images/imagen-lectura.jpg" alt="Imagen de lectura" />
-                        </td>
-                    </tr>
-                </table>
+                <div style={{ textAlign: "center" }}>
+                    <img src="https://via.placeholder.com/300" alt="Imagen seleccionada" />
+                </div>
             </PopupConfig>
 
         </div>
