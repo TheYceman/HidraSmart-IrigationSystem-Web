@@ -18,7 +18,8 @@
     font-size: 13px;
 }
 
-.cabecera_izquierda button, .cabecera_izquierda select{
+.cabecera_izquierda button,
+.cabecera_izquierda select {
     padding: 5px 10px;
     cursor: pointer;
 }
@@ -30,13 +31,19 @@
     gap: 10px;
 }
 
-.cabecera_izquierda .filtros_select div{
+.cabecera_izquierda .filtros_select div {
     margin-right: 5px;
 }
 
-.cabecera_izquierda .filtros_select select{
-   border-radius: 5px;
-   margin-left: 5px;
+.cabecera_izquierda .filtros_select select {
+    border: 2px solid #a1a1a1;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+.cabecera_izquierda .filtros_select select:focus {
+    border-color: var(--color-primary-400);
+    outline: var(--color-primary-400);
 }
 
 .cabecera_izquierda .filtros_duracion {
@@ -87,7 +94,7 @@
     border-collapse: collapse;
 }
 
-.tabla_contenedor table tbody{
+.tabla_contenedor table tbody {
     font-size: 12px;
 }
 
@@ -100,7 +107,7 @@
     background-color: #e6f7ff;
 }
 
-.tabla_contenedor th{
+.tabla_contenedor th {
     background-color: var(--color-primary-400);
     color: white;
 }
@@ -124,6 +131,7 @@
     color: var(--color-primary-400);
     border-radius: 5px;
     padding: 5px 10px;
+    font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -148,7 +156,7 @@
     align-items: center;
 }
 
-.columna_derecha .mapa_riego{
+.columna_derecha .mapa_riego {
     width: 100%;
     height: 100%;
 }

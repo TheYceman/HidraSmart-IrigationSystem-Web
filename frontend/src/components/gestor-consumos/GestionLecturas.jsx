@@ -1,24 +1,132 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import styles from "../../../public/styles/gestor-consumos/gestion-lecturas.module.css";
+
+//Obtener API Key para el mapa
+import GoogleApiKeyProvider from "../api-keys/GoogleApiKeyProvider";
+import PopupConfig from "../pop-up/PopupConfiguration";
 
 function GestionLecturas() {
+
+    const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+
+    // Este es el método que quieres:
+    function openImageLectura() {
+        setIsImagePopupOpen(true);
+    }
+
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "/scripts/gestor-consumos/gestion-lecturas.js";
+        document.body.appendChild(script);
+    }, []);
+
     return (
-        <div>
-            <h3>Gestión de Lecturas</h3>
-            <p>Aquí se cargarán las lecturas de contadores de agua.</p>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
+
+        <div className={styles.contenedor_principal}>
+            <div className={`${styles.peticiones_lectura} ${styles.filtros_tabla}`}>
+                <div className={styles.filtros}>
+                    <div>
+                        <label htmlFor="periodo-select-1">Seleccione día</label>
+                        <input type="datetime-local" id="periodo-select-1" name="fecha" />
+                    </div>
+                    <div>
+                        <label htmlFor="sector-select">Balsa</label>
+                        <select name="sector" id="sector-select">
+                            <option value="todos">Todos</option>
+                            <option value="sector1">Sector 1</option>
+                            <option value="sector2">Sector 2</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="contador-select">Contador</label>
+                        <select name="contador" id="contador-select">
+                            <option value="0CM0201">Todos</option>
+                            <option value="0CM0201">0CM0201</option>
+                            <option value="0CM0202">0CM0202</option>
+                            <option value="0CM0203">0CM0203</option>
+                        </select>
+                    </div>
+                    <button><i className="fas fa-folder-open"></i>Exportar a Excel</button>
+                </div>
+                <div className="custom_scrollbar">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha Hora</th>
+                                <th>Nombre</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Array.from({ length: 14 }).map((_, i) => (
+                                <tr key={i}>
+                                    <td>Dato 1</td>
+                                    <td>Dato 2</td>
+                                    <td><i className="fas fa-edit"></i></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div className={styles.grafica_contenedor}>
+                <div id="grafica-lecturas" className={styles.grafica}>
+
+                </div>
+            </div>
+
+            <div className={`${styles.lecturas}`}>
+                <div className="custom_scrollbar">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Contador</th>
+                                <th>Fecha Lectura</th>
+                                <th>Usuario</th>
+                                <th>Volumen (m3)</th>
+                                <th>Accion</th>
+                                <th>Imagen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Array.from({ length: 14 }).map((_, i) => (
+                                <tr key={i}>
+                                    <td>Dato 1</td>
+                                    <td>Dato 2</td>
+                                    <td>Dato 3</td>
+                                    <td>Dato 4</td>
+                                    <td><i className="fas fa-edit"></i></td>
+                                    <td><i onClick={openImageLectura} className="fas fa-image"></i></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div className={styles.mapa}>
+                <div id="mapa-lecturas" className={styles.mapa_lecturas}></div>
+                <GoogleApiKeyProvider />
+            </div>
+
+            <PopupConfig
+                isOpen={isImagePopupOpen}
+                onClose={() => setIsImagePopupOpen(false)}
+                title="Imagen de lectura"
+                width="600px"
+                height="400px"
+                footer={<button onClick={() => setIsImagePopupOpen(false)}>Cerrar</button>}
+            >
+                <table>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Parcela</th>
-                        <th>Lectura (m³)</th>
+                        <td>
+                            <img src="/images/imagen-lectura.jpg" alt="Imagen de lectura" />
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr><td>2025-06-01</td><td>Parcela 1</td><td>1234</td></tr>
-                    <tr><td>2025-06-08</td><td>Parcela 2</td><td>4567</td></tr>
-                    <tr><td>2025-06-10</td><td>Parcela 3</td><td>7890</td></tr>
-                </tbody>
-            </table>
+                </table>
+            </PopupConfig>
+
         </div>
     );
 }
