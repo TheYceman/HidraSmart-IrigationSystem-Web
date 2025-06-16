@@ -12,11 +12,18 @@
     border: 2px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .contenedor_principal>div:hover {
     border: 2px solid var(--color-primary-400);
-    box-shadow: 0px 0px 10px 0px rgba(52,162,231,0.3);
+    box-shadow: 0px 0px 10px 0px rgba(52, 162, 231, 0.3);
+}
+
+.contenedor_principal i {
+    font-size: 14px;
+    transition: color 0.2s ease;
 }
 
 .contenedor_principal i:hover {
@@ -25,6 +32,13 @@
     color: var(--color-primary-400);
 }
 
+.contenedor_principal .titulo_pestania {
+    background-color: var(--color-primary-400);
+    color: white;
+    padding: 2.5px 0;
+    text-align: center;
+    width: 100%;
+}
 
 /* Estilos botones globales */
 .contenedor_principal button {
@@ -115,12 +129,35 @@
     text-align: center;
 }
 
+.contenedor_principal table tr {
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.contenedor_principal table th:last-child,
+.contenedor_principal table td:last-child {
+    width: 30px;
+}
+
 .contenedor_principal table th {
     background-color: var(--color-primary-400);
     color: white;
+    font-size: 0.9rem;
 }
+
 .contenedor_principal table button {
     margin: 0 auto;
+}
+
+.contenedor_principal table .ver_mas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+.contenedor_principal table .ver_mas:hover {
+    color: var(--color-primary-400);
 }
 
 /* Div 1 */
@@ -137,16 +174,16 @@
     height: 100%;
 }
 
-.lecturas table th:last-child,
-.lecturas table td:last-child {
-    width: 50px;
+.lecturas table input {
+    width: 100%;
 }
 
 /* Div 3 */
 .grafica_contenedor {
     box-sizing: border-box;
 }
-.grafica_contenedor .grafica{
+
+.grafica_contenedor .grafica {
     width: 100%;
     height: 100%;
 }
@@ -159,4 +196,63 @@
 .mapa .mapa_lecturas {
     width: 100%;
     height: 100%;
+}
+
+@media (max-width: 1024px) {
+    .contenedor_principal {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        /* ya no limitamos altura en vertical */
+    }
+
+    .lecturas,
+    .peticiones_lectura,
+    .grafica_contenedor,
+    .mapa {
+        height: auto;
+    }
+
+    .peticiones_lectura {
+        order: 1;
+    }
+
+    .lecturas {
+        order: 2;
+    }
+
+    .grafica_contenedor {
+        order: 3;
+    }
+
+    .mapa {
+        order: 4;
+    }
+
+    .filtros_tabla {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filtros_tabla .filtros {
+        gap: 5px;
+        border-bottom: 2.5px solid #ccc;
+    }
+
+    .filtros_tabla .filtros div {
+        width: 50%;
+    }
+
+    .contenedor_scroll {
+        height: 250px;
+    }
+
+    .contenedor_principal table th,
+    .contenedor_principal table td {
+        font-size: 0.8rem;
+    }
+
+    .mapa .mapa_lecturas {
+        height: 250px;
+    }
 }
