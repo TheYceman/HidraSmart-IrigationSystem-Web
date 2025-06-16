@@ -7,7 +7,6 @@ import ContactUs from './pages/ContactUs';
 
 import PanelAplicaciones from './pages/PanelAplicaciones';
 import GestorConsumos from './pages/GestorConsumos';
-import VentanaVacia from './pages/EjemploVacia';
 
 // Estilos GLOBALES
 import '../public/styles/common/custom-scrollbar.css';
@@ -20,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/panel-aplicaciones" element={<PanelAplicaciones />} />
+        <Route path="/panel-aplicaciones/gestor-consumos" element={<GestorConsumos />} />
         <Route path="*" element={<RedirectPage />} />
       </Routes>
     </Router>

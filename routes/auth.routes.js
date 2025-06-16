@@ -5,4 +5,6 @@ const router = express.Router();
 
 router.post("/loginReact", authController.loginReact);
 
+router.post("/changePasswordReact", authController.changePassword);
+
 module.exports = router;

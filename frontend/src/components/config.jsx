@@ -5,6 +5,11 @@ const ConfigurationPopup = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState('tab1');
   const [is2FAEnabled, setIs2FAEnabled] = useState(true);
 
+  var [currentPassword, setCurrentPassword] = useState('');
+  var [newPassword, setNewPassword] = useState('');
+  var [confirmPassword, setRepeatPassword] = useState('');
+  var [message, setMessage] = useState('');
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -12,6 +17,101 @@ const ConfigurationPopup = ({ onClose }) => {
   const handle2FAToggle = () => {
     setIs2FAEnabled(!is2FAEnabled);
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Validar que todos los campos estén completos
+  if (
+    !currentPassword ||
+    !newPassword ||
+    !confirmPassword
+  ) {
+    fadeMixinNotTime.fire({
+      icon: "warning",
+      title: "Campos incompletos",
+      text: "Por favor, completa todos los campos.",
+      confirmButtonText: "Aceptar",
+    });
+    return;
+  }
+
+  // Validar que la nueva contraseña y la repetida coincidan
+  if (newPassword !== confirmPassword) {
+    fadeMixinNotTime.fire({
+      icon: "warning",
+      title: "Contraseñas no coinciden",
+      text: "La nueva contraseña y su confirmación deben ser iguales.",
+      confirmButtonText: "Aceptar",
+    });
+    return;
+  }
+
+
+   let token;
+  try {
+    token = await grecaptcha.enterprise.execute(
+      "6Lf3o3opAAAAAH0GHlp_LuajXdK_Ur8HCR8_vLqX",
+      { action: "changePassword" }
+    );
+  } catch (error) {
+    console.error("Error al obtener token de reCAPTCHA:", error);
+    fadeMixinNotTime.fire({
+      icon: "error",
+      title: "Error de verificación",
+      text: "No se pudo verificar la solicitud. Inténtalo de nuevo.",
+      confirmButtonText: "Aceptar",
+    });
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/changePasswordReact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        oldPassword: currentPassword,
+        newPassword: newPassword,
+        token: token,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de cambio de contraseña");
+    }
+
+    const data = await response.json();
+    if (data.success) {
+      fadeMixinNotTime.fire({
+        icon: "success",
+        title: "Contraseña cambiada",
+        text: "La contraseña ha sido actualizada correctamente.",
+        confirmButtonText: "Aceptar",
+      }).then(() => {
+        currentPassword = "";
+        newPassword = "";
+        confirmPassword = "";
+      });
+    } else {
+      fadeMixinNotTime.fire({
+        icon: "error",
+        title: "Error al cambiar contraseña",
+        text: data.message || "No se pudo cambiar la contraseña.",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  } catch (error) {
+    console.error("Error al cambiar contraseña:", error);
+    fadeMixinNotTime.fire({
+      icon: "error",
+      title: "Error de conexión",
+      text: "No se pudo conectar con el servidor. Inténtalo más tarde.",
+      confirmButtonText: "Aceptar",
+    });
+  }
+}
+
 
   return (
     <div className="config-popup-overlay">
@@ -69,60 +169,59 @@ const ConfigurationPopup = ({ onClose }) => {
           <label htmlFor="tab4_configuration">Gestor de Usuarios</label>
 
           <div className="tab_content_popup_configuration">
-<div 
-        id="container-submit-network-selection" 
-        className="container_submit_password" 
-        style={{ flexDirection: 'column' }}
-      >
-        <div 
-          className="network-selector-container" 
-          style={{ 
-            width: '95%', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center' 
-          }}
-        >
-          <div className="inputGroup">
-            <input 
-              value="alcazar" 
-              id="radio0" 
-              name="radio" 
-              type="radio" 
-            />
-            <label htmlFor="radio0">Alcázar de San Juan</label>
-          </div>
+            <div
+              id="container-submit-network-selection"
+              className="container_submit_password"
+              style={{ flexDirection: 'column' }}
+            >
+              <div
+                className="network-selector-container"
+                style={{
+                  width: '95%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center'
+                }}
+              >
+                <div className="inputGroup">
+                  <input
+                    value="alcazar"
+                    id="radio0"
+                    name="radio"
+                    type="radio"
+                  />
+                  <label htmlFor="radio0">Alcázar de San Juan</label>
+                </div>
 
-          <div className="inputGroup">
-            <input 
-              value="corral" 
-              id="radio1" 
-              name="radio" 
-              type="radio" 
-            />
-            <label htmlFor="radio1">Corral de Calatrava</label>
-          </div>
-        </div>
+                <div className="inputGroup">
+                  <input
+                    value="corral"
+                    id="radio1"
+                    name="radio"
+                    type="radio"
+                  />
+                  <label htmlFor="radio1">Corral de Calatrava</label>
+                </div>
+              </div>
 
-        <button 
-          id="button-submit-network-selection" 
-          className="button_common" 
-          type="button"
-        ></button>
-      </div>      
-      
+              <button
+                id="button-submit-network-selection"
+                className="button_common"
+                type="button"
+              ></button>
+            </div>
+
           </div>
 
           <div className="tab_content_popup_configuration">
             <form
               id="form-popup-configuration"
               className="form_popup_configuration"
-              action="/cambiar-contrasena"
               autoComplete="off"
               inputMode="none"
               aria-autocomplete="none"
               method="POST"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
             >
               <div id="body-form-popup-configuration" className="body_form_popup_configuration">
                 <div id="fields-popup-configuration" className="fields_popup_configuration">
@@ -133,6 +232,8 @@ const ConfigurationPopup = ({ onClose }) => {
                       className="input_old_password"
                       placeholder=" "
                       autoComplete="current-password"
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+
                     />
                     <span className="label_name_old_password">Antigua Contraseña</span>
                     <span className="label_icon_old_password"></span>
@@ -145,6 +246,8 @@ const ConfigurationPopup = ({ onClose }) => {
                       className="input_new_password"
                       placeholder=" "
                       autoComplete="new-password"
+                      onChange={(e) => setNewPassword(e.target.value)}
+
                     />
                     <span className="label_name_new_password">Nueva Contraseña</span>
                     <span className="label_icon_new_password"></span>
@@ -157,6 +260,7 @@ const ConfigurationPopup = ({ onClose }) => {
                       className="input_repeat_password"
                       placeholder=" "
                       autoComplete="new-password"
+                      onChange={(e) => setRepeatPassword(e.target.value)}
                     />
                     <span className="label_name_repeat_password">Repetir Contraseña</span>
                     <span className="label_icon_repeat_password"></span>
@@ -178,8 +282,7 @@ const ConfigurationPopup = ({ onClose }) => {
                 <button
                   id="submit-password"
                   className="button_submit_password"
-                  type="button"
-                  disabled
+                  type="submit"
                 ></button>
               </div>
             </form>
