@@ -1,10 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../../public/styles/gestor-consumos/gestion-lecturas.module.css";
 
 //Obtener API Key para el mapa
 import GoogleApiKeyProvider from "../api-keys/GoogleApiKeyProvider";
+import PopupConfig from "../pop-up/PopupConfiguration";
 
 function GestionLecturas() {
+
+    const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+
+    // Este es el método que quieres:
+    function openImageLectura() {
+        setIsImagePopupOpen(true);
+    }
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "/scripts/gestor-consumos/gestion-lecturas.js";
@@ -12,6 +21,7 @@ function GestionLecturas() {
     }, []);
 
     return (
+
         <div className={styles.contenedor_principal}>
             <div className={`${styles.peticiones_lectura} ${styles.filtros_tabla}`}>
                 <div className={styles.filtros}>
@@ -30,6 +40,7 @@ function GestionLecturas() {
                     <div>
                         <label htmlFor="contador-select">Contador</label>
                         <select name="contador" id="contador-select">
+                            <option value="0CM0201">Todos</option>
                             <option value="0CM0201">0CM0201</option>
                             <option value="0CM0202">0CM0202</option>
                             <option value="0CM0203">0CM0203</option>
@@ -41,9 +52,8 @@ function GestionLecturas() {
                     <table>
                         <thead>
                             <tr>
-                                <th>Fecha Inicio</th>
-                                <th>Hora</th>
-                                <th>Volumen (m3)</th>
+                                <th>Fecha Hora</th>
+                                <th>Nombre</th>
                                 <th>Acción</th>
                             </tr>
                         </thead>
@@ -52,38 +62,7 @@ function GestionLecturas() {
                                 <tr key={i}>
                                     <td>Dato 1</td>
                                     <td>Dato 2</td>
-                                    <td>Dato 3</td>
-                                    <td>Dato 4</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div className={`${styles.lecturas} ${styles.filtros_tabla}`}>
-                <div className={styles.filtros}>
-                    <button><i className="fas fa-plus"></i>Añadir lectura</button>
-                    <button><i className="fas fa-sync"></i>Petición</button>
-                    <button><i className="fas fa-map"></i>SmartMap</button>
-                </div>
-                <div className="custom_scrollbar">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Contador</th>
-                                <th>Fecha Petición</th>
-                                <th>Usuario</th>
-                                <th>Accion</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {Array.from({ length: 14 }).map((_, i) => (
-                                <tr key={i}>
-                                    <td>Dato 1</td>
-                                    <td>Dato 2</td>
-                                    <td>Dato 3</td>
-                                    <td>Dato 4</td>
+                                    <td><i className="fas fa-edit"></i></td>
                                 </tr>
                             ))}
                         </tbody>
@@ -97,10 +76,57 @@ function GestionLecturas() {
                 </div>
             </div>
 
+            <div className={`${styles.lecturas}`}>
+                <div className="custom_scrollbar">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Contador</th>
+                                <th>Fecha Lectura</th>
+                                <th>Usuario</th>
+                                <th>Volumen (m3)</th>
+                                <th>Accion</th>
+                                <th>Imagen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Array.from({ length: 14 }).map((_, i) => (
+                                <tr key={i}>
+                                    <td>Dato 1</td>
+                                    <td>Dato 2</td>
+                                    <td>Dato 3</td>
+                                    <td>Dato 4</td>
+                                    <td><i className="fas fa-edit"></i></td>
+                                    <td><i onClick={openImageLectura} className="fas fa-image"></i></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div className={styles.mapa}>
                 <div id="mapa-lecturas" className={styles.mapa_lecturas}></div>
                 <GoogleApiKeyProvider />
             </div>
+
+            <PopupConfig
+                isOpen={isImagePopupOpen}
+                onClose={() => setIsImagePopupOpen(false)}
+                title="Imagen de lectura"
+                width="600px"
+                height="400px"
+                footer={<button onClick={() => setIsImagePopupOpen(false)}>Cerrar</button>}
+            >
+                <table>
+                    <tr>
+                        <td>
+                            <img src="/images/imagen-lectura.jpg" alt="Imagen de lectura" />
+                        </td>
+                    </tr>
+                </table>
+            </PopupConfig>
+
         </div>
     );
 }
