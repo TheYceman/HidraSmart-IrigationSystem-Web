@@ -15,6 +15,8 @@ const authMiddleware = require("./middlewares/check-auth");
 const initRoutes = require("./routes/init.routes");
 const authRoutes = require("./routes/auth.routes");
 const applicationPanelRoutes = require("./routes/application-panel.routes");
+const gestionLecturasRoutes = require("./routes/gestion-lecturas.routes");
+
 const app = express();
 
 // 1. Middleware global
@@ -46,6 +48,7 @@ app.use("/api", authRoutes);
 app.use(authMiddleware);
 
 app.use("/api", applicationPanelRoutes);
+app.use("/api", gestionLecturasRoutes);
 
 // 6. Archivos estáticos del frontend
 const frontendDistPath = path.join(__dirname, "frontend", "public", "dist");
