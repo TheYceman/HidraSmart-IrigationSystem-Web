@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
-const { getSequelizeInstance } = require('../data/bbdd-selector');  // <-- Usamos tu selector
-const { Peticion } = require('../models/peticion.model');  // <-- Cargamos tu modelo
+const { getSequelizeInstance } = require('../data/bbdd-selector');
+const { Peticion } = require('../models/peticion.model');
 
 // Cache de modelos para evitar redefinirlos cada vez
 const modelCache = {};
