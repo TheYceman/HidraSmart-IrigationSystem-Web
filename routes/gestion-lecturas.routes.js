@@ -1,8 +1,8 @@
-const express = require("express");
-const gestionLecturasController = require("../controllers/gestion-lecturas.controller");
+// const express = require("express");
+// const gestionLecturasController = require("../controllers/gestion-lecturas.controller");
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get("/getContadores", gestionLecturasController.getContadores);
+// router.get("/getContadores", gestionLecturasController.getContadores);
 
-module.exports = router;
+// module.exports = router;
