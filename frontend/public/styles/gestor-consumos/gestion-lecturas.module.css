@@ -78,6 +78,7 @@
     display: grid;
     grid-template-columns: 17.5% auto;
     overflow: hidden;
+    height: 100%;
 }
 
 /* Columna filtros */
@@ -131,6 +132,7 @@
 
 .contenedor_principal table tr {
     border-bottom: 1px solid #e7e7e7;
+    font-size: 14px;
 }
 
 .contenedor_principal table th:last-child,

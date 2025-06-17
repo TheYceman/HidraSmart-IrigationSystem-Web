@@ -1,0 +1,1 @@
+const Lectura = require('../models/lectura.model');

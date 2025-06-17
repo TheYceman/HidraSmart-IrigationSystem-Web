@@ -1,13 +1,20 @@
 import { useEffect, useState, useRef } from "react";
+//Estilos
 import styles from "../../../public/styles/gestor-consumos/gestion-lecturas.module.css";
 
-//Obtener API Key para el mapa
+//Scripts
 import GoogleApiKeyProvider from "../api-keys/GoogleApiKeyProvider";
 import PopupConfig from "../pop-up/PopupConfiguration";
+import { fetchPeticiones } from "../../api/gestion-lectura-api.js";
 
 function GestionLecturas() {
 
-    const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+    const [peticiones, setPeticiones] = useState([]);
+    const [selectedBalsa, setSelectedBalsa] = useState("all");
+
+    const [popupContent, setPopupContent] = useState(null);
+    const [popupTitle, setPopupTitle] = useState("");
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const fileInputRef = useRef(null);
 
@@ -15,14 +22,32 @@ function GestionLecturas() {
         fileInputRef.current.click();
     };
 
-    function openImageLectura() {
-        setIsImagePopupOpen(true);
-    }
+    const openPopup = (title, content) => {
+        setPopupTitle(title);
+        setPopupContent(content);
+        setIsPopupOpen(true);
+    };
+
+    const handleBalsaChange = async (e) => {
+        const balsaValue = e.target.value;
+        setSelectedBalsa(balsaValue);
+
+        const dbSuffix = balsaValue === "all" ? "x" : balsaValue;
+        const datos = await fetchPeticiones(dbSuffix);
+        setPeticiones(datos);
+    };
 
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "/scripts/gestor-consumos/gestion-lecturas.js";
         document.body.appendChild(script);
+
+        const loadInitialData = async () => {
+            const datos = await fetchPeticiones("x");
+            setPeticiones(datos);
+        };
+
+        loadInitialData();
     }, []);
 
     return (
@@ -37,9 +62,9 @@ function GestionLecturas() {
                             <input type="datetime-local" id="periodo-select-1" name="fecha" />
                         </div>
                         <div>
-                            <label htmlFor="sector-select">Balsa</label>
-                            <select name="sector" id="sector-select">
-                                <option value="todos">Todas</option>
+                            <label htmlFor="balsa-select">Balsa</label>
+                            <select name="balsa" id="balsa-select" onChange={handleBalsaChange}>
+                                <option value="all">Todas</option>
                                 <option value="1">Balsa 1</option>
                                 <option value="2">Balsa 2</option>
                                 <option value="3">Balsa 3</option>
@@ -51,7 +76,7 @@ function GestionLecturas() {
                         <div>
                             <label htmlFor="contador-select">Contador</label>
                             <select name="contador" id="contador-select">
-                                <option value="0CM0201">Todos</option>
+                                <option value="all">Todos</option>
                                 <option value="0CM0201">0CM0201</option>
                                 <option value="0CM0202">0CM0202</option>
                                 <option value="0CM0203">0CM0203</option>
@@ -75,23 +100,34 @@ function GestionLecturas() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {Array.from({ length: 14 }).map((_, i) => (
-                                    <tr key={i}>
-                                        <td>Dato 1</td>
-                                        <td>Dato 2</td>
-                                        <td>Dato 3</td>
-                                        <td>Dato 4</td>
-                                        <td>Dato 5</td>
-                                        <td>Dato 6</td>
-                                        <td>Dato 7</td>
-                                        <td>
-                                            <span onClick={openImageLectura} className={styles.ver_mas}>
-                                                <i className="fas fa-align-left"></i>Ver más
-                                            </span>
+                                {peticiones.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="9" style={{ textAlign: "center", padding: "20px" }}>
+                                            No hay datos disponibles para las opciones seleccionadas
                                         </td>
-                                        <td><i className="fas fa-edit"></i></td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    peticiones.map((item, i) => (
+                                        <tr key={i}>
+                                            <td>{new Date(item.fecha).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}</td>
+                                            <td>{item.name}</td>
+                                            <td>{item.requester}</td>
+                                            <td>{item.assignedTo}</td>
+                                            <td>{item.priority}</td>
+                                            <td>{item.status}</td>
+                                            <td>{item.type}</td>
+                                            <td>
+                                                <span
+                                                    onClick={() => openPopup("Comentario", <div style={{ padding: "20px" }}>{item.comments}</div>)}
+                                                    className={styles.ver_mas}
+                                                >
+                                                    <i className="fas fa-align-left"></i>Ver más
+                                                </span>
+                                            </td>
+                                            <td><i className="fas fa-edit"></i></td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -141,9 +177,13 @@ function GestionLecturas() {
                                     <td>Dato 3</td>
                                     <td>Dato 4</td>
                                     <td>
-                                        <span onClick={openImageLectura} className={styles.ver_mas}>
+                                        <span
+                                            onClick={() => openPopup("Imagen de lectura", <div style={{ padding: "20px" }}>Aquí irá la imagen</div>)}
+                                            className={styles.ver_mas}
+                                        >
                                             <i className="fas fa-image"></i>Ver imagen
                                         </span>
+
                                     </td>
                                     <td><i className="fas fa-edit"></i></td>
                                 </tr>
@@ -159,16 +199,17 @@ function GestionLecturas() {
             </div>
 
             <PopupConfig
-                isOpen={isImagePopupOpen}
-                onClose={() => setIsImagePopupOpen(false)}
-                title="Imagen de lectura"
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+                title={popupTitle}
                 width="600px"
-                height="400px"
+                height="auto"
             >
                 <div style={{ textAlign: "center" }}>
-                    <img src="https://via.placeholder.com/300" alt="Imagen seleccionada" />
+                    {popupContent}
                 </div>
             </PopupConfig>
+
         </div>
     );
 }

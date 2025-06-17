@@ -43,12 +43,12 @@ io.use((socket, next) => {
 // ✅ Esta ruta es pública, asegúrate que initRoutes tenga `router.get("/")`
 app.use("/api", initRoutes);
 app.use("/api", authRoutes);
+app.use("/api", gestionLecturasRoutes);
 
 // 5. Middleware de autenticación para rutas privadas
 app.use(authMiddleware);
 
 app.use("/api", applicationPanelRoutes);
-app.use("/api", gestionLecturasRoutes);
 
 // 6. Archivos estáticos del frontend
 const frontendDistPath = path.join(__dirname, "frontend", "public", "dist");
