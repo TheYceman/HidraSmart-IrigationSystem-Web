@@ -98,6 +98,11 @@
     border-collapse: collapse;
 }
 
+.tabla_contenedor table thead {
+    position: sticky;
+    top: 0
+}
+
 .tabla_contenedor table tbody {
     font-size: 12px;
 }
