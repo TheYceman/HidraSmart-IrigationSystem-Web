@@ -125,6 +125,11 @@
     table-layout: fixed;
 }
 
+.contenedor_principal table thead {
+    position: sticky;
+    top: 0
+}
+
 .contenedor_principal table th,
 .contenedor_principal table td {
     padding: 8px;
