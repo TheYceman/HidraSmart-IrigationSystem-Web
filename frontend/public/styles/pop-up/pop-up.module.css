@@ -45,13 +45,13 @@
 .popup_close {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 30px;
   cursor: pointer;
   color: #999;
   transition: color 0.2s ease;
 }
 .popup_close:hover {
-  color: #333;
+  color: red;
 }
 
 @keyframes fadeIn {
