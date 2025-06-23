@@ -2,7 +2,7 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const mysql = require('mysql2/promise');
 
-const pemFile = process.env.PEM_CERTIFICATE_DDBB.replace(/\\n/g, '\n');
+const pemFile = process.env.PEM_CERTIFICATE_DDBB.replace(/\n/g, '\n');
 
 const baseConfig = {
   host: process.env.AZURE_MYSQL_HOST,
@@ -17,7 +17,7 @@ const baseConfig = {
 };
 
 if (process.env.NODE_ENV === 'development') {
-  baseConfig.timezone = 'Europe/Madrid';
+  baseConfig.timezone = '+02:00'; // Compatible con MySQL
 }
 
 const connections = {};
@@ -76,11 +76,10 @@ async function getAvailableBalsas() {
   const basePrefix = 'hidrasmart_is_b';
   const results = [];
 
-  for (let i = 0; i <= 20; i++) {
+  let i = 0;
+  while (true) {
     const dbName = `${basePrefix}${i === 0 ? 'x' : i}`;
     try {
-      console.log("Probing DB:", dbName); // ← AÑADE ESTO
-
       const connection = await mysql.createConnection({
         host: process.env.AZURE_MYSQL_HOST,
         user: process.env.AZURE_MYSQL_USER,
@@ -89,19 +88,19 @@ async function getAvailableBalsas() {
         ssl: { ca: pemFile },
       });
 
-      await connection.query('SELECT 1'); // conexión básica
+      await connection.query('SELECT 1'); // Test conexión
       await connection.end();
 
       results.push(i === 0 ? 'x' : i.toString());
+      i++; // Solo incrementar si tuvo éxito
     } catch (error) {
       console.warn(`❌ No disponible: ${dbName}`);
+      break; // Sale del bucle si falla
     }
   }
 
-  console.log("✅ Balsas disponibles:", results);
   return results;
 }
-
 
 module.exports = {
   getSequelizeInstance,
