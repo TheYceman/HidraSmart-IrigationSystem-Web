@@ -8,7 +8,7 @@ function Lectura(sequelize) {
             autoIncrement: true
         },
         contador: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(10),
             allowNull: false
         },
         fecha: {
@@ -24,7 +24,7 @@ function Lectura(sequelize) {
             allowNull: false
         },
         imagen: {
-            type: DataTypes.STRING(255),
+            type: DataTypes.BLOB('long'),
             allowNull: true
         }
     }, {

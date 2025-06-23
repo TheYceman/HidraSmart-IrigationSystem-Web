@@ -25,6 +25,7 @@
     "express": "^4.21.2",
     "express-mysql-session": "^3.0.0",
     "express-session": "^1.18.0",
+    "file-type": "^21.0.0",
     "git": "^0.1.5",
     "js-yaml": "^4.1.0",
     "mysql": "^2.18.1",

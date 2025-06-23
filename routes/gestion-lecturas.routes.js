@@ -9,6 +9,15 @@ const contadoresController = require('../controllers/contadores.controller.js');
 // Selector de bases de datos
 const { getAvailableBalsas } = require('../data/bbdd-selector.js');
 
+// RUTA ESPECIAL - Obtener todas las bases de datos de balsas disponibles
+router.get('/balsas-disponibles', async (req, res) => {
+    try {
+        const balsas = await getAvailableBalsas();
+        res.json(balsas);
+    } catch (err) {
+        res.status(500).json({ error: 'Error al obtener balsas disponibles' });
+    }
+});
 
 // Middleware para extraer el número de base de datos desde la ruta
 router.param('databaseNumber', (req, res, next, value) => {
@@ -63,14 +72,15 @@ router.get('/is-b:databaseNumber/contadores', async (req, res) => {
     }
 });
 
-// RUTA ESPECIAL - Obtener todas las bases de datos de balsas disponibles
-router.get('/balsas-disponibles', async (req, res) => {
-  try {
-    const balsas = await getAvailableBalsas();
-    res.json(balsas);
-  } catch (err) {
-    res.status(500).json({ error: 'Error al obtener balsas disponibles' });
-  }
+// Crear nueva lectura
+router.get('/is-b:databaseNumber/lecturas', async (req, res) => {
+    try {
+        const lecturas = await lecturaController.getAll(req.databaseNumber);
+        res.json(lecturas);
+    } catch (error) {
+        console.error('❌ Error al obtener las lecturas:', error);
+        res.status(500).json({ error: 'Error al obtener las lecturas', details: error.message });
+    }
 });
 
 module.exports = router;

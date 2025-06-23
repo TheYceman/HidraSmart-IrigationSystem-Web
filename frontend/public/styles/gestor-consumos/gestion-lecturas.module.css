@@ -186,6 +186,13 @@
     width: 100%;
 }
 
+.imagen_lecturas_popup {
+  width: 100%;
+  height: 400px;
+  display: block;
+  object-fit: contain;
+}
+
 /* Div 3 */
 .grafica_contenedor {
     box-sizing: border-box;
