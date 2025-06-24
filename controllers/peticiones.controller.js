@@ -1,4 +1,4 @@
-
+const { Op } = require('sequelize');
 const { getSequelizeInstance } = require('../data/bbdd-selector');
 const { Peticion } = require('../models/peticion.model');
 
@@ -28,9 +28,19 @@ async function getAwPeticiones(databaseNumber) {
  * @param {string|number} databaseNumber - Identificador de la base de datos.
  * @returns {Promise<Array>} - Array de objetos Peticion encontrados en la base de datos.
  */
-async function getAll(databaseNumber) {
-    const AwPeticiones = await getAwPeticiones(databaseNumber); // Obtiene el modelo para la base indicada
-    return await AwPeticiones.findAll(); // Devuelve todas las filas de la tabla 'peticiones'
+async function getAll(databaseNumber, filtroFecha = null) {
+    const AwPeticiones = await getAwPeticiones(databaseNumber);
+
+    const whereClause = filtroFecha
+        ? {
+            fecha: {
+                [Op.gte]: new Date(`${filtroFecha}T00:00:00`),
+                [Op.lt]: new Date(`${filtroFecha}T23:59:59`)
+            }
+        }
+        : {};
+
+    return await AwPeticiones.findAll({ where: whereClause });
 }
 
 // Exporta las funciones disponibles del módulo

@@ -85,7 +85,7 @@
 
 /* Columna filtros */
 .filtros_tabla .tabla {
-    overflow-x: hidden; 
+    overflow-x: hidden;
     border-bottom-right-radius: 8px;
 }
 
@@ -180,6 +180,13 @@
 .peticiones_lectura {
     box-sizing: border-box;
     position: relative;
+}
+
+.fecha_select_input {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .peticiones_lectura_wrapper {

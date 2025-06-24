@@ -8,48 +8,30 @@ import axios from "axios";
  * @param {string} dbSuffix - suffix of the database to fetch from
  * @returns {Promise<Array>} - an array of peticiones
  */
-export const fetchPeticiones = async (dbSuffix) => {
+export const fetchPeticiones = async (dbSuffix, fecha) => {
     try {
-        const url =
-            dbSuffix === "all"
-                ? "/api/peticiones-todas"
-                : `/api/is-b${dbSuffix}/peticiones`;
+        let url = dbSuffix === "all"
+            ? "/api/peticiones-todas"
+            : `/api/is-b${dbSuffix}/peticiones`;
 
+        if (fecha) url += `?fecha=${fecha}`;
         const res = await axios.get(url);
-
-        if (Array.isArray(res.data)) {
-            return res.data;
-        } else {
-            return [];
-        }
+        return Array.isArray(res.data) ? res.data : [];
     } catch (error) {
         console.error("Error al obtener peticiones:", error);
         return [];
     }
 };
 
-/**
- * Fetchs all lecturas from the backend for the given database suffix
- * and returns them as an array. If there is an error, it logs the error
- * and returns an empty array.
- *
- * @param {string} dbSuffix - suffix of the database to fetch from
- * @returns {Promise<Array>} - an array of lecturas
- */
-export const fetchLecturas = async (dbSuffix) => {
+export const fetchLecturas = async (dbSuffix, fecha) => {
     try {
-        const url =
-            dbSuffix === "all"
-                ? "/api/lecturas-todas"
-                : `/api/is-b${dbSuffix}/lecturas`;
+        let url = dbSuffix === "all"
+            ? "/api/lecturas-todas"
+            : `/api/is-b${dbSuffix}/lecturas`;
 
+        if (fecha) url += `?fecha=${fecha}`;
         const res = await axios.get(url);
-
-        if (Array.isArray(res.data)) {
-            return res.data;
-        } else {
-            return [];
-        }
+        return Array.isArray(res.data) ? res.data : [];
     } catch (error) {
         console.error("Error al obtener lecturas:", error);
         return [];

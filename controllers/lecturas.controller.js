@@ -37,17 +37,37 @@ async function getAwLecturas(databaseNumber) {
     return modelCache[databaseNumber];
 }
 
-async function getAll(databaseNumber) {
+async function getAll(databaseNumber, filtroFecha = null) {
     const AwLecturas = await getAwLecturas(databaseNumber);
-    const lecturas = await AwLecturas.findAll();
+
+    const whereClause = filtroFecha
+        ? {
+            fecha: {
+                [Op.gte]: new Date(`${filtroFecha}T00:00:00`),
+                [Op.lt]: new Date(`${filtroFecha}T23:59:59`)
+            }
+        }
+        : {};
+
+    const lecturas = await AwLecturas.findAll({ where: whereClause });
     return transformarLecturasConImagen(lecturas);
 }
 
-async function getByContador(databaseNumber, contador) {
+async function getByContador(databaseNumber, contador, filtroFecha = null) {
     const AwLecturas = await getAwLecturas(databaseNumber);
-    const lecturas = await AwLecturas.findAll({
-        where: { contador }
-    });
+
+    const whereClause = {
+        contador: contador
+    };
+
+    if (filtroFecha) {
+        whereClause.fecha = {
+            [Op.gte]: new Date(`${filtroFecha}T00:00:00`),
+            [Op.lt]: new Date(`${filtroFecha}T23:59:59`)
+        };
+    }
+
+    const lecturas = await AwLecturas.findAll({ where: whereClause });
     return transformarLecturasConImagen(lecturas);
 }
 

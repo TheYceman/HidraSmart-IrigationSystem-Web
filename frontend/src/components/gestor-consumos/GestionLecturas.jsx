@@ -25,6 +25,9 @@ function GestionLecturas() {
     const [peticiones, setPeticiones] = useState([]);
     const [selectedBalsa, setSelectedBalsa] = useState("all");
 
+    // Fecha
+    const [selectedFecha, setSelectedFecha] = useState("");
+
     // Lecturas
     const [lecturas, setLecturas] = useState([]);
     const [selectedContador, setSelectedContador] = useState("all");
@@ -182,19 +185,23 @@ function GestionLecturas() {
      */
     const handleContadorChange = async (contadorValue) => {
         setSelectedContador(contadorValue);
-        setFiltroContador("");
+        if (contadorValue === "all") {
+            setFiltroContador("Todos");
+        } else {
+            setFiltroContador(contadorValue);
+        }
+        setShowDropdown(false);
 
         const dbSuffix = selectedBalsa === "all" ? "x" : selectedBalsa;
 
         if (contadorValue === "all") {
-            const datosLecturas = await fetchLecturas(dbSuffix);
+            const datosLecturas = await fetchLecturas(dbSuffix, selectedFecha);
             setLecturas(datosLecturas);
         } else {
-            const datosLecturas = await fetchLecturasByContador(dbSuffix, contadorValue);
+            const datosLecturas = await fetchLecturasByContador(dbSuffix, contadorValue, selectedFecha);
             setLecturas(datosLecturas);
         }
     };
-
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -202,19 +209,22 @@ function GestionLecturas() {
         document.body.appendChild(script);
 
         const loadInitialData = async () => {
-            const datosPeticiones = await fetchPeticiones("x");
+            const dbSuffix = selectedBalsa === "all" ? "x" : selectedBalsa;
+
+            const [datosPeticiones, datosLecturas, datosContadores, balsasDisponibles] = await Promise.all([
+                fetchPeticiones(dbSuffix, selectedFecha),
+                selectedContador === "all"
+                    ? fetchLecturas(dbSuffix, selectedFecha)
+                    : fetchLecturasByContador(dbSuffix, selectedContador),
+                fetchContadores(dbSuffix),
+                fetchBalsasDisponibles()
+            ]);
+
             setPeticiones(datosPeticiones);
-
-            const datosLecturas = await fetchLecturas("x");
             setLecturas(datosLecturas);
-
-            const datosContadores = await fetchContadores("x");
             setContadores(datosContadores);
-
-            const balsasDisponibles = await fetchBalsasDisponibles();
             setBalsas(balsasDisponibles);
 
-            // Obtener IDs únicos de usuarios en peticiones y lecturas
             const idsUsuarios = new Set();
             datosPeticiones.forEach(p => {
                 if (p.requester) idsUsuarios.add(p.requester);
@@ -229,7 +239,8 @@ function GestionLecturas() {
 
 
         loadInitialData();
-    }, []);
+    }, [selectedBalsa, selectedContador, selectedFecha]);
+
 
     return (
         <>
@@ -239,8 +250,22 @@ function GestionLecturas() {
                     <div className={styles.filtros_tabla}>
                         <div className={styles.filtros}>
                             <div>
-                                <label htmlFor="periodo-select-1">Seleccione día</label>
-                                <input type="date" id="periodo-select-1" name="fecha" />
+                                <label htmlFor="fecha-select">Seleccione día</label>
+                                <div className={styles.fecha_select_input}>
+                                    <input
+                                        type="date"
+                                        id="fecha-select"
+                                        name="fecha"
+                                        value={selectedFecha}
+                                        onChange={(e) => setSelectedFecha(e.target.value)}
+                                    />
+                                    <i
+                                        className="fas fa-trash"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => setSelectedFecha("")}
+                                    ></i>
+                                </div>
+
                             </div>
                             <div>
                                 <label htmlFor="balsa-select">Balsa</label>
