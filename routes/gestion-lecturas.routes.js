@@ -5,6 +5,7 @@ const router = express.Router();
 const peticionesController = require('../controllers/peticiones.controller.js');
 const lecturaController = require('../controllers/lecturas.controller.js');
 const contadoresController = require('../controllers/contadores.controller.js');
+const authController = require('../controllers/auth.controller.js');
 
 // Selector de bases de datos
 const { getAvailableBalsas } = require('../data/bbdd-selector.js');
@@ -152,7 +153,6 @@ router.get('/contadores-todos', async (req, res) => {
         res.status(500).json({ error: 'Error al obtener todos los contadores' });
     }
 });
-
 
 
 // Crear nueva lectura

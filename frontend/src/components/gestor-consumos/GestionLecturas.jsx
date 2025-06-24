@@ -14,6 +14,7 @@ import {
     fetchLecturasByContador,
     fetchContadores,
     fetchBalsasDisponibles,
+    fetchNombreUsuario,
 } from "../../api/gestion-lectura-api.js";
 
 function GestionLecturas() {
@@ -39,6 +40,8 @@ function GestionLecturas() {
         );
     }, [contadores, filtroContador]);
 
+    // Usuarios
+    const [usuariosMap, setUsuariosMap] = useState({});
 
     // Popup
     const [popupContent, setPopupContent] = useState(null);
@@ -53,6 +56,25 @@ function GestionLecturas() {
         volumen: "",
         imagenBase64: "",
     });
+
+
+    const cargarUsuariosPorIds = async (ids) => {
+        const nuevoMapa = { ...usuariosMap };
+
+        const idsNoCargados = ids.filter(id => id && !nuevoMapa[id]);
+
+        const promesas = idsNoCargados.map(id =>
+            fetchNombreUsuario(id).then(res => {
+                nuevoMapa[id] = res.username;
+            }).catch(() => {
+                nuevoMapa[id] = `ID ${id}`;
+            })
+        );
+
+        await Promise.all(promesas);
+        setUsuariosMap(nuevoMapa);
+    };
+
 
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
@@ -191,7 +213,20 @@ function GestionLecturas() {
 
             const balsasDisponibles = await fetchBalsasDisponibles();
             setBalsas(balsasDisponibles);
+
+            // Obtener IDs únicos de usuarios en peticiones y lecturas
+            const idsUsuarios = new Set();
+            datosPeticiones.forEach(p => {
+                if (p.requester) idsUsuarios.add(p.requester);
+                if (p.assignedTo) idsUsuarios.add(p.assignedTo);
+            });
+            datosLecturas.forEach(l => {
+                if (l.usuario) idsUsuarios.add(l.usuario);
+            });
+
+            await cargarUsuariosPorIds([...idsUsuarios]);
         };
+
 
         loadInitialData();
     }, []);
@@ -205,7 +240,7 @@ function GestionLecturas() {
                         <div className={styles.filtros}>
                             <div>
                                 <label htmlFor="periodo-select-1">Seleccione día</label>
-                                <input type="datetime-local" id="periodo-select-1" name="fecha" />
+                                <input type="date" id="periodo-select-1" name="fecha" />
                             </div>
                             <div>
                                 <label htmlFor="balsa-select">Balsa</label>
@@ -294,8 +329,8 @@ function GestionLecturas() {
                                                     })}
                                                 </td>
                                                 <td>{item.name}</td>
-                                                <td>{item.requester}</td>
-                                                <td>{item.assignedTo}</td>
+                                                <td>{usuariosMap[item.requester] || item.requester}</td>
+                                                <td>{usuariosMap[item.assignedTo] || item.assignedTo}</td>
                                                 <td>{item.priority}</td>
                                                 <td>{item.status}</td>
                                                 <td>{item.type}</td>
@@ -387,7 +422,7 @@ function GestionLecturas() {
                                                     timeZone: "Europe/Madrid",
                                                 })}
                                             </td>
-                                            <td>{item.usuario}</td>
+                                            <td>{usuariosMap[item.usuario] || item.usuario}</td>
                                             <td>{item.volumen}</td>
                                             <td>
                                                 <span

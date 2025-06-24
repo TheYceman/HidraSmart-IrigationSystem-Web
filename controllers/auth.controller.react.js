@@ -3,15 +3,14 @@
 const { verifyCaptcha } = require("../config/verify-captcha");
 const { verifyUser } = require("../config/verify-user");
 const { insertSessionLog } = require("./session.controller");
-
-
+const { runQuery } = require("../data/bbdd-connector");
 
 async function loginReact(req, res) {
   console.log("Procesando login React...");
   if (!req.body || !req.body.username || !req.body.password || !req.body.token) {
     return res.status(400).json({ success: false, message: "Faltan datos en la solicitud" });
   }
-  
+
   try {
 
     const { username, password, token } = req.body;
@@ -23,7 +22,7 @@ async function loginReact(req, res) {
       return res.status(400).json({ success: false, message: "Captcha inválido o no verificado" });
     }
     const user = await verifyUser(username, password);
-    
+
     if (!user) {
       return res.status(401).json({ success: false, message: "Email y/o contraseña no son válidos" });
     }
@@ -50,4 +49,25 @@ async function loginReact(req, res) {
   }
 }
 
-module.exports = { loginReact };
+async function getNombreUsuarioById(req, res) {
+  const idUsuario = req.params.id;
+
+  try {
+    const query = "SELECT idusers, username FROM users WHERE idusers = ?";
+    const results = await runQuery(query, [idUsuario], "hidrasmart_is");
+
+    const filas = results?.data?.rows;
+
+    if (!Array.isArray(filas) || filas.length === 0) {
+      return res.json({ id: idUsuario, username: "Usuario no encontrado" });
+    }
+
+    const user = filas[0];
+    return res.json({ id: user.idusers, username: user.username });
+  } catch (error) {
+    console.error("Error al obtener nombre de usuario:", error);
+    return res.status(500).json({ error: "Error interno del servidor" });
+  }
+}
+
+module.exports = { loginReact, getNombreUsuarioById };

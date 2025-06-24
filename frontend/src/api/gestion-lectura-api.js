@@ -131,3 +131,14 @@ export const fetchBalsasDisponibles = async () => {
         return [];
     }
 };
+
+export const fetchNombreUsuario = async (id_usuario) => {
+    try {
+        const res = await axios.get(`/api/usuario/name-${id_usuario}`);
+        return res.data;
+    } catch (error) {
+        console.error("Error al obtener el nombre de usuario:", error);
+        return null;
+    }
+};
+
