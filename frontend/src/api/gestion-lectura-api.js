@@ -10,13 +10,20 @@ import axios from "axios";
  */
 export const fetchPeticiones = async (dbSuffix) => {
     try {
-        const res = await axios.get(`/api/is-b${dbSuffix}/peticiones`);
+        const url =
+            dbSuffix === "all"
+                ? "/api/peticiones-todas"
+                : `/api/is-b${dbSuffix}/peticiones`;
+
+        const res = await axios.get(url);
+
         if (Array.isArray(res.data)) {
             return res.data;
         } else {
             return [];
         }
     } catch (error) {
+        console.error("Error al obtener peticiones:", error);
         return [];
     }
 };
@@ -31,13 +38,20 @@ export const fetchPeticiones = async (dbSuffix) => {
  */
 export const fetchLecturas = async (dbSuffix) => {
     try {
-        const res = await axios.get(`/api/is-b${dbSuffix}/lecturas`);
+        const url =
+            dbSuffix === "all"
+                ? "/api/lecturas-todas"
+                : `/api/is-b${dbSuffix}/lecturas`;
+
+        const res = await axios.get(url);
+
         if (Array.isArray(res.data)) {
             return res.data;
         } else {
             return [];
         }
     } catch (error) {
+        console.error("Error al obtener lecturas:", error);
         return [];
     }
 };
@@ -54,13 +68,20 @@ export const fetchLecturas = async (dbSuffix) => {
 
 export const fetchLecturasByContador = async (dbSuffix, contador) => {
     try {
-        const res = await axios.get(`/api/is-b${dbSuffix}/lecturas/cont-${contador}`);
+        const url =
+            dbSuffix === "all"
+                ? `/api/lecturas-todas/cont-${contador}`
+                : `/api/is-b${dbSuffix}/lecturas/cont-${contador}`;
+
+        const res = await axios.get(url);
+
         if (Array.isArray(res.data)) {
             return res.data;
         } else {
             return [];
         }
     } catch (error) {
+        console.error("Error al obtener lecturas por contador:", error);
         return [];
     }
 };
@@ -75,13 +96,20 @@ export const fetchLecturasByContador = async (dbSuffix, contador) => {
  */
 export const fetchContadores = async (dbSuffix) => {
     try {
-        const res = await axios.get(`/api/is-b${dbSuffix}/contadores`);
+        const url =
+            dbSuffix === "all"
+                ? "/api/contadores-todos"
+                : `/api/is-b${dbSuffix}/contadores`;
+
+        const res = await axios.get(url);
+
         if (Array.isArray(res.data)) {
             return res.data;
         } else {
             return [];
         }
     } catch (error) {
+        console.error("Error al obtener contadores:", error);
         return [];
     }
 };

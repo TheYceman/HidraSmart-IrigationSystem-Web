@@ -25,7 +25,9 @@ router.param('databaseNumber', (req, res, next, value) => {
     next();
 });
 
-// Obtener todas las peticiones
+
+
+// Obtener todas las peticiones de una balsa
 router.get('/is-b:databaseNumber/peticiones', async (req, res) => {
     try {
         const peticiones = await peticionesController.getAll(req.databaseNumber);
@@ -35,6 +37,26 @@ router.get('/is-b:databaseNumber/peticiones', async (req, res) => {
         res.status(500).json({ error: 'Error al obtener las peticiones' });
     }
 });
+
+// Obtener las peticiones de todas las balsas
+router.get('/peticiones-todas', async (req, res) => {
+    try {
+        const balsas = await getAvailableBalsas();
+        const results = [];
+
+        for (const balsa of balsas) {
+            const peticiones = await peticionesController.getAll(balsa);
+            results.push(...peticiones);
+        }
+
+        res.json(results);
+    } catch (error) {
+        console.error('❌ Error al obtener todas las peticiones:', error);
+        res.status(500).json({ error: 'Error al obtener todas las peticiones' });
+    }
+});
+
+
 
 // Obtener todas las lecturas
 router.get('/is-b:databaseNumber/lecturas', async (req, res) => {
@@ -47,7 +69,27 @@ router.get('/is-b:databaseNumber/lecturas', async (req, res) => {
     }
 });
 
-// Obtener todas las lecturas de un contador
+// Obtener las lecturas de todas las balsas
+router.get('/lecturas-todas', async (req, res) => {
+    try {
+        const balsas = await getAvailableBalsas();
+        const results = [];
+
+        for (const balsa of balsas) {
+            const lecturas = await lecturaController.getAll(balsa);
+            results.push(...lecturas);
+        }
+
+        res.json(results);
+    } catch (error) {
+        console.error('❌ Error al obtener todas las lecturas:', error);
+        res.status(500).json({ error: 'Error al obtener todas las lecturas' });
+    }
+});
+
+
+
+// Obtener todas las lecturas de un contador de una balsa
 router.get('/is-b:databaseNumber/lecturas/cont-:contador', async (req, res) => {
     try {
         const databaseNumber = req.databaseNumber;
@@ -61,6 +103,27 @@ router.get('/is-b:databaseNumber/lecturas/cont-:contador', async (req, res) => {
     }
 });
 
+// Obtener todas las lecturas de un contador de todas las balsas
+router.get('/lecturas-todas/cont-:contador', async (req, res) => {
+    try {
+        const contador = req.params.contador;
+        const balsas = await getAvailableBalsas();
+        const results = [];
+
+        for (const balsa of balsas) {
+            const lecturas = await lecturaController.getByContador(balsa, contador);
+            results.push(...lecturas);
+        }
+
+        res.json(results);
+    } catch (error) {
+        console.error('❌ Error al obtener lecturas por contador:', error);
+        res.status(500).json({ error: 'Error al obtener lecturas por contador' });
+    }
+});
+
+
+
 // Obtener todos los contadores de una base de datos
 router.get('/is-b:databaseNumber/contadores', async (req, res) => {
     try {
@@ -71,6 +134,26 @@ router.get('/is-b:databaseNumber/contadores', async (req, res) => {
         res.status(500).json({ error: 'Error al obtener contadores' });
     }
 });
+
+// Obtener todos los contadores de todas las balsas
+router.get('/contadores-todos', async (req, res) => {
+    try {
+        const balsas = await getAvailableBalsas();
+        const results = [];
+
+        for (const balsa of balsas) {
+            const contadores = await contadoresController.getAll(balsa);
+            results.push(...contadores);
+        }
+
+        res.json(results);
+    } catch (error) {
+        console.error('❌ Error al obtener todos los contadores:', error);
+        res.status(500).json({ error: 'Error al obtener todos los contadores' });
+    }
+});
+
+
 
 // Crear nueva lectura
 router.get('/is-b:databaseNumber/lecturas', async (req, res) => {

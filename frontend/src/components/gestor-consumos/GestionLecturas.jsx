@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import axios from "axios";
+import Select from "react-select";
 
 //Estilos
 import styles from "../../../public/styles/gestor-consumos/gestion-lecturas.module.css";
@@ -29,6 +30,15 @@ function GestionLecturas() {
 
     // Contadores
     const [contadores, setContadores] = useState([]);
+    const [filtroContador, setFiltroContador] = useState("");
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    const filteredContadores = useMemo(() => {
+        return contadores.filter(c =>
+            c.ideEle?.toLowerCase().includes(filtroContador.toLowerCase())
+        );
+    }, [contadores, filtroContador]);
+
 
     // Popup
     const [popupContent, setPopupContent] = useState(null);
@@ -125,12 +135,13 @@ function GestionLecturas() {
     const handleBalsaChange = async (e) => {
         const balsaValue = e.target.value;
         setSelectedBalsa(balsaValue);
+        setFiltroContador("");
+        setSelectedContador("all");
 
-        const dbSuffix = balsaValue === "all" ? "x" : balsaValue;
-        const datos = await fetchPeticiones(dbSuffix);
+        const datos = await fetchPeticiones(balsaValue);
         setPeticiones(datos);
 
-        const datosContadores = await fetchContadores(dbSuffix);
+        const datosContadores = await fetchContadores(balsaValue);
         setContadores(datosContadores);
     };
 
@@ -147,18 +158,21 @@ function GestionLecturas() {
      * lecturas en el estado de 'lecturas'. Si la petición no devuelve un array,
      * se vacía el estado de 'lecturas'.
      */
-    const handleContadorChange = async (e) => {
-        const contadorValue = e.target.value;
+    const handleContadorChange = async (contadorValue) => {
         setSelectedContador(contadorValue);
+        setFiltroContador("");
+
+        const dbSuffix = selectedBalsa === "all" ? "x" : selectedBalsa;
 
         if (contadorValue === "all") {
-            const datosLecturas = await fetchLecturas("x");
+            const datosLecturas = await fetchLecturas(dbSuffix);
             setLecturas(datosLecturas);
         } else {
-            const datosLecturas = await fetchLecturasByContador("x", contadorValue);
+            const datosLecturas = await fetchLecturasByContador(dbSuffix, contadorValue);
             setLecturas(datosLecturas);
         }
     };
+
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -196,50 +210,57 @@ function GestionLecturas() {
                             <div>
                                 <label htmlFor="balsa-select">Balsa</label>
                                 <select value={selectedBalsa} onChange={handleBalsaChange}>
-                                    {balsas.length === 0 ? (
-                                        <option disabled value="">
-                                            No hay balsas disponibles
+                                    <option value="all">Todas</option>
+                                    {balsas.map((balsa) => (
+                                        <option key={balsa} value={balsa}>
+                                            {`Balsa ${balsa}`}
                                         </option>
-                                    ) : (
-                                        <>
-                                            {balsas.map((balsa) => (
-                                                <option key={balsa} value={balsa}>
-                                                    {balsa === "x" ? "Todas" : `Balsa ${balsa}`}
-                                                </option>
-
-                                            ))}
-                                        </>
-                                    )}
+                                    ))}
                                 </select>
                             </div>
                             <div>
                                 <label htmlFor="contador-select">Contador</label>
-                                <select
-                                    name="contador"
-                                    id="contador-select"
-                                    onChange={handleContadorChange}
-                                >
-                                    {contadores.length === 0 ? (
-                                        <option value="" disabled>
-                                            Sin contadores disponibles
-                                        </option>
-                                    ) : (
-                                        <>
-                                            <option value="all">Todos</option>
-                                            {contadores.map((item, i) => (
-                                                <option key={i} value={item.ideEle}>
-                                                    {item.ideEle}
-                                                </option>
+
+                                <div className={styles.peticiones_lectura_wrapper}>
+                                    <input
+                                        type="text"
+                                        id="contador-select"
+                                        placeholder="Buscar contador"
+                                        value={filtroContador}
+                                        onChange={(e) => setFiltroContador(e.target.value)}
+                                        onFocus={() => setShowDropdown(true)}
+                                        onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
+                                        className={styles.peticiones_lectura_input}
+                                    />
+                                    {showDropdown && (
+                                        <ul className={`${styles.peticiones_lectura_lista} custom_scrollbar`} >
+                                            <li
+                                                key="all"
+                                                onMouseDown={() => handleContadorChange("all")}
+                                                className={styles.peticiones_lectura_item}
+                                            >
+                                                Todos
+                                            </li>
+                                            {filteredContadores.map((c) => (
+                                                <li
+                                                    key={c.ideEle}
+                                                    onMouseDown={() => handleContadorChange(c.ideEle)}
+                                                    className={styles.peticiones_lectura_item}
+                                                >
+                                                    {c.ideEle}
+                                                </li>
                                             ))}
-                                        </>
+                                        </ul>
                                     )}
-                                </select>
+                                </div>
+
                             </div>
+
                             <button>
                                 <i className="fas fa-folder-open"></i>Exportar a Excel
                             </button>
                         </div>
-                        <div className={`${styles.contenedor_scroll} custom_scrollbar`}>
+                        <div className={`${styles.tabla} custom_scrollbar`}>
                             <table>
                                 <thead>
                                     <tr>
