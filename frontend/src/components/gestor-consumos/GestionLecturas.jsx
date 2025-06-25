@@ -140,7 +140,7 @@ function GestionLecturas() {
             openPopup("Lectura guardada", <p>La lectura se ha guardado correctamente.</p>);
 
             // Recargar lecturas
-            const datosLecturas = await fetchLecturasByContador(selectedBalsa, selectedContador);
+            const datosLecturas = await fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha);
             setLecturas(datosLecturas);
 
             // Limpiar campos
@@ -233,7 +233,7 @@ function GestionLecturas() {
                 fetchPeticiones(selectedBalsa, selectedFecha),
                 selectedContador === "all"
                     ? fetchLecturas(selectedBalsa, selectedFecha)
-                    : fetchLecturasByContador(selectedBalsa, selectedContador),
+                    : fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha),
                 fetchContadores(selectedBalsa),
                 fetchBalsasDisponibles()
             ]);

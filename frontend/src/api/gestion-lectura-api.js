@@ -64,12 +64,16 @@ export const fetchLecturas = async (dbSuffix, fecha) => {
  * @returns {Promise<Array>} - an array of lecturas
  */
 
-export const fetchLecturasByContador = async (dbSuffix, contador) => {
+export const fetchLecturasByContador = async (dbSuffix, contador, fecha = null) => {
     try {
-        const url =
+        let url =
             dbSuffix === "all"
                 ? `/api/lecturas-todas/cont-${contador}`
                 : `/api/is-b${dbSuffix}/lecturas/cont-${contador}`;
+
+        if (fecha) {
+            url += `?fecha=${fecha}`;
+        }
 
         const res = await axios.get(url);
 
@@ -79,7 +83,7 @@ export const fetchLecturasByContador = async (dbSuffix, contador) => {
             return [];
         }
     } catch (error) {
-        console.error("Error al obtener lecturas por contador:", error);
+        console.error("❌ Error al obtener lecturas por contador:", error);
         return [];
     }
 };
