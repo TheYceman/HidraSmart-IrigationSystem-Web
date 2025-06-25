@@ -130,6 +130,7 @@
     border-collapse: collapse;
     border-radius: 5px;
     table-layout: fixed;
+    font-size: 12px;
 }
 
 .contenedor_principal table thead {
@@ -248,6 +249,7 @@
 /* Div 3 */
 .grafica_contenedor {
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .grafica_contenedor .grafica {
@@ -258,6 +260,7 @@
 /* Div 4 */
 .mapa {
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .mapa .mapa_lecturas {

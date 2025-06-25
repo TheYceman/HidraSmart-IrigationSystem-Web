@@ -58,6 +58,30 @@ router.get('/peticiones-todas', async (req, res) => {
     }
 });
 
+router.get('/is-b:databaseNumber/peticion/nombre/:id', async (req, res) => {
+    try {
+        const databaseNumber = req.params.databaseNumber;
+        const idtipo = req.params.id;
+
+        if (databaseNumber === "all") {
+            const balsas = await getAvailableBalsas();
+
+            for (const balsa of balsas) {
+                const nombre = await peticionesController.getNombreTipo(balsa, idtipo);
+                if (nombre) return res.send(nombre);
+            }
+
+            return res.status(404).send("Tipo no encontrado");
+        }
+
+        const peticion = await peticionesController.getNombreTipo(databaseNumber, idtipo);
+        res.send(peticion ?? "Tipo no encontrado");
+    } catch (error) {
+        console.error('❌ Error al obtener la petición:', error);
+        res.status(500).json({ error: 'Error al obtener la petición' });
+    }
+});
+
 
 
 // Obtener todas las lecturas

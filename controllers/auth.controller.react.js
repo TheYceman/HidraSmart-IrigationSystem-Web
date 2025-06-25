@@ -59,7 +59,7 @@ async function getNombreUsuarioById(req, res) {
     const filas = results?.data?.rows;
 
     if (!Array.isArray(filas) || filas.length === 0) {
-      return res.json({ id: idUsuario, username: "Usuario no encontrado" });
+      return res.json({ id: idUsuario, username: `Usuario ${idUsuario}` });
     }
 
     const user = filas[0];

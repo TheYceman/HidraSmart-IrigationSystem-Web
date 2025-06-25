@@ -15,6 +15,7 @@ import {
     fetchContadores,
     fetchBalsasDisponibles,
     fetchNombreUsuario,
+    fetchNombreTipoPeticion,
 } from "../../api/gestion-lectura-api.js";
 
 function GestionLecturas() {
@@ -24,6 +25,9 @@ function GestionLecturas() {
     // Peticiones
     const [peticiones, setPeticiones] = useState([]);
     const [selectedBalsa, setSelectedBalsa] = useState("all");
+
+    //Tipos peticiones
+    const [tiposMap, setTiposMap] = useState({});
 
     // Fecha
     const [selectedFecha, setSelectedFecha] = useState("");
@@ -78,6 +82,25 @@ function GestionLecturas() {
         setUsuariosMap(nuevoMapa);
     };
 
+    const cargarTiposPorIds = async (ids) => {
+        const idsUnicos = [...new Set(ids)];
+        const tiposNoCargados = idsUnicos.filter(id => id && !tiposMap[id]);
+
+        if (tiposNoCargados.length === 0) return;
+
+        const nuevoMap = { ...tiposMap };
+
+        await Promise.all(tiposNoCargados.map(async (id) => {
+            try {
+                const tipo = await fetchNombreTipoPeticion(selectedBalsa, id);
+                nuevoMap[id] = tipo || `Tipo ${id}`;
+            } catch (error) {
+                nuevoMap[id] = `Tipo ${id}`;
+            }
+        }));
+
+        setTiposMap(nuevoMap);
+    };
 
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
@@ -111,15 +134,13 @@ function GestionLecturas() {
             imagen: nuevaLectura.imagenBase64
         };
 
-        const dbSuffix = selectedBalsa === "all" ? "x" : selectedBalsa;
-
         try {
-            await axios.post(`/api/is-b${dbSuffix}/lecturas`, payload);
+            await axios.post(`/api/is-b${selectedBalsa}/lecturas`, payload);
             // Mostrar popup de éxito
             openPopup("Lectura guardada", <p>La lectura se ha guardado correctamente.</p>);
 
             // Recargar lecturas
-            const datosLecturas = await fetchLecturasByContador(dbSuffix, selectedContador);
+            const datosLecturas = await fetchLecturasByContador(selectedBalsa, selectedContador);
             setLecturas(datosLecturas);
 
             // Limpiar campos
@@ -192,13 +213,11 @@ function GestionLecturas() {
         }
         setShowDropdown(false);
 
-        const dbSuffix = selectedBalsa === "all" ? "x" : selectedBalsa;
-
         if (contadorValue === "all") {
-            const datosLecturas = await fetchLecturas(dbSuffix, selectedFecha);
+            const datosLecturas = await fetchLecturas(selectedBalsa, selectedFecha);
             setLecturas(datosLecturas);
         } else {
-            const datosLecturas = await fetchLecturasByContador(dbSuffix, contadorValue, selectedFecha);
+            const datosLecturas = await fetchLecturasByContador(selectedBalsa, contadorValue, selectedFecha);
             setLecturas(datosLecturas);
         }
     };
@@ -209,14 +228,13 @@ function GestionLecturas() {
         document.body.appendChild(script);
 
         const loadInitialData = async () => {
-            const dbSuffix = selectedBalsa === "all" ? "x" : selectedBalsa;
 
             const [datosPeticiones, datosLecturas, datosContadores, balsasDisponibles] = await Promise.all([
-                fetchPeticiones(dbSuffix, selectedFecha),
+                fetchPeticiones(selectedBalsa, selectedFecha),
                 selectedContador === "all"
-                    ? fetchLecturas(dbSuffix, selectedFecha)
-                    : fetchLecturasByContador(dbSuffix, selectedContador),
-                fetchContadores(dbSuffix),
+                    ? fetchLecturas(selectedBalsa, selectedFecha)
+                    : fetchLecturasByContador(selectedBalsa, selectedContador),
+                fetchContadores(selectedBalsa),
                 fetchBalsasDisponibles()
             ]);
 
@@ -235,12 +253,14 @@ function GestionLecturas() {
             });
 
             await cargarUsuariosPorIds([...idsUsuarios]);
-        };
 
+            // Cargar nombres de los tipos de peticiones
+            const tiposIds = [...new Set(datosPeticiones.map(p => p.type).filter(Boolean))];
+            await cargarTiposPorIds(tiposIds);
+        };
 
         loadInitialData();
     }, [selectedBalsa, selectedContador, selectedFecha]);
-
 
     return (
         <>
@@ -358,7 +378,7 @@ function GestionLecturas() {
                                                 <td>{usuariosMap[item.assignedTo] || item.assignedTo}</td>
                                                 <td>{item.priority}</td>
                                                 <td>{item.status}</td>
-                                                <td>{item.type}</td>
+                                                <td>{tiposMap[item.type]}</td>
                                                 <td>
                                                     <span
                                                         onClick={() =>
@@ -455,18 +475,14 @@ function GestionLecturas() {
                                                         if (!item.imagen) {
                                                             openPopup(
                                                                 "Sin imagen",
-                                                                <div style={{ padding: "20px" }}>
-                                                                    <p>No se ha subido ninguna imagen para esta lectura.</p>
-                                                                </div>
+                                                                <p>No se ha subido ninguna imagen para esta lectura.</p>
                                                             );
                                                             return;
                                                         }
                                                         if (!item.imagen.startsWith("data:image/jpeg;base64,")) {
                                                             openPopup(
                                                                 "Error",
-                                                                <div style={{ padding: "20px" }}>
-                                                                    <p>No se puede mostrar la imagen: formato inválido.</p>
-                                                                </div>
+                                                                <p>No se puede mostrar la imagen: formato inválido.</p>
                                                             );
                                                             return;
                                                         }
