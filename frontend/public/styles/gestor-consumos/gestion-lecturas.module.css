@@ -43,6 +43,19 @@
     border-top-right-radius: 8px;
 }
 
+.contenedor_principal select,
+.contenedor_principal input {
+    border: 2px solid #a1a1a1;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.contenedor_principal select:focus,
+.contenedor_principal input:focus {
+    border-color: var(--color-primary-400);
+    outline: var(--color-primary-400);
+}
+
 /* Estilos botones globales */
 .contenedor_principal button {
     border-radius: 5px;
@@ -104,19 +117,6 @@
     font-weight: bold;
 }
 
-.filtros_tabla .filtros select,
-.filtros_tabla .filtros input {
-    border: 2px solid #a1a1a1;
-    border-radius: 5px;
-    padding: 5px;
-}
-
-.filtros_tabla .filtros select:focus,
-.filtros_tabla .filtros input:focus {
-    border-color: var(--color-primary-400);
-    outline: var(--color-primary-400);
-}
-
 .filtros_tabla .filtros div {
     width: 100%;
     display: flex;
@@ -145,8 +145,11 @@
 }
 
 .contenedor_principal table tr {
-    border-bottom: 1px solid #e7e7e7;
     font-size: 14px;
+}
+
+.contenedor_principal tbody tr {
+    border-bottom: 1px solid #e7e7e7;
 }
 
 .contenedor_principal table th:last-child,
@@ -225,6 +228,35 @@
 
 .peticiones_lectura_item:hover {
     background-color: #f0f0f0;
+}
+
+/* Filtros de la cabecera de la tabla peticiones */
+.th_filtrable {
+    position: relative;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.filtro_dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    background-color: white;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    width: 100%; /* Coincide con el ancho del <th> */
+}
+
+.filtro_dropdown select {
+    width: 100%;
+}
+
+.th_filtrable:hover .filtro_dropdown {
+    display: block;
 }
 
 /* Div 2 */

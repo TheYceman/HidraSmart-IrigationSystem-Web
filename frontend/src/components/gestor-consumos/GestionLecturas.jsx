@@ -19,22 +19,11 @@ import {
 } from "../../api/gestion-lectura-api.js";
 
 function GestionLecturas() {
-    // Balsas
-    const [balsas, setBalsas] = useState([]);
-
-    // Peticiones
-    const [peticiones, setPeticiones] = useState([]);
-    const [selectedBalsa, setSelectedBalsa] = useState("all");
-
-    //Tipos peticiones
-    const [tiposMap, setTiposMap] = useState({});
-
     // Fecha
     const [selectedFecha, setSelectedFecha] = useState("");
 
-    // Lecturas
-    const [lecturas, setLecturas] = useState([]);
-    const [selectedContador, setSelectedContador] = useState("all");
+    // Balsas
+    const [balsas, setBalsas] = useState([]);
 
     // Contadores
     const [contadores, setContadores] = useState([]);
@@ -46,6 +35,31 @@ function GestionLecturas() {
             c.ideEle?.toLowerCase().includes(filtroContador.toLowerCase())
         );
     }, [contadores, filtroContador]);
+
+    // Filtros en la tabla de peticiones
+    const [filtroPrioridad, setFiltroPrioridad] = useState("");
+    const [filtroEstado, setFiltroEstado] = useState("");
+    const [filtroTipo, setFiltroTipo] = useState("");
+
+    // Peticiones
+    const [peticiones, setPeticiones] = useState([]);
+    const [selectedBalsa, setSelectedBalsa] = useState("all");
+
+    //Tipos peticiones
+    const [tiposMap, setTiposMap] = useState({});
+    // Cargar filtros para la tabla peticiones
+    const prioridadesUnicas = useMemo(() => [...new Set(peticiones.map(p => p.priority).filter(Boolean))], [peticiones]);
+    const estadosUnicos = useMemo(() => [...new Set(peticiones.map(p => p.status).filter(Boolean))], [peticiones]);
+    const tiposUnicos = useMemo(() => {
+        const nombres = peticiones
+            .map(p => tiposMap[p.type])
+            .filter(Boolean);
+        return [...new Set(nombres)];
+    }, [peticiones, tiposMap]);
+
+    // Lecturas
+    const [lecturas, setLecturas] = useState([]);
+    const [selectedContador, setSelectedContador] = useState("all");
 
     // Usuarios
     const [usuariosMap, setUsuariosMap] = useState({});
@@ -222,6 +236,13 @@ function GestionLecturas() {
         }
     };
 
+    const peticionesFiltradas = peticiones.filter((p) => {
+        const matchPrioridad = !filtroPrioridad || p.priority === filtroPrioridad;
+        const matchEstado = !filtroEstado || p.status === filtroEstado;
+        const matchTipo = !filtroTipo || tiposMap[p.type] === filtroTipo;
+        return matchPrioridad && matchEstado && matchTipo;
+    });
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "/scripts/gestor-consumos/gestion-lecturas.js";
@@ -348,25 +369,53 @@ function GestionLecturas() {
                                         <th>Nombre</th>
                                         <th>Solicitante</th>
                                         <th>Asignado</th>
-                                        <th>Prioridad</th>
-                                        <th>Estado</th>
-                                        <th>Tipo</th>
-                                        <th>Comentarios</th>
+                                        <th className={styles.th_filtrable}>
+                                            Prioridad <i className="fas fa-sort"></i>
+                                            <div className={styles.filtro_dropdown}>
+                                                <select value={filtroPrioridad} onChange={(e) => setFiltroPrioridad(e.target.value)}>
+                                                    <option value="">Todas</option>
+                                                    {prioridadesUnicas.map(p => (
+                                                        <option key={p} value={p}>{p}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </th>
+                                        <th className={styles.th_filtrable}>
+                                            Estado <i className="fas fa-sort"></i>
+                                            <div className={styles.filtro_dropdown}>
+                                                <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}>
+                                                    <option value="">Todos</option>
+                                                    {estadosUnicos.map(e => (
+                                                        <option key={e} value={e}>{e}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </th>
+                                        <th className={styles.th_filtrable}>
+                                            Tipo <i className="fas fa-sort"></i>
+                                            <div className={styles.filtro_dropdown}>
+                                                <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)}>
+                                                    <option value="">Todos</option>
+                                                    {tiposUnicos.map(t => (
+                                                        <option key={t} value={t}>{t}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </th>
+                                        <th>Comentario</th>
                                         <th></th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
-                                    {peticiones.length === 0 ? (
+                                    {peticionesFiltradas.length === 0 ? (
                                         <tr>
-                                            <td
-                                                colSpan="9"
-                                                style={{ textAlign: "center", padding: "20px" }}
-                                            >
+                                            <td colSpan="9" style={{ textAlign: "center", padding: "20px" }}>
                                                 No hay datos disponibles para las opciones seleccionadas
                                             </td>
                                         </tr>
                                     ) : (
-                                        peticiones.map((item, i) => (
+                                        peticionesFiltradas.map((item, i) => (
                                             <tr key={i}>
                                                 <td>
                                                     {new Date(item.fecha).toLocaleString("es-ES", {
@@ -384,9 +433,7 @@ function GestionLecturas() {
                                                         onClick={() =>
                                                             openPopup(
                                                                 "Comentario",
-                                                                <div style={{ padding: "20px" }}>
-                                                                    {item.comments}
-                                                                </div>
+                                                                <div style={{ padding: "20px" }}>{item.comments}</div>
                                                             )
                                                         }
                                                         className={styles.ver_mas}
