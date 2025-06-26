@@ -3,11 +3,10 @@ import styles from "../../../public/styles/gestor-consumos/gestion-lecturas.modu
 
 //Obtener API Key para el mapa
 import GoogleApiKeyProvider from "../api-keys/GoogleApiKeyProvider";
-import PopupConfig from "../pop-up/PopupConfiguration";
 
 function GestionLecturas() {
 
-    const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+    const [setIsImagePopupOpen] = useState(false);
 
     const fileInputRef = useRef(null);
 

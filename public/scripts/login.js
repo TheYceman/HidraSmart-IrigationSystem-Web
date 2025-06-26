@@ -1,19 +1,3 @@
-var fadeMixinNotTime = Swal.mixin({
-  icon: "warning",
-  title: "General Title",
-  animation: false,
-  showClass: {
-    popup: "animated fadeInDown faster",
-    icon: "animated heartBeat delay-1s",
-  },
-  hideClass: {
-    popup: "animated fadeOutUp faster",
-  },
-  customClass: {
-    popup: "custom-dialog-class",
-  },
-});
-
 function applyRedBorder(element) {
   var contentElemen = document.querySelector(".subcontainer_input_" + element);
   contentElemen.classList.add("red_border");

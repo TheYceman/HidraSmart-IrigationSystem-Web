@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 1;
   animation: fadeIn 0.3s ease;
 }
 
@@ -22,12 +22,13 @@
 
 .popup_header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Mantiene el texto centrado */
   align-items: center;
-  padding: 15px 20px;
+  padding: 15px 40px 15px 20px; /* Añade padding a la derecha para el botón */
   border-bottom: 1px solid #ddd;
   font-weight: bold;
   font-size: 18px;
+  position: relative; /* Permite posicionar el botón absolutamente */
 }
 
 .popup_body {
@@ -49,7 +50,12 @@
   cursor: pointer;
   color: #999;
   transition: color 0.2s ease;
+  position: absolute; /* Posiciona el botón fuera del flujo */
+  right: 15px; /* Alinea al borde derecho */
+  top: 50%; /* Centra verticalmente */
+  transform: translateY(-50%); /* Ajusta la posición vertical */
 }
+
 .popup_close:hover {
   color: #333;
 }
