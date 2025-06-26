@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import axios from "axios";
-import Select from "react-select";
 
 //Estilos
 import styles from "../../../public/styles/gestor-consumos/gestion-lecturas.module.css";
@@ -30,11 +29,15 @@ function GestionLecturas() {
     const [filtroContador, setFiltroContador] = useState("");
     const [showDropdown, setShowDropdown] = useState(false);
 
+    // Memoriza el resultado de filtrar contadores en base al texto introducido en el input de búsqueda.
+    // Se recalcula solo cuando cambian los contadores disponibles o el texto del filtro.
     const filteredContadores = useMemo(() => {
         return contadores.filter(c =>
+            // Para cada contador, revisa si el campo 'ideEle' contiene
+            // el texto escrito en el filtro (ignorando mayúsculas/minúsculas)
             c.ideEle?.toLowerCase().includes(filtroContador.toLowerCase())
         );
-    }, [contadores, filtroContador]);
+    }, [contadores, filtroContador]); // Solo se recalcula cuando cambia la lista de contadores o el texto del filtro.
 
     // Filtros en la tabla de peticiones
     const [filtroPrioridad, setFiltroPrioridad] = useState("");
@@ -47,14 +50,35 @@ function GestionLecturas() {
 
     //Tipos peticiones
     const [tiposMap, setTiposMap] = useState({});
+
     // Cargar filtros para la tabla peticiones
-    const prioridadesUnicas = useMemo(() => [...new Set(peticiones.map(p => p.priority).filter(Boolean))], [peticiones]);
-    const estadosUnicos = useMemo(() => [...new Set(peticiones.map(p => p.status).filter(Boolean))], [peticiones]);
+    // Lista única de prioridades presentes en las peticiones.
+    const prioridadesUnicas = useMemo(() =>
+        [...new Set(                      // Convierte a conjunto para eliminar duplicados
+            peticiones
+                .map(p => p.priority)     // Extrae el campo 'priority' de cada petición
+                .filter(Boolean)         // Filtra valores null, undefined o falsy
+        )],
+        [peticiones]                     // Dependencia: se actualiza solo si cambia 'peticiones'
+    );
+
+    // Lista única de estados (status) presentes en las peticiones.
+    const estadosUnicos = useMemo(() =>
+        [...new Set(
+            peticiones
+                .map(p => p.status)
+                .filter(Boolean)
+        )],
+        [peticiones]
+    );
+
+    // Lista de los nombres únicos de los tipos de peticiones.
+    // Aquí el tipo es un ID, por lo que se mapea a su nombre real usando 'tiposMap'.
     const tiposUnicos = useMemo(() => {
         const nombres = peticiones
-            .map(p => tiposMap[p.type])
-            .filter(Boolean);
-        return [...new Set(nombres)];
+            .map(p => tiposMap[p.type]) // Convierte el ID de tipo en su nombre usando el mapa
+            .filter(Boolean);           // Elimina resultados vacíos (por si el tipo aún no está cargado)
+        return [...new Set(nombres)];   // Devuelve una lista de nombres únicos
     }, [peticiones, tiposMap]);
 
     // Lecturas
@@ -78,7 +102,11 @@ function GestionLecturas() {
         imagenBase64: "",
     });
 
-
+    /**
+     * Carga los nombres de los usuarios cuyos IDs se pasan como parámetro
+     * y los almacena en el estado `usuariosMap`.
+     * @param {string[]} ids IDs de los usuarios a cargar
+     */
     const cargarUsuariosPorIds = async (ids) => {
         const nuevoMapa = { ...usuariosMap };
 
@@ -96,6 +124,12 @@ function GestionLecturas() {
         setUsuariosMap(nuevoMapa);
     };
 
+    /**
+     * Carga los nombres de los tipos de peticiones cuyos IDs se pasan como parámetro
+     * y los almacena en el estado `tiposMap`.
+     * Si el tipo no existe en la base de datos, se almacena con el nombre "Tipo <id>".
+     * @param {string[]} ids IDs de los tipos de peticiones a cargar
+     */
     const cargarTiposPorIds = async (ids) => {
         const idsUnicos = [...new Set(ids)];
         const tiposNoCargados = idsUnicos.filter(id => id && !tiposMap[id]);
@@ -116,10 +150,22 @@ function GestionLecturas() {
         setTiposMap(nuevoMap);
     };
 
+    /**
+     * Simula un click en el input file para que el usuario pueda seleccionar
+     * una imagen para subir.
+     */
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
     };
 
+    /**
+     * Maneja los cambios en el campo de entrada de imagen.
+     * Lee el archivo seleccionado y actualiza el estado `imagenBase64` si el tamaño
+     * del archivo está dentro del límite permitido (1 MB).
+     * Si el archivo supera 1 MB, se muestra un popup de error.
+     *
+     * @param {Event} e - Evento generado por el cambio en el input de tipo archivo.
+     */
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file && file.size > 1024 * 1024) { // 1 MB
@@ -134,6 +180,12 @@ function GestionLecturas() {
         reader.readAsDataURL(file);
     };
 
+    /**
+     * Sube una lectura a la base de datos y actualiza el estado
+     * con las lecturas recargadas.
+     * Muestra un popup de éxito o error según sea el caso.
+     * Limpia los campos para crear una nueva lectura.
+     */
     const subirLectura = async () => {
         if (selectedContador === "all") {
             openPopup("Error", <p>Debes seleccionar un contador específico.</p>);
@@ -183,14 +235,12 @@ function GestionLecturas() {
     };
 
     /**
-     * Handler para el evento de cambio de la select de balsas.
-     *
-     * @param {Event} e - Evento de cambio de la select
-     *
-     * Actualiza el estado de 'selectedBalsa' con el valor de la balsa seleccionada,
-     * y llama a fetchPeticiones con el sufijo de la base de datos correspondiente
-     * (si se selecciona "all", se utiliza el sufijo "x"). El resultado se guarda
-     * en el estado de 'peticiones'.
+     * Función manejadora para el cambio de la balsa seleccionada.
+     * 
+     * Actualiza el estado de la balsa seleccionada y obtiene las peticiones y contadores
+     * relacionados en función del valor seleccionado.
+     * 
+     * @param {Event} e - Evento generado por el cambio en el select de balsa.
      */
     const handleBalsaChange = async (e) => {
         const balsaValue = e.target.value;
@@ -206,17 +256,14 @@ function GestionLecturas() {
     };
 
     /**
-     * Handler para el evento de cambio de la select de contadores.
-     *
-     * @param {Event} e - Evento de cambio de la select
-     *
-     * Actualiza el estado de 'selectedContador' con el valor del contador seleccionado,
-     * y llama a fetchLecturas con el sufijo de la base de datos correspondiente
-     * (si se selecciona "all", se utiliza el sufijo "x"). El resultado se guarda
-     * en el estado de 'lecturas'. Si el valor seleccionado no es "all", se hace
-     * una petición GET a "/api/is-bx/lecturas/:contadorId" y se guardan las
-     * lecturas en el estado de 'lecturas'. Si la petición no devuelve un array,
-     * se vacía el estado de 'lecturas'.
+     * Función manejadora para el cambio del contador seleccionado.
+     * 
+     * Actualiza el estado del contador seleccionado y obtiene las lecturas relacionadas
+     * en función del valor seleccionado.
+     * Si se selecciona "all", se obtienen todas las lecturas para la balsa seleccionada.
+     * Si se selecciona un contador específico, se obtienen solo las lecturas de ese contador.
+     * 
+     * @param {string} contadorValue - Valor del contador seleccionado por el usuario.
      */
     const handleContadorChange = async (contadorValue) => {
         setSelectedContador(contadorValue);
@@ -236,6 +283,124 @@ function GestionLecturas() {
         }
     };
 
+    const formatearFechaMadrid = (fecha) => {
+        const formatter = new Intl.DateTimeFormat("es-ES", {
+            timeZone: "Europe/Madrid",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+
+        return formatter.format(new Date(fecha)).replace(",", "");
+    };
+
+    /**
+     * Exporta las peticiones y lecturas de la balsa seleccionada (o todas las balsas)
+     * a un archivo zip con hojas de cálculo xlsx, una por balsa.
+     * Las hojas de cálculo se llaman "Peticiones" y "Lecturas".
+     */
+    const handleExportZipPorBalsa = async () => {
+        // Importación dinámica de las librerías necesarias solo cuando se ejecuta la exportación
+        const JSZip = (await import("jszip")).default;
+        const XLSX = await import("xlsx");
+        const FileSaver = await import("file-saver");
+
+        // Crear un nuevo archivo ZIP donde se incluirán los Excel por balsa
+        const zip = new JSZip();
+
+        // Determinar qué balsas exportar: una específica o todas
+        const balsasAExportar = selectedBalsa === "all" ? balsas : [selectedBalsa];
+
+        // Obtener la fecha actual en formato de Madrid (UTC+2) y formatearla para el nombre del archivo
+        const fechaActual = formatearFechaMadrid(new Date()).replace(" ", "_").replace(/:/g, "-");
+
+        // Función para calcular el ancho de cada columna en función de su contenido
+        const calculateColumnWidths = (data) => {
+            const headers = Object.keys(data[0] || {});
+            return headers.map((key) => {
+                const maxLength = Math.max(
+                    key.length,
+                    ...data.map(row => String(row[key] || "").length)
+                );
+                return { wch: Math.min(maxLength + 2, 60) }; // Máximo de 60 caracteres (~450px)
+            });
+        };
+
+        // Función para centrar horizontal y verticalmente el contenido de las cabeceras
+        const centrarCabeceras = (ws, data) => {
+            const headers = Object.keys(data[0] || {});
+            headers.forEach((header, idx) => {
+                const colLetter = XLSX.utils.encode_col(idx);
+                const cellRef = `${colLetter}1`; // Referencia a la celda de cabecera (primera fila)
+                if (ws[cellRef]) {
+                    ws[cellRef].s = {
+                        alignment: { horizontal: "center", vertical: "center", wrapText: true },
+                        font: { bold: true }
+                    };
+                }
+            });
+        };
+
+        // Recorrer todas las balsas a exportar
+        for (const balsa of balsasAExportar) {
+            // Filtrar las peticiones y lecturas correspondientes a la balsa actual
+            const peticionesBalsa = peticionesFiltradas.filter(p => p.balsa === balsa);
+            const lecturasBalsa = lecturas.filter(l => l.balsa === balsa);
+
+            // Transformar los datos de peticiones en un formato adecuado para exportar
+            const peticionesData = peticionesBalsa.map(p => ({
+                Id: p.idPeticion,
+                Fecha: formatearFechaMadrid(p.fecha),
+                Nombre: p.name,
+                Solicitante: usuariosMap[p.requester] || p.requester,
+                Asignado: usuariosMap[p.assignedTo] || p.assignedTo,
+                Prioridad: p.priority,
+                Estado: p.status,
+                Tipo: tiposMap[p.type],
+                Comentario: p.comments
+            }));
+
+            // Transformar los datos de lecturas
+            const lecturasData = lecturasBalsa.map(l => ({
+                Id: l.idLectura,
+                Contador: l.contador,
+                Fecha: formatearFechaMadrid(l.fecha),
+                Usuario: usuariosMap[l.usuario] || l.usuario,
+                Volumen: l.volumen
+            }));
+
+            // Crear hoja de Excel para las peticiones
+            const wsPeticiones = XLSX.utils.json_to_sheet(peticionesData);
+            wsPeticiones["!cols"] = calculateColumnWidths(peticionesData); // Ajustar ancho de columnas
+            centrarCabeceras(wsPeticiones, peticionesData); // Centrar cabeceras
+
+            // Crear hoja de Excel para las lecturas
+            const wsLecturas = XLSX.utils.json_to_sheet(lecturasData);
+            wsLecturas["!cols"] = calculateColumnWidths(lecturasData);
+            centrarCabeceras(wsLecturas, lecturasData);
+
+            // Crear un nuevo libro de Excel y añadir ambas hojas
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, wsPeticiones, "Peticiones");
+            XLSX.utils.book_append_sheet(wb, wsLecturas, "Lecturas");
+
+            // Convertir el libro a un blob binario
+            const wbBlob = XLSX.write(wb, { bookType: "xlsx", type: "array", cellStyles: true });
+
+            // Añadir el archivo Excel al ZIP
+            zip.file(`balsa_${balsa}.xlsx`, wbBlob);
+        }
+
+        // Generar el archivo ZIP completo con todas las balsas
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+
+        // Guardar el archivo ZIP con un nombre que incluye la fecha
+        FileSaver.saveAs(zipBlob, `datos_balsas_${fechaActual}.zip`);
+    };
+
+    // Filtros en la tabla de peticiones
     const peticionesFiltradas = peticiones.filter((p) => {
         const matchPrioridad = !filtroPrioridad || p.priority === filtroPrioridad;
         const matchEstado = !filtroEstado || p.status === filtroEstado;
@@ -249,36 +414,53 @@ function GestionLecturas() {
         document.body.appendChild(script);
 
         const loadInitialData = async () => {
-
-            const [datosPeticiones, datosLecturas, datosContadores, balsasDisponibles] = await Promise.all([
-                fetchPeticiones(selectedBalsa, selectedFecha),
-                selectedContador === "all"
-                    ? fetchLecturas(selectedBalsa, selectedFecha)
-                    : fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha),
-                fetchContadores(selectedBalsa),
-                fetchBalsasDisponibles()
-            ]);
-
-            setPeticiones(datosPeticiones);
-            setLecturas(datosLecturas);
-            setContadores(datosContadores);
+            const balsasDisponibles = await fetchBalsasDisponibles();
             setBalsas(balsasDisponibles);
 
+            let todasPeticiones = [];
+            let todasLecturas = [];
+
+            if (selectedBalsa === "all") {
+                for (const balsa of balsasDisponibles) {
+                    const peticiones = await fetchPeticiones(balsa, selectedFecha);
+                    todasPeticiones.push(...peticiones.map(p => ({ ...p, balsa })));
+
+                    const lecturas = selectedContador === "all"
+                        ? await fetchLecturas(balsa, selectedFecha)
+                        : await fetchLecturasByContador(balsa, selectedContador, selectedFecha);
+                    todasLecturas.push(...lecturas.map(l => ({ ...l, balsa })));
+                }
+            } else {
+                const peticiones = await fetchPeticiones(selectedBalsa, selectedFecha);
+                todasPeticiones = peticiones.map(p => ({ ...p, balsa: selectedBalsa }));
+
+                const lecturas = selectedContador === "all"
+                    ? await fetchLecturas(selectedBalsa, selectedFecha)
+                    : await fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha);
+                todasLecturas = lecturas.map(l => ({ ...l, balsa: selectedBalsa }));
+            }
+
+            setPeticiones(todasPeticiones);
+            setLecturas(todasLecturas);
+
+            const datosContadores = await fetchContadores(selectedBalsa);
+            setContadores(datosContadores);
+
             const idsUsuarios = new Set();
-            datosPeticiones.forEach(p => {
+            todasPeticiones.forEach(p => {
                 if (p.requester) idsUsuarios.add(p.requester);
                 if (p.assignedTo) idsUsuarios.add(p.assignedTo);
             });
-            datosLecturas.forEach(l => {
+            todasLecturas.forEach(l => {
                 if (l.usuario) idsUsuarios.add(l.usuario);
             });
 
             await cargarUsuariosPorIds([...idsUsuarios]);
 
-            // Cargar nombres de los tipos de peticiones
-            const tiposIds = [...new Set(datosPeticiones.map(p => p.type).filter(Boolean))];
+            const tiposIds = [...new Set(todasPeticiones.map(p => p.type).filter(Boolean))];
             await cargarTiposPorIds(tiposIds);
         };
+
 
         loadInitialData();
     }, [selectedBalsa, selectedContador, selectedFecha]);
@@ -357,7 +539,7 @@ function GestionLecturas() {
 
                             </div>
 
-                            <button>
+                            <button onClick={handleExportZipPorBalsa}>
                                 <i className="fas fa-folder-open"></i>Exportar a Excel
                             </button>
                         </div>
