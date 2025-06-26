@@ -3,11 +3,10 @@ import styles from "../../../public/styles/gestor-consumos/gestion-lecturas.modu
 
 //Obtener API Key para el mapa
 import GoogleApiKeyProvider from "../api-keys/GoogleApiKeyProvider";
-import PopupConfig from "../pop-up/PopupConfiguration";
 
 function GestionLecturas() {
 
-    const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+    const [setIsImagePopupOpen] = useState(false);
 
     // Este es el método que quieres:
     function openImageLectura() {
@@ -109,23 +108,7 @@ function GestionLecturas() {
                 <div id="mapa-lecturas" className={styles.mapa_lecturas}></div>
                 <GoogleApiKeyProvider />
             </div>
-
-            <PopupConfig
-                isOpen={isImagePopupOpen}
-                onClose={() => setIsImagePopupOpen(false)}
-                title="Imagen de lectura"
-                width="600px"
-                height="400px"
-                footer={<button onClick={() => setIsImagePopupOpen(false)}>Cerrar</button>}
-            >
-                <table>
-                    <tr>
-                        <td>
-                            <img src="/images/imagen-lectura.jpg" alt="Imagen de lectura" />
-                        </td>
-                    </tr>
-                </table>
-            </PopupConfig>
+ 
 
         </div>
     );

@@ -15,6 +15,7 @@ const authMiddleware = require("./middlewares/check-auth");
 const initRoutes = require("./routes/init.routes");
 const authRoutes = require("./routes/auth.routes");
 const applicationPanelRoutes = require("./routes/application-panel.routes");
+const userConfigRoutes = require("./routes/user-configuration.routes");
 const app = express();
 
 // 1. Middleware global
@@ -41,6 +42,7 @@ io.use((socket, next) => {
 // ✅ Esta ruta es pública, asegúrate que initRoutes tenga `router.get("/")`
 app.use("/api", initRoutes);
 app.use("/api", authRoutes);
+app.use("/api", userConfigRoutes);
 
 // 5. Middleware de autenticación para rutas privadas
 app.use(authMiddleware);

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import ConfigurationPopup from "../components/config";
 
 function PanelAplicaciones() {
   const [data, setData] = useState(null);
@@ -35,7 +34,6 @@ function PanelAplicaciones() {
     const handleConfigClick = (event) => {
       if (event.target.closest("#config-button")) {
         setShowConfigPopup((prev) => !prev);
-        console.log("Botón de configuración pulsado");
       }
     };
 
@@ -62,7 +60,6 @@ function PanelAplicaciones() {
       <main>
         <div dangerouslySetInnerHTML={{ __html: data.bodyApplicationPanelHTML }} />
       </main>
-      {showConfigPopup && <ConfigurationPopup />}
     </>
   );
 }

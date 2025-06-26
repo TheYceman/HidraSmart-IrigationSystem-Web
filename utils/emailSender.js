@@ -23,7 +23,7 @@ async function sendEmail( contactname, contactemail, contactmessage) {
         let mailOptions = {
             from: process.env.USER_GMAIL,
             to: contactemail,
-            bcc: 'carlos.merino@hidralab.com, hidrasmarthydraulicinnovation@hotmail.com, emilio.ruiz@hidralab.com',
+            bcc: 'ismael.moraleda@hidralab.com',
             subject: 'Consulta Irrigation System',
             text: `Nombre: `+contactname+`\nEmail: `+contactemail+`\nMensaje: `+contactmessage
         };

@@ -26,6 +26,7 @@ function Login() {
       "https://cdn.jsdelivr.net/gh/HidralabIyD/HidraSmart-CommonFiles@latest/scripts/common-funtions-forms.js",
       "/scripts/login-header-image.js",
       "/scripts/login.js",
+      "/scripts/data-verification.js",
     ];
 
     const loadScript = (src) =>
