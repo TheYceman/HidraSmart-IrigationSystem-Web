@@ -464,6 +464,45 @@ function GestionLecturas() {
         }
     };
 
+    const iniciarEdicionLectura = (lectura) => {
+        setLecturaEditandoId(lectura.idLectura);
+        setDatosEditLectura({ ...lectura });
+    };
+
+    const cancelarEdicionLectura = () => {
+        setLecturaEditandoId(null);
+        setDatosEditLectura({});
+    };
+
+    const confirmarEdicionLectura = async (id) => {
+        if (selectedBalsa === "all") {
+            openPopup("Error", <p>Debes seleccionar una balsa específica para editar una lectura.</p>);
+            return;
+        }
+
+        try {
+            await axios.put(`/api/is-b${selectedBalsa}/lecturas/${id}`, datosEditLectura);
+
+            openPopup("Lectura actualizada", <p>La lectura se ha actualizado correctamente.</p>);
+
+            const datosActualizados = selectedContador === "all"
+                ? await fetchLecturas(selectedBalsa, selectedFecha)
+                : await fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha);
+
+            setLecturas(datosActualizados);
+
+            // Recargar nombre de usuario para evitar "Cargando..."
+            const nuevosIdsUsuarios = [...new Set(datosActualizados.map(l => l.usuario))];
+            await cargarUsuariosPorIds(nuevosIdsUsuarios);
+
+            setLecturaEditandoId(null);
+            setDatosEditLectura({});
+        } catch (err) {
+            console.error("❌ Error al actualizar la lectura:", err);
+            openPopup("Error", <p>Ocurrió un error al actualizar la lectura.</p>);
+        }
+    };
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "/scripts/gestor-consumos/gestion-lecturas.js";
@@ -860,57 +899,96 @@ function GestionLecturas() {
                                 ) : (
                                     lecturas.map((item, i) => (
                                         <tr key={i}>
-                                            <td>{item.contador}</td>
+                                            <td>
+                                                {lecturaEditandoId === item.idLectura ? (
+                                                    <select
+                                                        value={datosEditLectura.contador || ""}
+                                                        onChange={e => setDatosEditLectura({ ...datosEditLectura, contador: e.target.value })}
+                                                        required
+                                                    >
+                                                        <option value="" disabled>Selecciona</option>
+                                                        {filteredContadores.map(c => (
+                                                            <option key={c.ideEle} value={c.ideEle}>
+                                                                {c.ideEle}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                ) : (
+                                                    item.contador
+                                                )}
+                                            </td>
+
                                             <td>
                                                 {new Date(item.fecha).toLocaleString("es-ES", {
                                                     timeZone: "Europe/Madrid",
                                                 })}
                                             </td>
-                                            <td>{usuariosMap[item.usuario] || item.usuario}</td>
-                                            <td>{item.volumen}</td>
+
+                                            <td>
+                                                {lecturaEditandoId === item.idLectura ? (
+                                                    <select
+                                                        value={datosEditLectura.usuario || ""}
+                                                        onChange={e => setDatosEditLectura({ ...datosEditLectura, usuario: parseInt(e.target.value) })}
+                                                        required
+                                                    >
+                                                        <option value="" defaultValue disabled>Selecciona</option>
+                                                        {usuariosAsignables.map(user => (
+                                                            <option key={user.idusers} value={user.idusers}>
+                                                                {user.username}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                ) : (
+                                                    usuariosMap[item.usuario] || 'Cargando...'
+                                                )}
+                                            </td>
+
+                                            <td>
+                                                {lecturaEditandoId === item.idLectura ? (
+                                                    <input
+                                                        type="number"
+                                                        step="any"
+                                                        value={datosEditLectura.volumen || ""}
+                                                        onChange={e => setDatosEditLectura({ ...datosEditLectura, volumen: e.target.value })}
+                                                    />
+                                                ) : (
+                                                    item.volumen
+                                                )}
+                                            </td>
+
                                             <td>
                                                 <span
                                                     onClick={() => {
                                                         if (!item.imagen) {
-                                                            openPopup(
-                                                                "Sin imagen",
-                                                                <p>No se ha subido ninguna imagen para esta lectura.</p>
-                                                            );
+                                                            openPopup("Sin imagen", <p>No se ha subido ninguna imagen para esta lectura.</p>);
                                                             return;
                                                         }
                                                         if (!item.imagen.startsWith("data:image/jpeg;base64,")) {
-                                                            openPopup(
-                                                                "Error",
-                                                                <p>No se puede mostrar la imagen: formato inválido.</p>
-                                                            );
+                                                            openPopup("Error", <p>No se puede mostrar la imagen: formato inválido.</p>);
                                                             return;
                                                         }
-                                                        openPopup(
-                                                            "Imagen de lectura",
-                                                            <img
-                                                                src={item.imagen}
-                                                                alt="Imagen de lectura"
-                                                                className={styles.imagen_lecturas_popup}
-                                                            />
-                                                        );
+                                                        openPopup("Imagen de lectura", (
+                                                            <img src={item.imagen} alt="Imagen de lectura" className={styles.imagen_lecturas_popup} />
+                                                        ));
                                                     }}
                                                     className={styles.ver_mas}
                                                 >
                                                     <i className="fas fa-image"></i>Ver imagen
                                                 </span>
                                             </td>
+
                                             <td className={styles.action_buttons}>
-                                                {peticionEditandoId === item.idPeticion ? (
+                                                {lecturaEditandoId === item.idLectura ? (
                                                     <>
-                                                        <button onClick={() => confirmarEdicionPeticion(item.idPeticion)}>
+                                                        <button onClick={() => confirmarEdicionLectura(item.idLectura)}>
                                                             <i className="fas fa-check"></i>
                                                         </button>
-                                                        <button onClick={() => cancelarEdicionPeticion()}>
+                                                        <button onClick={cancelarEdicionLectura}>
                                                             <i className="fas fa-times"></i>
                                                         </button>
                                                     </>
                                                 ) : (
-                                                    <button onClick={() => iniciarEdicionPeticion(item)}>
+                                                    <button onClick={() => iniciarEdicionLectura(item)}>
                                                         <i className="fas fa-pen"></i>
                                                     </button>
                                                 )}

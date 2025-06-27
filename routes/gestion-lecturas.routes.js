@@ -171,6 +171,24 @@ router.get('/lecturas-todas/cont-:contador', async (req, res) => {
     }
 });
 
+// Actualizar lectura
+router.put('/is-b:databaseNumber/lecturas/:id', async (req, res) => {
+    try {
+        const databaseNumber = req.params.databaseNumber;
+        const id = req.params.id;
+        const datos = req.body;
+
+        console.log("ID de la lectura a actualizar:", id);
+        console.log("Datos recibidos:", datos);
+
+        const resultado = await lecturaController.updateLectura(databaseNumber, id, datos);
+        res.json({ success: true, resultado });
+    } catch (error) {
+        console.error("❌ Error al actualizar la lectura:", error);
+        res.status(500).json({ error: "Error al actualizar la lectura" });
+    }
+});
+
 
 
 // Obtener todos los contadores de una base de datos

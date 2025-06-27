@@ -101,8 +101,26 @@ async function createLectura(databaseNumber, data) {
     return nuevaLectura;
 }
 
+async function updateLectura(databaseNumber, idLectura, nuevosDatos) {
+    const AwLecturas = await getAwLecturas(databaseNumber);
+
+    const lectura = await AwLecturas.findByPk(idLectura);
+    if (!lectura) throw new Error("Lectura no encontrada");
+
+    if (nuevosDatos.imagen?.startsWith("data:image")) {
+        const base64Data = nuevosDatos.imagen.split(',')[1];
+        nuevosDatos.imagen = Buffer.from(base64Data, 'base64');
+    } else if (nuevosDatos.imagen === null) {
+        nuevosDatos.imagen = null;
+    }
+
+    await lectura.update(nuevosDatos);
+    return lectura;
+}
+
 module.exports = {
     getAll,
     getByContador,
     createLectura,
+    updateLectura,
 };

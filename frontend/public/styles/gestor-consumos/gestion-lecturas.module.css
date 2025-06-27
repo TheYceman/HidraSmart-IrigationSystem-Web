@@ -60,6 +60,12 @@
 }
 
 /* Ultima columna de botones en las tablas */
+.contenedor_principal .action_buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
 .contenedor_principal .action_buttons button {
     width: 100%;
     padding: 5px;
