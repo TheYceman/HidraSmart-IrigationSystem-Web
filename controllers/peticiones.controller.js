@@ -49,7 +49,10 @@ async function getAll(databaseNumber, filtroFecha = null) {
         }
         : {};
 
-    return await AwPeticiones.findAll({ where: whereClause });
+    return await AwPeticiones.findAll({
+        where: whereClause,
+        attributes: { exclude: ['image'] }
+    });
 }
 
 /**

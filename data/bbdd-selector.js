@@ -94,7 +94,8 @@ async function getAvailableBalsas() {
       results.push(i === 0 ? 'x' : i.toString());
       i++; // Solo incrementar si tuvo éxito
     } catch (error) {
-      console.warn(`❌ No disponible: ${dbName}`);
+      // Mensaje en la consola del servidor
+      // console.warn(`❌ No disponible: ${dbName}`);
       break; // Sale del bucle si falla
     }
   }
