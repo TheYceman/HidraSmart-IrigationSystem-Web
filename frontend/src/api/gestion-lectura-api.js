@@ -144,3 +144,12 @@ export const fetchNombreUsuario = async (id_usuario) => {
     }
 };
 
+export const fetchUsuarios = async () => {
+    try {
+        const res = await axios.get(`/api/usuarios`);
+        return res.data;
+    } catch (error) {
+        console.error("Error al obtener los usuarios:", error);
+        return [];
+    }
+};

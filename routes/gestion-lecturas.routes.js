@@ -82,6 +82,25 @@ router.get('/is-b:databaseNumber/peticion/nombre/:id', async (req, res) => {
     }
 });
 
+// Actualizar petición
+router.put('/is-b:databaseNumber/peticiones/:id', async (req, res) => {
+    try {
+        const databaseNumber = req.params.databaseNumber;
+        const id = req.params.id;
+        const datos = req.body;
+
+        console.log("ID de la petición:", id);
+        console.log("Datos recibidos:", datos);
+
+        const resultado = await peticionesController.updatePeticion(databaseNumber, id, datos);
+
+        res.json({ success: true, resultado });
+    } catch (error) {
+        console.error("Error al actualizar la petición:", error);
+        res.status(500).json({ error: "Error al actualizar la petición" });
+    }
+});
+
 
 
 // Obtener todas las lecturas

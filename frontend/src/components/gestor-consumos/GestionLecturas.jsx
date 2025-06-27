@@ -15,6 +15,7 @@ import {
     fetchBalsasDisponibles,
     fetchNombreUsuario,
     fetchNombreTipoPeticion,
+    fetchUsuarios
 } from "../../api/gestion-lectura-api.js";
 
 function GestionLecturas() {
@@ -101,6 +102,15 @@ function GestionLecturas() {
         volumen: "",
         imagenBase64: "",
     });
+
+    // Editar peticiones y lecturas
+    const [peticionEditandoId, setPeticionEditandoId] = useState(null);
+    const [lecturaEditandoId, setLecturaEditandoId] = useState(null);
+
+    const [datosEditPeticion, setDatosEditPeticion] = useState({});
+    const [datosEditLectura, setDatosEditLectura] = useState({});
+
+    const [usuariosAsignables, setUsuariosAsignables] = useState([]);
 
     /**
      * Carga los nombres de los usuarios cuyos IDs se pasan como parámetro
@@ -192,7 +202,7 @@ function GestionLecturas() {
             return;
         }
 
-        const payload = {
+        const datosLectura = {
             contador: selectedContador,
             fecha: nuevaLectura.fecha,
             usuario: nuevaLectura.usuario,
@@ -201,7 +211,7 @@ function GestionLecturas() {
         };
 
         try {
-            await axios.post(`/api/is-b${selectedBalsa}/lecturas`, payload);
+            await axios.post(`/api/is-b${selectedBalsa}/lecturas`, datosLectura);
             // Mostrar popup de éxito
             openPopup("Lectura guardada", <p>La lectura se ha guardado correctamente.</p>);
 
@@ -408,6 +418,52 @@ function GestionLecturas() {
         return matchPrioridad && matchEstado && matchTipo;
     });
 
+    //Editar peticiones y lecturas
+    const iniciarEdicionPeticion = (peticion) => {
+        setPeticionEditandoId(peticion.idPeticion);
+        setDatosEditPeticion({ ...peticion });
+    };
+
+    const cancelarEdicionPeticion = () => {
+        setPeticionEditandoId(null);
+        setDatosEditPeticion({});
+    };
+
+    const confirmarEdicionPeticion = async (id) => {
+        if (selectedBalsa === "all") {
+            openPopup("Error", <p>Debes seleccionar una balsa específica para editar una petición.</p>);
+            return;
+        }
+
+        if (!datosEditPeticion.name || !datosEditPeticion.priority || !datosEditPeticion.status) {
+            openPopup("Error", <p>Por favor completa todos los campos obligatorios.</p>);
+            return;
+        }
+
+        try {
+            await axios.put(`/api/is-b${selectedBalsa}/peticiones/${id}`, datosEditPeticion);
+
+            openPopup("Petición actualizada", <p>La petición se ha actualizado correctamente.</p>);
+
+            const datosActualizados = await fetchPeticiones(selectedBalsa, selectedFecha);
+            setPeticiones(datosActualizados);
+
+            // Recargar nombres de usuario para evitar "Cargando..."
+            const nuevosIdsUsuarios = new Set();
+            datosActualizados.forEach(p => {
+                if (p.requester) nuevosIdsUsuarios.add(p.requester);
+                if (p.assignedTo) nuevosIdsUsuarios.add(p.assignedTo);
+            });
+            await cargarUsuariosPorIds([...nuevosIdsUsuarios]);
+
+            setPeticionEditandoId(null);
+            setDatosEditPeticion({});
+        } catch (err) {
+            console.error("❌ Error al actualizar la petición:", err);
+            openPopup("Error", <p>Ocurrió un error al actualizar la petición.</p>);
+        }
+    };
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "/scripts/gestor-consumos/gestion-lecturas.js";
@@ -459,8 +515,10 @@ function GestionLecturas() {
 
             const tiposIds = [...new Set(todasPeticiones.map(p => p.type).filter(Boolean))];
             await cargarTiposPorIds(tiposIds);
-        };
 
+            const usuariosAsignables = await fetchUsuarios();
+            setUsuariosAsignables(usuariosAsignables);
+        };
 
         loadInitialData();
     }, [selectedBalsa, selectedContador, selectedFecha]);
@@ -488,7 +546,6 @@ function GestionLecturas() {
                                         onClick={() => setSelectedFecha("")}
                                     ></i>
                                 </div>
-
                             </div>
                             <div>
                                 <label htmlFor="balsa-select">Balsa</label>
@@ -604,28 +661,141 @@ function GestionLecturas() {
                                                         timeZone: "Europe/Madrid",
                                                     })}
                                                 </td>
-                                                <td>{item.name}</td>
-                                                <td>{usuariosMap[item.requester] || item.requester}</td>
-                                                <td>{usuariosMap[item.assignedTo] || item.assignedTo}</td>
-                                                <td>{item.priority}</td>
-                                                <td>{item.status}</td>
-                                                <td>{tiposMap[item.type]}</td>
                                                 <td>
-                                                    <span
-                                                        onClick={() =>
-                                                            openPopup(
-                                                                "Comentario",
-                                                                <div style={{ padding: "20px" }}>{item.comments}</div>
-                                                            )
-                                                        }
-                                                        className={styles.ver_mas}
-                                                    >
-                                                        <i className="fas fa-align-left"></i>Ver más
-                                                    </span>
+                                                    {peticionEditandoId === item.idPeticion ? (
+                                                        <input
+                                                            value={datosEditPeticion.name || ""}
+                                                            onChange={e =>
+                                                                setDatosEditPeticion({ ...datosEditPeticion, name: e.target.value })
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        item.name
+                                                    )}
                                                 </td>
+
+                                                <td>{usuariosMap[item.requester] || 'Cargando...'}</td>
+
                                                 <td>
-                                                    <i className="fas fa-edit"></i>
+                                                    {peticionEditandoId === item.idPeticion ? (
+                                                        <select
+                                                            value={datosEditPeticion.assignedTo || ""}
+                                                            onChange={e =>
+                                                                setDatosEditPeticion({ ...datosEditPeticion, assignedTo: e.target.value })
+                                                            }
+                                                            required
+                                                        >
+                                                            <option value="" defaultValue disabled>Selecciona</option>
+                                                            {usuariosAsignables.map(user => (
+                                                                <option key={user.idusers} value={user.idusers}>
+                                                                    {user.username}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    ) : (
+                                                        usuariosMap[item.assignedTo] || 'Cargando...'
+                                                    )}
                                                 </td>
+
+                                                <td>
+                                                    {peticionEditandoId === item.idPeticion ? (
+                                                        <select
+                                                            value={datosEditPeticion.priority || ""}
+                                                            onChange={e =>
+                                                                setDatosEditPeticion({ ...datosEditPeticion, priority: e.target.value })
+                                                            }
+                                                            required
+                                                        >
+                                                            <option value="" defaultValue disabled>Selecciona</option>
+                                                            {prioridadesUnicas.map(op => (
+                                                                <option key={op} value={op}>{op}</option>
+                                                            ))}
+                                                        </select>
+                                                    ) : (
+                                                        item.priority
+                                                    )}
+                                                </td>
+
+                                                <td>
+                                                    {peticionEditandoId === item.idPeticion ? (
+                                                        <select
+                                                            value={datosEditPeticion.status || ""}
+                                                            onChange={e =>
+                                                                setDatosEditPeticion({ ...datosEditPeticion, status: e.target.value })
+                                                            }
+                                                            required
+                                                        >
+                                                            <option value="" defaultValue disabled>Selecciona</option>
+                                                            {estadosUnicos.map(op => (
+                                                                <option key={op} value={op}>{op}</option>
+                                                            ))}
+                                                        </select>
+                                                    ) : (
+                                                        item.status
+                                                    )}
+                                                </td>
+
+                                                <td>
+                                                    {peticionEditandoId === item.idPeticion ? (
+                                                        <select
+                                                            value={tiposMap[datosEditPeticion.type] || ""}
+                                                            onChange={e => {
+                                                                const entrada = Object.entries(tiposMap).find(([, v]) => v === e.target.value);
+                                                                const tipoKey = entrada?.[0] || "";
+                                                                setDatosEditPeticion({ ...datosEditPeticion, type: tipoKey });
+                                                            }}
+                                                            required
+                                                        >
+                                                            <option value="" defaultValue disabled>Selecciona</option>
+                                                            {tiposUnicos.map(op => (
+                                                                <option key={op} value={op}>{op}</option>
+                                                            ))}
+                                                        </select>
+                                                    ) : (
+                                                        tiposMap[item.type] || 'Cargando...'
+                                                    )}
+                                                </td>
+
+                                                <td>
+                                                    {peticionEditandoId === item.idPeticion ? (
+                                                        <textarea
+                                                            value={datosEditPeticion.comments || ""}
+                                                            onChange={e =>
+                                                                setDatosEditPeticion({ ...datosEditPeticion, comments: e.target.value })
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <span
+                                                            onClick={() =>
+                                                                openPopup(
+                                                                    "Comentario",
+                                                                    <div style={{ padding: "20px" }}>{item.comments}</div>
+                                                                )
+                                                            }
+                                                            className={styles.ver_mas}
+                                                        >
+                                                            <i className="fas fa-align-left"></i>Ver más
+                                                        </span>
+                                                    )}
+                                                </td>
+
+                                                <td className={styles.action_buttons}>
+                                                    {peticionEditandoId === item.idPeticion ? (
+                                                        <>
+                                                            <button onClick={() => confirmarEdicionPeticion(item.idPeticion)}>
+                                                                <i className="fas fa-check"></i>
+                                                            </button>
+                                                            <button onClick={() => cancelarEdicionPeticion()}>
+                                                                <i className="fas fa-times"></i>
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <button onClick={() => iniciarEdicionPeticion(item)}>
+                                                            <i className="fas fa-pen"></i>
+                                                        </button>
+                                                    )}
+                                                </td>
+
                                             </tr>
                                         ))
                                     )}
@@ -729,8 +899,21 @@ function GestionLecturas() {
                                                     <i className="fas fa-image"></i>Ver imagen
                                                 </span>
                                             </td>
-                                            <td>
-                                                <i className="fas fa-edit"></i>
+                                            <td className={styles.action_buttons}>
+                                                {peticionEditandoId === item.idPeticion ? (
+                                                    <>
+                                                        <button onClick={() => confirmarEdicionPeticion(item.idPeticion)}>
+                                                            <i className="fas fa-check"></i>
+                                                        </button>
+                                                        <button onClick={() => cancelarEdicionPeticion()}>
+                                                            <i className="fas fa-times"></i>
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <button onClick={() => iniciarEdicionPeticion(item)}>
+                                                        <i className="fas fa-pen"></i>
+                                                    </button>
+                                                )}
                                             </td>
                                         </tr>
                                     ))

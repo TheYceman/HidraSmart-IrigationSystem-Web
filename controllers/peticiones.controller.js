@@ -68,7 +68,28 @@ async function getNombreTipo(databaseNumber, idtipo) {
     return tipo?.Descripcion ?? null;
 }
 
+/**
+ * Actualiza una petición en la base de datos específica.
+ * 
+ * @param {number|string} databaseNumber - El número de la base de datos a utilizar.
+ * @param {number|string} idPeticion - El ID de la petición a actualizar.
+ * @param {Object} nuevosDatos - Un objeto que contiene los nuevos datos a aplicar a la petición.
+ * @throws {Error} Si la petición no se encuentra.
+ * @returns {Promise<Object>} La petición actualizada.
+ */
+
+async function updatePeticion(databaseNumber, idPeticion, nuevosDatos) {
+    const AwPeticiones = await getAwPeticiones(databaseNumber);
+
+    const peticion = await AwPeticiones.findByPk(idPeticion);
+    if (!peticion) throw new Error("Petición no encontrada");
+
+    await peticion.update(nuevosDatos);
+    return peticion;
+}
+
 module.exports = {
     getAll,
-    getNombreTipo
+    getNombreTipo,
+    updatePeticion,
 };

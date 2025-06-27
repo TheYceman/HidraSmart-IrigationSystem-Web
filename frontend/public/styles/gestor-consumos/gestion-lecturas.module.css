@@ -27,12 +27,6 @@
     transition: color 0.2s ease;
 }
 
-.contenedor_principal i:hover {
-    cursor: pointer;
-    transform: scale(1.1);
-    color: var(--color-primary-400);
-}
-
 .contenedor_principal .titulo_pestania {
     background-color: var(--color-primary-400);
     color: white;
@@ -48,12 +42,38 @@
     border: 2px solid #a1a1a1;
     border-radius: 5px;
     padding: 5px;
+    width: 100%;
+}
+
+.contenedor_principal textarea {
+    border: 2px solid #a1a1a1;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+
 }
 
 .contenedor_principal select:focus,
 .contenedor_principal input:focus {
     border-color: var(--color-primary-400);
     outline: var(--color-primary-400);
+}
+
+/* Ultima columna de botones en las tablas */
+.contenedor_principal .action_buttons button {
+    width: 100%;
+    padding: 5px;
+    justify-content: center;
+}
+
+.contenedor_principal .action_buttons button:nth-child(2){
+    color: red;
+    border-color: red;
+}
+
+.contenedor_principal .action_buttons button:nth-child(2):hover {
+    color: white;
+    background-color: red;
 }
 
 /* Estilos botones globales */
@@ -115,6 +135,12 @@
 .filtros_tabla .filtros label {
     font-size: 12px;
     font-weight: bold;
+}
+
+.filtros_tabla .filtros i:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    color: var(--color-primary-400);
 }
 
 .filtros_tabla .filtros div {
@@ -247,8 +273,9 @@
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    width: 100%; /* Coincide con el ancho del <th> */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    /* Coincide con el ancho del <th> */
 }
 
 .filtro_dropdown select {

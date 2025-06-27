@@ -66,8 +66,26 @@ async function getNombreUsuarioById(req, res) {
     return res.json({ id: user.idusers, username: user.username });
   } catch (error) {
     console.error("Error al obtener nombre de usuario:", error);
-    return res.status(500).json({ error: "Error interno del servidor" });
+    return res.status(500).json({ error: "Error al obtener nombre de usuario" });
   }
 }
 
-module.exports = { loginReact, getNombreUsuarioById };
+async function getUsuarios(req, res) {
+  try {
+    const query = "SELECT idusers, username FROM users";
+    const results = await runQuery(query, [], "hidrasmart_is");
+
+    const filas = results?.data?.rows;
+
+    if (!Array.isArray(filas) || filas.length === 0) {
+      return res.json([]); // Devuelve array vacío si no hay resultados
+    }
+
+    return res.json(filas); // Devuelve todos los usuarios
+  } catch (error) {
+    console.error("Error al obtener los usuarios:", error);
+    return res.status(500).json({ error: "Error al obtener los usuarios" });
+  }
+}
+
+module.exports = { loginReact, getNombreUsuarioById, getUsuarios };
