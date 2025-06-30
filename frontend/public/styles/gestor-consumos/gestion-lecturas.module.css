@@ -12,6 +12,10 @@
     transform: scale(1.1);
 }
 
+.blue_strong{
+    color: var(--color-primary-400);
+}
+
 .contenedor_principal {
     display: grid;
     grid-template-columns: 2.5fr 1fr;

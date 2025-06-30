@@ -110,9 +110,13 @@ function GestionLecturas() {
         setUsuariosMap(nuevoMapa);
     };
 
+    /**
+     * Carga los tipos de peticiones para la balsa actualmente seleccionada
+     * y los almacena en el estado `tiposMap` y `tiposUnicos`.
+     * @returns {Promise<void>}
+     */
     const cargarTiposPeticion = async () => {
         const tipos = await fetchTiposPeticiones(selectedBalsa);
-        console.log("🔍 Tipos cargados desde API:", tipos);
 
         const nuevoMap = {};
         const nombresUnicos = new Set();
@@ -166,8 +170,25 @@ function GestionLecturas() {
      * Limpia los campos para crear una nueva lectura.
      */
     const subirLectura = async () => {
+        if (selectedBalsa === "all") {
+            openPopup("Advertencia", <p>Debes seleccionar una balsa específica.</p>);
+            return;
+        }
         if (selectedContador === "all") {
             openPopup("Advertencia", <p>Debes seleccionar un contador específico.</p>);
+            return;
+        }
+
+        // Validar campos obligatorios
+        if (!nuevaLectura.fecha || !nuevaLectura.usuario || !nuevaLectura.volumen) {
+            openPopup(
+                "Advertencia",
+                <p>
+                    Por favor, rellena todos los campos obligatorios antes de enviar la lectura. <br /><br />
+                    Los campos <strong className={styles.blue_strong}>fecha</strong>, <strong className={styles.blue_strong}>usuario</strong> y <strong className={styles.blue_strong}>volumen</strong> son obligatorios. <br />
+                    La imagen es opcional.
+                </p>
+            );
             return;
         }
 
@@ -176,19 +197,16 @@ function GestionLecturas() {
             fecha: nuevaLectura.fecha,
             usuario: nuevaLectura.usuario,
             volumen: parseFloat(nuevaLectura.volumen),
-            imagen: nuevaLectura.imagenBase64
+            imagen: nuevaLectura.imagenBase64 || null
         };
 
         try {
             await axios.post(`/api/is-b${selectedBalsa}/lecturas`, datosLectura);
-            // Mostrar popup de éxito
             openPopup("Lectura guardada", <p>La lectura se ha guardado correctamente.</p>);
 
-            // Recargar lecturas
             const datosLecturas = await fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha);
             setLecturas(datosLecturas);
 
-            // Limpiar campos
             setNuevaLectura({
                 fecha: '',
                 usuario: '',
@@ -841,7 +859,20 @@ function GestionLecturas() {
                                         <input type="datetime-local" value={nuevaLectura.fecha} onChange={(e) => setNuevaLectura({ ...nuevaLectura, fecha: e.target.value })} />
                                     </td>
                                     <td>
-                                        <input type="text" value={nuevaLectura.usuario} onChange={(e) => setNuevaLectura({ ...nuevaLectura, usuario: e.target.value })} />
+                                        <select
+                                            value={nuevaLectura.usuario}
+                                            onChange={(e) =>
+                                                setNuevaLectura({ ...nuevaLectura, usuario: parseInt(e.target.value) })
+                                            }
+                                            required
+                                        >
+                                            <option value="" disabled>Selecciona un usuario</option>
+                                            {usuariosAsignables.map(user => (
+                                                <option key={user.idusers} value={user.idusers}>
+                                                    {user.username}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </td>
                                     <td>
                                         <input type="text" value={nuevaLectura.volumen} onChange={(e) => setNuevaLectura({ ...nuevaLectura, volumen: e.target.value })} />
