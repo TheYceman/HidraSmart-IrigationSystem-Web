@@ -1,3 +1,7 @@
+.w_full {
+    width: 100%;
+}
+
 .contenedor_principal {
     display: grid;
     grid-template-columns: 2.5fr 1fr;
@@ -72,7 +76,7 @@
     justify-content: center;
 }
 
-.contenedor_principal .action_buttons button:nth-child(2){
+.contenedor_principal .action_buttons button:nth-child(2) {
     color: red;
     border-color: red;
 }
@@ -83,12 +87,13 @@
 }
 
 /* Estilos botones globales */
-.contenedor_principal button {
+.btn {
     border-radius: 5px;
     border: 2px solid var(--color-primary-400);
     background-color: transparent;
     color: var(--color-primary-400);
     width: fit-content;
+    margin: 0 auto;
     font-weight: bold;
     padding: 5px 10px;
     display: flex;
@@ -99,16 +104,16 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.contenedor_principal button:hover {
+.btn:hover {
     background-color: var(--color-primary-400);
     color: white;
 }
 
-.contenedor_principal button:active {
+.btn:active {
     transform: scale(0.95);
 }
 
-.contenedor_principal button:disabled {
+.btn:disabled {
     border-radius: 5px;
     border-color: #a1a1a1;
     color: #a1a1a1;
@@ -309,6 +314,11 @@
     height: 400px;
     display: block;
     object-fit: contain;
+}
+
+.sin_imagen {
+    font-style: italic;
+    color: #999;
 }
 
 /* Div 3 */

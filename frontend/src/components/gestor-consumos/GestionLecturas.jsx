@@ -179,7 +179,7 @@ function GestionLecturas() {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file && file.size > 1024 * 1024) { // 1 MB
-            openPopup("Error", <p>La imagen no debe superar 1 MB.</p>);
+            openPopup("Advertencia", <p>La imagen no debe superar 1 MB.</p>);
             return;
         }
 
@@ -198,7 +198,7 @@ function GestionLecturas() {
      */
     const subirLectura = async () => {
         if (selectedContador === "all") {
-            openPopup("Error", <p>Debes seleccionar un contador específico.</p>);
+            openPopup("Advertencia", <p>Debes seleccionar un contador específico.</p>);
             return;
         }
 
@@ -431,7 +431,7 @@ function GestionLecturas() {
 
     const confirmarEdicionPeticion = async (id) => {
         if (selectedBalsa === "all") {
-            openPopup("Error", <p>Debes seleccionar una balsa específica para editar una petición.</p>);
+            openPopup("Advertencia", <p>Debes seleccionar una balsa específica para editar una petición.</p>);
             return;
         }
 
@@ -476,7 +476,7 @@ function GestionLecturas() {
 
     const confirmarEdicionLectura = async (id) => {
         if (selectedBalsa === "all") {
-            openPopup("Error", <p>Debes seleccionar una balsa específica para editar una lectura.</p>);
+            openPopup("Advertencia", <p>Debes seleccionar una balsa específica para editar una lectura.</p>);
             return;
         }
 
@@ -635,7 +635,7 @@ function GestionLecturas() {
 
                             </div>
 
-                            <button onClick={handleExportZipPorBalsa}>
+                            <button className={`${styles.btn}`} onClick={handleExportZipPorBalsa}>
                                 <i className="fas fa-folder-open"></i>Exportar a Excel
                             </button>
                         </div>
@@ -821,15 +821,15 @@ function GestionLecturas() {
                                                 <td className={styles.action_buttons}>
                                                     {peticionEditandoId === item.idPeticion ? (
                                                         <>
-                                                            <button onClick={() => confirmarEdicionPeticion(item.idPeticion)}>
+                                                            <button className={`${styles.btn}`} onClick={() => confirmarEdicionPeticion(item.idPeticion)}>
                                                                 <i className="fas fa-check"></i>
                                                             </button>
-                                                            <button onClick={() => cancelarEdicionPeticion()}>
+                                                            <button className={`${styles.btn}`} onClick={() => cancelarEdicionPeticion()}>
                                                                 <i className="fas fa-times"></i>
                                                             </button>
                                                         </>
                                                     ) : (
-                                                        <button onClick={() => iniciarEdicionPeticion(item)}>
+                                                        <button className={`${styles.btn}`} onClick={() => iniciarEdicionPeticion(item)}>
                                                             <i className="fas fa-pen"></i>
                                                         </button>
                                                     )}
@@ -880,7 +880,7 @@ function GestionLecturas() {
                                     </td>
                                     <td>
                                         <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleImageChange} />
-                                        <button onClick={handleFileButtonClick}>Subir archivo</button>
+                                        <button className={`${styles.btn}`} onClick={handleFileButtonClick}>Subir archivo</button>
                                     </td>
                                     <td>
                                         <i className="fas fa-plus" style={{ cursor: "pointer" }} onClick={subirLectura}></i>
@@ -957,38 +957,114 @@ function GestionLecturas() {
                                             </td>
 
                                             <td>
-                                                <span
-                                                    onClick={() => {
-                                                        if (!item.imagen) {
-                                                            openPopup("Sin imagen", <p>No se ha subido ninguna imagen para esta lectura.</p>);
-                                                            return;
-                                                        }
-                                                        if (!item.imagen.startsWith("data:image/jpeg;base64,")) {
-                                                            openPopup("Error", <p>No se puede mostrar la imagen: formato inválido.</p>);
-                                                            return;
-                                                        }
-                                                        openPopup("Imagen de lectura", (
-                                                            <img src={item.imagen} alt="Imagen de lectura" className={styles.imagen_lecturas_popup} />
-                                                        ));
-                                                    }}
-                                                    className={styles.ver_mas}
-                                                >
-                                                    <i className="fas fa-image"></i>Ver imagen
-                                                </span>
+                                                {lecturaEditandoId === item.idLectura ? (
+                                                    datosEditLectura.imagen ? (
+                                                        <span
+                                                            onClick={() => {
+                                                                openPopup("Editor de imagen", (
+                                                                    <div>
+                                                                        <img
+                                                                            src={datosEditLectura.imagen}
+                                                                            alt="Imagen de lectura"
+                                                                            className={styles.imagen_lecturas_popup}
+                                                                        />
+                                                                        <br />
+                                                                        <div className={styles.w_full}>
+                                                                            <button className={`${styles.btn}`} onClick={() => {
+                                                                                const input = document.createElement('input');
+                                                                                input.type = 'file';
+                                                                                input.accept = 'image/jpeg';
+
+                                                                                input.onchange = e => {
+                                                                                    const file = e.target.files[0];
+                                                                                    if (file && file.size > 1024 * 1024) {
+                                                                                        openPopup("Advertencia", <p>La imagen no debe superar 1 MB.</p>);
+                                                                                        return;
+                                                                                    }
+
+                                                                                    const reader = new FileReader();
+                                                                                    reader.onloadend = () => {
+                                                                                        setDatosEditLectura(prev => ({
+                                                                                            ...prev,
+                                                                                            imagen: reader.result
+                                                                                        }));
+                                                                                        setIsPopupOpen(false);
+                                                                                    };
+                                                                                    reader.readAsDataURL(file);
+                                                                                };
+
+                                                                                input.click();
+                                                                            }}>Reemplazar imagen</button>
+                                                                        </div>
+                                                                    </div>
+                                                                ));
+                                                            }}
+                                                            className={styles.ver_mas}
+                                                        >
+                                                            <i className="fas fa-edit"></i>Abrir editor de imagen
+                                                        </span>
+                                                    ) : (
+                                                        <button className={`${styles.btn}`} onClick={() => {
+                                                            const input = document.createElement('input');
+                                                            input.type = 'file';
+                                                            input.accept = 'image/jpeg';
+
+                                                            input.onchange = e => {
+                                                                const file = e.target.files[0];
+                                                                if (file && file.size > 1024 * 1024) {
+                                                                    openPopup("Advertencia", <p>La imagen no debe superar 1 MB.</p>);
+                                                                    return;
+                                                                }
+
+                                                                const reader = new FileReader();
+                                                                reader.onloadend = () => {
+                                                                    setDatosEditLectura(prev => ({
+                                                                        ...prev,
+                                                                        imagen: reader.result
+                                                                    }));
+                                                                };
+                                                                reader.readAsDataURL(file);
+                                                            };
+
+                                                            input.click();
+                                                        }}>
+                                                            <i className="fas fa-upload"></i> Subir imagen
+                                                        </button>
+                                                    )
+                                                ) : (
+                                                    item.imagen ? (
+                                                        <span
+                                                            onClick={() => {
+                                                                openPopup("Imagen de lectura", (
+                                                                    <img
+                                                                        src={item.imagen}
+                                                                        alt="Imagen de lectura"
+                                                                        className={styles.imagen_lecturas_popup}
+                                                                    />
+                                                                ));
+                                                            }}
+                                                            className={styles.ver_mas}
+                                                        >
+                                                            <i className="fas fa-image"></i>Ver imagen
+                                                        </span>
+                                                    ) : (
+                                                        <span className={styles.sin_imagen}>Sin imagen</span>
+                                                    )
+                                                )}
                                             </td>
 
                                             <td className={styles.action_buttons}>
                                                 {lecturaEditandoId === item.idLectura ? (
                                                     <>
-                                                        <button onClick={() => confirmarEdicionLectura(item.idLectura)}>
+                                                        <button className={`${styles.btn}`} onClick={() => confirmarEdicionLectura(item.idLectura)}>
                                                             <i className="fas fa-check"></i>
                                                         </button>
-                                                        <button onClick={cancelarEdicionLectura}>
+                                                        <button className={`${styles.btn}`} onClick={cancelarEdicionLectura}>
                                                             <i className="fas fa-times"></i>
                                                         </button>
                                                     </>
                                                 ) : (
-                                                    <button onClick={() => iniciarEdicionLectura(item)}>
+                                                    <button className={`${styles.btn}`} onClick={() => iniciarEdicionLectura(item)}>
                                                         <i className="fas fa-pen"></i>
                                                     </button>
                                                 )}
