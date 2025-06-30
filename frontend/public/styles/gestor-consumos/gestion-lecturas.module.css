@@ -2,6 +2,16 @@
     width: 100%;
 }
 
+.icon {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.icon:hover {
+    color: var(--color-primary-400);
+    transform: scale(1.1);
+}
+
 .contenedor_principal {
     display: grid;
     grid-template-columns: 2.5fr 1fr;
@@ -26,10 +36,10 @@
     box-shadow: 0px 0px 10px 0px rgba(52, 162, 231, 0.3);
 }
 
-.contenedor_principal i {
+/* .contenedor_principal i {
     font-size: 14px;
     transition: color 0.2s ease;
-}
+} */
 
 .contenedor_principal .titulo_pestania {
     background-color: var(--color-primary-400);

@@ -23,19 +23,13 @@ export const fetchPeticiones = async (dbSuffix, fecha) => {
     }
 };
 
-/**
- * Obtiene la descripción del tipo de petición dado su idtipo y base de datos
- * @param {string|number} dbSuffix - sufijo de base de datos, por ejemplo 'bx' (sin 'is-')
- * @param {number|string} idtipo
- * @returns {Promise<string|null>}
- */
-export const fetchNombreTipoPeticion = async (dbSuffix, idtipo) => {
+export const fetchTiposPeticiones = async (dbSuffix) => {
     try {
-        const res = await axios.get(`/api/is-b${dbSuffix}/peticion/nombre/${idtipo}`);
+        const res = await axios.get(`/api/is-b${dbSuffix}/peticiones/tipos`);
         return res.data;
     } catch (error) {
-        console.error("❌ Error al obtener tipo de petición:", error);
-        return null;
+        console.error("Error al obtener los tipos de peticiones:", error);
+        return [];
     }
 };
 
@@ -83,7 +77,7 @@ export const fetchLecturasByContador = async (dbSuffix, contador, fecha = null) 
             return [];
         }
     } catch (error) {
-        console.error("❌ Error al obtener lecturas por contador:", error);
+        console.error("Error al obtener lecturas por contador:", error);
         return [];
     }
 };

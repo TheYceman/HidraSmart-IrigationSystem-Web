@@ -56,16 +56,11 @@ async function getAll(databaseNumber, filtroFecha = null) {
 }
 
 /**
- * Devuelve la descripción del tipo de petición dado su ID y número de base de datos.
+ * Devuelve los tipos de petición almacenados en una base de datos específica.
  */
-async function getNombreTipo(databaseNumber, idtipo) {
+async function getTiposPeticiones(databaseNumber) {
     const AwTipoPeticiones = await getAwTipoPeticiones(databaseNumber);
-
-    const tipo = await AwTipoPeticiones.findOne({
-        where: { idtipo }
-    });
-
-    return tipo?.Descripcion ?? null;
+    return await AwTipoPeticiones.findAll();
 }
 
 /**
@@ -90,6 +85,6 @@ async function updatePeticion(databaseNumber, idPeticion, nuevosDatos) {
 
 module.exports = {
     getAll,
-    getNombreTipo,
+    getTiposPeticiones,
     updatePeticion,
 };

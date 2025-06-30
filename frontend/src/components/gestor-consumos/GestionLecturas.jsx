@@ -14,7 +14,7 @@ import {
     fetchContadores,
     fetchBalsasDisponibles,
     fetchNombreUsuario,
-    fetchNombreTipoPeticion,
+    fetchTiposPeticiones,
     fetchUsuarios
 } from "../../api/gestion-lectura-api.js";
 
@@ -51,36 +51,12 @@ function GestionLecturas() {
 
     //Tipos peticiones
     const [tiposMap, setTiposMap] = useState({});
+    const [tiposUnicos, setTiposUnicos] = useState([]);
 
     // Cargar filtros para la tabla peticiones
-    // Lista única de prioridades presentes en las peticiones.
-    const prioridadesUnicas = useMemo(() =>
-        [...new Set(                      // Convierte a conjunto para eliminar duplicados
-            peticiones
-                .map(p => p.priority)     // Extrae el campo 'priority' de cada petición
-                .filter(Boolean)         // Filtra valores null, undefined o falsy
-        )],
-        [peticiones]                     // Dependencia: se actualiza solo si cambia 'peticiones'
-    );
+    const prioridadesDisponibles = ["Alta", "Media", "Baja"];
+    const estadosDisponibles = ["Pendiente", "Aprobada", "Asignada", "Rechazada"];
 
-    // Lista única de estados (status) presentes en las peticiones.
-    const estadosUnicos = useMemo(() =>
-        [...new Set(
-            peticiones
-                .map(p => p.status)
-                .filter(Boolean)
-        )],
-        [peticiones]
-    );
-
-    // Lista de los nombres únicos de los tipos de peticiones.
-    // Aquí el tipo es un ID, por lo que se mapea a su nombre real usando 'tiposMap'.
-    const tiposUnicos = useMemo(() => {
-        const nombres = peticiones
-            .map(p => tiposMap[p.type]) // Convierte el ID de tipo en su nombre usando el mapa
-            .filter(Boolean);           // Elimina resultados vacíos (por si el tipo aún no está cargado)
-        return [...new Set(nombres)];   // Devuelve una lista de nombres únicos
-    }, [peticiones, tiposMap]);
 
     // Lecturas
     const [lecturas, setLecturas] = useState([]);
@@ -134,30 +110,23 @@ function GestionLecturas() {
         setUsuariosMap(nuevoMapa);
     };
 
-    /**
-     * Carga los nombres de los tipos de peticiones cuyos IDs se pasan como parámetro
-     * y los almacena en el estado `tiposMap`.
-     * Si el tipo no existe en la base de datos, se almacena con el nombre "Tipo <id>".
-     * @param {string[]} ids IDs de los tipos de peticiones a cargar
-     */
-    const cargarTiposPorIds = async (ids) => {
-        const idsUnicos = [...new Set(ids)];
-        const tiposNoCargados = idsUnicos.filter(id => id && !tiposMap[id]);
+    const cargarTiposPeticion = async () => {
+        const tipos = await fetchTiposPeticiones(selectedBalsa);
+        console.log("🔍 Tipos cargados desde API:", tipos);
 
-        if (tiposNoCargados.length === 0) return;
+        const nuevoMap = {};
+        const nombresUnicos = new Set();
 
-        const nuevoMap = { ...tiposMap };
-
-        await Promise.all(tiposNoCargados.map(async (id) => {
-            try {
-                const tipo = await fetchNombreTipoPeticion(selectedBalsa, id);
-                nuevoMap[id] = tipo || `Tipo ${id}`;
-            } catch (error) {
-                nuevoMap[id] = `Tipo ${id}`;
+        tipos.forEach(tipo => {
+            // Adaptamos el mapeo usando los nombres reales de los campos
+            nuevoMap[tipo.idtipo] = tipo.Descripcion;
+            if (tipo.Descripcion) {
+                nombresUnicos.add(tipo.Descripcion);
             }
-        }));
+        });
 
         setTiposMap(nuevoMap);
+        setTiposUnicos([...nombresUnicos].sort());
     };
 
     /**
@@ -552,8 +521,7 @@ function GestionLecturas() {
 
             await cargarUsuariosPorIds([...idsUsuarios]);
 
-            const tiposIds = [...new Set(todasPeticiones.map(p => p.type).filter(Boolean))];
-            await cargarTiposPorIds(tiposIds);
+            await cargarTiposPeticion();
 
             const usuariosAsignables = await fetchUsuarios();
             setUsuariosAsignables(usuariosAsignables);
@@ -580,7 +548,7 @@ function GestionLecturas() {
                                         onChange={(e) => setSelectedFecha(e.target.value)}
                                     />
                                     <i
-                                        className="fas fa-trash"
+                                        className={`${styles.icon} fas fa-trash`}
                                         style={{ cursor: "pointer" }}
                                         onClick={() => setSelectedFecha("")}
                                     ></i>
@@ -652,7 +620,7 @@ function GestionLecturas() {
                                             <div className={styles.filtro_dropdown}>
                                                 <select value={filtroPrioridad} onChange={(e) => setFiltroPrioridad(e.target.value)}>
                                                     <option value="">Todas</option>
-                                                    {prioridadesUnicas.map(p => (
+                                                    {prioridadesDisponibles.map(p => (
                                                         <option key={p} value={p}>{p}</option>
                                                     ))}
                                                 </select>
@@ -663,7 +631,7 @@ function GestionLecturas() {
                                             <div className={styles.filtro_dropdown}>
                                                 <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}>
                                                     <option value="">Todos</option>
-                                                    {estadosUnicos.map(e => (
+                                                    {estadosDisponibles.map(e => (
                                                         <option key={e} value={e}>{e}</option>
                                                     ))}
                                                 </select>
@@ -746,7 +714,7 @@ function GestionLecturas() {
                                                             required
                                                         >
                                                             <option value="" defaultValue disabled>Selecciona</option>
-                                                            {prioridadesUnicas.map(op => (
+                                                            {prioridadesDisponibles.map(op => (
                                                                 <option key={op} value={op}>{op}</option>
                                                             ))}
                                                         </select>
@@ -765,7 +733,7 @@ function GestionLecturas() {
                                                             required
                                                         >
                                                             <option value="" defaultValue disabled>Selecciona</option>
-                                                            {estadosUnicos.map(op => (
+                                                            {estadosDisponibles.map(op => (
                                                                 <option key={op} value={op}>{op}</option>
                                                             ))}
                                                         </select>
@@ -883,7 +851,7 @@ function GestionLecturas() {
                                         <button className={`${styles.btn}`} onClick={handleFileButtonClick}>Subir archivo</button>
                                     </td>
                                     <td>
-                                        <i className="fas fa-plus" style={{ cursor: "pointer" }} onClick={subirLectura}></i>
+                                        <i className={`${styles.icon} fas fa-plus`} onClick={subirLectura}></i>
                                     </td>
                                 </tr>
 
