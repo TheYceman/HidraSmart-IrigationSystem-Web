@@ -5,7 +5,7 @@ const PopupConfig = ({
   isOpen,
   onClose,
   title = "",
-  width = "800px",
+  width = "40%",
   height = "600px",
   children,
   footer = null,

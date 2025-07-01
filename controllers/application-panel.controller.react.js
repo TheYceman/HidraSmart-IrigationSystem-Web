@@ -56,6 +56,7 @@ async function getApplicationPanelContent(req) {
                     </div>
                 </div>
             </div>
+                <button id="config-button">Configuración</button>
         </div>
         <!-- Fin cabecera -->
 

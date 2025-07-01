@@ -1,4 +1,4 @@
-let fadeMixinNotTime = Swal.mixin({
+var fadeMixinNotTime = typeof fadeMixinNotTime === 'undefined' ? Swal.mixin({
   icon: "warning",
   title: "General Title",
   animation: false,
@@ -12,14 +12,13 @@ let fadeMixinNotTime = Swal.mixin({
   customClass: {
     popup: "custom-dialog-class",
   },
-});
+}) : fadeMixinNotTime;
 
 document.addEventListener("DOMContentLoaded", () => {
   // Agregar eventos de enfoque y desenfoque a los inputs
   inputEmail.addEventListener("focus", () => {
     applyRedBorder("email");
-  }
-  );
+  });
   inputEmail.addEventListener("blur", () => {
     if (inputEmail.value === "") {
       addImportantWarning("email");
@@ -27,12 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
       removeImportantWarning("email");
       removeRedBorder("email");
     }
-  }   
-  );
+  });
   inputPass.addEventListener("focus", () => {
     applyRedBorder("pass");
-  }
-  );
+  });
   inputPass.addEventListener("blur", () => {
     if (inputPass.value === "") {
       addImportantWarning("pass");
@@ -40,12 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
       removeImportantWarning("pass");
       removeRedBorder("pass");
     }
-  }
-  );
+  });
 });
-
-
-//<input type="text" name="username" id="input-email" class="input_email" placeholder="Usuario*" required onfocus="applyRedBorder('email');" onblur="if(this.value=='') addImportantWarning('email'); else removeImportantWarning('email'); removeRedBorder('email');" />
 
 function applyRedBorder(element) {
   var contentElemen = document.querySelector(".subcontainer_input_" + element);
@@ -90,16 +83,12 @@ function validarFormulario() {
   if (emailInput.value === "") {
     addImportantWarning("email");
     emailInput.focus();
-
-    // Evitar el envío del formulario
     return false;
   } else if (passwordInput.value === "") {
     addImportantWarning("pass");
     passwordInput.focus();
-
-    // Evitar el envío del formulario
     return false;
-  } else if (emailInput != "admin" && passwordInput.value != "admin") {
+  } else if (emailInput.value !== "admin" || passwordInput.value !== "admin") {
     fadeMixinNotTime.fire({
       icon: "",
       title:
@@ -110,17 +99,13 @@ function validarFormulario() {
       confirmButtonText: "ACEPTAR",
       confirmButtonColor: "#3a677c",
     });
-    // Evitar el envío del formulario
     return false;
   }
-
-  // El formulario se enviará si todos los campos están completos
   return true;
 }
 
 async function testLogin() {
   let response;
-
   try {
     response = await fetch("/api/login", {
       method: "POST",
@@ -145,12 +130,70 @@ async function testLogin() {
   }
 }
 
+function bbddSelector(selector) {
+  let inputGroups;
+  let selectedOption = null;
+  fadeMixinNotTime.fire({
+    icon: "",
+    title:
+      'Selecciona localidad',
+    html: selector,
+    showCancelButton: false,
+    showConfirmButton: true,
+    confirmButtonText: "ACEPTAR",
+    confirmButtonColor: "#3a677c",
+    customClass: {
+      confirmButton: 'custom-confirm-button-class'
+    },
+    didOpen: () => {
+      inputGroups = document.querySelectorAll('.inputGroup');
+    },
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      selectedOption = null;
+      Array.from(inputGroups).forEach(inputGroup => {
+        const input = inputGroup.querySelector('input');
+        if (input.checked) {
+          selectedOption = input.value;
+        }
+      });
+      if (!selectedOption) throw failedLogin('No ha seleccionado ninguna población.');
+      else {
+        let saveLocationOptionResult = await fetch(
+          `/api/save-location-option`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ selectedOption }),
+          }
+        );
+        console.log('saveLocationOptionResult:');
+        console.log(saveLocationOptionResult);
+        if (saveLocationOptionResult.ok) {
+          const responseData = await saveLocationOptionResult.json();
+          if (responseData.success) {
+            window.location.href = responseData.route;
+          } else {
+            failedLogin('Carece de permisos.<br>Póngase en contacto con el SAT.');
+            clearImputsLogin();
+          }
+        } else {
+          console.error('Error al enviar la opción al servidor');
+        }
+      }
+    }
+  });
+}
+
+
 async function login(event) {
   if (event) event.preventDefault();
   const emailInput = document.getElementById("input-email");
   const passwordInput = document.getElementById("input-pass");
   const token = await grecaptcha.enterprise.execute('6Lf3o3opAAAAAH0GHlp_LuajXdK_Ur8HCR8_vLqX', { action: 'login' });
-  
+
   if (emailInput.value === "" || passwordInput.value === "") {
     fadeMixinNotTime.fire({
       icon: "warning",
@@ -160,7 +203,6 @@ async function login(event) {
     });
     return;
   }
-
   try {
     const response = await fetch("/api/loginReact", {
       method: "POST",
@@ -174,23 +216,52 @@ async function login(event) {
       }),
     });
 
-    if (!response.ok) {
-      throw new Error("Error en la solicitud de inicio de sesión");
-    }
 
     const data = await response.json();
+
     if (data.success) {
-      console.log("Inicio de sesión exitoso:", data);
-      fadeMixinNotTime.fire({
-        icon: "success",
-        title: "Inicio de sesión exitoso",
-        text: "Bienvenido de nuevo, " + data.username,
-        confirmButtonText: "Aceptar",
-      }).then(() => {
-        if (typeof window.onLoginSuccess === "function") {
-          window.onLoginSuccess();
+      if (data.user.two_factor_enabled == 1) {
+
+        const sendingemail = data.user.email;
+        const sendingsubject = 'Código de verificación';
+        const sendingmessage = 'Inicio de sesión.';
+        const resultVerificationCode = await sendingDataForVerificationCode(sendingemail, sendingsubject, sendingmessage);
+        let resultChangeCodeRequest;
+        try {
+          resultChangeCodeRequest = await showMessageCodeRequest(sendingemail, 'double');
+        } catch (error) {
+          console.error('Error al enviar el correo electrónico:', error);
         }
-      });
+        if (resultChangeCodeRequest.success === true) {
+          if (data.user.namenetwork === 'full') {
+            bbddSelector(data.html);
+          }
+          // fadeMixinNotTime.fire({
+          //   icon: "success",
+          //   title: "Inicio de sesión exitoso",
+          //   text: "Bienvenido de nuevo, " + data.username,
+          //   confirmButtonText: "Aceptar",
+          // }).then(() => {
+          //   if (typeof window.onLoginSuccess === "function") {
+          //     window.onLoginSuccess();
+          //   }
+          // });
+        }
+      } else {
+        if (data.user.namenetwork === 'full') {
+          bbddSelector(data.html);
+        }
+        // fadeMixinNotTime.fire({
+        //   icon: "success",
+        //   title: "Inicio de sesión exitoso",
+        //   text: "Bienvenido de nuevo, " + data.username,
+        //   confirmButtonText: "Aceptar",
+        // }).then(() => {
+        //   if (typeof window.onLoginSuccess === "function") {
+        //     window.onLoginSuccess();
+        //   }
+        // });
+      }
     } else {
       fadeMixinNotTime.fire({
         icon: "error",
@@ -209,4 +280,3 @@ async function login(event) {
     });
   }
 }
-

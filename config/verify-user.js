@@ -1,4 +1,4 @@
-const User = require('../models/users.model');
+const User = require('../models/user.model');
 const { hashatePassword } = require("../config/hashate-password");
 
 async function verifyUser(username, password) {

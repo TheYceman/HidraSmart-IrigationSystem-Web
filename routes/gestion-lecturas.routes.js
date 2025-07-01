@@ -243,4 +243,4 @@ router.post('/is-b:databaseNumber/lecturas', async (req, res) => {
     }
 });
 
-module.exports = router;
+// module.exports = router;

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import RedirectPage from './pages/RedirectPage';
 import Login from './pages/Login';
 import ContactUs from './pages/ContactUs';
+
 import PanelAplicaciones from './pages/PanelAplicaciones';
 import GestorConsumos from './pages/GestorConsumos';
 
