@@ -121,7 +121,7 @@ export const fetchBalsasDisponibles = async () => {
     try {
         // Animacion de carga hasta que se obtengan las balsas
         const res = await axios.get(`/api/balsas-disponibles`);
-        return res.data; // ['x', '1', '2', ...]
+        return res.data; // ['hidrasmart_is_bx', 'hidrasmart_is_b1', 'hidrasmart_is_b2', ...]
     } catch (error) {
         console.error("Error al obtener balsas disponibles:", error);
         return [];

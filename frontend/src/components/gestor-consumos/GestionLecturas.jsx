@@ -57,7 +57,6 @@ function GestionLecturas() {
     const prioridadesDisponibles = ["Alta", "Media", "Baja"];
     const estadosDisponibles = ["Pendiente", "Aprobada", "Asignada", "Rechazada"];
 
-
     // Lecturas
     const [lecturas, setLecturas] = useState([]);
     const [selectedContador, setSelectedContador] = useState("all");
@@ -87,6 +86,13 @@ function GestionLecturas() {
     const [datosEditLectura, setDatosEditLectura] = useState({});
 
     const [usuariosAsignables, setUsuariosAsignables] = useState([]);
+
+    // Sufijo de las balsas
+    const getDbSuffix = (balsa) => {
+        if (!balsa || typeof balsa !== "string") return "";
+        if (balsa === "all") return "all";
+        return balsa.replace("hidrasmart_is_b", "");
+    };
 
     /**
      * Carga los nombres de los usuarios cuyos IDs se pasan como parámetro
@@ -201,7 +207,7 @@ function GestionLecturas() {
         };
 
         try {
-            await axios.post(`/api/is-b${selectedBalsa}/lecturas`, datosLectura);
+            await axios.post(`/api/is-b${getDbSuffix(selectedBalsa)}/lecturas`, datosLectura);
             openPopup("Lectura guardada", <p>La lectura se ha guardado correctamente.</p>);
 
             const datosLecturas = await fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha);
@@ -248,7 +254,7 @@ function GestionLecturas() {
         const datos = await fetchPeticiones(balsaValue);
         setPeticiones(datos);
 
-        const datosContadores = await fetchContadores(balsaValue);
+        const datosContadores = await fetchContadores(getDbSuffix(selectedBalsa));
         setContadores(datosContadores);
     };
 
@@ -272,10 +278,10 @@ function GestionLecturas() {
         setShowDropdown(false);
 
         if (contadorValue === "all") {
-            const datosLecturas = await fetchLecturas(selectedBalsa, selectedFecha);
+            const datosLecturas = await fetchLecturas(getDbSuffix(selectedBalsa), selectedFecha);
             setLecturas(datosLecturas);
         } else {
-            const datosLecturas = await fetchLecturasByContador(selectedBalsa, contadorValue, selectedFecha);
+            const datosLecturas = await fetchLecturasByContador(getDbSuffix(selectedBalsa), contadorValue, selectedFecha);
             setLecturas(datosLecturas);
         }
     };
@@ -428,11 +434,11 @@ function GestionLecturas() {
         }
 
         try {
-            await axios.put(`/api/is-b${selectedBalsa}/peticiones/${id}`, datosEditPeticion);
+            await axios.put(`/api/is-b${getDbSuffix(selectedBalsa)}/peticiones/${id}`, datosEditPeticion);
 
             openPopup("Petición actualizada", <p>La petición se ha actualizado correctamente.</p>);
 
-            const datosActualizados = await fetchPeticiones(selectedBalsa, selectedFecha);
+            const datosActualizados = await fetchPeticiones(getDbSuffix(selectedBalsa), selectedFecha);
             setPeticiones(datosActualizados);
 
             // Recargar nombres de usuario para evitar "Cargando..."
@@ -468,7 +474,7 @@ function GestionLecturas() {
         }
 
         try {
-            await axios.put(`/api/is-b${selectedBalsa}/lecturas/${id}`, datosEditLectura);
+            await axios.put(`/api/is-b${getDbSuffix(selectedBalsa)}/lecturas/${id}`, datosEditLectura);
 
             openPopup("Lectura actualizada", <p>La lectura se ha actualizado correctamente.</p>);
 
@@ -504,28 +510,34 @@ function GestionLecturas() {
 
             if (selectedBalsa === "all") {
                 for (const balsa of balsasDisponibles) {
-                    const peticiones = await fetchPeticiones(balsa, selectedFecha);
+                    const dbSuffix = getDbSuffix(balsa);
+
+                    const peticiones = await fetchPeticiones(dbSuffix, selectedFecha);
                     todasPeticiones.push(...peticiones.map(p => ({ ...p, balsa })));
 
                     const lecturas = selectedContador === "all"
-                        ? await fetchLecturas(balsa, selectedFecha)
-                        : await fetchLecturasByContador(balsa, selectedContador, selectedFecha);
+                        ? await fetchLecturas(dbSuffix, selectedFecha)
+                        : await fetchLecturasByContador(dbSuffix, selectedContador, selectedFecha);
                     todasLecturas.push(...lecturas.map(l => ({ ...l, balsa })));
                 }
             } else {
-                const peticiones = await fetchPeticiones(selectedBalsa, selectedFecha);
+                const dbSuffix = getDbSuffix(selectedBalsa);
+
+                const peticiones = await fetchPeticiones(dbSuffix, selectedFecha);
                 todasPeticiones = peticiones.map(p => ({ ...p, balsa: selectedBalsa }));
 
                 const lecturas = selectedContador === "all"
-                    ? await fetchLecturas(selectedBalsa, selectedFecha)
-                    : await fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha);
+                    ? await fetchLecturas(dbSuffix, selectedFecha)
+                    : await fetchLecturasByContador(dbSuffix, selectedContador, selectedFecha);
                 todasLecturas = lecturas.map(l => ({ ...l, balsa: selectedBalsa }));
             }
 
             setPeticiones(todasPeticiones);
             setLecturas(todasLecturas);
 
-            const datosContadores = await fetchContadores(selectedBalsa);
+            const datosContadores = await fetchContadores(
+                selectedBalsa === "all" ? "all" : getDbSuffix(selectedBalsa)
+            );
             setContadores(datosContadores);
 
             const idsUsuarios = new Set();
@@ -547,6 +559,7 @@ function GestionLecturas() {
 
         loadInitialData();
     }, [selectedBalsa, selectedContador, selectedFecha]);
+
 
     return (
         <>
@@ -578,7 +591,7 @@ function GestionLecturas() {
                                     <option value="all">Todas</option>
                                     {balsas.map((balsa) => (
                                         <option key={balsa} value={balsa}>
-                                            {`Balsa ${balsa}`}
+                                            {balsa.replace("hidrasmart_is_b", "Balsa ")}
                                         </option>
                                     ))}
                                 </select>

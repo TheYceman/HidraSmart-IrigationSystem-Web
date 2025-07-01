@@ -12,9 +12,19 @@ const { getAvailableBalsas } = require('../data/bbdd-selector.js');
 // RUTA ESPECIAL - Obtener todas las bases de datos de balsas disponibles
 router.get('/balsas-disponibles', async (req, res) => {
     try {
-        const balsas = await getAvailableBalsas();
-        res.json(balsas);
-    } catch (err) {
+        // const user_id = parseInt(req.query.user_id);
+        // const network_id = parseInt(req.query.network_id);
+        const user_id = 28;
+        const network_id = 2;
+
+        if (isNaN(user_id) || isNaN(network_id)) {
+            return res.status(400).json({ error: 'Parámetros inválidos' });
+        }
+
+        const balsas = await getAvailableBalsas(user_id, network_id);
+        res.json(balsas); // ['hidrasmart_is_b1', ...]
+    } catch (error) {
+        console.error("❌ Error al obtener balsas disponibles:", error);
         res.status(500).json({ error: 'Error al obtener balsas disponibles' });
     }
 });
