@@ -10,6 +10,7 @@ import GestorConsumos from './pages/GestorConsumos';
 
 // Estilos GLOBALES
 import '../public/styles/common/custom-scrollbar.css';
+import PlanHidraulico from './pages/PlanHidraulico';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/panel-aplicaciones" element={<PanelAplicaciones />} />
         <Route path="/panel-aplicaciones/gestor-consumos" element={<GestorConsumos />} />
+        <Route path="/panel-aplicaciones/plan-hidraulico" element={<PlanHidraulico />} />
         <Route path="*" element={<RedirectPage />} />
       </Routes>
     </Router>

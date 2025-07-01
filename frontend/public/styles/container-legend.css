@@ -1,0 +1,276 @@
+#container-legend {
+    min-width: 25%;
+    width: fit-content;
+    position: relative;
+    border-radius: 5px 0px 0px 5px;
+    background: none rgb(255, 255, 255);
+    border: 0px;
+    padding: 0px;
+    font-family: Arial, sans-serif;
+    align-items: center;
+    transition: width 1s ease-in-out;
+}
+
+.width_plus {
+    width: 100% !important;
+}
+
+.legend-container {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    font-family: Arial, sans-serif;
+}
+
+.tab_list {
+    background: #eee;
+    position: absolute;
+    z-index: 9;
+}
+
+[role=tablist] {
+    display: grid;
+    width: 100%;
+    margin: auto;
+    grid-template-columns: 50px auto;
+    height: 100%;
+}
+
+.label_tab {
+    padding: 1em 0em;
+    background: #eee;
+    cursor: pointer;
+    display: inline-flex;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    align-items: center;
+}
+
+.label_tab input[type="radio"] {
+    display: none;
+}
+
+.fas_tab {
+    padding: 8px 0px 0px;
+    transform: rotate(180deg);
+}
+
+.div_tab {
+    display: flex;
+    background: #fff;
+    align-content: center;
+    width: 84%;
+}
+
+.layer_tab {
+    justify-content: center;
+    width: 84%;
+}
+
+[role=tabpanel] {
+    grid-column: 2;
+    grid-row: 1 / 9999;
+    display: none;
+}
+
+.label_tab:has(:checked) {
+    background: #fff;
+}
+
+.label_tab:has(:checked)+[role=tabpanel] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.toggle-tab {
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    width: 20px;
+    height: 40px;
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transform: translateY(-50%);
+    border-radius: 0 5px 5px 0;
+    z-index: 9;
+}
+
+.hidden {
+    width: 0 !important;
+    min-width: 4% !important;
+}
+
+.hidden+.toggle-tab i {
+    transform: rotate(180deg);
+}
+
+.legend_container {
+    border: 0px;
+    padding: 10px;
+    margin: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    align-items: center;
+}
+
+.legend_container label {
+    display: flex;
+    align-items: center;
+}
+
+.sublabel_legend {
+    margin-left: 10px;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend_tab {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.legend_tab_valves {
+    overflow-y: auto !important;
+}
+
+.legend-item {
+    border: 2px solid #ccc;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.legend-title {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.legend-item p {
+    font-size: 12px;
+    margin: 0;
+}
+
+.legend-item-field {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.legend-item-field strong{
+    color: #616161;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.legend-item-field .item-field-description{
+    color: #616161;
+}
+
+.legend-item-field .field-column{
+    display: flex;
+    flex-direction: column;
+}
+
+.legend-item-field .field-wrap{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.legend-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.legend-description {
+    font-size: 0.8vw;
+}
+
+.container_label_legend {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.container_label_legend .fa-trash:hover {
+    color: red;
+    cursor: pointer;
+}
+
+.legend_tab_container {
+    display: flex;
+    flex-direction: column;
+    height: 0px;
+    top: 100px;
+    background: none rgb(255, 255, 255);
+    border: 0px;
+    padding: 10px;
+    margin: 10px 0px;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+    min-width: 80%;
+}
+
+.button_export_to_excel {
+    top: 0;
+    height: 50px;
+    width: 50px;
+    margin: 0 auto;
+    padding: 0px;
+    background: none rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+    background-image: url("/images/icons/export-to-excel.png");
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.legend_tab_start {
+    justify-content: start !important;
+    padding: 20px 0;
+}
+
+.export_title strong {
+    color: var(--color-primary-400);
+}
+
+.layer_tab_network {
+    width: 92.5% !important;
+    align-items: start !important;
+    padding: 20px 0 20px 20px;
+}
+
+.range_conductions_legend {
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 0 2px 0;
+}
+
+/* Punto redondo con el color*/
+.range_conductions_legend div {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline;
+    margin: 5px;
+}

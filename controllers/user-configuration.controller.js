@@ -124,7 +124,10 @@ async function getUserDataProv(req, res) {
             user: {
                 ...req.session.user,
                 networks: req.session.user.networks,
-                selectedbbdd: req.session.user.ddbbSelected
+                selectedbbdd: req.session.user.ddbbSelected,
+                targetLongitude: req.session.targetLongitude,
+                targetLatitude: req.session.targetLatitude,
+                targetZoom: req.session.targetZoom
             }
         });
 

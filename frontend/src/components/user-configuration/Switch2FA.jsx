@@ -3,72 +3,75 @@ import '../../../public/styles/pop-up/PopupConfiguration.css';
 import { handleSwitch2FA } from '../../../public/scripts/switch-2FA';
 
 const Switch2FA = ({ popupData, fadeMixinNotTime, on2FAChange }) => {
-  const [is2FAEnabled, setIs2FAEnabled] = useState(popupData?.two_factor_enabled ?? false);
+  // Estado original del 2FA (viene del servidor)
+  const [original2FA, setOriginal2FA] = useState(popupData?.two_factor_enabled ?? false);
+  // Estado temporal del checkbox (para mostrar visualmente)
   const [tempIs2FAEnabled, setTempIs2FAEnabled] = useState(popupData?.two_factor_enabled ?? false);
+  // Estado para el botón habilitado/deshabilitado
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Actualizar estados cuando cambie popupData
   useEffect(() => {
     const enabled = popupData?.two_factor_enabled ?? false;
-    setIs2FAEnabled(enabled);
+    setOriginal2FA(enabled);
     setTempIs2FAEnabled(enabled);
+    setIsButtonEnabled(false); // Resetear el estado del botón cuando cambie popupData
   }, [popupData?.two_factor_enabled]);
 
-  // Verificar si el estado ha cambiado
-  const hasStateChanged = tempIs2FAEnabled;
-  console.log("NUEVO ESTADO: ", hasStateChanged);
-  // Imprimir estado del botón por consola
-  useEffect(() => {
-    const isButtonDisabled = isLoading || !hasStateChanged;
-    console.log('Estado del botón:', isButtonDisabled ? 'DESACTIVADO' : 'ACTIVADO');
-    console.log('Razón:', {
-      isLoading: isLoading,
-      hasStateChanged: hasStateChanged,
-      currentState: is2FAEnabled,
-      tempState: tempIs2FAEnabled
-    });
-  }, [isLoading, hasStateChanged, is2FAEnabled, tempIs2FAEnabled]);
-
-  const handleSwitchToggle = (event) => {
-    setTempIs2FAEnabled(event.target.checked);
+  // Función para manejar el toggle del checkbox
+  const handleCheckboxToggle = () => {
+    if (!isLoading) {
+      setTempIs2FAEnabled(!tempIs2FAEnabled);
+      setIsButtonEnabled(!isButtonEnabled); // Alternar el estado del botón
+    }
   };
 
+  // Función para confirmar el cambio
   const handleConfirm = async () => {
-    if (!hasStateChanged) return;
-
     setIsLoading(true);
     setError(null);
     try {
       const success = await handleSwitch2FA(
         fadeMixinNotTime,
-        is2FAEnabled, // Estado actual (antes del cambio)
+        original2FA, // Usar el estado original para determinar la acción
         popupData?.email
       );
       if (success) {
-        // Actualizar el estado real solo si la operación fue exitosa
-        setIs2FAEnabled(tempIs2FAEnabled);
+        // Actualizar el estado original al nuevo valor
+        setOriginal2FA(tempIs2FAEnabled);
+        setIsButtonEnabled(false); // Deshabilitar el botón tras éxito
         on2FAChange();
       } else {
-        // Si falla, revertir el estado temporal al estado real
-        setTempIs2FAEnabled(is2FAEnabled);
+        // Si falla, revertir el estado temporal al original
+        setTempIs2FAEnabled(original2FA);
+        setIsButtonEnabled(false); // Deshabilitar el botón tras fallo
       }
     } catch (err) {
       setError(err.message);
-      // Si hay error, revertir el estado temporal al estado real
-      setTempIs2FAEnabled(is2FAEnabled);
+      // Si hay error, revertir el estado temporal al original
+      setTempIs2FAEnabled(original2FA);
+      setIsButtonEnabled(false); // Deshabilitar el botón tras error
     } finally {
       setIsLoading(false);
     }
   };
+
+
+
+
+
+
+
 
   return (
     <div className="tab_content_popup_configuration">
       <div id="container-switcher-2fa" className="container_switcher">
         <div className="slideCol_state">
           <div className="scroller_state">
-            <div id="inner-element-state-2fa" className="inner_state">
-              <p>{tempIs2FAEnabled ? 'Activada' : 'Desactivada'}</p>
+            <div id="inner-element-state-2fa" className="inner_state change_state">
+              <p>{tempIs2FAEnabled ? 'ACTIVADA' : 'DESACTIVADA'}</p>
             </div>
           </div>
         </div>
@@ -79,7 +82,7 @@ const Switch2FA = ({ popupData, fadeMixinNotTime, on2FAChange }) => {
               className="checkbox__toggle"
               type="checkbox"
               checked={tempIs2FAEnabled}
-              onChange={handleSwitchToggle}
+              onChange={handleCheckboxToggle}
               disabled={isLoading}
               aria-label="Toggle Two-Factor Authentication"
             />
@@ -100,13 +103,14 @@ const Switch2FA = ({ popupData, fadeMixinNotTime, on2FAChange }) => {
           </label>
         </div>
       </div>
+
       <div id="container-common" className="container_common">
         {error && <p className="error-message" role="alert">{error}</p>}
         <button
           id="button-change-2fa"
           className="button_submit_password"
           onClick={handleConfirm}
-          disabled={isLoading || !hasStateChanged}
+          disabled={isLoading || !isButtonEnabled}
           aria-busy={isLoading}
         >
           GUARDAR

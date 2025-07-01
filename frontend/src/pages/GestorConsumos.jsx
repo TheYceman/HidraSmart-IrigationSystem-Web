@@ -164,6 +164,7 @@ function GestorConsumos() {
         height="400px"
         footer={<button onClick={() => setIsImagePopupOpen(false)}>Cerrar</button>}
       />
+      {/* Esto pasará a ser global en el panel de aplicaciones */}
 
       <PopupConfig
         isOpen={isConfigPopupOpen}

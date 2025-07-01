@@ -23,6 +23,9 @@ html {
   font-family: "Nunito Sans", sans-serif;
   font-size: 1.5vh; /* Tamaño de fuente relativo al ancho de la ventana */
 }
+html{
+    font-family: "Oswald", sans-serif;
+}
 
 body {
     margin: 0;
