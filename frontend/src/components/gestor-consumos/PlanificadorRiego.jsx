@@ -59,7 +59,7 @@ function PlanificadorRiego() {
                     </div>
                 </div>
 
-                <div className={`${styles.tabla_contenedor} ${styles.custom_scrollbar}`}>
+                <div className={`${styles.tabla_contenedor} custom_scrollbar`}>
                     <table>
                         <thead>
                             <tr>

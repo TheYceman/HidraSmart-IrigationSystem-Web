@@ -11,11 +11,16 @@ const saveSession = require("./middlewares/session-midleware");
 const createSession = require("./config/session");
 const authMiddleware = require("./middlewares/check-auth");
 
+
 // Rutas
 const initRoutes = require("./routes/init.routes");
 const authRoutes = require("./routes/auth.routes");
 const applicationPanelRoutes = require("./routes/application-panel.routes");
 const userConfigRoutes = require("./routes/user-configuration.routes");
+const permissionGroups = require('./routes/permission-group.routes');
+const permissionLevels = require('./routes/permission-level.routes');
+const networksList = require('./routes/network.routes');
+const userRoutes = require('./routes/user.routes');
 const app = express();
 
 // 1. Middleware global
@@ -24,12 +29,13 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: true, limit: '2mb' }));
+app.use(express.json({ limit: '2mb' }));
 
 // 2. Sesiones
 const sessionMiddleware = createSession();
 app.use(sessionMiddleware);
+
 
 // 3. Socket.io con acceso a la sesión
 const server = http.createServer(app);
@@ -43,11 +49,16 @@ io.use((socket, next) => {
 app.use("/api", initRoutes);
 app.use("/api", authRoutes);
 app.use("/api", userConfigRoutes);
+app.use("/api", permissionGroups);
+app.use("/api", networksList);
+app.use("/api", userRoutes);
+app.use("/api", permissionLevels);
 
 // 5. Middleware de autenticación para rutas privadas
 app.use(authMiddleware);
 
 app.use("/api", applicationPanelRoutes);
+// app.use("/api", gestionLecturasRoutes);
 
 // 6. Archivos estáticos del frontend
 const frontendDistPath = path.join(__dirname, "frontend", "public", "dist");

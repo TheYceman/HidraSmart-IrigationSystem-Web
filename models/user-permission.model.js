@@ -1,13 +1,13 @@
 const { DataTypes } = require('sequelize');
 const { sequelizeHS_IS } = require('../data/bbdd-connector-sequelize');
-const Network = require('./network.model');
+const Network = require('../models/network.model');
 const PermissionGroup = require('./permission-group.model');
 
 const UserPermission = sequelizeHS_IS.define('users_permissions', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+       autoIncrement: true,
     },
     id_users: {
         type: DataTypes.INTEGER,
@@ -27,6 +27,7 @@ const UserPermission = sequelizeHS_IS.define('users_permissions', {
 });
 
 UserPermission.belongsTo(Network, { foreignKey: 'id_network' });
-UserPermission.belongsTo(PermissionGroup, { foreignKey: 'id_permission_group' });
+UserPermission.belongsTo(PermissionGroup, { foreignKey: 'id_permission_group', as: 'grupoPermisos' });
+
 
 module.exports = UserPermission;

@@ -146,7 +146,7 @@ async function saveLocationOption(req, res) {
         req.session.user[0].balsas = resultBalsas;
         if (resultPermits.permits !== '000000') {
             req.session.user[0].permits = resultPermits[0];
-
+            console.log(req.session.user[0]);
             //await htmlNavbarController(req, resultPermits);
 
             await dataCollected(req, selectedOption);

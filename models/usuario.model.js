@@ -17,11 +17,11 @@ class Usuario {
 
   static async getAll(req, res) {
     let queryString = "";
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = "SELECT * FROM users WHERE username<>'HidraSmart' AND owner =?;";
     }
     else {
-      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+      if (req.session.user?.[0].permits.rol == 'hidra' || req.session.user?.[0].permits.rol == 'admin') {
         queryString = "SELECT * FROM users WHERE username<>'HidraSmart';";
       }
     }
@@ -36,11 +36,11 @@ class Usuario {
   static async getFilteredData(req, res, login) {
 
     let queryString = "";
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = "SELECT * FROM users WHERE username=? AND username<>'HidraSmart' AND owner =?;";
     }
     else {
-      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+      if (req.session.user?.[0].permits.rol == 'hidra' || req.session.user?.[0].permits.rol == 'admin') {
         queryString = "SELECT * FROM users WHERE username=? AND username<>'HidraSmart';";
       }
     }
@@ -54,11 +54,11 @@ class Usuario {
   static async getFilteredDataGrupo(req, res, idGrupo) {
 
     let queryString = "";
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = "SELECT * FROM users WHERE rol=? AND username<>'HidraSmart' AND owner =?;";
     }
     else {
-      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+      if (req.session.user?.[0].permits.rol == 'hidra' || req.session.user?.[0].permits.rol == 'admin') {
         queryString = "SELECT * FROM users WHERE rol=? AND username<>'HidraSmart';";
       }
     }
@@ -73,11 +73,11 @@ class Usuario {
 
     let queryString = "";
     const values = [];
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = "SELECT * FROM users WHERE username<>'HidraSmart' AND owner=" + req.session.user[0].idusers + " LIMIT " + perPage + " OFFSET " + offset;
     }
     else {
-      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+      if (req.session.user?.[0].permits.rol == 'hidra' || req.session.user?.[0].permits.rol == 'admin') {
         queryString = "SELECT * FROM users WHERE username<>'HidraSmart' LIMIT " + perPage + " OFFSET " + offset;
       }
     }
@@ -91,12 +91,12 @@ class Usuario {
 
     let queryString = "";
     let values = [];
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = "SELECT count(*) as total FROM users WHERE username<>'HidraSmart' AND owner =?;";
       values = [req.session.user[0].idusers];
     }
     else {
-      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+      if (req.session.user?.[0].permits.rol == 'hidra' || req.session.user?.[0].permits.rol == 'admin') {
         queryString = "SELECT count(*) as total FROM users WHERE username<>'HidraSmart'";
         values = [];
       }
@@ -111,11 +111,11 @@ class Usuario {
   static async getAllUsuarios(req, res) {
 
     let queryString = "";
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = "SELECT * FROM users WHERE username<>'HidraSmart' AND owner =?;";
     }
     else {
-      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+      if (req.session.user?.[0].permits.rol == 'hidra' || req.session.user?.[0].permits.rol == 'admin') {
         queryString = "SELECT * FROM users WHERE username<>'HidraSmart';";
       }
     }
@@ -128,11 +128,11 @@ class Usuario {
 
   static async getFilteredData(req, res, login) {
     let queryString = "";
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = `SELECT * FROM users WHERE login="${login}" AND username<>'HidraSmart' AND owner =?;`
     }
     else {
-      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+      if (req.session.user?.[0].permits.rol == 'hidra' || req.session.user?.[0].permits.rol == 'admin') {
         queryString = `SELECT * FROM users WHERE login="${login}" AND username<>'HidraSmart';`
       }
     }

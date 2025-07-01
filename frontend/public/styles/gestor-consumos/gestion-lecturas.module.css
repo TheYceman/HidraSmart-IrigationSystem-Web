@@ -1,7 +1,25 @@
+.w_full {
+    width: 100%;
+}
+
+.icon {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.icon:hover {
+    color: var(--color-primary-400);
+    transform: scale(1.1);
+}
+
+.blue_strong{
+    color: var(--color-primary-400);
+}
+
 .contenedor_principal {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 2.5fr 1fr;
+    grid-template-rows: calc(40vh - 5px) calc(40vh - 5px);
     width: 100%;
     height: 80vh;
     gap: 10px;
@@ -10,37 +28,106 @@
 }
 
 .contenedor_principal>div {
-    border: 1px solid #ccc;
+    height: 100%;
+    border: 2px solid #ccc;
     border-radius: 10px;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.contenedor_principal>div:hover {
+    border: 2px solid var(--color-primary-400);
+    box-shadow: 0px 0px 10px 0px rgba(52, 162, 231, 0.3);
+}
+
+/* .contenedor_principal i {
+    font-size: 14px;
+    transition: color 0.2s ease;
+} */
+
+.contenedor_principal .titulo_pestania {
+    background-color: var(--color-primary-400);
+    color: white;
+    padding: 2.5px 0;
+    text-align: center;
+    width: 100%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.contenedor_principal select,
+.contenedor_principal input {
+    border: 2px solid #a1a1a1;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+}
+
+.contenedor_principal textarea {
+    border: 2px solid #a1a1a1;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+
+}
+
+.contenedor_principal select:focus,
+.contenedor_principal input:focus {
+    border-color: var(--color-primary-400);
+    outline: var(--color-primary-400);
+}
+
+/* Ultima columna de botones en las tablas */
+.contenedor_principal .action_buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contenedor_principal .action_buttons button {
+    width: 100%;
+    padding: 5px;
+    justify-content: center;
+}
+
+.contenedor_principal .action_buttons button:nth-child(2) {
+    color: red;
+    border-color: red;
+}
+
+.contenedor_principal .action_buttons button:nth-child(2):hover {
+    color: white;
+    background-color: red;
 }
 
 /* Estilos botones globales */
-.contenedor_principal button {
+.btn {
     border-radius: 5px;
     border: 2px solid var(--color-primary-400);
     background-color: transparent;
     color: var(--color-primary-400);
     width: fit-content;
+    margin: 0 auto;
     font-weight: bold;
     padding: 5px 10px;
     display: flex;
     gap: 5px;
     align-items: center;
     cursor: pointer;
+    white-space: nowrap;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.contenedor_principal button:hover {
+.btn:hover {
     background-color: var(--color-primary-400);
     color: white;
 }
 
-.contenedor_principal button:active {
+.btn:active {
     transform: scale(0.95);
 }
 
-.contenedor_principal button:disabled {
+.btn:disabled {
     border-radius: 5px;
     border-color: #a1a1a1;
     color: #a1a1a1;
@@ -50,18 +137,24 @@
 
 /* Estilos div con columna filtros y columna tabla */
 .filtros_tabla {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    overflow: hidden;
+    display: flex;
+    height: 91.5%;
 }
 
 /* Columna filtros */
+.filtros_tabla .tabla {
+    overflow-x: hidden;
+    border-bottom-right-radius: 8px;
+}
+
 .filtros_tabla .filtros {
+    width: 20%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 5px;
+    padding: 10px 15px;
+    border-right: 1px solid #a1a1a1;
 }
 
 .filtros_tabla .filtros label {
@@ -69,64 +162,186 @@
     font-weight: bold;
 }
 
-.filtros_tabla .filtros select,
-.filtros_tabla .filtros input {
-    border: 2px solid #a1a1a1;
-    border-radius: 5px;
-    padding: 5px;
-}
-
-.filtros_tabla .filtros select:focus,
-.filtros_tabla .filtros input:focus {
-    border-color: var(--color-primary-400);
-    outline: var(--color-primary-400);
+.filtros_tabla .filtros i:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    color: var(--color-primary-400);
 }
 
 .filtros_tabla .filtros div {
-    width: 70%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
 /* Columna tabla */
-.filtros_tabla table {
+.contenedor_principal table {
     width: 100%;
     border-collapse: collapse;
-    border: 2px solid var(--color-primary-400);
     border-radius: 5px;
     table-layout: fixed;
+    font-size: 12px;
 }
 
-.filtros_tabla table th,
-.filtros_tabla table td {
+.contenedor_principal table thead {
+    position: sticky;
+    top: 0
+}
+
+.contenedor_principal table th,
+.contenedor_principal table td {
     padding: 8px;
     text-align: center;
 }
 
-.filtros_tabla table th {
-    background-color: var(--color-primary-400);
-    color: white;
+.contenedor_principal table tr {
+    font-size: 14px;
 }
 
+.contenedor_principal tbody tr {
+    border-bottom: 1px solid #e7e7e7;
+}
 
+.contenedor_principal table th:last-child,
+.contenedor_principal table td:last-child {
+    width: 30px;
+}
+
+.contenedor_principal table th {
+    background-color: var(--color-primary-400);
+    color: white;
+    font-size: 0.9rem;
+}
+
+.contenedor_principal table button {
+    margin: 0 auto;
+}
+
+.contenedor_principal table .ver_mas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.contenedor_principal table .ver_mas:hover {
+    color: var(--color-primary-400);
+}
 
 /* Div 1 */
 .peticiones_lectura {
-    /* padding: 10px; */
     box-sizing: border-box;
+    position: relative;
+}
+
+.fecha_select_input {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.peticiones_lectura_wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.peticiones_lectura_input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.peticiones_lectura_lista {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0 0;
+}
+
+.peticiones_lectura_item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.peticiones_lectura_item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Filtros de la cabecera de la tabla peticiones */
+.th_filtrable {
+    position: relative;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.filtro_dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    background-color: white;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    /* Coincide con el ancho del <th> */
+}
+
+.filtro_dropdown select {
+    width: 100%;
+}
+
+.th_filtrable:hover .filtro_dropdown {
+    display: block;
 }
 
 /* Div 2 */
 .lecturas {
+    position: relative;
     box-sizing: border-box;
+    display: flex;
+    height: 100%;
+}
+
+.lecturas table input {
+    width: 100%;
+}
+
+.imagen_lecturas_popup {
+    width: 100%;
+    height: 400px;
+    display: block;
+    object-fit: contain;
+}
+
+.sin_imagen {
+    font-style: italic;
+    color: #999;
 }
 
 /* Div 3 */
 .grafica_contenedor {
     box-sizing: border-box;
+    overflow: hidden;
 }
-.grafica_contenedor .grafica{
+
+.grafica_contenedor .grafica {
     width: 100%;
     height: 100%;
 }
@@ -134,9 +349,69 @@
 /* Div 4 */
 .mapa {
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .mapa .mapa_lecturas {
     width: 100%;
     height: 100%;
+}
+
+@media (max-width: 1024px) {
+    .contenedor_principal {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        /* ya no limitamos altura en vertical */
+    }
+
+    .lecturas,
+    .peticiones_lectura,
+    .grafica_contenedor,
+    .mapa {
+        height: auto;
+    }
+
+    .peticiones_lectura {
+        order: 1;
+    }
+
+    .lecturas {
+        order: 2;
+    }
+
+    .grafica_contenedor {
+        order: 3;
+    }
+
+    .mapa {
+        order: 4;
+    }
+
+    .filtros_tabla {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filtros_tabla .filtros {
+        gap: 5px;
+        border-bottom: 2.5px solid #ccc;
+    }
+
+    .filtros_tabla .filtros div {
+        width: 50%;
+    }
+
+    .contenedor_scroll {
+        height: 250px;
+    }
+
+    .contenedor_principal table th,
+    .contenedor_principal table td {
+        font-size: 0.8rem;
+    }
+
+    .mapa .mapa_lecturas {
+        height: 250px;
+    }
 }

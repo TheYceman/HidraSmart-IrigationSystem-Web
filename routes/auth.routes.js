@@ -7,4 +7,8 @@ router.post("/loginReact", authController.loginReact);
 
 router.post('/save-location-option', locationManager.saveLocationOption);
 
+router.get("/usuario/name-:id", authController.getNombreUsuarioById);
+
+router.get("/usuarios", authController.getUsuarios);
+
 module.exports = router;

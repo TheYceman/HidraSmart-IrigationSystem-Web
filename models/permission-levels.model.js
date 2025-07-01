@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelizeHS_IS } = require('../data/bbdd-connector-sequelize');
 
-const Permission = sequelizeHS_IS.define('permission', {
+const PermissionLevels= sequelizeHS_IS.define('permission_levels', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -15,15 +15,10 @@ const Permission = sequelizeHS_IS.define('permission', {
         type: DataTypes.STRING(255),
         allowNull: false,
         unique: true,
-    },
-    notes: {
-        type: DataTypes.TEXT, 
-        allowNull: true,
-    },
-    
+    }
 }, {
-    tableName: 'permissions',
+    tableName: 'permission_levels',
     timestamps: false,
 });
 
-module.exports = Permission;
+module.exports =  PermissionLevels 

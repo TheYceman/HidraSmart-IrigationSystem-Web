@@ -5,6 +5,10 @@
     height: 60vh;
 }
 
+.contenedor_principal>div {
+    overflow: hidden;
+}
+
 .columna_izquierda {
     display: grid;
     grid-template-rows: 10% 80% 10%;
@@ -94,6 +98,11 @@
     border-collapse: collapse;
 }
 
+.tabla_contenedor table thead {
+    position: sticky;
+    top: 0
+}
+
 .tabla_contenedor table tbody {
     font-size: 12px;
 }
@@ -154,9 +163,30 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 5px;
 }
 
 .columna_derecha .mapa_riego {
     width: 100%;
     height: 100%;
+}
+
+@media (max-width: 1024px) {
+    .contenedor_principal {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+    }
+
+    .columna_izquierda .tabla_contenedor {
+        margin: 10px 0;
+    }
+    .columna_izquierda .botones_izquierda {
+        padding-bottom: 1rem;
+    }
+
+    .columna_derecha {
+        height: 250px;
+        width: 100%;
+    }
 }

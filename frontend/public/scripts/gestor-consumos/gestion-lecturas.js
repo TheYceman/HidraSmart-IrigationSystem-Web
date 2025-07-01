@@ -106,7 +106,7 @@ function initializeRiegoChart() {
 
     Highcharts.chart('grafica-lecturas', {
         chart: { type: 'line' },
-        title: { text: 'Lecturas de prueba' },
+        title: { text: 'Gráfica de lecturas' },
         xAxis: { categories: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] },
         yAxis: { title: { text: 'Consumo (m³)' } },
         series: [

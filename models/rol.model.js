@@ -16,11 +16,11 @@ class Rol {
   static async getAll(req, res) {
 
     let queryString = "";
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin' AND propietario =?;";
     }
     else {
-      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol == 'admin') {
+      if (req.session.user?.[0].permits.rol == 'hidra' || req.session.user?.[0].permits.rol == 'admin') {
         queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin';";
       }
     }
@@ -34,11 +34,11 @@ class Rol {
 
   static async getFilteredData(req, res, nombre) {
     let queryString = "";
-    if (req.session.user[0].rol  == 'userp') {
+    if (req.session.user?.[0].permits.rol  == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin' AND propietario =?;";
     }
     else {
-      if (req.session.user[0].rol  == 'hidra' || req.session.user[0].rol  == 'admin') {
+      if (req.session.user?.[0].permits.rol  == 'hidra' || req.session.user?.[0].permits.rol  == 'admin') {
         queryString = "SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin';";
       }
     }
@@ -50,11 +50,11 @@ class Rol {
   }
   static async getFilteredDataGrupo(req, res, idGrupo) {
     let queryString = "";
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin' AND propietario =?;";
     }
     else {
-      if (req.session.user[0].rol  == 'hidra' || req.session.user[0].rol  == 'admin') {
+      if (req.session.user?.[0].permits.rol  == 'hidra' || req.session.user?.[0].permits.rol  == 'admin') {
         queryString = "SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin';";
       }
     }
@@ -68,11 +68,11 @@ class Rol {
 
     let queryString = "";
     let values = [];
-    if (req.session.user[0].rol  == 'userp') {
+    if (req.session.user?.[0].permits.rol  == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin' AND propietario =" + req.session.user[0].idusers + " LIMIT " + perPage + " OFFSET " + offset;
     }
     else {
-      if (req.session.user[0].rol  == 'hidra' || req.session.user[0].rol  == 'admin') {
+      if (req.session.user?.[0].permits.rol  == 'hidra' || req.session.user?.[0].permits.rol  == 'admin') {
         queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin' LIMIT " + perPage + " OFFSET " + offset;
       }
     }
@@ -85,11 +85,11 @@ class Rol {
 
   static async getCountAll(req, res) {
     let queryString = "";
-    if (req.session.user[0].rol == 'userp') {
+    if (req.session.user?.[0].permits.rol == 'userp') {
       queryString = "SELECT count(*) as total FROM grupos_usuario WHERE nombre<>'admin' AND propietario =?;";
     }
     else {
-      if (req.session.user[0].rol == 'hidra' || req.session.user[0].rol  == 'admin') {
+      if (req.session.user?.[0].permits.rol == 'hidra' || req.session.user?.[0].permits.rol  == 'admin') {
         queryString = "SELECT count(*) as total FROM grupos_usuario WHERE nombre<>'admin';";
       }
     }
@@ -103,11 +103,11 @@ class Rol {
 
   static async getAllRoles(req, res) {
     let queryString = "";
-    if (req.session.user[0].rol  == 'userp') {
+    if (req.session.user?.[0].permits.rol  == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin' AND propietario =?;";
     }
     else {
-      if (req.session.user[0].rol  == 'hidra' || req.session.user[0].rol  == 'admin') {
+      if (req.session.user?.[0].permits.rol  == 'hidra' || req.session.user?.[0].permits.rol  == 'admin') {
         queryString = "SELECT * FROM grupos_usuario WHERE nombre<>'admin';";
       }
     }
@@ -121,12 +121,12 @@ class Rol {
   static async getFilteredData(req, res, nombre) {
     let queryString = "";
     let values = [];
-    if (req.session.user[0].rol  == 'userp') {
+    if (req.session.user?.[0].permits.rol  == 'userp') {
       queryString = "SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin' AND propietario =?;";
       values = [nombre, req.session.user[0].idusers];
     }
     else {
-      if (req.session.user[0].rol  == 'hidra' || req.session.user[0].rol  == 'admin') {
+      if (req.session.user?.[0].permits.rol  == 'hidra' || req.session.user?.[0].permits.rol  == 'admin') {
         queryString = "SELECT * FROM grupos_usuario WHERE nombre=? AND nombre<>'admin';";
         values = [nombre];
       }

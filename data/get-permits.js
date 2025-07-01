@@ -35,7 +35,7 @@ async function getPermits(idUsers, nameNetwork = null) {
         const permissionGroupIds = userPermissions.map(up => up.id_permission_group);
 
         const groupPermissions = await PermissionGroup.findAll({
-            attributes: ['id', 'per_cultivos', 'per_cupos', 'per_riegos', 'per_meteo', 'per_red', 'per_activos', 'per_cambios', 'per_usuarios'],
+            attributes: ['id', 'per_cultivos', 'per_cupos', 'per_riegos', 'per_meteo', 'per_red', 'per_activos', 'per_cambios', 'per_usuarios',['nombre', 'rol']],
             where: { id: permissionGroupIds },
             raw: true
         });
