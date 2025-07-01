@@ -1,5 +1,6 @@
 const { insertSessionLog } = require("../controllers/session.controller");
 const { getPermits } = require("../data/get-permits");
+const { getBalsas } = require("../data/get-balsa");
 
 const Network = require('../models/network.model');
 const UserPermission = require('../models/user-permission.model');
@@ -141,10 +142,13 @@ async function saveLocationOption(req, res) {
 
         req.session.user[0].ddbbSelected = selectedOption;
         const resultPermits = await getPermits(req.session.user[0].idusers, selectedOption);
-
+        const resultBalsas = await getBalsas(req.session.user[0].idusers,resultPermits[0].id_network);
+        
+        req.session.user[0].balsas = resultBalsas;
+        
         if (resultPermits.permits !== '000000') {
             req.session.user[0].permits = resultPermits[0];
-
+            console.log(req.session.user[0]);
             //await htmlNavbarController(req, resultPermits);
 
             await dataCollected(req, selectedOption);

@@ -1,6 +1,6 @@
 
 const { hashatePassword } = require("../config/hashate-password");
-const User = require('../models/users.model');
+const User = require('../models/user.model');
 
 async function updateCode(req) {
     const sixDigitCode = generateSixDigitCode().toString();

@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelizeHS_IS } = require('../data/bbdd-connector-sequelize');
-const Permission = require('./permission.model');
+const PermissionLevels = require('./permission-levels.model');
 
 const PermissionGroup = sequelizeHS_IS.define('permission_group', {
     id: {
@@ -32,16 +32,19 @@ const PermissionGroup = sequelizeHS_IS.define('permission_group', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    nombre:{
+        type: DataTypes.STRING(255),
+    },
 }, {
     tableName: 'permission_groups',
     timestamps: false,
 });
 
-PermissionGroup.belongsTo(Permission, { foreignKey: 'per_equipos', as: 'equipos' });
-PermissionGroup.belongsTo(Permission, { foreignKey: 'per_activos', as: 'activos' });
-PermissionGroup.belongsTo(Permission, { foreignKey: 'per_red', as: 'red' });
-PermissionGroup.belongsTo(Permission, { foreignKey: 'per_valvulas', as: 'valvulas' });
-PermissionGroup.belongsTo(Permission, { foreignKey: 'per_simulador', as: 'simulador' });
-PermissionGroup.belongsTo(Permission, { foreignKey: 'per_estadistica', as: 'estadistica' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_equipos', as: 'equipos' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_activos', as: 'activos' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_red', as: 'red' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_valvulas', as: 'valvulas' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_simulador', as: 'simulador' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_estadistica', as: 'estadistica' });
 
 module.exports = PermissionGroup;

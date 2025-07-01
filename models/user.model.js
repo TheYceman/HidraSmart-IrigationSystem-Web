@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
-const { sequelizeHS_IS} = require('../data/bbdd-connector-sequelize');
+const { sequelizeHS_IS } = require('../data/bbdd-connector-sequelize');
+const UserPermission = require('./user-permission.model');
 
 const User = sequelizeHS_IS.define('user', {
     idusers: {
@@ -10,45 +11,45 @@ const User = sequelizeHS_IS.define('user', {
     username: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        field: 'username',
+        unique: true,
     },
     password: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        field: 'password',
     },
     name: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        field: 'name',
     },
     surname: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        field: 'surname',
     },
     email: {
         type: DataTypes.STRING(255),
         allowNull: true,
-        field: 'email',
+        unique: true,
     },
     reset_code: {
         type: DataTypes.STRING(255),
         allowNull: true,
-        field: 'reset_code',
-      },
+    },
     reset_code_expiration: {
         type: DataTypes.DATE,
         allowNull: true,
-        field: 'reset_code_expiration',
     },
     two_factor_enabled: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-      },
+    },
+    // rol: {
+    //     type: DataTypes.STRING(10),
+    //     allowNull: true,
+    // },
 }, {
     tableName: 'users',
     timestamps: false,
 });
-
+User.hasMany(UserPermission, { foreignKey: 'id_users' });
+UserPermission.belongsTo(User, { foreignKey: 'id_users' });
 module.exports = User;

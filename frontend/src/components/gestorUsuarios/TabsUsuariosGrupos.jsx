@@ -1,4 +1,5 @@
 import React from 'react';
+import "../../../public/styles/pop-up/gestorUsuarios.css";
 
 export default function TabsUsuariosGrupos({ activeTab, setActiveTab }) {
   return (

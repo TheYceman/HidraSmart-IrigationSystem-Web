@@ -1,11 +1,27 @@
 export async function fetchUsuarios() {
-  const res = await fetch('/getAllUsers/');
-  if (!res.ok) throw new Error('Error al obtener usuarios');
+  const res = await fetch('/api/getAllUsers/');
+
+  if (!res.ok) {
+    let mensaje = 'Error al obtener usuarios';
+
+    // Intentar extraer mensaje del backend
+    try {
+      const json = await res.json();
+      if (res.status === 403 && json?.error) {
+        mensaje = json.error;
+      }
+    } catch (_) {
+      // Si no es JSON, mantener mensaje por defecto
+    }
+
+    throw new Error(mensaje);
+  }
+
   return await res.json();
 }
 
 export async function createUsuario(usuario) {
-  const res = await fetch('/create-user/', {
+  const res = await fetch('/api/create-user/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(usuario),
@@ -16,7 +32,7 @@ export async function createUsuario(usuario) {
 }
 
 export async function updateUsuario(id, datos) {
-  const res = await fetch(`/update-user/${id}`, {
+  const res = await fetch(`/api/update-user/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(datos),
@@ -27,61 +43,31 @@ export async function updateUsuario(id, datos) {
 }
 
 export async function deleteUsuario(id) {
-  const res = await fetch(`/delete-user/${id}`, { method: 'DELETE' });
+  const res = await fetch(`/api/delete-user/${id}`, { method: 'DELETE' });
   if (!res.ok) throw await res.json();
   return true;
 }
 
 export async function fetchRedes() {
-  const res = await fetch('/networks');
+  const res = await fetch('/api/networks');
   if (!res.ok) throw new Error('Error al obtener redes');
   return await res.json();
 }
 
 export async function fetchGruposPermiso() {
-  const res = await fetch('/permission-group/');
-  if (!res.ok) throw new Error('Error al obtener grupos de permisos');
-  return await res.json();
-}
-
-export async function fetchPermisosUsuario(id) {
-  const res = await fetch(`/user-permissions/${id}`);
-  if (!res.ok) throw new Error('Error al obtener permisos de usuario');
-  return await res.json();
-}
-
-export async function updatePermisosUsuario(permisos) {
-  const res = await fetch('/update-user-permissions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(permisos),
-  });
-
-  if (!res.ok) throw await res.json();
-  return true;
-}
-
-//PERMISOS USUARIOS
-export async function fetchRedes() {
-  const res = await fetch('/networks');
-  if (!res.ok) throw new Error('Error al obtener redes');
-  return await res.json();
-}
-
-export async function fetchGruposPermiso() {
-  const res = await fetch('/permission-group/');
+  const res = await fetch('/api/permission-group/');
   if (!res.ok) throw new Error('Error al obtener grupos de permisos');
   return await res.json();
 }
 
 export async function fetchPermisosUsuario(idUsuario) {
-  const res = await fetch(`/user-permissions/${idUsuario}`);
+  const res = await fetch(`/api/user-permissions/${idUsuario}`);
   if (!res.ok) throw new Error('Error al obtener permisos del usuario');
   return await res.json();
 }
 
 export async function updatePermisosUsuario(permisos) {
-  const res = await fetch('/update-user-permissions', {
+  const res = await fetch('/api/update-user-permissions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(permisos),
@@ -89,4 +75,3 @@ export async function updatePermisosUsuario(permisos) {
   if (!res.ok) throw await res.json();
   return true;
 }
-

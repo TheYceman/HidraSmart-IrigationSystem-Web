@@ -169,7 +169,7 @@ async function getInfoMeteo(req, res) {
 
 async function getDemandasCultivos(req, res) {
 
-  if (req.session.user[0].rol === 'admin') {
+  if (req.session.user?.[0].permits.rol === 'admin') {
     res.render("navbar/gestor-cultivos-admin", {
       headImage: req.session.headImage,
       navIndex: 5,
@@ -327,8 +327,8 @@ async function getGestorPeticiones(req, res) {
 
 async function getGestorUsuarios(req, res) {
 
-  const rol = req.session.user[0].rol;
-  //console.log("req.session.user[0].rol " + rol);
+  const rol = req.session.user?.[0].permits.rol;
+  //console.log("req.session.user?.[0].permits.rol" + rol);
 
   if (rol == 'hidra' || rol == 'admin' || rol == 'userp') {
     res.render("navbar/gestor-usuarios", {

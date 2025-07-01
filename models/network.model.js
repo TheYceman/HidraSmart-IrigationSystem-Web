@@ -12,16 +12,16 @@ const Network = sequelizeHS_IS.define('network', {
         allowNull: false,
         field: 'name_network',
     },
-    bbdd_datos: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-        field: 'bbdd_datos',
-    },
-    bbdd_resultados: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-        field: 'bbdd_resultados',
-    },
+    // bbdd_datos: {
+    //     type: DataTypes.STRING(255),
+    //     allowNull: false,
+    //     field: 'bbdd_datos',
+    // },
+    // bbdd_resultados: {
+    //     type: DataTypes.STRING(255),
+    //     allowNull: false,
+    //     field: 'bbdd_resultados',
+    // },
     logo: {
         type: DataTypes.STRING
     },
