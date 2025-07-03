@@ -11,34 +11,34 @@ const tiposCache = {};
  * Obtiene el modelo Peticion asociado a una base de datos concreta.
  * Usa caché para evitar volver a generar el modelo si ya existe.
  */
-async function getAwPeticiones(databaseNumber) {
-    if (!peticionesCache[databaseNumber]) {
-        const sequelize = await getSequelizeInstance(databaseNumber);
+async function getAwPeticiones(database) {
+    if (!peticionesCache[database]) {
+        const sequelize = await getSequelizeInstance(database);
         const AwPeticiones = Peticion(sequelize);
-        peticionesCache[databaseNumber] = AwPeticiones;
+        peticionesCache[database] = AwPeticiones;
     }
-    return peticionesCache[databaseNumber];
+    return peticionesCache[database];
 }
 
 /**
  * Obtiene el modelo TipoPeticion asociado a una base de datos concreta.
  * Usa caché para evitar volver a generar el modelo si ya existe.
  */
-async function getAwTipoPeticiones(databaseNumber) {
-    if (!tiposCache[databaseNumber]) {
-        const sequelize = await getSequelizeInstance(databaseNumber);
+async function getAwTipoPeticiones(database) {
+    if (!tiposCache[database]) {
+        const sequelize = await getSequelizeInstance(database);
         const AwTipoPeticiones = TipoPeticion(sequelize);
-        tiposCache[databaseNumber] = AwTipoPeticiones;
+        tiposCache[database] = AwTipoPeticiones;
     }
-    return tiposCache[databaseNumber];
+    return tiposCache[database];
 }
 
 /**
  * Devuelve todas las peticiones almacenadas en una base de datos específica,
  * opcionalmente filtradas por fecha.
  */
-async function getAll(databaseNumber, filtroFecha = null) {
-    const AwPeticiones = await getAwPeticiones(databaseNumber);
+async function getAll(database, filtroFecha = null) {
+    const AwPeticiones = await getAwPeticiones(database);
 
     const whereClause = filtroFecha
         ? {
@@ -58,23 +58,23 @@ async function getAll(databaseNumber, filtroFecha = null) {
 /**
  * Devuelve los tipos de petición almacenados en una base de datos específica.
  */
-async function getTiposPeticiones(databaseNumber) {
-    const AwTipoPeticiones = await getAwTipoPeticiones(databaseNumber);
+async function getTiposPeticiones(database) {
+    const AwTipoPeticiones = await getAwTipoPeticiones(database);
     return await AwTipoPeticiones.findAll();
 }
 
 /**
  * Actualiza una petición en la base de datos específica.
  * 
- * @param {number|string} databaseNumber - El número de la base de datos a utilizar.
+ * @param {number|string} database - El número de la base de datos a utilizar.
  * @param {number|string} idPeticion - El ID de la petición a actualizar.
  * @param {Object} nuevosDatos - Un objeto que contiene los nuevos datos a aplicar a la petición.
  * @throws {Error} Si la petición no se encuentra.
  * @returns {Promise<Object>} La petición actualizada.
  */
 
-async function updatePeticion(databaseNumber, idPeticion, nuevosDatos) {
-    const AwPeticiones = await getAwPeticiones(databaseNumber);
+async function updatePeticion(database, idPeticion, nuevosDatos) {
+    const AwPeticiones = await getAwPeticiones(database);
 
     const peticion = await AwPeticiones.findByPk(idPeticion);
     if (!peticion) throw new Error("Petición no encontrada");

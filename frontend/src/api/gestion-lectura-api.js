@@ -1,18 +1,10 @@
 import axios from "axios";
 
-/**
- * Fetchs all peticiones from the backend for the given database suffix
- * and returns them as an array. If there is an error, it logs the error
- * and returns an empty array.
- *
- * @param {string} dbSuffix - suffix of the database to fetch from
- * @returns {Promise<Array>} - an array of peticiones
- */
-export const fetchPeticiones = async (dbSuffix, fecha) => {
+export const fetchPeticiones = async (database, fecha) => {
     try {
-        let url = dbSuffix === "all"
+        let url = database === "all"
             ? "/api/peticiones-todas"
-            : `/api/is-b${dbSuffix}/peticiones`;
+            : `/api/${database}/peticiones`;
 
         if (fecha) url += `?fecha=${fecha}`;
         const res = await axios.get(url);
@@ -23,9 +15,9 @@ export const fetchPeticiones = async (dbSuffix, fecha) => {
     }
 };
 
-export const fetchTiposPeticiones = async (dbSuffix) => {
+export const fetchTiposPeticiones = async (database) => {
     try {
-        const res = await axios.get(`/api/is-b${dbSuffix}/peticiones/tipos`);
+        const res = await axios.get(`/api/${database}/peticiones/tipos`);
         return res.data;
     } catch (error) {
         console.error("Error al obtener los tipos de peticiones:", error);
@@ -33,11 +25,11 @@ export const fetchTiposPeticiones = async (dbSuffix) => {
     }
 };
 
-export const fetchLecturas = async (dbSuffix, fecha) => {
+export const fetchLecturas = async (database, fecha) => {
     try {
-        let url = dbSuffix === "all"
+        let url = database === "all"
             ? "/api/lecturas-todas"
-            : `/api/is-b${dbSuffix}/lecturas`;
+            : `/api/${database}/lecturas`;
 
         if (fecha) url += `?fecha=${fecha}`;
         const res = await axios.get(url);
@@ -48,22 +40,12 @@ export const fetchLecturas = async (dbSuffix, fecha) => {
     }
 };
 
-/**
- * Fetches lecturas from the backend for a specific contador and database suffix.
- * Returns them as an array. If there is an error, it logs the error and
- * returns an empty array.
- *
- * @param {string} dbSuffix - suffix of the database to fetch from
- * @param {string} contador - identifier of the contador to fetch lecturas for
- * @returns {Promise<Array>} - an array of lecturas
- */
-
-export const fetchLecturasByContador = async (dbSuffix, contador, fecha = null) => {
+export const fetchLecturasByContador = async (database, contador, fecha = null) => {
     try {
         let url =
-            dbSuffix === "all"
+            database === "all"
                 ? `/api/lecturas-todas/cont-${contador}`
-                : `/api/is-b${dbSuffix}/lecturas/cont-${contador}`;
+                : `/api/${database}/lecturas/cont-${contador}`;
 
         if (fecha) {
             url += `?fecha=${fecha}`;
@@ -82,20 +64,12 @@ export const fetchLecturasByContador = async (dbSuffix, contador, fecha = null) 
     }
 };
 
-/**
- * Fetches all contadores from the backend for a specific database suffix.
- * Returns them as an array. If there is an error, it logs the error and
- * returns an empty array.
- *
- * @param {string} dbSuffix - suffix of the database to fetch from
- * @returns {Promise<Array>} - an array of contadores
- */
-export const fetchContadores = async (dbSuffix) => {
+export const fetchContadores = async (database) => {
     try {
         const url =
-            dbSuffix === "all"
+            database === "all"
                 ? "/api/contadores-todos"
-                : `/api/is-b${dbSuffix}/contadores`;
+                : `/api/${database}/contadores`;
 
         const res = await axios.get(url);
 
@@ -110,31 +84,15 @@ export const fetchContadores = async (dbSuffix) => {
     }
 };
 
-/**
- * Fetches all available balsas from the backend.
- * Returns them as an array of strings. If there is an error, it logs the error and
- * returns an empty array.
- *
- * @returns {Promise<Array>} - an array of balsas, e.g. ['x', '1', '2', ...]
- */
 export const fetchBalsasDisponibles = async () => {
     try {
         // Animacion de carga hasta que se obtengan las balsas
         const res = await axios.get(`/api/balsas-disponibles`);
-        return res.data; // ['hidrasmart_is_bx', 'hidrasmart_is_b1', 'hidrasmart_is_b2', ...]
+        
+        return res.data; // [{ id: 1, nombre: 'hidrasmart_is_b1' }]
     } catch (error) {
         console.error("Error al obtener balsas disponibles:", error);
         return [];
-    }
-};
-
-export const fetchNombreUsuario = async (id_usuario) => {
-    try {
-        const res = await axios.get(`/api/usuario/name-${id_usuario}`);
-        return res.data;
-    } catch (error) {
-        console.error("Error al obtener el nombre de usuario:", error);
-        return null;
     }
 };
 

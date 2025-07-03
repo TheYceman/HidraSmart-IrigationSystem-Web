@@ -5,24 +5,23 @@ const router = express.Router();
 const peticionesController = require('../controllers/peticiones.controller.js');
 const lecturaController = require('../controllers/lecturas.controller.js');
 const contadoresController = require('../controllers/contadores.controller.js');
+const Balsa = require('../models/balsa.model.js');
 
-// Selector de bases de datos
-const { getAvailableBalsas } = require('../data/bbdd-selector.js');
+async function getBalsas(req) {
+    return req.session.user?.[0]?.balsas || []; // Array de objetos [ { id_balsa: 1, bbdd: 'hidrasmart_is_bx' }, ... ]
+}
+
+async function getNombreBalsasUsuario(req) {
+    const balsas = await getBalsas(req);
+    return balsas.map(b => b.bbdd); // Array de strings ['hidrasmart_is_bx']
+}
 
 // RUTA ESPECIAL - Obtener todas las bases de datos de balsas disponibles
 router.get('/balsas-disponibles', async (req, res) => {
     try {
-        // const user_id = parseInt(req.query.user_id);
-        // const network_id = parseInt(req.query.network_id);
-        const user_id = 28;
-        const network_id = 2;
+        const balsas = await getBalsas(req);
 
-        if (isNaN(user_id) || isNaN(network_id)) {
-            return res.status(400).json({ error: 'Parámetros inválidos' });
-        }
-
-        const balsas = await getAvailableBalsas(user_id, network_id);
-        res.json(balsas); // ['hidrasmart_is_b1', ...]
+        res.json(balsas); // [{ id: 1, nombre: 'hidrasmart_is_b1' }]
     } catch (error) {
         console.error("❌ Error al obtener balsas disponibles:", error);
         res.status(500).json({ error: 'Error al obtener balsas disponibles' });
@@ -30,21 +29,21 @@ router.get('/balsas-disponibles', async (req, res) => {
 });
 
 // Middleware para extraer el número de base de datos desde la ruta
-router.param('databaseNumber', (req, res, next, value) => {
-    req.databaseNumber = value;  // NO lo parseamos
+router.param('database', (req, res, next, value) => {
+    req.database = value; // ejemplo: 'hidrasmart_is_bx'
     next();
 });
 
 
 
 // Obtener todas las peticiones de una balsa
-router.get('/is-b:databaseNumber/peticiones', async (req, res) => {
+router.get('/:database/peticiones', async (req, res) => {
     try {
         const fecha = req.query.fecha || null;
-        const peticiones = await peticionesController.getAll(req.databaseNumber, fecha);
+        const peticiones = await peticionesController.getAll(req.database, fecha);
         res.json(peticiones);
     } catch (error) {
-        console.error('Error al obtener las peticiones:', error);
+        console.error('❌ Error al obtener las peticiones:', error);
         res.status(500).json({ error: 'Error al obtener las peticiones' });
     }
 });
@@ -53,13 +52,14 @@ router.get('/is-b:databaseNumber/peticiones', async (req, res) => {
 router.get('/peticiones-todas', async (req, res) => {
     try {
         const fecha = req.query.fecha || null;
-        const balsas = await getAvailableBalsas();
+        const balsas = await getNombreBalsasUsuario(req);
         const acumulado = [];
 
         for (const balsa of balsas) {
             const peticiones = await peticionesController.getAll(balsa, fecha);
             acumulado.push(...peticiones);
         }
+
 
         res.json(acumulado);
     } catch (error) {
@@ -69,13 +69,13 @@ router.get('/peticiones-todas', async (req, res) => {
 });
 
 // Obtener los tipos de peticiones desde una base de datos específica o desde todas
-router.get('/is-b:databaseNumber/peticiones/tipos', async (req, res) => {
+router.get('/:database/peticiones/tipos', async (req, res) => {
     try {
-        const databaseNumber = req.params.databaseNumber;
+        const database = req.params.database;
 
         // Si se solicitan los tipos de todas las balsas
-        if (databaseNumber === "all") {
-            const balsas = await getAvailableBalsas();
+        if (database === "all") {
+            const balsas = await getNombreBalsasUsuario(req);
 
             const acumulado = [];
 
@@ -88,7 +88,7 @@ router.get('/is-b:databaseNumber/peticiones/tipos', async (req, res) => {
         }
 
         // Tipos para una balsa específica
-        const tipos = await peticionesController.getTiposPeticiones(databaseNumber);
+        const tipos = await peticionesController.getTiposPeticiones(database);
         res.json(tipos);
     } catch (error) {
         console.error('❌ Error al obtener los tipos de peticiones:', error);
@@ -97,17 +97,17 @@ router.get('/is-b:databaseNumber/peticiones/tipos', async (req, res) => {
 });
 
 // Actualizar petición
-router.put('/is-b:databaseNumber/peticiones/:id', async (req, res) => {
+router.put('/:database/peticiones/:id', async (req, res) => {
     try {
-        const databaseNumber = req.params.databaseNumber;
+        const database = req.params.database;
         const id = req.params.id;
         const datos = req.body;
 
-        const resultado = await peticionesController.updatePeticion(databaseNumber, id, datos);
+        const resultado = await peticionesController.updatePeticion(database, id, datos);
 
         res.json({ success: true, resultado });
     } catch (error) {
-        console.error("Error al actualizar la petición:", error);
+        console.error("❌ Error al actualizar la petición:", error);
         res.status(500).json({ error: "Error al actualizar la petición" });
     }
 });
@@ -115,13 +115,13 @@ router.put('/is-b:databaseNumber/peticiones/:id', async (req, res) => {
 
 
 // Obtener todas las lecturas
-router.get('/is-b:databaseNumber/lecturas', async (req, res) => {
+router.get('/:database/lecturas', async (req, res) => {
     try {
         const fecha = req.query.fecha || null;
-        const lecturas = await lecturaController.getAll(req.databaseNumber, fecha);
+        const lecturas = await lecturaController.getAll(req.database, fecha);
         res.json(lecturas);
     } catch (error) {
-        console.error('Error al obtener las lecturas:', error);
+        console.error('❌ Error al obtener las lecturas:', error);
         res.status(500).json({ error: 'Error al obtener las lecturas' });
     }
 });
@@ -130,7 +130,7 @@ router.get('/is-b:databaseNumber/lecturas', async (req, res) => {
 router.get('/lecturas-todas', async (req, res) => {
     try {
         const fecha = req.query.fecha || null;
-        const balsas = await getAvailableBalsas();
+        const balsas = await getNombreBalsasUsuario(req);
         const acumulado = [];
 
         for (const balsa of balsas) {
@@ -148,16 +148,16 @@ router.get('/lecturas-todas', async (req, res) => {
 
 
 // Obtener todas las lecturas de un contador de una balsa
-router.get('/is-b:databaseNumber/lecturas/cont-:contador', async (req, res) => {
+router.get('/:database/lecturas/cont-:contador', async (req, res) => {
     try {
-        const { databaseNumber } = req;
+        const { database } = req;
         const { contador } = req.params;
         const fecha = req.query.fecha || null;
 
-        const lecturas = await lecturaController.getByContador(databaseNumber, contador, fecha);
+        const lecturas = await lecturaController.getByContador(database, contador, fecha);
         res.json(lecturas);
     } catch (error) {
-        console.error('Error al obtener las lecturas por contador:', error);
+        console.error('❌ Error al obtener las lecturas por contador:', error);
         res.status(500).json({ error: 'Error al obtener lecturas por contador' });
     }
 });
@@ -167,7 +167,7 @@ router.get('/lecturas-todas/cont-:contador', async (req, res) => {
     try {
         const contador = req.params.contador;
         const fecha = req.query.fecha || null;
-        const balsas = await getAvailableBalsas();
+        const balsas = await getNombreBalsasUsuario(req);
         const acumulado = [];
 
         for (const balsa of balsas) {
@@ -183,13 +183,13 @@ router.get('/lecturas-todas/cont-:contador', async (req, res) => {
 });
 
 // Actualizar lectura
-router.put('/is-b:databaseNumber/lecturas/:id', async (req, res) => {
+router.put('/:database/lecturas/:id', async (req, res) => {
     try {
-        const databaseNumber = req.params.databaseNumber;
+        const database = req.params.database;
         const id = req.params.id;
         const datos = req.body;
 
-        const resultado = await lecturaController.updateLectura(databaseNumber, id, datos);
+        const resultado = await lecturaController.updateLectura(database, id, datos);
         res.json({ success: true, resultado });
     } catch (error) {
         console.error("❌ Error al actualizar la lectura:", error);
@@ -197,15 +197,29 @@ router.put('/is-b:databaseNumber/lecturas/:id', async (req, res) => {
     }
 });
 
+// Crear nueva lectura
+router.post('/:database/lecturas', async (req, res) => {
+    try {
+        const database = req.database;
+        const data = req.body;
+
+        const nuevaLectura = await lecturaController.createLectura(database, data);
+        res.status(201).json({ message: "Lectura creada correctamente", lectura: nuevaLectura });
+    } catch (error) {
+        console.error('❌ Error al crear lectura:', error);
+        res.status(500).json({ error: 'Error al crear lectura', details: error.message });
+    }
+});
+
 
 
 // Obtener todos los contadores de una base de datos
-router.get('/is-b:databaseNumber/contadores', async (req, res) => {
+router.get('/:database/contadores', async (req, res) => {
     try {
-        const contadores = await contadoresController.getAll(req.databaseNumber);
+        const contadores = await contadoresController.getAll(req.database);
         res.json(contadores);
     } catch (error) {
-        console.error('Error al obtener contadores:', error);
+        console.error('❌ Error al obtener contadores:', error);
         res.status(500).json({ error: 'Error al obtener contadores' });
     }
 });
@@ -213,7 +227,7 @@ router.get('/is-b:databaseNumber/contadores', async (req, res) => {
 // Obtener todos los contadores de todas las balsas
 router.get('/contadores-todos', async (req, res) => {
     try {
-        const balsas = await getAvailableBalsas();
+        const balsas = await getNombreBalsasUsuario(req);
         const acumulado = [];
 
         for (const balsa of balsas) {
@@ -229,18 +243,4 @@ router.get('/contadores-todos', async (req, res) => {
 });
 
 
-// Crear nueva lectura
-router.post('/is-b:databaseNumber/lecturas', async (req, res) => {
-    try {
-        const databaseNumber = req.databaseNumber;
-        const data = req.body;
-
-        const nuevaLectura = await lecturaController.createLectura(databaseNumber, data);
-        res.status(201).json({ message: "Lectura creada correctamente", lectura: nuevaLectura });
-    } catch (error) {
-        console.error('❌ Error al crear lectura:', error);
-        res.status(500).json({ error: 'Error al crear lectura', details: error.message });
-    }
-});
-
-// module.exports = router;
+module.exports = router;

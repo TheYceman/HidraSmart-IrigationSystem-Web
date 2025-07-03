@@ -12,8 +12,12 @@
     transform: scale(1.1);
 }
 
-.blue_strong{
+.blue_strong {
     color: var(--color-primary-400);
+}
+
+.contenedor_principal * {
+    box-sizing: border-box;
 }
 
 .contenedor_principal {
@@ -79,9 +83,15 @@
 
 /* Ultima columna de botones en las tablas */
 .contenedor_principal .action_buttons {
+    padding: 0;
+}
+
+.contenedor_principal .buttons_container {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
 }
 
 .contenedor_principal .action_buttons button {
@@ -197,6 +207,7 @@
 
 .contenedor_principal table tr {
     font-size: 14px;
+    min-height: 60px;
 }
 
 .contenedor_principal tbody tr {
