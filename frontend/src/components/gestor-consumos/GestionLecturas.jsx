@@ -88,13 +88,6 @@ function GestionLecturas() {
 
     const [usuariosAsignables, setUsuariosAsignables] = useState([]);
 
-    // Sufijo de las balsas
-    const getDbSuffix = (balsa) => {
-        if (!balsa || typeof balsa !== "string") return "";
-        if (balsa === "all") return "all";
-        return balsa.replace("hidrasmart_is_b", "");
-    };
-
     const cargarTodosLosUsuarios = async () => {
         try {
             const usuarios = await fetchUsuarios();
@@ -206,7 +199,7 @@ function GestionLecturas() {
         };
 
         try {
-            await axios.post(`/api/is-b${getDbSuffix(selectedBalsa)}/lecturas`, datosLectura);
+            await axios.post(`/api/${selectedBalsa}/lecturas`, datosLectura);
             openPopup("Lectura guardada", <p>La lectura se ha guardado correctamente.</p>);
 
             const datosLecturas = await fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha);
@@ -247,13 +240,16 @@ function GestionLecturas() {
     const handleBalsaChange = async (e) => {
         const balsaValue = e.target.value;
         setSelectedBalsa(balsaValue);
+
         setFiltroContador("");
         setSelectedContador("all");
+
+        console.log("Balsa seleccionada:", balsaValue);
 
         const datos = await fetchPeticiones(balsaValue);
         setPeticiones(datos);
 
-        const datosContadores = await fetchContadores(getDbSuffix(selectedBalsa));
+        const datosContadores = await fetchContadores(balsaValue);
         setContadores(datosContadores);
     };
 
@@ -277,10 +273,10 @@ function GestionLecturas() {
         setShowDropdown(false);
 
         if (contadorValue === "all") {
-            const datosLecturas = await fetchLecturas(getDbSuffix(selectedBalsa), selectedFecha);
+            const datosLecturas = await fetchLecturas(selectedBalsa, selectedFecha);
             setLecturas(datosLecturas);
         } else {
-            const datosLecturas = await fetchLecturasByContador(getDbSuffix(selectedBalsa), contadorValue, selectedFecha);
+            const datosLecturas = await fetchLecturasByContador(selectedBalsa, contadorValue, selectedFecha);
             setLecturas(datosLecturas);
         }
     };
@@ -433,11 +429,11 @@ function GestionLecturas() {
         }
 
         try {
-            await axios.put(`/api/is-b${getDbSuffix(selectedBalsa)}/peticiones/${id}`, datosEditPeticion);
+            await axios.put(`/api/${selectedBalsa}/peticiones/${id}`, datosEditPeticion);
 
             openPopup("Petición actualizada", <p>La petición se ha actualizado correctamente.</p>);
 
-            const datosActualizados = await fetchPeticiones(getDbSuffix(selectedBalsa), selectedFecha);
+            const datosActualizados = await fetchPeticiones(selectedBalsa, selectedFecha);
             setPeticiones(datosActualizados);
 
             setPeticionEditandoId(null);
@@ -465,7 +461,7 @@ function GestionLecturas() {
         }
 
         try {
-            await axios.put(`/api/is-b${getDbSuffix(selectedBalsa)}/lecturas/${id}`, datosEditLectura);
+            await axios.put(`/api/${selectedBalsa}/lecturas/${id}`, datosEditLectura);
 
             openPopup("Lectura actualizada", <p>La lectura se ha actualizado correctamente.</p>);
 
@@ -474,10 +470,6 @@ function GestionLecturas() {
                 : await fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha);
 
             setLecturas(datosActualizados);
-
-            // Recargar nombre de usuario para evitar "Cargando..."
-            // const nuevosIdsUsuarios = [...new Set(datosActualizados.map(l => l.usuario))];
-            // await cargarUsuariosPorIds(nuevosIdsUsuarios);
 
             setLecturaEditandoId(null);
             setDatosEditLectura({});
@@ -512,54 +504,49 @@ function GestionLecturas() {
         document.body.appendChild(script);
 
         const loadInitialData = async () => {
-            // Cargar todos los usuarios
+            // 1. Usuarios
             cargarTodosLosUsuarios();
 
-            // Cargar balsas
-            fetchBalsasDisponibles().then((balsas) => {
-                setBalsas(balsas);
-                if (balsas.length > 0) {
-                    const defaultBalsa = "all";
-                    setSelectedBalsa(defaultBalsa);
-                    cargarDatos(defaultBalsa, selectedContador, selectedFecha); // ⚠️ Cargar manualmente
-                }
-            });
+            // 2. Balsas
+            const balsasCargadas = await fetchBalsasDisponibles();
+            setBalsas(balsasCargadas);
 
+            // 3. Peticiones y Lecturas
             let todasPeticiones = [];
             let todasLecturas = [];
 
             if (selectedBalsa === "all") {
-                for (const balsa of balsas) {
-                    const dbSuffix = getDbSuffix(balsa);
-
-                    const peticiones = await fetchPeticiones(dbSuffix, selectedFecha);
-                    todasPeticiones.push(...peticiones.map(p => ({ ...p, balsa })));
+                for (const balsa of balsasCargadas) {
+                    const peticiones = await fetchPeticiones(balsa.bbdd, selectedFecha);
+                    todasPeticiones.push(...peticiones.map(p => ({ ...p, balsa: balsa.bbdd })));
 
                     const lecturas = selectedContador === "all"
-                        ? await fetchLecturas(dbSuffix, selectedFecha)
-                        : await fetchLecturasByContador(dbSuffix, selectedContador, selectedFecha);
-                    todasLecturas.push(...lecturas.map(l => ({ ...l, balsa })));
+                        ? await fetchLecturas(balsa.bbdd, selectedFecha)
+                        : await fetchLecturasByContador(balsa.bbdd, selectedContador, selectedFecha);
+
+                    todasLecturas.push(...lecturas.map(l => ({ ...l, balsa: balsa.bbdd })));
                 }
             } else {
-                const dbSuffix = getDbSuffix(selectedBalsa);
-
-                const peticiones = await fetchPeticiones(dbSuffix, selectedFecha);
+                const peticiones = await fetchPeticiones(selectedBalsa, selectedFecha);
                 todasPeticiones = peticiones.map(p => ({ ...p, balsa: selectedBalsa }));
 
                 const lecturas = selectedContador === "all"
-                    ? await fetchLecturas(dbSuffix, selectedFecha)
-                    : await fetchLecturasByContador(dbSuffix, selectedContador, selectedFecha);
+                    ? await fetchLecturas(selectedBalsa, selectedFecha)
+                    : await fetchLecturasByContador(selectedBalsa, selectedContador, selectedFecha);
+
                 todasLecturas = lecturas.map(l => ({ ...l, balsa: selectedBalsa }));
             }
 
             setPeticiones(todasPeticiones);
             setLecturas(todasLecturas);
 
+            // 4. Contadores
             const datosContadores = await fetchContadores(
-                selectedBalsa === "all" ? "all" : getDbSuffix(selectedBalsa)
+                selectedBalsa === "all" ? "all" : selectedBalsa
             );
             setContadores(datosContadores);
 
+            // 5. Tipos y usuarios
             await cargarTiposPeticion();
 
             const usuariosAsignables = await fetchUsuarios();
@@ -599,7 +586,7 @@ function GestionLecturas() {
                                 <select value={selectedBalsa} onChange={handleBalsaChange}>
                                     <option value="all">Todas</option>
                                     {balsas.map((balsa) => (
-                                        <option key={balsa} value={balsa}>
+                                        <option key={balsa.bbdd} value={balsa.bbdd}>
                                             {balsa.bbdd.replace("hidrasmart_is_b", "Balsa ")}
                                         </option>
                                     ))}
@@ -928,7 +915,7 @@ function GestionLecturas() {
                                                         required
                                                     >
                                                         <option value="" disabled>Selecciona</option>
-                                                        {filteredContadores.map(c => (
+                                                        {contadores.map(c => (
                                                             <option key={c.ideEle} value={c.ideEle}>
                                                                 {c.ideEle}
                                                             </option>

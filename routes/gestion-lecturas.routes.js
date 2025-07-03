@@ -216,7 +216,6 @@ router.post('/:database/lecturas', async (req, res) => {
 // Obtener todos los contadores de una base de datos
 router.get('/:database/contadores', async (req, res) => {
     try {
-        console.log("📦 Database seleccionada para contadores:", req.database);
         const contadores = await contadoresController.getAll(req.database);
         res.json(contadores);
     } catch (error) {
