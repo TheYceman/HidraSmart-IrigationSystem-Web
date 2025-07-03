@@ -51,8 +51,23 @@ export async function deleteUsuario(id) {
 export async function fetchRedes() {
   const res = await fetch('/api/networks');
   if (!res.ok) throw new Error('Error al obtener redes');
-  return await res.json();
+
+  const redes = await res.json();
+
+  const nombreRedMap = {
+    pennarroya: "Peñarroya",
+    argamasilla: "Argamasilla"
+  };
+
+  const redesFormateadas = redes.map(red => ({
+    ...red,
+    name_network: nombreRedMap[red.name_network] || red.name_network
+  }));
+
+  return redesFormateadas;
 }
+
+
 
 export async function fetchGruposPermiso() {
   const res = await fetch('/api/permission-group/');

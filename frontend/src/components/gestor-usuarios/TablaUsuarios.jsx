@@ -1,8 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
-import FilaUsuario from './FilaUsuario';
-import FilaPermisosRedes from './FilaPermisosRedes';
+import FilaUsuario from './FilaUsuario.jsx';
+import FilaPermisosRedes from './FilaPermisosRedes.jsx';
 import { fetchUsuarios } from '../../api/users.js'; 
+import "../../../public/styles/pop-up/gestorUsuarios.css";
 
 export default function TablaUsuarios() {
   const [usuarios, setUsuarios] = useState([]);

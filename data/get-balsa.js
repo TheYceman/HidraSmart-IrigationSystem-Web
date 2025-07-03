@@ -10,16 +10,20 @@ async function getBalsas(idUsers, idnetwork) {
           model: Balsa,
           as: 'balsa',
           where: { network_id: idnetwork },
-          attributes: ['id_balsa'],
+          attributes: ['id_balsa', 'bbdd'], 
         }
       ],
     });
 
-    return userBalsas.map(ub => ub.balsa.id_balsa);
+    return userBalsas.map(ub => ({
+      id_balsa: ub.balsa.id_balsa,
+      bbdd: ub.balsa.bbdd
+    }));
   } catch (error) {
     console.error('Error en getBalsas:', error);
     throw error;
   }
 }
+
 
 module.exports = { getBalsas };

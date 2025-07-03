@@ -1,8 +1,7 @@
 const { Op } = require('sequelize');
 const PermissionGroup = require('../models/permission-group.model');
-//const Permission = require('../models/permission.model');
-const {getPermits} = require('../data/get-permits');
-const PermissionLevels  = require('../models/permission-levels.model');
+const PermissionLevels = require('../models/permission-levels.model');
+const { getPermits } = require('../data/get-permits');
 
 // Devuelve todos los grupos de permisos (solo ID y nombre)
 async function getAllPermissionGroup(req) {
@@ -10,14 +9,14 @@ async function getAllPermissionGroup(req) {
     console.log("ROL DEL USER: " + rolUser);
 
     const excludedPermissions = rolUser === 'Administrador'
-        ? [4] // 1 = Admin, 4 = SuperAdmin
+        ? [4]
         : rolUser === 'SuperAdmin'
-        ? [0]
-        : (() => { throw new Error("Solo los administradores pueden gestionar usuarios"); })();
+            ? [0]
+            : (() => { throw new Error("Solo los administradores pueden gestionar usuarios"); })();
 
     try {
         const allPermissionGroup = await PermissionGroup.findAll({
-            attributes: ["id", "nombre"],
+            attributes: ['id', 'nombre'],
             where: {
                 id: { [Op.notIn]: excludedPermissions }
             }
@@ -33,7 +32,6 @@ async function getAllPermissionGroup(req) {
     }
 }
 
-
 async function permissionGroups(req, res) {
     try {
         const result = await getAllPermissionGroup(req);
@@ -44,51 +42,36 @@ async function permissionGroups(req, res) {
     }
 }
 
-// Devuelve los grupos de permisos para el front
+// Devuelve los grupos de permisos con niveles relacionados
 async function getGroupPermissionsData(req) {
+    const permisosUser = await getPermits(req.session.user[0].idusers);
+    console.log("Permisos del usuario:", permisosUser);
 
-     let permisosUser = await getPermits(req.session.user[0].idusers,);
-    console.log("_________________________________________________________________________________________")
-    console.log(permisosUser);
     const grupos = await PermissionGroup.findAll({
         attributes: ['id', 'nombre'],
         include: [
-            { model: PermissionLevels, as: 'equipos', attributes: ['id', 'level'] },
-            { model: PermissionLevels, as: 'activos', attributes: ['id', 'level'] },
+            { model: PermissionLevels, as: 'cultivos', attributes: ['id', 'level'] },
+            { model: PermissionLevels, as: 'cupos', attributes: ['id', 'level'] },
+            { model: PermissionLevels, as: 'riegos', attributes: ['id', 'level'] },
+            { model: PermissionLevels, as: 'meteo', attributes: ['id', 'level'] },
             { model: PermissionLevels, as: 'red', attributes: ['id', 'level'] },
-            { model: PermissionLevels, as: 'valvulas', attributes: ['id', 'level'] },
-            { model: PermissionLevels, as: 'simulador', attributes: ['id', 'level'] },
-            { model: PermissionLevels, as: 'estadisticas', attributes: ['id', 'level'] },
+            { model: PermissionLevels, as: 'activos', attributes: ['id', 'level'] },
+            { model: PermissionLevels, as: 'cambios', attributes: ['id', 'level'] },
+            { model: PermissionLevels, as: 'usuarios', attributes: ['id', 'level'] },
         ]
     });
 
     return grupos.map(group => ({
         idGrupo: group.id,
         nombreGrupo: group.nombre,
-        per_equipos: {
-            id: group.equipos.id,
-            level: group.equipos.level
-        },
-        per_activos: {
-            id: group.activos.id,
-            level: group.activos.level
-        },
-        per_red: {
-            id: group.red.id,
-            level: group.red.level
-        },
-        per_valvulas: {
-            id: group.valvulas.id,
-            level: group.valvulas.level
-        },
-        per_simulador: {
-            id: group.simulador.id,
-            level: group.simulador.level
-        },
-        per_estadistica: {
-            id: group.estadistica.id,
-            level: group.estadistica.level
-        }
+        per_cultivos: group.cultivos,
+        per_cupos: group.cupos,
+        per_riegos: group.riegos,
+        per_meteo: group.meteo,
+        per_red: group.red,
+        per_activos: group.activos,
+        per_cambios: group.cambios,
+        per_usuarios: group.usuarios,
     }));
 }
 
@@ -101,15 +84,19 @@ async function getGroupPermission(req, res) {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
+
+// Actualiza un grupo de permisos
 async function updateGroupPermissions(req, res) {
     const {
         idGrupo,
-        per_equipos,
-        per_activos,
+        per_cultivos,
+        per_cupos,
+        per_riegos,
+        per_meteo,
         per_red,
-        per_valvulas,
-        per_simulador,
-        per_estadistica
+        per_activos,
+        per_cambios,
+        per_usuarios
     } = req.body;
 
     try {
@@ -117,12 +104,14 @@ async function updateGroupPermissions(req, res) {
         if (!group) return res.status(404).json({ error: 'Grupo no encontrado' });
 
         await group.update({
-            per_equipos,
-            per_activos,
+            per_cultivos,
+            per_cupos,
+            per_riegos,
+            per_meteo,
             per_red,
-            per_valvulas,
-            per_simulador,
-            per_estadistica
+            per_activos,
+            per_cambios,
+            per_usuarios
         });
 
         res.json({ message: 'Grupo actualizado' });
@@ -131,30 +120,36 @@ async function updateGroupPermissions(req, res) {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
+
+// Crea un nuevo grupo de permisos
 async function createPermissionGroup(req, res) {
     const {
         nombreGrupo,
-        per_equipos,
-        per_activos,
+        per_cultivos,
+        per_cupos,
+        per_riegos,
+        per_meteo,
         per_red,
-        per_valvulas,
-        per_simulador,
-        per_estadistica
+        per_activos,
+        per_cambios,
+        per_usuarios
     } = req.body;
 
-    if (!nombreGrupo || !per_equipos || !per_activos || !per_red || !per_valvulas || !per_simulador || !per_estadistica) {
+    if (!nombreGrupo || !per_cultivos || !per_cupos || !per_riegos || !per_meteo || !per_red || !per_activos || !per_cambios || !per_usuarios) {
         return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
 
     try {
         const nuevoGrupo = await PermissionGroup.create({
             nombre: nombreGrupo,
-            per_equipos,
-            per_activos,
+            per_cultivos,
+            per_cupos,
+            per_riegos,
+            per_meteo,
             per_red,
-            per_valvulas,
-            per_simulador,
-            per_estadistica
+            per_activos,
+            per_cambios,
+            per_usuarios
         });
 
         res.status(201).json({
@@ -170,6 +165,7 @@ async function createPermissionGroup(req, res) {
     }
 }
 
+// Elimina un grupo
 async function deletePermissionGroup(req, res) {
     const { id } = req.params;
 
@@ -188,6 +184,10 @@ async function deletePermissionGroup(req, res) {
     }
 }
 
-
-
-module.exports = { permissionGroups, getGroupPermission, updateGroupPermissions, createPermissionGroup, deletePermissionGroup};
+module.exports = {
+    permissionGroups,
+    getGroupPermission,
+    updateGroupPermissions,
+    createPermissionGroup,
+    deletePermissionGroup
+};

@@ -171,8 +171,10 @@ function GestorConsumos() {
         height="400"
         onClose={() => setIsConfigPopupOpen(false)}
         title="CONFIGURACIÓN"
-        popupData={configData} // Pass user data
+        popupData={configData}
+        isUserManagerActive={activeTab === "tab4"}
       >
+
         <div className="config-popup-container">
           <div className="tab_wrap_popup_configuration">
             <input

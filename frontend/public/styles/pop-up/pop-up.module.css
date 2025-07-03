@@ -59,7 +59,15 @@
 .popup_close:hover {
   color: red;
 }
-
+.expandExtraLarge {
+  width: 83vw !important;
+  height: 83vh !important;
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

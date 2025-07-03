@@ -3,48 +3,60 @@ const { sequelizeHS_IS } = require('../data/bbdd-connector-sequelize');
 const PermissionLevels = require('./permission-levels.model');
 
 const PermissionGroup = sequelizeHS_IS.define('permission_group', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-    },
-    per_equipos: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    per_activos: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    per_red: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    per_valvulas: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    per_simulador: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    per_estadistica: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    nombre:{
-        type: DataTypes.STRING(255),
-    },
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  per_cultivos: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  per_cupos: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  per_riegos: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  per_meteo: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  per_red: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  per_activos: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  per_cambios: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  per_usuarios: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  nombre: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
 }, {
-    tableName: 'permission_groups',
-    timestamps: false,
+  tableName: 'permission_groups',
+  timestamps: false,
 });
 
-PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_equipos', as: 'equipos' });
-PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_activos', as: 'activos' });
+// Asociaciones con alias claros
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_cultivos', as: 'cultivos' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_cupos', as: 'cupos' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_riegos', as: 'riegos' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_meteo', as: 'meteo' });
 PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_red', as: 'red' });
-PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_valvulas', as: 'valvulas' });
-PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_simulador', as: 'simulador' });
-PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_estadistica', as: 'estadistica' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_activos', as: 'activos' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_cambios', as: 'cambios' });
+PermissionGroup.belongsTo(PermissionLevels, { foreignKey: 'per_usuarios', as: 'usuarios' });
 
 module.exports = PermissionGroup;
