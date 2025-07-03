@@ -819,22 +819,23 @@ function GestionLecturas() {
                                                 </td>
 
                                                 <td className={styles.action_buttons}>
-                                                    {peticionEditandoId === item.idPeticion ? (
-                                                        <>
-                                                            <button className={`${styles.btn}`} onClick={() => confirmarEdicionPeticion(item.idPeticion)}>
-                                                                <i className="fas fa-check"></i>
+                                                    <div className={styles.buttons_container}>
+                                                        {peticionEditandoId === item.idPeticion ? (
+                                                            <>
+                                                                <button className={`${styles.btn}`} onClick={() => confirmarEdicionPeticion(item.idPeticion)}>
+                                                                    <i className="fas fa-check"></i>
+                                                                </button>
+                                                                <button className={`${styles.btn}`} onClick={() => cancelarEdicionPeticion()}>
+                                                                    <i className="fas fa-times"></i>
+                                                                </button>
+                                                            </>
+                                                        ) : (
+                                                            <button className={`${styles.btn}`} onClick={() => iniciarEdicionPeticion(item)}>
+                                                                <i className="fas fa-pen"></i>
                                                             </button>
-                                                            <button className={`${styles.btn}`} onClick={() => cancelarEdicionPeticion()}>
-                                                                <i className="fas fa-times"></i>
-                                                            </button>
-                                                        </>
-                                                    ) : (
-                                                        <button className={`${styles.btn}`} onClick={() => iniciarEdicionPeticion(item)}>
-                                                            <i className="fas fa-pen"></i>
-                                                        </button>
-                                                    )}
+                                                        )}
+                                                    </div>
                                                 </td>
-
                                             </tr>
                                         ))
                                     )}
