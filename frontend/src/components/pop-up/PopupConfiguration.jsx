@@ -9,7 +9,8 @@ const PopupConfig = ({
   height = "600px",
   children,
   footer = null,
-  showCloseButton = true
+  showCloseButton = true,
+  isUserManagerActive = false // <-- nueva prop para saber si el tab4(GestorUsuarios) está activo
 }) => {
   if (!isOpen) return null;
 
@@ -20,7 +21,10 @@ const PopupConfig = ({
 
   return (
     <div className={styles.popup_overlay}>
-      <div className={styles.popup_content} style={popupStyle}>
+      <div
+        className={`${styles.popup_content} ${isUserManagerActive ? styles.expandExtraLarge : ""}`}
+        style={popupStyle}
+      >
         <div className={styles.popup_header}>
           <span>{title}</span>
           {showCloseButton && (

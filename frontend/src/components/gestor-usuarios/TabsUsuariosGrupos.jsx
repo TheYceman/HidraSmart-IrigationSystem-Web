@@ -10,6 +10,9 @@ export default function TabsUsuariosGrupos({ activeTab, setActiveTab }) {
       <button className={activeTab === 'grupos' ? 'active' : ''} onClick={() => setActiveTab('grupos')}>
         Grupos
       </button>
+      <button className={activeTab === 'balsas' ? 'active' : ''} onClick={() => setActiveTab('balsas')}>
+        Balsas
+      </button>
     </div>
   );
 }

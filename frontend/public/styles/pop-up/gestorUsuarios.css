@@ -1,12 +1,4 @@
-#popup-configuration.expandExtraLarge {
-  width: 80vw !important;
-  height: 80vh !important;
-  max-width: 90vw;
-  max-height: 90vh;
-  border-radius: 10px;
-   display: flex;
-  flex-direction: column;
-}
+
 .user-permissions-table {
   width: 100%;
   margin: 10px auto;
@@ -16,7 +8,7 @@
 
 .user-permissions-table th, .user-permissions-table td {
   border: 1px solid #ccc;
-  padding: 8px 22px;
+  padding: 8px 15px;
   text-align: center;
 }
 
@@ -49,6 +41,9 @@
 .table-selector button.active {
   background-color: var(--color-primary-300);
   color: white;
+}
+.apply-permissions-btn{
+  margin-right: 5px;
 }
 .edit-btn, .apply-btn,.permissions-btn,.add-user-btn,.apply-permissions-btn,.create-group-btn,.apply-new-btn{
     padding: 5px 10px;
@@ -104,7 +99,7 @@
     cursor: pointer;
 }
 
-.edit-btn, .apply-btn, .delete-btn, .cancel-btn, .permissions-btn, .create-group-btn ,.add-user-btn,.apply-permissions-btn,.cancel-permissions-btn,#cancel-new-user-btn,#save-new-user-btn,.cancel-new-btn{
+.edit-btn, .apply-btn, .delete-btn, .cancel-btn, .permissions-btn, .create-group-btn ,.add-user-btn,.apply-permissions-btn,.cancel-permissions-btn,#cancel-new-user-btn,.save-new-user-btn,.cancel-new-btn{
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
@@ -117,7 +112,7 @@
     color: white;
 }
 
-.apply-btn ,.apply-permissions-btn,#save-new-user-btn,.apply-new-btn{
+.apply-btn ,.apply-permissions-btn,.save-new-user-btn,.apply-new-btn{
     background-color: #28a745;
     color: white;
 }
@@ -134,7 +129,7 @@
     background-color: var(--color-primary-600);
 }
 
-.apply-btn:hover ,.apply-permissions-btn:hover,#save-new-user-btn:hover,.apply-new-btn:hover{
+.apply-btn:hover ,.apply-permissions-btn:hover,.save-new-user-btn:hover,.apply-new-btn:hover{
     background-color: #218838;
 }
 .editable-input:not(:disabled)  {
@@ -158,18 +153,27 @@
 }
 
 .permissions-panel {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-.select-permissions{
-  padding: 1%;
+.td-select-permissions{
+  padding: 5% 35px 5% 35px !important;
   border:  3px solid #007bff;
-  font-size: 1.3em;
+}
+.select-permissions{
+   border:  3px solid #007bff;
+  font-size: 1.2em;
+  padding: 2%;
 }
 .network-permission{
+  margin-right: 15px;
+  padding: 5%;
   font-weight: bold;
   font-size: 1.3em;
 }
@@ -181,4 +185,15 @@
 .select-levels[disabled] {
     background-color: #f0f0f0;
     color: #999;
+}
+.permisos-user, .permisos-user-red{
+  padding-left: 15%;
+  padding-right: 15%;
+  font-size: 2em;
+}
+.balsas-expandido {
+  padding: 12px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }

@@ -143,7 +143,6 @@ async function saveLocationOption(req, res) {
         req.session.user[0].ddbbSelected = selectedOption;
         const resultPermits = await getPermits(req.session.user[0].idusers, selectedOption);
         const resultBalsas = await getBalsas(req.session.user[0].idusers,resultPermits[0].id_network);
-        
         req.session.user[0].balsas = resultBalsas;
         
         if (resultPermits.permits !== '000000') {

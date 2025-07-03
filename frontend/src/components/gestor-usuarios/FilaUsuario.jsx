@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "../../../public/styles/pop-up/gestorUsuarios.css";
 import {
   createUsuario,
   updateUsuario,
@@ -52,9 +53,9 @@ export default function FilaUsuario({ user, isNuevo = false, onSave, onCancel, o
       <td>
         {!editando ? (
           <>
-            <button onClick={() => setEditando(true)}>Editar</button>
-            <button onClick={eliminar}>Eliminar</button>
-            <button onClick={onPermisosClick}>Permisos</button>
+            <button className='edit-btn' onClick={() => setEditando(true)}>Editar</button>
+            <button className='delete-btn' onClick={eliminar}>Eliminar</button>
+            <button className='permissions-btn' onClick={onPermisosClick}>Permisos</button>
           </>
         ) : (
           <>
@@ -66,8 +67,8 @@ export default function FilaUsuario({ user, isNuevo = false, onSave, onCancel, o
                 type="password"
               />
             )}
-            <button onClick={guardar}>Guardar</button>
-            <button onClick={() => {
+            <button className='save-new-user-btn' onClick={guardar}>Guardar</button>
+            <button className='cancel-new-btn' onClick={() => {
               if (isNuevo) onCancel();
               else setEditando(false);
             }}>Cancelar</button>

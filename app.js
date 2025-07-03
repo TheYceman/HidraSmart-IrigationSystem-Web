@@ -21,6 +21,7 @@ const permissionGroups = require('./routes/permission-group.routes');
 const permissionLevels = require('./routes/permission-level.routes');
 const networksList = require('./routes/network.routes');
 const userRoutes = require('./routes/user.routes');
+// const gestionLecturasRoutes= require('./routes/gestion-lecturas.routes');
 const app = express();
 
 // 1. Middleware global
@@ -59,6 +60,7 @@ app.use(authMiddleware);
 
 app.use("/api", applicationPanelRoutes);
 // app.use("/api", gestionLecturasRoutes);
+
 
 // 6. Archivos estáticos del frontend
 const frontendDistPath = path.join(__dirname, "frontend", "public", "dist");

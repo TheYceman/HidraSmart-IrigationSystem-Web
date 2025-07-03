@@ -108,7 +108,7 @@
 /* CSS tabs popup cofiguración usuario */
 
 .tab_wrap_popup_configuration {
-    height: 260px;
+    height: auto;
     transition: 0.3s box-shadow ease;
     border-radius: 6px;
     display: flex;

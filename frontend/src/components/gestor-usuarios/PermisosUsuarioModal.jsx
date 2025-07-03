@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import "../../../public/styles/pop-up/gestorUsuarios.css";
 
 export default function PermisosUsuarioModal({ userId, username, onClose }) {
   const [permisos, setPermisos] = useState([]);

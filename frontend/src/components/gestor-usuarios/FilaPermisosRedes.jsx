@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import "../../../public/styles/pop-up/gestorUsuarios.css";
 import {
   fetchRedes,
   fetchGruposPermiso,
@@ -24,6 +25,7 @@ export default function FilaPermisosRedes({ userId, onClose }) {
       ]);
 
       setNetworks(nets);
+      console.log(nets);
       setGrupos(gruposPermiso);
       setPermisos(permisosUsuario);
     } catch (error) {
@@ -65,14 +67,15 @@ export default function FilaPermisosRedes({ userId, onClose }) {
     <tr className="permissions-row">
       <td colSpan="6">
         <div className="permissions-panel">
-          <h4>Permisos por red</h4>
+          <h2>Permisos por red</h2>
           <table>
             <tbody>
               {networks.map((network) => (
                 <tr key={network.id}>
-                  <td>{network.name_network}</td>
-                  <td>
+                  <td className='network-permission'>{network.name_network}</td>
+                  <td className='td-select-permissions'>
                     <select
+                      className='select-permissions'
                       value={getGrupo(network.id)}
                       onChange={(e) => handleChange(network.id, e.target.value)}
                     >
@@ -86,10 +89,18 @@ export default function FilaPermisosRedes({ userId, onClose }) {
                   </td>
                 </tr>
               ))}
+              <tr>
+                <td colSpan={2}>
+                  <button className='apply-permissions-btn' onClick={guardar}>Aplicar Permisos</button>
+                  <button className='cancel-btn' onClick={onClose}>Cancelar</button>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <button onClick={guardar}>Aplicar Permisos</button>
-          <button onClick={onClose}>Cancelar</button>
+          {/* <div>
+          <button className='apply-permissions-btn' onClick={guardar}>Aplicar Permisos</button>
+          <button className='cancel-btn' onClick={onClose}>Cancelar</button>
+          </div> */}
         </div>
       </td>
     </tr>
