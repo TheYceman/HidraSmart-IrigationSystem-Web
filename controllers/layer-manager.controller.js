@@ -26,7 +26,7 @@ async function getAllConductions(database) {
     return geConductions;
 }
 
-const NodesNetwork = require("../models/nodes-network.model.js/index.js");
+const NodesNetwork = require("../models/nodes-network.model.js");
 
 async function getAllNodesNetwork(database) {
     const geNodesNetwork = [...(await NodesNetwork.getAllNodesNetwork(database))];
@@ -48,13 +48,30 @@ async function getAllDemandPlots(database) {
     return geDemandPlots;
 }
 
-const Valve = require("../models/valve.model");
+const defineValveModel = require('../models/valve.model');
+const { getSequelizeInstance } = require('../data/bbdd-connector-sequelize');
 
+/* sección [Conseguir válvulas] conseguir válvulas */
 async function getAllValve(database) {
-    console.log("LLAMANDO GETA,LVALLES");
-    const geValve = [...(await Valve.getAllValve(database))];
-    return geValve;
+  if (!database || typeof database !== 'string') {
+    console.error('Invalid database name:', database);
+    throw new Error('Database name must be a non-empty string');
+  }
+  console.log(`LLAMANDO GETALLVALVES para la base de datos: ${database}`);
+  try {
+    // Get Sequelize instance for the specified database
+    const sequelize = await getSequelizeInstance(database);
+    // Define Valve model for this Sequelize instance
+    const Valve = defineValveModel(sequelize);
+    // Fetch all valves
+    const valves = await Valve.findAll();
+    return valves;
+  } catch (error) {
+    console.error(`Error al obtener válvulas de ${database}:`, error);
+    throw error;
+  }
 }
+/* [Fin de sección] */
 
 async function getData(pathFile) {
     try {

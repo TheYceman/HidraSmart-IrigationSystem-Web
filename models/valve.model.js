@@ -1,47 +1,46 @@
-const { DataTypes } = require('sequelize');
-const { sequelizeHS_IS } = require('../data/bbdd-connector-sequelize');
+/* sección [Conseguir válvulas] Modelo válvula */
 
-const Valve = sequelizeHS_IS.define('Valve', {
-    id: {
-        type: DataTypes.INTEGER,
+// File: /models/valve.model.js
+const { DataTypes } = require('sequelize');
+
+function defineValveModel(sequelize) {
+  return sequelize.define(
+    'Valve',
+    {
+      ideSensor: {
+        type: DataTypes.STRING,
         primaryKey: true,
         allowNull: false,
-    },
-    ninicio: {
+      },
+      ideRadio: {
         type: DataTypes.STRING,
         allowNull: true,
-    },
-    nfinal: {
+      },
+      tipo: {
         type: DataTypes.STRING,
         allowNull: true,
-    },
-    diametro: {
+      },
+      dimension: {
         type: DataTypes.FLOAT,
         allowNull: true,
-    },
-    tipo: {
-        type: DataTypes.STRING,
+      },
+      coorX: {
+        type: DataTypes.FLOAT,
         allowNull: true,
-    },
-    estado: {
-        type: DataTypes.STRING,
+      },
+      coorY: {
+        type: DataTypes.FLOAT,
         allowNull: true,
+      }
     },
-    info: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-    },
-    tele: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    geometrygood: {
-        type: DataTypes.JSONB,
-        allowNull: true,
-    },
-}, {
-    tableName: 'valvulas',
-    timestamps: false,
-});
+    
+    {
+      tableName: 'ge_valvulas',
+      timestamps: false,
+    }
+  );
+}
 
-module.exports = Valve;
+module.exports = defineValveModel;
+
+/* [Fin de sección] */

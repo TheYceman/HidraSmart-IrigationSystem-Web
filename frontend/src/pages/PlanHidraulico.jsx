@@ -8,6 +8,9 @@ import { fetchUserData } from '../../public/scripts/fetch-user-data.js';
 import { fetchValves } from "../api/plan-hidraulico-api.js";
 
 function PlanHidraulico() {
+
+    /* sección [Plan hidráulico] Funcionalidad */
+
     const [activeTab, setActiveTab] = React.useState('layer-tab');
     const [userData, setUserData] = useState(null);
 
@@ -69,10 +72,14 @@ function PlanHidraulico() {
             try {
                 // First, load user data
                 await loadUserData();
+
+                const datosValvulas = await fetchValves("hidrasmart_is_bx");
+                window.dataAllValve = datosValvulas;
+                console.log("DATOS DE VÁLVULAS: ", datosValvulas);
                 // Then, load scripts
                 await loadAllScripts();
                 // Finally, fetch valves
-                await fetchValves();
+                
             } catch (err) {
                 console.error("Error during initialization:", err);
             }
@@ -89,9 +96,12 @@ function PlanHidraulico() {
             // });
         };
     }, []);
-
+    /* [Fin de sección] */
 
     return (
+
+        /* sección [Plan hidráulico] HTML Mapa, leyenda y exportar datos */
+
         <div className="container_data_viewer" id="container-data-viewer">
             <div className="slideCol_map">
                 <div className="scroller_map">
@@ -652,6 +662,7 @@ function PlanHidraulico() {
                 </div>
             </div>
         </div>
+        /* [Fin de sección] */
     );
 }
 

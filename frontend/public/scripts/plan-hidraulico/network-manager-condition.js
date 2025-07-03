@@ -63,6 +63,8 @@ var customMapStyles = [
     }
 ];
 
+// Rodeo código en comentario como sección para probar una herramienta
+
 /* sección [Mapa de Google] Cargar API key*/
 
 function loadGoogleMapsScript() {
@@ -120,7 +122,7 @@ async function initializeMap() {
     //await paint_nodes();
     //paint_conductions();
     //paint_plots();
-    //paint_valves();
+    paint_valves();
     //paint_tanks();
     //center_map();
 }
@@ -716,96 +718,80 @@ async function activation_deactivation_conductions_property(property) {
 
 // Inicio funciones de válvulas
 
+/* sección [Mapa de Google] Pintar las válvulas */
 function paint_valves() {
-    //const dataAllValve = fetchValves();
-    dataAllValve.forEach(valve => {
-        const coordinates = valve.geometrygood;
-        const valveCoords = []; // Array para almacenar las coordenadas de los puntos de la tubería
+    console.log("Datos de válvulas:", window.dataAllValve); // Verificar datos
+    if (!myMapCondition) {
+        console.error("myMapCondition no está inicializado");
+        return;
+    }
 
-        // Obtener las coordenadas de los puntos de la tubería y agregarlas al array valveCoords
-        coordinates.forEach(coord => {
-            // Convertir las coordenadas a números
-            const lat = parseFloat(coord.y);
-            const lng = parseFloat(coord.x);
+    const datosDeValvulas = window.dataAllValve || [];
+    valveArray = [];
+    infoWindowsValves = {};
 
-            // Verificar si las coordenadas son números válidos
-            if (!isNaN(lat) && !isNaN(lng)) {
-                valveCoords.push({
-                    lat: lat,
-                    lng: lng
-                });
-            } else {
-                console.error("Coordenadas inválidas:", coord);
-            }
-        });
+    datosDeValvulas.forEach(valve => {
+        const lat = parseFloat(valve.coorX);
+        const lng = parseFloat(valve.coorY);
 
-        // Calcular el punto medio de la línea
-        const middleIndex = Math.floor(valveCoords.length / 2);
-        const middlePoint = valveCoords[middleIndex];
-        if (valve.info === 'No_operativa') {
-            var setup = 'grey';
-        } else {
-            if (valve.estado === 'Open') {
-                var setup = 'green';
-            } else {
-                var setup = 'red';
-            }
+        if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+            console.error("Coordenadas inválidas para válvula:", valve.ideSensor, valve);
+            return;
         }
-        // Crear el marcador en el punto medio con el icono deseado
+
+        const valvePosition = { lat, lng };
+        const setup = valve.ideRadio ? 'green' : 'grey';
+
         const marker = new google.maps.Marker({
-            position: middlePoint,
-            // map: myMapCondition,
-            id: valve.id,
-            icon: getIconMarkerValveColor('black'),//'/images/icons/marker_valve.svg',
-            draggable: false, // Para que el marcador no se pueda mover
-            zIndex: 9999, // Asegura que el marcador esté por encima de otras capas
+            position: valvePosition,
+            id: valve.ideSensor,
+            icon: {
+                url: `https://maps.google.com/mapfiles/ms/icons/${setup}-dot.png`,
+                scaledSize: new google.maps.Size(32, 32)
+            },
+            draggable: false,
+            zIndex: 9999,
             type: valve.tipo,
             setup: setup,
-            diameter: valve.diametro,
+            diameter: valve.dimension,
         });
-        const contentString = showGrafic('Válvula', valve.id);
+
+        marker.setMap(myMapCondition); // Añadir marcador al mapa
+
+        const contentString = `<div><h3>Válvula</h3><p>ID: ${valve.ideSensor}</p></div>`;
         let infowindow = new google.maps.InfoWindow({ content: contentString });
+
         marker.addListener("click", () => {
             if (currentInfowindow) {
                 currentInfowindow.close();
             }
-
             infowindow.open(myMapCondition, marker);
             currentInfowindow = infowindow;
         });
 
-        // Ocultar la línea de la válvula
-        const polyline = new google.maps.Polyline({
-            path: valveCoords,
-            geodesic: true,
-            strokeColor: "transparent", // Línea transparente
-            strokeOpacity: 0, // Opacidad 0 para que sea transparente
-            strokeWeight: 0 // Grosor 0 para que no sea visible
-        });
         valveArray.push(marker);
-        infoWindowsValves[valve.id] = infowindow;
+        infoWindowsValves[valve.ideSensor] = infowindow;
+    });
 
-
-        // Agregar la polilínea y el marcador al mapa
-        polyline.setMap(myMapCondition);
-    });
-    markerValve = new MarkerClusterer(myMapCondition, valveArray, {
-        styles: [{
-            height: 56,
-            width: 56,
-            textColor: 'white',
-            textSize: 12,
-            marginTop: 19,
-            url: '/images/icons/group_valve_black.svg', // Asegúrate de que esta ruta es correcta
-        }],
-        gridSize: 50,
-        maxZoom: 16,
-        title: 'valve'
-    });
-    google.maps.event.addListener(markerValve, 'clusteringend', function (valverer) {
-        valvesMarkers = valverer.getClusters();
-    });
+    // Opcional: Usa MarkerClusterer si es necesario
+    if (markerValve) {
+        markerValve.clearMarkers();
+    }
+    // markerValve = new MarkerClusterer(myMapCondition, valveArray, {
+    //     styles: [{
+    //         height: 56,
+    //         width: 56,
+    //         textColor: 'white',
+    //         textSize: 12,
+    //         marginTop: 19,
+    //         url: '/images/icons/group_valve_black.svg',
+    //     }],
+    //     gridSize: 50,
+    //     maxZoom: 16,
+    //     title: 'valve'
+    // });
 }
+/* [Fin de sección] */
 
 // Función para ocultar las válvulas y grupos de válvulas del mapa
 function clear_valves() {
