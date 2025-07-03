@@ -60,6 +60,7 @@ function GestionLecturas() {
     // Lecturas
     const [lecturas, setLecturas] = useState([]);
     const [selectedContador, setSelectedContador] = useState("all");
+    const [imagenSubida, setImagenSubida] = useState(false);
 
     // Usuarios
     const [usuariosMap, setUsuariosMap] = useState({});
@@ -157,6 +158,7 @@ function GestionLecturas() {
         const reader = new FileReader();
         reader.onloadend = () => {
             setNuevaLectura((prev) => ({ ...prev, imagenBase64: reader.result }));
+            setImagenSubida(true);
         };
         reader.readAsDataURL(file);
     };
@@ -211,6 +213,9 @@ function GestionLecturas() {
                 volumen: '',
                 imagenBase64: ''
             });
+
+            // Cambiar el icono de imagen cargada
+            setImagenSubida(false);
         } catch (err) {
             openPopup("Error", <p>Ocurrió un error al guardar la lectura.</p>);
             console.error(err);
@@ -888,7 +893,10 @@ function GestionLecturas() {
                                     </td>
                                     <td>
                                         <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleImageChange} />
-                                        <button className={`${styles.btn}`} onClick={handleFileButtonClick}>Subir archivo</button>
+
+                                        <button className={`${styles.btn}`} onClick={handleFileButtonClick}>
+                                            Subir archivo {imagenSubida && <i className="fas fa-check"></i>}
+                                        </button>
                                     </td>
                                     <td>
                                         <i className={`${styles.icon} fas fa-plus`} onClick={subirLectura}></i>
