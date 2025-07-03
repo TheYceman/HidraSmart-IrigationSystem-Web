@@ -1,5 +1,5 @@
 //const dataNodesNetwork = getDataNodesNetwork;
-
+// network-manager-condition.js
 var myMapCondition;
 
 var tanksArray = [];
@@ -712,13 +712,12 @@ async function activation_deactivation_conductions_property(property) {
 }
 
 
-
 // Fin funciones de conducciones
 
 // Inicio funciones de válvulas
 
 function paint_valves() {
-    const dataAllValve = getAllValve;
+    //const dataAllValve = fetchValves();
     dataAllValve.forEach(valve => {
         const coordinates = valve.geometrygood;
         const valveCoords = []; // Array para almacenar las coordenadas de los puntos de la tubería
@@ -1921,7 +1920,7 @@ async function createLegend() {
             if (mutation.type === 'childList') {
                 const HTMLAvailableInformationContentSpanType = document.getElementById("HTML-available-information-content-span-type");
                 if (HTMLAvailableInformationContentSpanType) {
-                    updateAvailableInformation();
+                    //updateAvailableInformation();
                     observer.disconnect(); // Dejar de observar una vez que el elemento está en el DOM
                 }
             }
@@ -1935,7 +1934,7 @@ async function createLegend() {
     observer.observe(document.body, config);
 
     // Llamar a la función inicial para asegurar que los datos se extraigan
-    updateAvailableInformation();
+    //updateAvailableInformation();
 
     // Asegurarse de que solo se seleccionen horas completas
     datetimePicker.addEventListener('change', async function () {
@@ -1953,7 +1952,7 @@ async function createLegend() {
 
             percentageExtraction(adjustedDate.toISOString().slice(0, 11) + "00:00");
             dataExtraction(datetimePicker.value + ':00');
-            updateAvailableInformation();
+            //updateAvailableInformation();
             reset_properties();
         }, 500);
         //loading_end();

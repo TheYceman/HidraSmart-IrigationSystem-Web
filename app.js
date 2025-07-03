@@ -17,6 +17,7 @@ const initRoutes = require("./routes/init.routes");
 const authRoutes = require("./routes/auth.routes");
 const applicationPanelRoutes = require("./routes/application-panel.routes");
 const userConfigRoutes = require("./routes/user-configuration.routes");
+const planHidraulicoRoutes = require("./routes/plan-hidraulico.routes");
 const permissionGroups = require('./routes/permission-group.routes');
 const permissionLevels = require('./routes/permission-level.routes');
 const networksList = require('./routes/network.routes');
@@ -52,6 +53,7 @@ app.use("/api", userConfigRoutes);
 app.use("/api", permissionGroups);
 app.use("/api", networksList);
 app.use("/api", userRoutes);
+app.use("/api", planHidraulicoRoutes);
 app.use("/api", permissionLevels);
 
 // 5. Middleware de autenticación para rutas privadas

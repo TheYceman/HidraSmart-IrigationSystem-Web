@@ -5,6 +5,7 @@ import '../../public/styles/container-legend.css';
 import '../../public/styles/pop-up/PopupConfiguration.css';
 import GoogleApiKeyProvider from "../components/api-keys/GoogleApiKeyProvider";
 import { fetchUserData } from '../../public/scripts/fetch-user-data.js';
+import { fetchValves } from "../api/plan-hidraulico-api.js";
 
 function PlanHidraulico() {
     const [activeTab, setActiveTab] = React.useState('layer-tab');
@@ -52,7 +53,7 @@ function PlanHidraulico() {
             }
         };
 
-        const loadUserData = async () => {
+       const loadUserData = async () => {
             try {
                 const data = await fetchUserData();
                 // Almacenar userData en window para que sea accesible globalmente (provisional hasta que se haya creado el contexto global)
@@ -60,11 +61,24 @@ function PlanHidraulico() {
                 setUserData(data);
             } catch (err) {
                 console.error("Error fetching user data:", err);
+                throw err; // Re-throw to handle in the calling function
             }
         };
 
-        loadAllScripts();
-        loadUserData();
+        const initializeData = async () => {
+            try {
+                // First, load user data
+                await loadUserData();
+                // Then, load scripts
+                await loadAllScripts();
+                // Finally, fetch valves
+                await fetchValves();
+            } catch (err) {
+                console.error("Error during initialization:", err);
+            }
+        };
+
+        initializeData();
 
         return () => {
             // scriptUrls.forEach((src) => {
