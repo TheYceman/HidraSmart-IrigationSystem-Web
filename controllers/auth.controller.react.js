@@ -2,6 +2,7 @@ const { verifyCaptcha } = require("../config/verify-captcha");
 const { verifyUser } = require("../config/verify-user");
 const { insertSessionLog } = require("./session.controller");
 const { getUserLocationOption } = require('../utils/location-manager');
+const { runQuery } = require("../data/bbdd-connector"); 
 
 async function loginReact(req, res) {
   // Validate request body
@@ -62,4 +63,22 @@ async function loginReact(req, res) {
   }
 }
 
-module.exports = { loginReact };
+async function getUsuarios(req, res) {
+  try {
+    const query = "SELECT idusers, username FROM users";
+    const results = await runQuery(query, [], "hidrasmart_is");
+
+    const filas = results?.data?.rows;
+
+    if (!Array.isArray(filas) || filas.length === 0) {
+      return res.json([]); // Devuelve array vacío si no hay resultados
+    }
+
+    return res.json(filas); // Devuelve todos los usuarios
+  } catch (error) {
+    console.error("Error al obtener los usuarios:", error);
+    return res.status(500).json({ error: "Error al obtener los usuarios" });
+  }
+}
+
+module.exports = { loginReact, getUsuarios };

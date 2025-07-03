@@ -13,7 +13,6 @@ import {
     fetchLecturasByContador,
     fetchContadores,
     fetchBalsasDisponibles,
-    fetchNombreUsuario,
     fetchTiposPeticiones,
     fetchUsuarios
 } from "../../api/gestion-lectura-api.js";
@@ -24,6 +23,7 @@ function GestionLecturas() {
 
     // Balsas
     const [balsas, setBalsas] = useState([]);
+    const [selectedBalsa, setSelectedBalsa] = useState("all");
 
     // Contadores
     const [contadores, setContadores] = useState([]);
@@ -47,7 +47,7 @@ function GestionLecturas() {
 
     // Peticiones
     const [peticiones, setPeticiones] = useState([]);
-    const [selectedBalsa, setSelectedBalsa] = useState("all");
+    const [tiposPeticiones, setTiposPeticiones] = useState([]);
 
     //Tipos peticiones
     const [tiposMap, setTiposMap] = useState({});
@@ -63,6 +63,7 @@ function GestionLecturas() {
 
     // Usuarios
     const [usuariosMap, setUsuariosMap] = useState({});
+    const [usuariosDisponibles, setUsuariosDisponibles] = useState([]);
 
     // Popup
     const [popupContent, setPopupContent] = useState(null);
@@ -94,26 +95,24 @@ function GestionLecturas() {
         return balsa.replace("hidrasmart_is_b", "");
     };
 
-    /**
-     * Carga los nombres de los usuarios cuyos IDs se pasan como parámetro
-     * y los almacena en el estado `usuariosMap`.
-     * @param {string[]} ids IDs de los usuarios a cargar
-     */
-    const cargarUsuariosPorIds = async (ids) => {
-        const nuevoMapa = { ...usuariosMap };
+    const cargarTodosLosUsuarios = async () => {
+        try {
+            const usuarios = await fetchUsuarios();
+            const mapa = {};
+            usuarios.forEach((user) => {
+                mapa[user.idusers] = user.username;
+            });
 
-        const idsNoCargados = ids.filter(id => id && !nuevoMapa[id]);
+            setUsuariosMap(mapa); // Para mostrar por ID
+            setUsuariosDisponibles(usuarios); // Para los selects
+        } catch (error) {
+            console.error("❌ Error al cargar usuarios:", error);
+        }
+    };
 
-        const promesas = idsNoCargados.map(id =>
-            fetchNombreUsuario(id).then(res => {
-                nuevoMapa[id] = res.username;
-            }).catch(() => {
-                nuevoMapa[id] = `ID ${id}`;
-            })
-        );
-
-        await Promise.all(promesas);
-        setUsuariosMap(nuevoMapa);
+    const mostrarNombreUsuario = (id) => {
+        if (Object.keys(usuariosMap).length === 0) return 'Cargando...';
+        return usuariosMap[Number(id)] ?? `Usuario ${id}`;
     };
 
     /**
@@ -441,14 +440,6 @@ function GestionLecturas() {
             const datosActualizados = await fetchPeticiones(getDbSuffix(selectedBalsa), selectedFecha);
             setPeticiones(datosActualizados);
 
-            // Recargar nombres de usuario para evitar "Cargando..."
-            const nuevosIdsUsuarios = new Set();
-            datosActualizados.forEach(p => {
-                if (p.requester) nuevosIdsUsuarios.add(p.requester);
-                if (p.assignedTo) nuevosIdsUsuarios.add(p.assignedTo);
-            });
-            await cargarUsuariosPorIds([...nuevosIdsUsuarios]);
-
             setPeticionEditandoId(null);
             setDatosEditPeticion({});
         } catch (err) {
@@ -485,8 +476,8 @@ function GestionLecturas() {
             setLecturas(datosActualizados);
 
             // Recargar nombre de usuario para evitar "Cargando..."
-            const nuevosIdsUsuarios = [...new Set(datosActualizados.map(l => l.usuario))];
-            await cargarUsuariosPorIds(nuevosIdsUsuarios);
+            // const nuevosIdsUsuarios = [...new Set(datosActualizados.map(l => l.usuario))];
+            // await cargarUsuariosPorIds(nuevosIdsUsuarios);
 
             setLecturaEditandoId(null);
             setDatosEditLectura({});
@@ -496,20 +487,49 @@ function GestionLecturas() {
         }
     };
 
+    const cargarDatos = async () => {
+        try {
+            const [nuevasPeticiones, nuevasLecturas, nuevosContadores, nuevosTipos] = await Promise.all([
+                fetchPeticiones(selectedBalsa, selectedFecha),
+                fetchLecturas(selectedBalsa, selectedFecha),
+                fetchContadores(selectedBalsa),
+                fetchTiposPeticiones(selectedBalsa)
+            ]);
+
+            setPeticiones(nuevasPeticiones);
+            setLecturas(nuevasLecturas);
+            setContadores(nuevosContadores);
+            setTiposPeticiones(nuevosTipos);
+
+        } catch (error) {
+            console.error("❌ Error al cargar datos:", error);
+        }
+    };
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "/scripts/gestor-consumos/gestion-lecturas.js";
         document.body.appendChild(script);
 
         const loadInitialData = async () => {
-            const balsasDisponibles = await fetchBalsasDisponibles();
-            setBalsas(balsasDisponibles);
+            // Cargar todos los usuarios
+            cargarTodosLosUsuarios();
+
+            // Cargar balsas
+            fetchBalsasDisponibles().then((balsas) => {
+                setBalsas(balsas);
+                if (balsas.length > 0) {
+                    const defaultBalsa = "all";
+                    setSelectedBalsa(defaultBalsa);
+                    cargarDatos(defaultBalsa, selectedContador, selectedFecha); // ⚠️ Cargar manualmente
+                }
+            });
 
             let todasPeticiones = [];
             let todasLecturas = [];
 
             if (selectedBalsa === "all") {
-                for (const balsa of balsasDisponibles) {
+                for (const balsa of balsas) {
                     const dbSuffix = getDbSuffix(balsa);
 
                     const peticiones = await fetchPeticiones(dbSuffix, selectedFecha);
@@ -539,17 +559,6 @@ function GestionLecturas() {
                 selectedBalsa === "all" ? "all" : getDbSuffix(selectedBalsa)
             );
             setContadores(datosContadores);
-
-            const idsUsuarios = new Set();
-            todasPeticiones.forEach(p => {
-                if (p.requester) idsUsuarios.add(p.requester);
-                if (p.assignedTo) idsUsuarios.add(p.assignedTo);
-            });
-            todasLecturas.forEach(l => {
-                if (l.usuario) idsUsuarios.add(l.usuario);
-            });
-
-            await cargarUsuariosPorIds([...idsUsuarios]);
 
             await cargarTiposPeticion();
 
@@ -591,7 +600,7 @@ function GestionLecturas() {
                                     <option value="all">Todas</option>
                                     {balsas.map((balsa) => (
                                         <option key={balsa} value={balsa}>
-                                            {balsa.replace("hidrasmart_is_b", "Balsa ")}
+                                            {balsa.bbdd.replace("hidrasmart_is_b", "Balsa ")}
                                         </option>
                                     ))}
                                 </select>
@@ -712,7 +721,7 @@ function GestionLecturas() {
                                                     )}
                                                 </td>
 
-                                                <td>{usuariosMap[item.requester] || 'Cargando...'}</td>
+                                                <td>{mostrarNombreUsuario(item.requester)}</td>
 
                                                 <td>
                                                     {peticionEditandoId === item.idPeticion ? (
@@ -724,14 +733,14 @@ function GestionLecturas() {
                                                             required
                                                         >
                                                             <option value="" defaultValue disabled>Selecciona</option>
-                                                            {usuariosAsignables.map(user => (
+                                                            {usuariosDisponibles.map(user => (
                                                                 <option key={user.idusers} value={user.idusers}>
                                                                     {user.username}
                                                                 </option>
                                                             ))}
                                                         </select>
                                                     ) : (
-                                                        usuariosMap[item.assignedTo] || 'Cargando...'
+                                                        mostrarNombreUsuario(item.assignedTo)
                                                     )}
                                                 </td>
 
@@ -951,7 +960,7 @@ function GestionLecturas() {
                                                         ))}
                                                     </select>
                                                 ) : (
-                                                    usuariosMap[item.usuario] || 'Cargando...'
+                                                    mostrarNombreUsuario(item.usuario)
                                                 )}
                                             </td>
 

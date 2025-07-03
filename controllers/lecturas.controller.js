@@ -28,13 +28,13 @@ function transformarLecturasConImagen(lecturas) {
     });
 }
 
-async function getAwLecturas(databaseNumber) {
-    if (!modelCache[databaseNumber]) {
-        const sequelize = await getSequelizeInstance(databaseNumber);
+async function getAwLecturas(database) {
+    if (!modelCache[database]) {
+        const sequelize = await getSequelizeInstance(database);
         const AwLecturas = Lectura(sequelize);
-        modelCache[databaseNumber] = AwLecturas;
+        modelCache[database] = AwLecturas;
     }
-    return modelCache[databaseNumber];
+    return modelCache[database];
 }
 
 async function getAll(databaseNumber, filtroFecha = null) {

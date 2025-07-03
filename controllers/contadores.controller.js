@@ -3,17 +3,17 @@ const { Contador } = require('../models/contador.model');
 
 const modelCache = {};
 
-async function getAwContadores(databaseNumber) {
-    if (!modelCache[databaseNumber]) {
-        const sequelize = await getSequelizeInstance(databaseNumber);
+async function getAwContadores(database) {
+    if (!modelCache[database]) {
+        const sequelize = await getSequelizeInstance(database);
         const AwContadores = Contador(sequelize);
-        modelCache[databaseNumber] = AwContadores;
+        modelCache[database] = AwContadores;
     }
-    return modelCache[databaseNumber];
+    return modelCache[database];
 }
 
-async function getAll(databaseNumber) {
-    const AwContadores = await getAwContadores(databaseNumber);
+async function getAll(database) {
+    const AwContadores = await getAwContadores(database);
     return await AwContadores.findAll();
 }
 

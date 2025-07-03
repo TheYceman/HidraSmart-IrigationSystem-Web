@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import '../../../public/styles/pop-up/PopupConfiguration.css';
-import TabsUsuariosGrupos from '../gestorUsuarios/TabsUsuariosGrupos';
-import TablaUsuarios from '../gestorUsuarios/TablaUsuarios';
-import TablaGrupos from '../gestorUsuarios/TablaGrupos';
+import TabsUsuariosGrupos from '../gestor-usuarios/TabsUsuariosGrupos';
+import TablaUsuarios from '../gestor-usuarios/TablaUsuarios';
+import TablaGrupos from '../gestor-usuarios/TablaGrupos';
 
 const UserManagement = () => {
   const [activeTab, setActiveTab] = useState('usuarios');
