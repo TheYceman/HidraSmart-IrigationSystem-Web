@@ -1,20 +1,22 @@
-.container_data_viewer{
+.container_data_viewer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* position: relative; */
-  width: 83vw;
+  width: 80vw; /* Reduced width to allow more horizontal space */
   height: 75vh;
-  /* overflow: hidden; */
   margin: 8.5% auto 0 auto;
-  /* justify-content: center;*/
+}
+#container_map_condition {
+  width: 75%; /* Reduced width to allow more space for legend */
+  position: relative;
+  border-radius: 0px 5px 5px 0px;
+  transition: width 1s;
 }
   .slideCol_map {
     height: 100%;
     text-align: left;
     overflow: hidden;
     display: block;
-    white-space: nowrap;
   }
     .scroller_map {
       height: 100%;
@@ -90,8 +92,10 @@
   width: 100%;
   height: 100%;
   justify-content: space-between;
+  gap: 20px; /* Added gap for more horizontal spacing */
   box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
 }
+
 
 .legend-container {
   background-color: #fff;
@@ -567,3 +571,175 @@
         font-size: 10px;
     }
 }
+
+.legend_container {
+  overflow-y: auto;
+  max-height: 51%;
+  height: 51%;
+  width: 15vw; /* Changed to viewport width for responsiveness */
+  min-width: 100px; /* Minimum width to prevent collapse */
+  background: none rgb(255, 255, 255);
+  border: 0px;
+  padding: 0.5rem; /* Adjusted padding */
+  margin: 0.5rem;
+  font-family: Arial, sans-serif;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  font-size: clamp(12px, 1.5vw, 14px); /* Responsive font size */
+}
+
+.tank_legend {
+  display: none;
+  width: 18vw; /* Changed to viewport width */
+  min-width: 120px; /* Minimum width */
+  height: 120px;
+  top: 100px;
+  background: none rgb(255, 255, 255);
+  border: 0px;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  font-family: Arial, sans-serif;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  font-size: clamp(12px, 1.5vw, 14px);
+}
+
+.nodes_legend {
+  display: none;
+  width: 18vw;
+  min-width: 120px;
+  height: 120px;
+  top: 250px;
+  background: none rgb(255, 255, 255);
+  border: 0px;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  font-family: Arial, sans-serif;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  font-size: clamp(12px, 1.5vw, 14px);
+}
+
+.conductions_legend {
+  display: none;
+  width: 18vw;
+  min-width: 120px;
+  height: 165px;
+  top: 360px;
+  background: none rgb(255, 255, 255);
+  border: 0px;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  font-family: Arial, sans-serif;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  font-size: clamp(12px, 1.5vw, 14px);
+}
+
+.valves_legend {
+  display: none;
+  width: 18vw;
+  min-width: 120px;
+  height: 165px;
+  top: 560px;
+  background: none rgb(255, 255, 255);
+  border: 0px;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  font-family: Arial, sans-serif;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  font-size: clamp(12px, 1.5vw, 14px);
+}
+
+.available_information_label {
+  top: 0;
+  height: 40px;
+  width: 20vw; /* Changed to viewport width */
+  min-width: 150px; /* Minimum width */
+  margin: 10px 15vw 0px 10px; /* Adjusted margin for responsiveness */
+  padding: 0px;
+  background: none rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  cursor: pointer;
+  font-size: clamp(12px, 1.8vw, 14px); /* Responsive font size */
+}
+
+.HTML_available_information_content_label_type {
+  position: absolute;
+  font-weight: bold;
+  margin: 2% 4%;
+  font-size: clamp(12px, 1.5vw, 14px); /* Responsive font size */
+}
+
+.HTML_available_information_content_span_type {
+  height: 100%;
+  align-content: center;
+  position: absolute;
+  right: 10%;
+  font-size: clamp(12px, 1.5vw, 14px); /* Responsive font size */
+}
+
+#tableContainer {
+  width: 20%;
+  list-style: none;
+  font: 400 clamp(10px, 1.2vw, 12px) Roboto, Arial, sans-serif; /* Responsive font */
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1720px) {
+  .table_data th,
+  .table_data td {
+    width: 34%;
+    font-size: clamp(9px, 1vw, 10px); /* Adjusted for smaller screens */
+  }
+
+  .legend_container,
+  .tank_legend,
+  .nodes_legend,
+  .conductions_legend,
+  .valves_legend {
+    width: 20vw; /* Wider on smaller screens */
+    min-width: 100px;
+    font-size: clamp(10px, 1.3vw, 12px); /* Smaller font on smaller screens */
+  }
+
+  .available_information_label {
+    width: 25vw;
+    min-width: 120px;
+    margin: 10px 10vw 0px 10px;
+    font-size: clamp(10px, 1.5vw, 12px);
+  }
+}
+
+@media (max-width: 768px) {
+  .legend_container,
+  .tank_legend,
+  .nodes_legend,
+  .conductions_legend,
+  .valves_legend {
+    width: 25vw; /* Further adjustment for very small screens */
+    min-width: 90px;
+    font-size: clamp(9px, 1.2vw, 11px);
+  }
+
+  .available_information_label {
+    width: 30vw;
+    min-width: 100px;
+    margin: 10px 5vw 0px 10px;
+    font-size: clamp(9px, 1.3vw, 11px);
+  }
+
+  .table_data th,
+  .table_data td {
+    font-size: clamp(8px, 1vw, 9px);
+  }
+}
+
+
+
+
+
