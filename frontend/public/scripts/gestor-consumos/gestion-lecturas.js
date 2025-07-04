@@ -42,7 +42,7 @@ function initializeRiegoMap() {
     }
 
     loadGoogleMapsScript(apiKey).then(() => {
-        const mapElement = document.getElementById("mapa");
+        const mapElement = document.getElementById("mapa-lecturas");
         if (!mapElement) {
             console.error("No se encontró el sitio para cargar el mapa");
             return;

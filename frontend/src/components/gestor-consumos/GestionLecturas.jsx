@@ -1076,7 +1076,7 @@ function GestionLecturas() {
                 </div>
 
                 <div className={styles.mapa}>
-                    <div id="mapa" className={styles.mapa}></div>
+                    <div id="mapa-lecturas" className={styles.mapa_lecturas}></div>
                     <GoogleApiKeyProvider />
                 </div>
 
