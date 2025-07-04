@@ -89,7 +89,7 @@
 
 .editable-input.active, .permissions-btn.active ,.add-user-btn.active,.create-group-btn.active{
     background-color: #e8f0fe;
-    border-color: #007bff;
+    border-color: var(--color-primary-400);
     color: #000;
     outline: none;
 }
@@ -135,7 +135,7 @@
 .editable-input:not(:disabled)  {
     background-color: #fff;
     color: #000;
-    border: 1px solid #007bff;
+    border: 1px solid var(--color-primary-400);
     padding: 5px;
     pointer-events: auto;
     cursor: text;
@@ -164,10 +164,10 @@
 }
 .td-select-permissions{
   padding: 5% 35px 5% 35px !important;
-  border:  3px solid #007bff;
+  border:  3px solid var(--color-primary-400);
 }
 .select-permissions{
-   border:  3px solid #007bff;
+   border:  3px solid var(--color-primary-400);
   font-size: 1.2em;
   padding: 2%;
 }
@@ -196,4 +196,80 @@
   background: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
+}
+.select-balsas{
+  padding: 1%;
+  border:  2px solid var(--color-primary-400);
+  font-size: 1.1em;
+}
+.tabla-redes {
+  width: 80%; /* o 100% si prefieres */
+  margin: 0 auto; /* 🔥 esto la centra horizontalmente */
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  border:  2px solid var(--color-primary-400);
+}
+
+.tabla-redes th,
+.tabla-redes td {
+  font-size: 1.2em;
+  color: #000;
+  padding: 0.3rem;
+  border: 1px solid #ccc;
+  text-align: center; /* si quieres centrar también el contenido */
+  border:  2px solid var(--color-primary-400);
+}
+
+.tabla-redes th {
+  background-color: #f9f9f9;
+  border:  2px solid var(--color-primary-400);
+}
+.balsas-expandido > div > p {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+.botones-balsas {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.botones-balsas button {
+  padding: 0.5rem 1.2rem;
+  margin: 0 0.6rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.aplicar-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.cancelar-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+
+.edit-btn {
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: var;
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn.cerrar-btn {
+  background-color: #e74c3c;
+}
+.botones-balsas button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
 }

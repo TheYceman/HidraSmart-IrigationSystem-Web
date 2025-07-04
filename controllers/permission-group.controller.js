@@ -19,7 +19,7 @@ async function getAllPermissionGroup(req) {
             attributes: ['id', 'nombre'],
             where: {
                 id: { [Op.notIn]: excludedPermissions }
-            }
+            } 
         });
 
         return allPermissionGroup.map(group => ({

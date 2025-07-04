@@ -20,7 +20,7 @@ const PopupConfig = ({
   };
 
   return (
-    <div className={styles.popup_overlay}>
+    <div className={styles.popup_overlay} >
       <div
         className={`${styles.popup_content} ${isUserManagerActive ? styles.expandExtraLarge : ""}`}
         style={popupStyle}
@@ -32,7 +32,7 @@ const PopupConfig = ({
           )}
         </div>
 
-        <div className={styles.popup_body}>
+        <div className={`${styles.popup_body} custom_scrollbar`}>
           {children}
         </div>
 
