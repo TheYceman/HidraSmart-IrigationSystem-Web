@@ -484,25 +484,6 @@ function GestionLecturas() {
         }
     };
 
-    const cargarDatos = async () => {
-        try {
-            const [nuevasPeticiones, nuevasLecturas, nuevosContadores, nuevosTipos] = await Promise.all([
-                fetchPeticiones(selectedBalsa, selectedFecha),
-                fetchLecturas(selectedBalsa, selectedFecha),
-                fetchContadores(selectedBalsa),
-                fetchTiposPeticiones(selectedBalsa)
-            ]);
-
-            setPeticiones(nuevasPeticiones);
-            setLecturas(nuevasLecturas);
-            setContadores(nuevosContadores);
-            setTiposPeticiones(nuevosTipos);
-
-        } catch (error) {
-            console.error("❌ Error al cargar datos:", error);
-        }
-    };
-
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "/scripts/gestor-consumos/gestion-lecturas.js";
@@ -1095,7 +1076,7 @@ function GestionLecturas() {
                 </div>
 
                 <div className={styles.mapa}>
-                    <div id="mapa-lecturas" className={styles.mapa_lecturas}></div>
+                    <div id="mapa" className={styles.mapa}></div>
                     <GoogleApiKeyProvider />
                 </div>
 
