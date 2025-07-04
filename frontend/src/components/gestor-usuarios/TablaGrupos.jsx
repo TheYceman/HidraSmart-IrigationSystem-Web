@@ -10,10 +10,11 @@ import {
 } from '../../api/permissions';
 
 export default function TablaGrupos() {
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState(null);
   const [levels, setLevels] = useState([]);
   const [showNewGroup, setShowNewGroup] = useState(false);
   const [newGroupData, setNewGroupData] = useState({ nombreGrupo: '', ...defaultPermissions() });
+  const [error, setError] = useState('');
 
   function defaultPermissions() {
     return {
@@ -22,18 +23,28 @@ export default function TablaGrupos() {
     };
   }
 
-
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = async () => {
-    const levelsData = await fetchPermissionLevels();
-    const groupsData = await fetchPermissionGroups();
+    try {
+      const levelsData = await fetchPermissionLevels();
+      const groupsData = await fetchPermissionGroups();
 
+      setLevels(levelsData);
 
-    setLevels(levelsData);
-    setGroups(groupsData);
+      if (!groupsData || groupsData.length === 0) {
+        setError('No hay grupos disponibles o no tienes permisos para verlos.');
+        setGroups([]);
+      } else {
+        setError('');
+        setGroups(groupsData);
+      }
+    } catch (e) {
+      setError('Debes ser administrador para acceder aquí');
+      setGroups([]);
+    }
   };
 
   const handleSave = async (updatedGroup) => {
@@ -57,9 +68,34 @@ export default function TablaGrupos() {
     }
   };
 
+  if (error) {
+return (
+  <div
+    style={{
+      color: "red",
+      fontSize: "1.5em",
+      marginBlockStart: "0.83em",
+      marginBlockEnd: "0.83em",
+      marginInlineStart: "0px",
+      marginInlineEnd: "0px",
+      fontWeight: "bold",
+    }}
+    className="error-message"
+  >
+    {error}
+  </div>
+);
+
+  }
+
+  if (groups === null) {
+    // Mientras carga
+    return <div>Cargando grupos...</div>;
+  }
+
   return (
     <div id="group-permissions-table-container">
-      <div style={{  marginBottom: '16px' }}>
+      <div style={{ marginBottom: '16px' }}>
         {!showNewGroup && (
           <button className="add-user-btn" onClick={() => setShowNewGroup(true)}>Crear Grupo</button>
         )}
@@ -82,35 +118,35 @@ export default function TablaGrupos() {
           </tr>
         </thead>
         <tbody>
-  {showNewGroup && (
-    <FilaGrupo
-      isNuevo
-      group={newGroupData}
-      permissionLevels={levels}
-      onSave={async (data) => {
-        const ok = await createPermissionGroup(data);
-        if (ok) {
-          setShowNewGroup(false);
-          setNewGroupData({ nombreGrupo: '', ...defaultPermissions() });
-          loadData();
-        }
-      }}
-      onCancel={() => {
-        setShowNewGroup(false);
-        setNewGroupData({ nombreGrupo: '', ...defaultPermissions() });
-      }}
-    />
-  )}
-  {groups.map(grupo => (
-    <FilaGrupo
-      key={grupo.idGrupo}
-      group={grupo}
-      permissionLevels={levels}
-      onSave={handleSave}
-      onDelete={handleDelete}
-    />
-  ))}
-</tbody>
+          {showNewGroup && (
+            <FilaGrupo
+              isNuevo
+              group={newGroupData}
+              permissionLevels={levels}
+              onSave={async (data) => {
+                const ok = await createPermissionGroup(data);
+                if (ok) {
+                  setShowNewGroup(false);
+                  setNewGroupData({ nombreGrupo: '', ...defaultPermissions() });
+                  loadData();
+                }
+              }}
+              onCancel={() => {
+                setShowNewGroup(false);
+                setNewGroupData({ nombreGrupo: '', ...defaultPermissions() });
+              }}
+            />
+          )}
+          {groups.map(grupo => (
+            <FilaGrupo
+              key={grupo.idGrupo}
+              group={grupo}
+              permissionLevels={levels}
+              onSave={handleSave}
+              onDelete={handleDelete}
+            />
+          ))}
+        </tbody>
       </table>
     </div>
   );

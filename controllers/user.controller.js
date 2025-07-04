@@ -6,15 +6,12 @@ const { hashatePassword } = require("../config/hashate-password");
 
 const getFilteredUsers = async (req) => {
   const rolUser = req.session.user?.[0].permits.rol;
-  // console.log(req.session.user?.[0].permits.id);
-  // console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
-  // console.log(req.session.user?.[0].rol);
   if (!rolUser || (rolUser !== 'Administrador' && rolUser !== 'SuperAdmin')) {
     const error = new Error('Debes ser administrador para acceder aquí');
     error.statusCode = 403;
     throw error;
   }
-
+  
   const excludedPermissions = rolUser === 'Administrador' ? [1, 4] : [4];
 
   const users = await User.findAll({
@@ -33,7 +30,7 @@ const getFilteredUsers = async (req) => {
     idusers: user.idusers,
     username: user.username,
     name: user.name,
-    surname: user.surname,
+    surname: user.surname, 
     email: user.email
   }));
 };

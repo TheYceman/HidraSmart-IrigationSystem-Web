@@ -10,7 +10,27 @@ export async function fetchPermissionLevels() {
 
 export async function fetchPermissionGroups() {
   const res = await fetch('/api/all-permission-group');
-  return await res.json();
+
+  if (!res.ok) {
+    let errorMessage = 'Error al obtener grupos de permisos';
+
+    try {
+      const errorData = await res.json();
+      if (errorData?.error) errorMessage = errorData.error;
+    } catch {
+      // no hacemos nada si no puede leer JSON
+    }
+
+    if (res.status === 403) {
+      errorMessage = 'Debes ser administrador para gestionar los grupos.';
+    }
+
+    const error = new Error(errorMessage);
+    error.status = res.status;
+    throw error;
+  }
+
+  return res.json();
 }
 
 export async function updatePermissionGroup(id, updatedData) {

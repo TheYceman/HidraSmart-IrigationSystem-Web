@@ -21,6 +21,7 @@ const permissionGroups = require('./routes/permission-group.routes');
 const permissionLevels = require('./routes/permission-level.routes');
 const networksList = require('./routes/network.routes');
 const userRoutes = require('./routes/user.routes');
+const balsaRoutes = require('./routes/balsas.routes');
 // const gestionLecturasRoutes= require('./routes/gestion-lecturas.routes');
 const app = express();
 
@@ -54,7 +55,7 @@ app.use("/api", permissionGroups);
 app.use("/api", networksList);
 app.use("/api", userRoutes);
 app.use("/api", permissionLevels);
-
+app.use("/api", balsaRoutes);
 // 5. Middleware de autenticación para rutas privadas
 app.use(authMiddleware);
 
